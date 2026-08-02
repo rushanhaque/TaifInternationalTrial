@@ -3,6 +3,7 @@ import { CARE } from '../data/site'
 import { CharCascade, Dilate } from '../components/Reveal'
 import Toggle from '../components/Toggle'
 import Button from '../components/Button'
+import Patina from '../components/mk2/Patina'
 
 export default function CarePage() {
   const [tab, setTab] = useState(CARE[0].key)
@@ -20,6 +21,9 @@ export default function CarePage() {
           </p>
         </Dilate>
       </section>
+
+      {/* the dial — care advice made tangible before it is written out */}
+      <Patina />
 
       <section className="section alt">
         <div className="wrap">

@@ -1,0 +1,185 @@
+/* ============ the patina dial ============
+   One number (--age, 0..1) cross-fades a young gradient into an old one.
+   No canvas, no images, no per-frame JS. */
+
+.pat {
+  position: relative;
+  background-color: var(--chrome);
+  background-image: var(--paper);
+  padding-block: clamp(4rem, 9vw, 8rem);
+}
+
+.pat-head { max-width: 60ch; }
+
+.pat-title {
+  font-family: var(--font-display);
+  font-stretch: 125%;
+  font-weight: 700;
+  font-size: clamp(2rem, 5vw, 4rem);
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+  color: var(--graphite);
+  text-wrap: balance;
+}
+
+.pat-lede {
+  margin-top: 1.1rem;
+  font-size: clamp(0.98rem, 1.3vw, 1.14rem);
+  line-height: 1.6;
+  color: var(--graphite-2);
+  text-wrap: pretty;
+}
+
+/* ── the dial ── */
+.pat-dial {
+  margin-top: clamp(2.2rem, 4.5vw, 3.4rem);
+  padding: clamp(1.2rem, 2.4vw, 1.8rem);
+  border-radius: var(--r-lg);
+  background: var(--white);
+  box-shadow: var(--lift-1), var(--edge-hair);
+}
+
+.pat-dial-label { display: block; color: var(--dim); margin-bottom: 0.9rem; }
+
+.pat-dial-row { display: flex; align-items: center; gap: clamp(1rem, 2.4vw, 2rem); }
+
+/* a brass rail with a machined slug for a thumb */
+.pat-range {
+  flex: 1 1 auto;
+  appearance: none;
+  -webkit-appearance: none;
+  height: 8px;
+  border-radius: var(--r-pill);
+  background: linear-gradient(90deg, var(--brass-lt), var(--brass) 55%, var(--walnut));
+  cursor: ew-resize;
+  outline-offset: 6px;
+}
+
+.pat-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 36% 32%, #fffaf0, #f0dcb0 34%, var(--brass) 68%, var(--brass-dk));
+  box-shadow: var(--lift-2), inset 0 0 0 1px rgba(58, 42, 26, 0.25);
+  cursor: grab;
+  transition: transform var(--t-base) var(--ease-surge);
+}
+
+.pat-range::-webkit-slider-thumb:active { cursor: grabbing; transform: scale(0.94); }
+
+.pat-range::-moz-range-thumb {
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 36% 32%, #fffaf0, #f0dcb0 34%, var(--brass) 68%, var(--brass-dk));
+  box-shadow: var(--lift-2);
+  cursor: grab;
+}
+
+.pat-out {
+  flex: none;
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  min-width: 5.5rem;
+  justify-content: flex-end;
+}
+
+.pat-out b {
+  font-family: var(--font-display);
+  font-stretch: 125%;
+  font-weight: 700;
+  font-size: clamp(1.8rem, 3.4vw, 2.6rem);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+  color: var(--tint-deep);
+}
+
+.pat-out i {
+  font-style: normal;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--dim);
+}
+
+/* ── the surfaces ── */
+.pat-grid {
+  display: grid;
+  gap: clamp(1rem, 2.2vw, 1.8rem);
+  margin-top: clamp(1.6rem, 3vw, 2.4rem);
+  grid-template-columns: repeat(2, 1fr);
+}
+
+@media (min-width: 900px) {
+  .pat-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+.pat-swatch {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  box-shadow: var(--lift-1), var(--edge-hair);
+}
+
+.pat-young,
+.pat-old {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+}
+
+/* the age IS the old layer's opacity — one value, continuous cross-fade */
+.pat-old {
+  opacity: var(--age, 0);
+  transition: opacity var(--t-slow) var(--ease-fluid);
+}
+
+/* a fixed specular pass so the swatch reads as a surface, not a paint chip */
+.pat-sheen {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(105deg,
+    transparent 32%,
+    rgba(255, 250, 238, 0.34) 44%,
+    transparent 56%);
+}
+
+.pat-say {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding-top: 0.75rem;
+}
+
+.pat-name {
+  font-weight: 600;
+  font-size: 0.95rem;
+  line-height: 1.25;
+  color: var(--graphite);
+}
+
+.pat-read {
+  color: var(--tint-deep);
+  transition: color var(--t-base);
+}
+
+.pat-foot {
+  margin-top: clamp(1.4rem, 3vw, 2.2rem);
+  max-width: 62ch;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--dim);
+  text-wrap: pretty;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pat-old, .pat-range::-webkit-slider-thumb { transition: none; }
+}
