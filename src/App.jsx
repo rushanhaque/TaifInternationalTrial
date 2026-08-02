@@ -12,6 +12,7 @@ import SectionStack from './components/SectionStack'
 import ClickSpark from './components/ClickSpark'
 import Ambient from './components/mk2/Ambient'
 import RevealGuard from './components/mk2/RevealGuard'
+import Interactions from './components/mk2/Interactions'
 import { CursorLabel } from './components/mk2/Micro'
 import Cart from './components/mk2/Cart'
 import { CartProvider } from './lib/cart'
@@ -136,6 +137,7 @@ export default function App() {
       <Navbar />
       <Router routes={ROUTES} notFound={NOT_FOUND} after={<><SectionStack /><RevealGuard /><Footer /></>} />
       <Ambient />
+      <Interactions />
       <div className="grain" aria-hidden="true" />
       <ClickSpark />
       <CursorLabel />

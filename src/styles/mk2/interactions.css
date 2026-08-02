@@ -1,0 +1,140 @@
+/* ============ the interaction layer ============
+   Hover behaviour that should feel the same everywhere. Driven entirely by
+   custom properties written from Interactions.jsx (--mx/--my for the pointer,
+   --mag-x/--mag-y for magnetism), so the CSS here is inert until a pointer
+   actually moves — and the site is unchanged if the script never runs. */
+
+@property --mx {
+  syntax: '<percentage>';
+  inherits: true;
+  initial-value: 50%;
+}
+
+@property --my {
+  syntax: '<percentage>';
+  inherits: true;
+  initial-value: 50%;
+}
+
+/* ── the specular pass ──
+   A raised brass surface throws a highlight as you move past it. That is the
+   product's own behaviour, borrowed for the interface. */
+.slab,
+.cat-card,
+.pl-card,
+.rail-card,
+.loc-card,
+.nf-card,
+.dp,
+.pat-swatch,
+.wo-attach {
+  position: relative;
+}
+
+.slab::after,
+.cat-card::after,
+.pl-card::after,
+.rail-card::after,
+.loc-card::after,
+.nf-card::after,
+.dp::after,
+.pat-swatch::after,
+.wo-attach::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity var(--t-slow) var(--ease-fluid);
+  background: radial-gradient(
+    22rem 22rem at var(--mx, 50%) var(--my, 50%),
+    rgba(255, 250, 238, 0.30) 0%,
+    rgba(255, 244, 220, 0.13) 34%,
+    transparent 68%
+  );
+}
+
+.slab.is-lit::after,
+.cat-card.is-lit::after,
+.pl-card.is-lit::after,
+.rail-card.is-lit::after,
+.loc-card.is-lit::after,
+.nf-card.is-lit::after,
+.dp.is-lit::after,
+.pat-swatch.is-lit::after,
+.wo-attach.is-lit::after { opacity: 1; }
+
+/* On the dark stages a warm bloom would grey out. Multiply keeps the light
+   sitting IN the surface on pale paper; screen does the same job on espresso. */
+.deep .slab::after,
+.deep .rail-card::after,
+.cd-facade .slab::after {
+  mix-blend-mode: screen;
+  background: radial-gradient(
+    20rem 20rem at var(--mx, 50%) var(--my, 50%),
+    rgba(240, 220, 176, 0.26) 0%,
+    rgba(176, 137, 79, 0.10) 40%,
+    transparent 70%
+  );
+}
+
+/* ── magnetism ──
+   `translate` and not `transform`: Button animates transform with GSAP for
+   its press, so keeping them on separate properties lets the two compose
+   rather than overwrite each other. */
+.btn {
+  translate: var(--mag-x, 0) var(--mag-y, 0);
+  transition: translate var(--t-base) var(--ease-surge);
+}
+
+/* the chip leans a little further than the button, so the arrow leads */
+.btn .btn-chip {
+  transition: transform var(--t-base) var(--ease-surge);
+}
+
+.btn:hover .btn-chip {
+  transform: translate(2px, -2px);
+}
+
+/* ── links: a rule that draws itself from the side you approach ── */
+.lnk-sweep {
+  background-image: linear-gradient(var(--tint-deep), var(--tint-deep));
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size var(--t-base) var(--ease-fluid), color var(--t-quick);
+}
+
+.lnk-sweep:hover { background-size: 100% 1px; color: var(--tint-deep); }
+
+/* ── images inside a lit surface push in very slightly ──
+   1.5% and no more: enough to feel alive, not enough to soften the edges of
+   a photograph a buyer is trying to judge. */
+.slab-img {
+  transition: transform var(--t-cine) var(--ease-fluid);
+  will-change: transform;
+}
+
+.is-lit .slab-img,
+.cat-card:hover .slab-img,
+.rail-card:hover .slab-img,
+.pl-card:hover .slab-img { transform: scale(1.015); }
+
+@media (prefers-reduced-motion: reduce) {
+  .slab::after, .cat-card::after, .pl-card::after, .rail-card::after,
+  .loc-card::after, .nf-card::after, .dp::after, .pat-swatch::after,
+  .wo-attach::after { transition: none; }
+  .btn { translate: none; transition: none; }
+  .slab-img { transition: none; }
+  .is-lit .slab-img, .cat-card:hover .slab-img,
+  .rail-card:hover .slab-img, .pl-card:hover .slab-img { transform: none; }
+}
+
+/* no hover on touch: the highlight would stick under the finger */
+@media (hover: none) {
+  .slab::after, .cat-card::after, .pl-card::after, .rail-card::after,
+  .loc-card::after, .nf-card::after, .dp::after, .pat-swatch::after,
+  .wo-attach::after { display: none; }
+}
