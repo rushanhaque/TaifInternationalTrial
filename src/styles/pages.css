@@ -233,11 +233,8 @@
   align-items: center; justify-content: center; text-align: center;
   padding: calc(var(--nav-h) + 3rem) var(--gutter) 4rem;
 }
-.nf-drop {
-  width: 74px; height: 74px; border-radius: 50% 50% 52% 48% / 55% 55% 45% 45%;
-  background: var(--sheen); box-shadow: var(--lift-3), var(--edge-lit);
-  margin-bottom: 1.6rem;
-}
+/* .nf-drop retired with the old 404 — the page is a works docket now,
+   see styles/mk2/notfound.css */
 
 /* ============ collections dolly (E19) ============
    Pinned scroll through five layered facades → Bespoke end-wall. */

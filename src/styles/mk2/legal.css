@@ -1,0 +1,143 @@
+/* ============ the fine print ============
+   A consulted document, not a read one: numbered clauses, an index that lists
+   every one of them, and a rail that fills as the reader moves through. */
+
+.legal-index { position: relative; }
+
+/* ── the reading rail ── */
+.lg-rail {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  border-radius: 2px;
+  background: var(--hair);
+  overflow: hidden;
+}
+
+.lg-rail-fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform: scaleY(0);
+  transform-origin: 50% 0%;
+  background: linear-gradient(180deg, var(--brass-lt), var(--brass) 60%, var(--tint-deep));
+}
+
+.lg-group { display: grid; }
+.lg-group + .lg-group { margin-top: 1.5rem; }
+
+.lg-group-head {
+  color: var(--dim);
+  padding: 0 0 0.5rem 1rem;
+}
+
+/* ── index entries ── */
+.legal-index a {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 2.2rem 1fr;
+  gap: 0.2rem;
+  align-items: baseline;
+  padding: 0.42rem 0.7rem 0.42rem 1rem;
+  font-size: 0.9rem;
+  line-height: 1.35;
+  color: var(--graphite-2);
+  text-decoration: none;
+  transition: color var(--t-quick) var(--ease-fluid);
+}
+
+.legal-index a:hover { color: var(--tint-deep); }
+.legal-index a.on { color: var(--graphite); font-weight: 600; }
+
+.lg-no {
+  font-variant-numeric: tabular-nums;
+  color: var(--dim);
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+}
+
+.legal-index a.on .lg-no { color: var(--tint-deep); }
+
+/* ── clauses ── */
+.lg-clause {
+  scroll-margin-top: 7rem;
+  padding-top: 0.2rem;
+}
+
+.lg-clause .d3 {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.lg-clause-no {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.08em;
+  color: var(--tint-deep);
+  padding: 0.16rem 0.5rem;
+  border-radius: var(--r-pill);
+  background: var(--chrome-2);
+  transform: translateY(-0.18em);
+}
+
+/* the cite mark: quiet until the clause is hovered, then offered */
+.lg-cite {
+  appearance: none;
+  border: 0;
+  cursor: pointer;
+  background: transparent;
+  color: var(--dim);
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1;
+  padding: 0.24rem 0.45rem;
+  border-radius: var(--r-sm);
+  opacity: 0;
+  transition:
+    opacity var(--t-base) var(--ease-fluid),
+    color var(--t-quick) var(--ease-fluid),
+    background-color var(--t-quick) var(--ease-fluid);
+}
+
+.lg-clause:hover .lg-cite,
+.lg-cite:focus-visible { opacity: 1; }
+
+.lg-cite:hover { color: var(--tint-deep); background: var(--chrome-2); }
+
+.lg-cite.is-done {
+  opacity: 1;
+  color: var(--tint-deep);
+  background: var(--chrome-2);
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+/* a clause arrived at by link announces itself briefly */
+.lg-clause:target .lg-clause-no {
+  background: var(--brass);
+  color: #2a1e10;
+}
+
+/* touch has no hover, so the mark must simply be present */
+@media (hover: none) {
+  .lg-cite { opacity: 1; }
+}
+
+@media (max-width: 900px) {
+  .lg-rail { display: none; }
+  .legal-index a { padding-left: 0; }
+  .lg-group-head { padding-left: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lg-cite, .legal-index a { transition: none; }
+}
