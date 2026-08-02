@@ -1,0 +1,477 @@
+/* ============================================================
+   MK2 · Case Ribbon
+   Three wide, stat-first cards on the warm alabaster ground.
+   The figure is the hero; the outcome is held back one beat.
+   Only transform / opacity / clip-path move. Nothing reflows.
+   ============================================================ */
+
+.cr {
+  position: relative;
+}
+
+.cr-intro {
+  align-items: end;
+  row-gap: clamp(1rem, 2vw, 1.4rem);
+}
+
+.cr-intro .d1 {
+  margin: 0;
+  max-width: 20ch;
+}
+
+.cr-lede {
+  margin: 0;
+  /* optical baseline settle against the display heading beside it */
+  padding-bottom: 0.4rem;
+}
+
+.cr-list {
+  list-style: none;
+  margin: clamp(2.4rem, 4.5vw, 3.6rem) 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1rem, 1.8vw, 1.5rem);
+}
+
+/* ---------- the card ---------- */
+
+.cr-card {
+  --acc: var(--brass);
+  --acc-lt: var(--brass-lt);
+  --acc-dk: var(--brass-dk);
+  --acc-wash: rgba(176, 137, 79, 0.07);
+
+  position: relative;
+  border: 1px solid var(--hair);
+  border-radius: var(--r-lg);
+  background: var(--white);
+  /* warm shadow — two lifts plus an inner specular on the top edge */
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 1px 2px rgba(58, 42, 26, 0.05),
+    0 10px 24px -16px rgba(58, 42, 26, 0.26),
+    0 30px 62px -42px rgba(58, 42, 26, 0.3);
+  transition:
+    transform 0.55s var(--ease-surge),
+    box-shadow 0.55s var(--ease-fluid),
+    border-color 0.4s var(--ease-fluid);
+}
+
+.cr-card[data-tone='copper'] {
+  --acc: var(--copper);
+  --acc-lt: var(--copper-lt);
+  --acc-dk: var(--copper-dk);
+  --acc-wash: rgba(180, 112, 60, 0.07);
+}
+
+.cr-card[data-tone='walnut'] {
+  --acc: var(--oak);
+  --acc-lt: var(--oak-lt);
+  --acc-dk: var(--walnut);
+  --acc-wash: rgba(107, 74, 46, 0.07);
+}
+
+/* a warm wash rakes in from the top-left corner as the card opens */
+.cr-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(90% 130% at 4% 0%, var(--acc-wash), transparent 62%);
+  opacity: 0;
+  pointer-events: none;
+  /* stays under the type — a wash on the ground, never a veil over the copy */
+  z-index: 0;
+  transition: opacity 0.6s var(--ease-fluid);
+}
+
+.cr-card.is-open {
+  transform: translateY(-4px);
+  border-color: var(--hair-strong);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 2px 4px rgba(58, 42, 26, 0.06),
+    0 18px 34px -18px rgba(58, 42, 26, 0.28),
+    0 46px 84px -46px rgba(58, 42, 26, 0.45);
+}
+
+.cr-card.is-open::after {
+  opacity: 1;
+}
+
+/* the material rail — an index tick at rest, a full rod when open */
+.cr-rail {
+  position: absolute;
+  left: 0;
+  top: clamp(1.5rem, 2.6vw, 2.4rem);
+  bottom: clamp(1.5rem, 2.6vw, 2.4rem);
+  width: 3px;
+  border-radius: var(--r-pill);
+  background: linear-gradient(180deg, var(--acc-lt), var(--acc) 45%, var(--acc-dk));
+  transform: scaleY(0.26);
+  transform-origin: top center;
+  opacity: 0.5;
+  transition:
+    transform 0.75s var(--ease-viscous),
+    opacity 0.5s var(--ease-fluid);
+}
+
+.cr-card.is-open .cr-rail {
+  transform: scaleY(1);
+  opacity: 1;
+}
+
+.cr-in {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: clamp(1.4rem, 2.6vw, 2.2rem);
+  padding: clamp(1.5rem, 2.8vw, 2.6rem) clamp(1.4rem, 3vw, 3rem);
+  padding-left: clamp(1.7rem, 3.2vw, 3.2rem);
+}
+
+/* ---------- top row: category · client · index ---------- */
+
+.cr-top {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.7rem 1rem;
+}
+
+.cr-cat {
+  padding: 0.36rem 0.85rem;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--acc-dk);
+  background: var(--chrome);
+  border-color: var(--hair);
+  transition: border-color 0.4s var(--ease-fluid), background-color 0.4s var(--ease-fluid);
+}
+
+/* it is a label, not a control — kill the global chip hover */
+.cr-cat:hover {
+  transform: none;
+  border-color: var(--hair);
+}
+
+.cr-card.is-open .cr-cat {
+  border-color: var(--acc);
+  background: var(--white);
+}
+
+.cr-client {
+  margin: 0;
+  font-family: var(--font-display);
+  font-stretch: 125%;
+  font-weight: 600;
+  font-size: clamp(0.95rem, 1.15vw, 1.12rem);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: var(--graphite);
+}
+
+.cr-no {
+  margin-left: auto;
+  color: var(--faint);
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+/* ---------- the figure ---------- */
+
+.cr-stat-mask {
+  /* the mask the stat rises out of on scroll-in; padding clears descenders */
+  overflow: hidden;
+  margin: 0;
+  padding-bottom: 0.12em;
+}
+
+.cr-stat {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.15rem 0.75rem;
+}
+
+.cr-part {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.4em;
+}
+
+.cr-val {
+  font-family: var(--font-display);
+  font-stretch: 125%;
+  font-weight: 700;
+  font-size: clamp(2rem, 5vw, 4rem);
+  line-height: 0.88;
+  letter-spacing: -0.045em;
+  font-variant-numeric: tabular-nums;
+  color: var(--walnut-dk);
+}
+
+/* the second half of a stat is the earned half — it carries the metal */
+.cr-part + .cr-part .cr-val,
+.cr-sep + .cr-part .cr-val {
+  color: var(--acc-dk);
+}
+
+.cr-unit {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: clamp(0.68rem, 0.9vw, 0.8rem);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--dim);
+  white-space: nowrap;
+}
+
+/* the struck punch-mark, echoing the section head */
+.cr-sep {
+  align-self: center;
+  width: 8px;
+  height: 8px;
+  flex: none;
+  border-radius: 1.5px;
+  transform: rotate(45deg);
+  background: linear-gradient(135deg, var(--acc-lt), var(--acc) 60%, var(--acc-dk));
+  box-shadow: 0 1px 2px rgba(107, 74, 46, 0.35);
+}
+
+.cr-statlabel {
+  margin: clamp(0.8rem, 1.4vw, 1.1rem) 0 0;
+  color: var(--faint);
+}
+
+/* ---------- brief, toggle, outcome ---------- */
+
+.cr-brief {
+  margin: 0;
+  color: var(--graphite-2);
+  max-width: 62ch;
+}
+
+.cr-foot {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  margin-top: clamp(1.2rem, 2vw, 1.6rem);
+}
+
+.cr-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  flex: none;
+  min-height: 42px;
+  padding: 0.5rem 1rem 0.5rem 0.85rem;
+  border: 1px solid var(--hair);
+  border-radius: var(--r-pill);
+  background: var(--white);
+  color: var(--graphite-2);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+  transition:
+    border-color 0.4s var(--ease-fluid),
+    color 0.4s var(--ease-fluid),
+    transform 0.4s var(--ease-surge);
+}
+
+.cr-toggle:hover {
+  border-color: var(--acc);
+  color: var(--graphite);
+}
+
+.cr-toggle:focus-visible {
+  outline: 2px solid var(--tint);
+  outline-offset: 3px;
+}
+
+.cr-toggle:active {
+  transform: scale(0.97);
+}
+
+.cr-mark {
+  width: 7px;
+  height: 7px;
+  flex: none;
+  border-radius: 1.5px;
+  transform: rotate(45deg);
+  background: var(--chrome-3);
+  transition: background-color 0.45s var(--ease-fluid), transform 0.55s var(--ease-surge);
+}
+
+.cr-card.is-open .cr-mark {
+  background: var(--acc);
+  transform: rotate(135deg);
+}
+
+.cr-chev {
+  flex: none;
+  color: var(--faint);
+  transition: transform 0.5s var(--ease-surge), color 0.4s var(--ease-fluid);
+}
+
+.cr-card.is-open .cr-chev {
+  transform: rotate(180deg);
+  color: var(--acc-dk);
+}
+
+/* the track the brass rule draws across */
+.cr-track {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  height: 2px;
+  border-radius: var(--r-pill);
+  background: var(--chrome-3);
+  overflow: hidden;
+}
+
+.cr-rule {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--acc-lt), var(--acc) 45%, var(--acc-dk));
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.85s var(--ease-viscous);
+}
+
+.cr-card.is-open .cr-rule {
+  transform: scaleX(1);
+}
+
+/* Height is reserved permanently — the outcome only translates and clips, so
+   the card never resizes and nothing below it ever moves. */
+.cr-res {
+  margin-top: clamp(0.9rem, 1.6vw, 1.2rem);
+}
+
+.cr-result {
+  margin: 0;
+  max-width: 62ch;
+  color: var(--graphite);
+  font-weight: 500;
+  transform: translateY(15px);
+  opacity: 0;
+  clip-path: inset(0 -20% 106% -20%);
+  transition:
+    transform 0.75s var(--ease-viscous),
+    opacity 0.45s var(--ease-fluid),
+    clip-path 0.75s var(--ease-viscous);
+}
+
+.cr-card.is-open .cr-result {
+  transform: translateY(0);
+  opacity: 1;
+  clip-path: inset(-25% -20% -25% -20%);
+}
+
+/* ---------- tail ---------- */
+
+.cr-tail {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.2rem 2rem;
+  margin-top: clamp(2rem, 4vw, 3.2rem);
+  padding-top: clamp(1.4rem, 2.4vw, 2rem);
+  border-top: 1px solid var(--hair);
+}
+
+.cr-tail-note {
+  margin: 0;
+  max-width: 48ch;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--dim);
+}
+
+/* ---------- wide: the card earns a two-column interior ---------- */
+
+@media (min-width: 900px) {
+  .cr-in {
+    grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
+    column-gap: clamp(1.6rem, 3vw, 3rem);
+    row-gap: clamp(1.6rem, 2.6vw, 2.4rem);
+  }
+
+  .cr-top {
+    grid-column: 1 / -1;
+  }
+
+  .cr-statcol {
+    align-self: start;
+  }
+
+  .cr-text {
+    border-left: 1px solid var(--hair);
+    padding-left: clamp(1.6rem, 3vw, 3rem);
+  }
+}
+
+@media (max-width: 899px) {
+  /* touch target grows where the finger is the pointer */
+  .cr-toggle {
+    min-height: 46px;
+    padding: 0.62rem 1.1rem 0.62rem 0.95rem;
+  }
+
+  .cr-no {
+    font-size: 0.72rem;
+  }
+}
+
+/* ---------- reduced motion: finished, not stripped ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .cr-card,
+  .cr-card::after,
+  .cr-rail,
+  .cr-rule,
+  .cr-result,
+  .cr-chev,
+  .cr-mark,
+  .cr-cat,
+  .cr-toggle {
+    transition: none;
+  }
+
+  /* no lift, no reveal — every outcome simply reads */
+  .cr-card,
+  .cr-card.is-open {
+    transform: none;
+  }
+
+  .cr-result,
+  .cr-card.is-open .cr-result {
+    transform: none;
+    opacity: 1;
+    clip-path: none;
+  }
+
+  .cr-rule {
+    transform: scaleX(1);
+  }
+
+  .cr-rail {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+
+  .cr-chev,
+  .cr-card.is-open .cr-chev {
+    transform: none;
+  }
+}

@@ -1,0 +1,219 @@
+/* ══════════════════════════════════════════════════════════════════════════
+   mk2 / seam.css
+   The brass spine + the house line reveal.
+
+   Everything here is drawn, not lit: no filters on the long strokes, no
+   blend modes, no blurs across the viewport. The bloom is a gradient and the
+   depth is three stroke passes over one geometry — which is also why the
+   whole spine costs one attribute write per frame.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ─────────────────────────────────────────────────────────────────────────
+   1 · the fixed layer
+   ───────────────────────────────────────────────────────────────────────── */
+
+.seam {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+
+  /* Above every section's opaque ground, below the content layer the page
+     lifts to z-index 2/3. --seam-z is the escape hatch: a section that wants
+     the spine reading in front of its artwork raises it locally rather than
+     forking this rule. */
+  z-index: var(--seam-z, 1);
+
+  /* The seam repaints on every scroll frame. Containment keeps that repaint
+     from being charged to the rest of the document. */
+  contain: layout style paint;
+}
+
+/* Opt-in for sections that carry their own dark or photographic ground and
+   want the seam laid over it. */
+.seam--front {
+  --seam-z: 4;
+}
+
+.seam-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   2 · the wire — three passes over one path
+   ───────────────────────────────────────────────────────────────────────── */
+
+.seam-halo,
+.seam-glow,
+.seam-line {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* the atmosphere the brass sits in — barely there, but it is the difference
+   between a line on a page and a line in a room */
+.seam-halo {
+  stroke: var(--brass-lt);
+  stroke-width: 13;
+  opacity: 0.085;
+}
+
+/* the near-field bloom */
+.seam-glow {
+  stroke: var(--brass);
+  stroke-width: 4.5;
+  opacity: 0.2;
+}
+
+/* the wire itself. Stroke is a gradient set as an attribute in the component,
+   so this rule deliberately does not declare `stroke` — a CSS declaration
+   here would outrank the presentation attribute and kill the gradient. */
+.seam-line {
+  stroke-width: 1.4;
+  opacity: 0.94;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   3 · the molten bead
+   The group is counter-scaled per frame, so every length in here is a real
+   screen pixel regardless of viewport aspect.
+   ───────────────────────────────────────────────────────────────────────── */
+
+.seam-bloom {
+  /* fill is the radial gradient, set as an attribute alongside the id */
+  pointer-events: none;
+}
+
+.seam-ring {
+  fill: none;
+  stroke: var(--brass-lt);
+  stroke-width: 1;
+  opacity: 0.5;
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  /* Slow enough to read as heat rather than a loading spinner. */
+  animation: seam-breathe 3.8s var(--ease-fluid) infinite;
+}
+
+.seam-hot {
+  fill: #fff6e6;
+  filter: drop-shadow(0 0 5px rgba(227, 200, 143, 0.85))
+    drop-shadow(0 0 14px rgba(176, 137, 79, 0.55));
+}
+
+@keyframes seam-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+
+  50% {
+    transform: scale(1.24);
+    opacity: 0.24;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   4 · mobile — the seam straightens and narrows
+   The amplitude drop is handled in JS; the weight drop belongs here.
+   ───────────────────────────────────────────────────────────────────────── */
+
+@media (max-width: 900px) {
+  .seam-halo {
+    stroke-width: 9;
+    opacity: 0.07;
+  }
+
+  .seam-glow {
+    stroke-width: 3;
+    opacity: 0.16;
+  }
+
+  .seam-line {
+    stroke-width: 1;
+    opacity: 0.82;
+  }
+
+  .seam-hot {
+    /* two stacked drop-shadows across a scrolling layer is the wrong trade on
+       a phone GPU; the bead keeps its ring and its bloom instead */
+    filter: none;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   5 · reduced motion — a straight brass hairline and nothing else
+   The path already rests at a straight `d` in the markup, so there is
+   nothing to undo here beyond retiring the bead.
+   ───────────────────────────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .seam-bead {
+    display: none;
+  }
+
+  .seam-ring {
+    animation: none;
+  }
+
+  .seam-halo {
+    opacity: 0.05;
+  }
+
+  .seam-glow {
+    opacity: 0.14;
+  }
+}
+
+/* Windows high-contrast: decoration steps aside rather than guessing. */
+@media (forced-colors: active) {
+  .seam {
+    display: none;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   6 · LineRise
+   These classes exist only after the splitter has run. Un-split text is
+   ordinary text in an ordinary tag — that is the fail-open guarantee, and it
+   is structural rather than something a rule here has to defend.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Word units. inline-block so offsetTop/offsetHeight describe a single box
+   per word; whitespace between them is preserved as real text nodes, so the
+   accessible string is unchanged. */
+.lr-w {
+  display: inline-block;
+}
+
+/* The mask. --lr-bleed is read back out of the used style by the component to
+   compute exactly how far the inner span has to sit below the mask floor, so
+   editing this number here needs no matching edit in the JS. */
+.lr-line {
+  --lr-bleed: 0.26em;
+
+  display: block;
+  overflow: hidden;
+  padding-block: var(--lr-bleed);
+
+  /* pulled straight back out: the mask gets its clearance for ascenders and
+     descenders without adding a single pixel to the block's height, which
+     matters because .mega runs a line-height of 0.86 */
+  margin-block: calc(var(--lr-bleed) * -1);
+}
+
+.lr-in {
+  display: block;
+  transform-origin: 0% 100%;
+}
+
+/* An .iris-phrase or an <em> inside a reveal is measured as one unit; keep it
+   from breaking mid-unit and invalidating that assumption. */
+.lr-line .iris-phrase {
+  white-space: nowrap;
+}

@@ -1,0 +1,362 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   ChapterRail — fixed chapter index, right edge, vertically centred.
+
+   Reads as a ruler: a faint spine with ten hairline ticks striking off it.
+   The tick you are standing in is drawn out in brass (GSAP) and names itself;
+   hovering the rail blooms every name in, top to bottom, on a CSS stagger.
+
+   CSS owns every steady state below. The single exception is
+   .crail-line-live's transform/opacity, which belongs to GSAP alone — no
+   transition is declared on it anywhere, so the two never contend.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.crail {
+  /* geometry knobs — the whole rail is derived from these two */
+  --tick: 46px;   /* full length of an extended mark */
+  --row: 28px;    /* vertical rhythm; 10 chapters ≈ 280px tall */
+
+  position: fixed;
+  top: 50%;
+  right: clamp(1rem, 2.1vw, 2.25rem);
+  /* Above page content, below the navbar (90) and the cursor layers
+     (blobber 120 / sparks 122) — chrome must never sit on the cursor. */
+  z-index: 86;
+  transform: translateY(-50%);
+  /* The rail is a 64px-wide dead column otherwise; only the ticks take hits.
+     :hover still resolves on this element because hover propagates up from
+     the button that was actually struck. */
+  pointer-events: none;
+  font-family: var(--font-body);
+}
+
+/* ─── the ONE component allowed to disappear on small screens ───────────────
+   A chapter rail on a phone is clutter: it is pure navigation chrome that
+   duplicates the primary nav exactly, adds nothing a thumb can use, and steals
+   the right edge from the content. Nothing unique lives here, so it is
+   removed rather than reflowed — and the JS observes nothing below 1100px. */
+@media (max-width: 1099.98px) {
+  .crail { display: none; }
+}
+
+.crail-inner {
+  position: relative;
+}
+
+/* ─── the spine — a hairline armature the ticks strike off ─────────────────── */
+.crail-spine {
+  position: absolute;
+  right: 0;
+  top: -4px;
+  bottom: -4px;
+  width: 1px;
+  background: var(--graphite);
+  opacity: 0.13;
+  transition: opacity 0.5s var(--ease-fluid), background-color 0.45s var(--ease-fluid);
+}
+
+.crail:hover .crail-spine,
+.crail:focus-within .crail-spine {
+  opacity: 0.34;
+}
+
+/* ─── the caption — editorial header, only present once the rail is a menu ─── */
+/* Scoped selector so the local type overrides win over .meta regardless of
+   which order the two stylesheets end up in. */
+.crail .crail-cap {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 16px);
+  font-size: 0.56rem;
+  letter-spacing: 0.22em;
+  color: var(--faint);
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateX(8px);
+  transition:
+    opacity 0.45s var(--ease-fluid),
+    transform 0.55s var(--ease-surge),
+    color 0.45s var(--ease-fluid);
+}
+
+.crail .crail-cap::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  bottom: -7px;
+  width: var(--tick);
+  height: 1px;
+  background: var(--brass);
+  opacity: 0.5;
+}
+
+.crail:hover .crail-cap,
+.crail:focus-within .crail-cap {
+  opacity: 1;
+  transform: none;
+  transition-delay: 40ms;
+}
+
+/* ─── the list ─────────────────────────────────────────────────────────────── */
+.crail-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.crail-item {
+  pointer-events: none;
+}
+
+/* Chapters whose section is not present in this document. The attribute is
+   only ever written by JS; its absence means "show", so an unresolved rail
+   fails open with every mark visible. */
+.crail-item[data-live='0'] {
+  display: none;
+}
+
+/* ─── the hit target ──────────────────────────────────────────────────────── */
+.crail-tick {
+  pointer-events: auto;
+  position: relative;
+  display: block;
+  width: calc(var(--tick) + 18px);
+  height: var(--row);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.crail-tick:focus {
+  outline: none;
+}
+
+.crail-tick:focus-visible {
+  outline: 2px solid var(--tint);
+  outline-offset: 3px;
+}
+
+/* ─── the marks ───────────────────────────────────────────────────────────── */
+.crail-line,
+.crail-line-live {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  margin-top: -0.5px;      /* crisp 1px hairline, no transform needed */
+  width: var(--tick);
+  height: 1px;
+  transform-origin: 100% 50%;
+}
+
+/* Base stub — ALWAYS painted. This is what makes the rail legible with the
+   animation dead: a row of short warm-ink marks, not an empty edge. */
+.crail-line {
+  background: var(--graphite);
+  opacity: 0.34;
+  transform: scaleX(0.28);
+  transition:
+    transform 0.55s var(--ease-surge),
+    opacity 0.4s var(--ease-fluid),
+    background-color 0.45s var(--ease-fluid);
+}
+
+/* Hovering the rail wakes every stub a little before the names arrive. */
+.crail:hover .crail-line {
+  transform: scaleX(0.46);
+  opacity: 0.5;
+  transition-delay: calc(var(--i) * 26ms);
+}
+
+.crail-tick:hover .crail-line {
+  transform: scaleX(0.62);
+  opacity: 0.72;
+  transition-delay: 0ms;
+}
+
+/* Held under the brass line rather than removed — a mark never vanishes. */
+.crail-item.is-active .crail-line,
+.crail:hover .crail-item.is-active .crail-line {
+  opacity: 0.2;
+}
+
+/* The brass line. Resting state is a decorative layer at zero — GSAP is its
+   only author, from mount onward, in both motion and reduced-motion modes. */
+.crail-line-live {
+  /* Origin right + a tip that brightens leftward: the mark reads as molten
+     brass being drawn out of the spine. */
+  background: linear-gradient(270deg, var(--brass-dk) 0%, var(--brass) 44%, var(--brass-lt) 100%);
+  box-shadow: 0 0 9px rgba(197, 143, 76, 0.42);
+  transform: scaleX(0);
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+/* ─── the name ────────────────────────────────────────────────────────────── */
+/* Absolutely positioned OUTSIDE the button's box and pointer-transparent, so
+   the rail's hit column stays 64px wide instead of 220px and never blocks the
+   page beneath it. Hidden with opacity + transform only, never visibility or
+   display, so the text stays the button's accessible name at all times. */
+.crail-name {
+  position: absolute;
+  right: calc(var(--tick) + 14px);
+  top: 50%;
+  display: flex;
+  align-items: baseline;
+  gap: 0.72em;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(10px, -50%);
+  transition:
+    opacity 0.5s var(--ease-fluid),
+    transform 0.6s var(--ease-surge);
+}
+
+/* Hovering the rail reveals ALL names, staggered down the column. On exit the
+   delay drops to zero and they leave together — bloom in, snap out. */
+.crail:hover .crail-name {
+  opacity: 1;
+  transform: translate(0, -50%);
+  transition-delay: calc(var(--i) * 30ms);
+}
+
+/* The chapter you are standing in names itself permanently, and a focused
+   tick names itself with no pointer and no JavaScript involved. */
+.crail-item.is-active .crail-name,
+.crail-tick:focus-visible .crail-name {
+  opacity: 1;
+  transform: translate(0, -50%);
+  transition-delay: 0ms;
+}
+
+/* Shrink-wrapped frosted plate — sized by its own name, so it fits any label
+   length without a hard-coded column width. */
+.crail-plate {
+  position: absolute;
+  inset: -6px -12px -5px;
+  border-radius: var(--r-pill);
+  background: rgba(250, 247, 242, 0.74);
+  border: 1px solid var(--hair);
+  box-shadow: var(--lift-2);
+  backdrop-filter: blur(14px) saturate(1.15);
+  -webkit-backdrop-filter: blur(14px) saturate(1.15);
+  opacity: 0;
+  transition:
+    opacity 0.45s var(--ease-fluid),
+    background-color 0.45s var(--ease-fluid),
+    border-color 0.45s var(--ease-fluid);
+}
+
+.crail:hover .crail-plate,
+.crail-tick:focus-visible .crail-plate {
+  opacity: 1;
+}
+
+.crail-num,
+.crail-label {
+  position: relative;   /* paint above the plate */
+}
+
+.crail-num {
+  font-size: 0.575rem;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  font-variant-numeric: tabular-nums;
+  color: var(--faint);
+  transition: color 0.4s var(--ease-fluid);
+}
+
+.crail-label {
+  font-size: 0.645rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.13em;
+  line-height: 1;
+  color: var(--dim);
+  transition: color 0.4s var(--ease-fluid);
+}
+
+.crail-tick:hover .crail-label {
+  color: var(--graphite);
+}
+
+.crail-item.is-active .crail-label,
+.crail-item.is-active .crail-num {
+  color: var(--tint-deep);
+}
+
+/* ═══ over the espresso sections ═══════════════════════════════════════════
+   .is-inverse is toggled by a ScrollTrigger watching every .deep panel. A
+   warm-ink rail is invisible on #1e1710; this is a contrast fix, not styling. */
+.crail.is-inverse .crail-spine,
+.crail.is-inverse .crail-line {
+  background: var(--on-deep);
+}
+
+.crail.is-inverse .crail-spine {
+  opacity: 0.18;
+}
+
+.crail:hover.is-inverse .crail-spine,
+.crail:focus-within.is-inverse .crail-spine {
+  opacity: 0.4;
+}
+
+.crail.is-inverse .crail-line {
+  opacity: 0.36;
+}
+
+.crail.is-inverse:hover .crail-line {
+  opacity: 0.52;
+}
+
+.crail.is-inverse .crail-item.is-active .crail-line,
+.crail.is-inverse:hover .crail-item.is-active .crail-line {
+  opacity: 0.22;
+}
+
+.crail.is-inverse .crail-line-live {
+  background: linear-gradient(270deg, var(--brass) 0%, var(--brass-lt) 44%, #fbeccf 100%);
+  box-shadow: var(--glow-brass);
+}
+
+.crail.is-inverse .crail-plate {
+  background: rgba(24, 18, 12, 0.62);
+  border-color: var(--hair-on-deep);
+  box-shadow: var(--lift-deep-1);
+}
+
+.crail.is-inverse .crail-label { color: var(--dim-on-deep); }
+.crail.is-inverse .crail-num   { color: rgba(243, 237, 227, 0.4); }
+.crail.is-inverse .crail-cap   { color: rgba(243, 237, 227, 0.42); }
+.crail.is-inverse .crail-cap::after { background: var(--tint-on-deep); }
+
+.crail.is-inverse .crail-tick:hover .crail-label { color: var(--on-deep); }
+
+.crail.is-inverse .crail-item.is-active .crail-label,
+.crail.is-inverse .crail-item.is-active .crail-num {
+  color: var(--tint-on-deep);
+}
+
+.crail.is-inverse .crail-tick:focus-visible {
+  outline-color: var(--tint-on-deep);
+}
+
+/* ═══ reduced motion ═══════════════════════════════════════════════════════
+   Everything still works and everything is still legible — the states just
+   arrive instantly. GSAP matches this by collapsing the brass line's tween
+   duration to zero, so the active chapter is a pure colour change. */
+@media (prefers-reduced-motion: reduce) {
+  .crail *,
+  .crail *::before,
+  .crail *::after {
+    transition: none !important;
+    transition-delay: 0ms !important;
+  }
+}

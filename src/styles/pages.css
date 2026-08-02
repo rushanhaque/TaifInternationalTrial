@@ -92,7 +92,7 @@
 /* before/after comparison */
 .cmp {
   position: relative; aspect-ratio: 16/10; border-radius: var(--r-lg);
-  overflow: hidden; box-shadow: 0 18px 50px -18px var(--shadow-soft);
+  overflow: hidden; box-shadow: var(--lift-3);
 }
 .cmp-pane {
   position: absolute; inset: 0; background: var(--tone-bg);
@@ -104,7 +104,7 @@
 .cmp-line {
   position: absolute; top: 0; bottom: 0; left: var(--cmp, 50%); width: 4px;
   transform: translateX(-50%); border-radius: var(--r-pill);
-  background: var(--white); box-shadow: 0 0 0 1px var(--hair);
+  background: var(--white); box-shadow: var(--edge-hair);
   pointer-events: none;
 }
 .cmp-line::after {
@@ -179,8 +179,34 @@
   box-shadow: inset 0 0 0 1px var(--hair), 0 1px 4px rgba(58,42,26,.22);
   will-change: transform;
 }
-.faq-a { height: 0; overflow: hidden; }
-.faq-a-inner { padding: 0 1.5rem 1.3rem; }
+/* The disclosure opens on grid-template-rows rather than height: the row
+   collapses to 0fr and expands to 1fr, so the browser resolves the size
+   itself and we never measure or set a pixel height. `min-height:0` on the
+   child is required or the grid item refuses to shrink below its content. */
+.faq-a {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--t-slow) var(--ease-surge);
+}
+.faq-row.open .faq-a { grid-template-rows: 1fr; }
+.faq-a > * { min-height: 0; overflow: hidden; }
+/* The grid child must carry NO padding: at 0fr the row resolves to zero but
+   padding still occupies space, so the panel would never fully close. The
+   padding therefore lives on the paragraph inside it. */
+.faq-a-inner {
+  padding: 0;
+  opacity: 0;
+  transform: translateY(-6px);
+  transition:
+    opacity var(--t-base) var(--ease-fluid) 0.08s,
+    transform var(--t-slow) var(--ease-surge) 0.08s;
+}
+.faq-a-inner .body { padding: 0 1.5rem 1.3rem; }
+.faq-row.open .faq-a-inner { opacity: 1; transform: translateY(0); }
+
+@media (prefers-reduced-motion: reduce) {
+  .faq-a, .faq-a-inner { transition-duration: 0.01ms; }
+}
 .faq-a-inner .body { color: var(--graphite-2); }
 
 /* ============ legal ============ */
@@ -209,7 +235,7 @@
 }
 .nf-drop {
   width: 74px; height: 74px; border-radius: 50% 50% 52% 48% / 55% 55% 45% 45%;
-  background: var(--sheen); box-shadow: 0 18px 50px -18px var(--shadow-soft), inset 0 1px 0 rgba(255,255,255,.8);
+  background: var(--sheen); box-shadow: var(--lift-3), var(--edge-lit);
   margin-bottom: 1.6rem;
 }
 
@@ -231,7 +257,26 @@
   width: min(540px, 78vw);
   position: relative;
   display: flex; flex-direction: column; gap: 1rem;
+  /* the layer above sets pointer-events:none so exited layers cannot swallow
+     clicks — the facade itself has to opt back in to be clickable */
+  pointer-events: auto;
+  color: inherit;
 }
+
+/* the affordance: it only appears once you are on the facade */
+.cd-open {
+  color: var(--tint-on-deep);
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity var(--t-base) var(--ease-fluid),
+              transform var(--t-base) var(--ease-surge);
+}
+.cd-facade:hover .cd-open,
+.cd-facade:focus-visible .cd-open,
+.cd-fallback-cell:hover .cd-open { opacity: 1; transform: translateX(0); }
+.cd-fallback-cell { display: block; color: inherit; }
+.cd-fallback-cell .cd-open { color: var(--tint-deep); }
+@media (hover: none) { .cd-open { opacity: 1; transform: none; } }
 .cd-facade .slab { width: 100%; }
 
 .cd-tag {

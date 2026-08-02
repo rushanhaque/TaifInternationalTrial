@@ -1,0 +1,345 @@
+/* ═══ LEDGER — the credibility close ══════════════════════════════════════
+   A shipping manifest set as a two-page spread. Everything here is tuned for
+   density and stillness: hairlines instead of cards, tabular figures, a
+   label column that never grows past 13rem so the value column stays a true
+   left edge down the whole page.
+
+   FAIL-OPEN CONTRACT: no rule in this file hides content. Rows rest at full
+   opacity with no transform; Ledger.jsx seeds the hidden state from JS only
+   under (prefers-reduced-motion: no-preference).
+   ═════════════════════════════════════════════════════════════════════════ */
+
+.ldg {
+  /* the whole block is set in tabular figures — the manifest tell */
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── head ───────────────────────────────────────────────────────────────── */
+
+.ldg-top {
+  align-items: end;
+  margin-bottom: clamp(2rem, 3.6vw, 3.2rem);
+}
+
+.ldg-top h2 {
+  text-wrap: balance;
+  max-width: 16ch;
+}
+
+.ldg-top-r {
+  display: flex;
+  align-items: flex-end;
+}
+
+@media (max-width: 899px) {
+  .ldg-top-r {
+    margin-top: 1.4rem;
+  }
+}
+
+/* ── document strip — the header band of the manifest ───────────────────── */
+
+.ldg-strip {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 0 0 clamp(2.4rem, 4vw, 3.4rem);
+  border-top: 1px solid var(--hair-strong);
+  border-bottom: 1px solid var(--hair);
+}
+
+.ldg-strip-cell {
+  display: flex;
+  flex-direction: column;
+  gap: .4rem;
+  min-width: 0;
+  padding-block: .95rem 1rem;
+  border-top: 1px solid var(--hair);
+}
+
+/* two-up on small screens: the second cell of each pair carries the divider */
+.ldg-strip-cell:nth-child(2n) {
+  padding-left: clamp(.9rem, 3.5vw, 1.5rem);
+  border-left: 1px solid var(--hair);
+}
+
+.ldg-strip-cell:nth-child(-n + 2) {
+  border-top: 0;
+}
+
+.ldg-strip-k {
+  color: var(--dim);
+  font-size: .625rem;
+  letter-spacing: .14em;
+}
+
+.ldg-strip-v {
+  margin: 0;
+  color: var(--graphite);
+  font-size: .9rem;
+  line-height: 1.35;
+  letter-spacing: -.005em;
+}
+
+@media (min-width: 900px) {
+  .ldg-strip {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .ldg-strip-cell,
+  .ldg-strip-cell:nth-child(2n) {
+    padding-left: clamp(1.1rem, 2.2vw, 1.9rem);
+    border-top: 0;
+    border-left: 1px solid var(--hair);
+  }
+
+  .ldg-strip-cell:first-child {
+    padding-left: 0;
+    border-left: 0;
+  }
+}
+
+/* ── the spread ─────────────────────────────────────────────────────────── */
+
+.ldg-sheet {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(2.8rem, 4.4vw, 3.6rem);
+}
+
+.ldg-col {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(2.8rem, 4.4vw, 3.6rem);
+  min-width: 0;
+}
+
+/* the binding — a full-height hairline that fades at both ends so the two
+   halves read as one sheet folded, not two tables parked side by side */
+.ldg-gutter {
+  display: none;
+}
+
+@media (min-width: 1000px) {
+  .ldg-sheet {
+    flex-direction: row;
+    gap: 0;
+  }
+
+  .ldg-col {
+    flex: 1 1 50%;
+    padding-right: clamp(2rem, 3.6vw, 4rem);
+  }
+
+  .ldg-col + .ldg-col {
+    padding-right: 0;
+    padding-left: clamp(2rem, 3.6vw, 4rem);
+  }
+
+  .ldg-gutter {
+    display: block;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 1px;
+    transform: translateX(-.5px);
+    background: linear-gradient(180deg,
+        transparent 0%,
+        var(--hair) 5%,
+        var(--hair) 95%,
+        transparent 100%);
+    pointer-events: none;
+  }
+}
+
+/* ── group ──────────────────────────────────────────────────────────────── */
+
+.ldg-head {
+  display: flex;
+  align-items: center;
+  gap: .68rem;
+  margin: 0 0 .2rem;
+  padding-bottom: .85rem;
+  border-bottom: 1px solid var(--hair-strong);
+}
+
+/* struck brass punch-mark — the maker's tick, repeated at group scale */
+.ldg-punch {
+  width: 7px;
+  height: 7px;
+  flex: none;
+  border-radius: 1.5px;
+  transform: rotate(45deg);
+  background: linear-gradient(135deg, var(--brass-lt), var(--brass) 58%, var(--brass-dk));
+  box-shadow: 0 1px 2px rgba(107, 74, 46, .35);
+}
+
+.ldg-no {
+  font-size: .72rem;
+  letter-spacing: .04em;
+}
+
+.ldg-name {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: .8rem;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: .13em;
+  color: var(--graphite);
+}
+
+/* line count per group — small, but it is real information, so it keeps
+   --dim rather than dropping to --faint and failing contrast */
+.ldg-count {
+  margin-left: auto;
+  flex: none;
+  font-size: .6rem;
+  font-weight: 600;
+  letter-spacing: .12em;
+  color: var(--dim);
+}
+
+/* ── rows ───────────────────────────────────────────────────────────────── */
+
+.ldg-rows {
+  margin: 0;
+}
+
+.ldg-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: .28rem;
+  padding-block: .78rem .82rem;
+  border-bottom: 1px solid var(--hair);
+}
+
+@media (min-width: 560px) {
+  .ldg-row {
+    grid-template-columns: minmax(8rem, 13rem) minmax(0, 1fr);
+    align-items: baseline;
+    gap: .3rem 1.1rem;
+    padding-block: .88rem .92rem;
+  }
+}
+
+/* hover marker sits in the outer margin so it never shifts the text —
+   transform only, so it costs nothing on a dense 40-row block */
+.ldg-row::before {
+  content: '';
+  position: absolute;
+  top: .42rem;
+  bottom: .42rem;
+  left: clamp(-1rem, -1.4vw, -.6rem);
+  width: 2px;
+  border-radius: var(--r-pill);
+  background: linear-gradient(180deg, var(--brass-lt), var(--brass-dk));
+  transform: scaleY(0);
+  transition: transform .42s var(--ease-surge);
+}
+
+@media (hover: hover) {
+  .ldg-row:hover::before {
+    transform: scaleY(1);
+  }
+
+  .ldg-row:hover .ldg-k {
+    color: var(--tint-deep);
+  }
+}
+
+.ldg-k {
+  color: var(--dim);
+  font-size: .655rem;
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: .115em;
+  transition: color .32s var(--ease-fluid);
+}
+
+.ldg-v {
+  margin: 0;
+  color: var(--graphite);
+  font-size: .945rem;
+  line-height: 1.45;
+  letter-spacing: -.004em;
+  text-wrap: pretty;
+}
+
+/* HS headings get a struck-tag treatment — raised off the sheet just enough
+   to read as a stamped code rather than running text */
+.ldg-code {
+  display: inline-block;
+  margin: 0 .34rem .18rem 0;
+  padding: .16em .5em .2em;
+  border: 1px solid var(--hair-strong);
+  border-radius: 5px;
+  background: linear-gradient(180deg, var(--white), var(--chrome-2));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, .9),
+    0 1px 1.5px rgba(58, 42, 26, .06);
+  font-size: .845rem;
+  font-weight: 600;
+  letter-spacing: .025em;
+  color: var(--graphite);
+}
+
+.ldg-code i {
+  margin-right: .4em;
+  font-style: normal;
+  font-size: .62em;
+  font-weight: 700;
+  letter-spacing: .1em;
+  color: var(--tint-deep);
+  vertical-align: .08em;
+}
+
+/* marginal annotation — the aside a factory writes in the margin of a spec */
+.ldg-note {
+  margin: 1.1rem 0 0;
+  padding-left: .85rem;
+  border-left: 2px solid var(--chrome-3);
+  max-width: 46ch;
+  color: var(--dim);
+  font-size: .795rem;
+  line-height: 1.55;
+  letter-spacing: 0;
+}
+
+/* ── foot ───────────────────────────────────────────────────────────────── */
+
+.ldg-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem clamp(2rem, 4vw, 4rem);
+  margin-top: clamp(2.8rem, 5vw, 4.4rem);
+  padding-top: clamp(1.4rem, 2.4vw, 2.1rem);
+  border-top: 1px solid var(--hair-strong);
+}
+
+.ldg-fine {
+  margin: 0;
+  flex: 1 1 34ch;
+  max-width: 66ch;
+  color: var(--dim);
+  font-size: .815rem;
+  line-height: 1.62;
+}
+
+.ldg-foot .btn {
+  flex: none;
+}
+
+/* ── reduced motion — static, complete, no transitions ──────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .ldg-row::before,
+  .ldg-k {
+    transition: none;
+  }
+}

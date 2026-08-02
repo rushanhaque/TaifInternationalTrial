@@ -2,6 +2,8 @@ import { useEffect, useRef } from 'react'
 import { gsap, ScrollTrigger, reduced } from '../lib/gsap'
 import { COLLECTIONS } from '../data/site'
 import Slab from './Slab'
+import { Link } from '../lib/router'
+import { familySlug } from '../pages/CollectionPage'
 import Button from './Button'
 import { COLLECTION_IMGS } from '../data/images'
 
@@ -93,7 +95,12 @@ export default function CollectionsDolly() {
       <div className="cd-stage only-cd">
         {COLLECTIONS.map((c, i) => (
           <div className="cd-layer" key={c.no}>
-            <div className="cd-facade">
+            <Link
+              className="cd-facade"
+              to={`/collections/${familySlug(c.name)}`}
+              data-cursor="OPEN"
+              aria-label={`Open the ${c.name} collection`}
+            >
               <span className={`cd-tag a-${c.accent}`} aria-hidden="true">{c.no}</span>
               <Slab tone={c.tone} label={c.name.toUpperCase()} meta={c.material} ratio="16/10" bead
                 img={COLLECTION_IMGS[c.name]} alt={`${c.name} — ${c.material}`} />
@@ -103,8 +110,9 @@ export default function CollectionsDolly() {
                   <span className="cd-stub-name"> · {c.name}</span>
                 </span>
                 <p className="cd-pitch">{c.pitch}</p>
+                <span className="cd-open meta" aria-hidden="true">Open the family →</span>
               </div>
-            </div>
+            </Link>
           </div>
         ))}
         {[0, 1, 2].map((i) => <div className="cd-haze" key={i} aria-hidden="true" />)}
@@ -126,11 +134,17 @@ export default function CollectionsDolly() {
       <div className="wrap only-fallback">
         <div className="cd-fallback">
           {COLLECTIONS.map((c) => (
-            <div key={c.no} className="cd-fallback-cell">
+            <Link
+              key={c.no}
+              className="cd-fallback-cell"
+              to={`/collections/${familySlug(c.name)}`}
+              aria-label={`Open the ${c.name} collection`}
+            >
               <Slab tone={c.tone} label={c.name.toUpperCase()} meta={c.material} ratio="16/10"
                 img={COLLECTION_IMGS[c.name]} alt={`${c.name} — ${c.material}`} />
               <p className="cd-pitch" style={{ marginTop: '.7rem' }}>{c.pitch}</p>
-            </div>
+              <span className="cd-open meta">Open the family →</span>
+            </Link>
           ))}
         </div>
         <div className="cd-end-fallback">

@@ -1,0 +1,762 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   mk2 · THE TURN
+   A hand-raised brass vessel turning 360° under a raking key light, then
+   dissolving into walnut. Every surface here is paint — no 3D, no bitmaps.
+
+   Resting state of this file is the DESIGNED STATIC PLATE: form fully
+   rendered, all six callouts legible, brass on top of walnut. The scrub
+   only ever seeds hidden states from JS, and only inside the desktop +
+   motion-allowed matchMedia. If the animation never runs, nothing is lost
+   except the turn itself.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.tt {
+  position: relative;
+  /* Diameter of the vessel. Bounded by viewport HEIGHT as well as width so
+     the pinned plate — HUD, form, readout rule — always fits one screen. */
+  --form: clamp(240px, min(34vw, 44svh), 460px);
+  /* The strips are wider than the form so a horizontal sweep never uncovers
+     an edge. Geometry: left -90%, width 280% → the strip spans -90%…190% of
+     the form and the fastest tween moves it 89.6%, landing at -179.6%…100.4%. */
+  --strip-w: 280%;
+  --strip-x: -90%;
+}
+
+/* ─── intro ─────────────────────────────────────────────────────────── */
+
+.tt-intro {
+  margin-bottom: clamp(2.2rem, 5vw, 4.2rem);
+}
+
+.tt-intro .grid {
+  align-items: end;
+  row-gap: clamp(1.1rem, 2.4vw, 1.6rem);
+}
+
+.tt-intro .lede {
+  max-width: 34ch;
+  padding-bottom: 0.35rem;
+}
+
+/* .tt-scoped so it outranks the global .meta it also carries */
+.tt .tt-caption {
+  margin-top: clamp(1.4rem, 3vw, 2.2rem);
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--hair);
+  color: var(--dim);
+  text-transform: none;
+  letter-spacing: 0.01em;
+  font-weight: 500;
+  font-size: 0.76rem;
+}
+
+/* ─── the stage — a dark room built for one object ──────────────────── */
+
+.tt-stage {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.2rem, 2.6vw, 2.2rem);
+  padding-block: clamp(1.8rem, 4vw, 3rem);
+  color: var(--on-deep);
+  background:
+    radial-gradient(128% 88% at 50% 4%, #2c2117 0%, #241b12 34%, #1e1710 62%, #130e08 100%);
+}
+
+/* the key light itself, spilling in from above the frame */
+.tt-lamp {
+  position: absolute;
+  inset: -14% -12% auto -12%;
+  height: 62%;
+  pointer-events: none;
+  background:
+    radial-gradient(48% 100% at 50% 0%,
+      rgba(255, 241, 214, 0.17) 0%,
+      rgba(255, 234, 197, 0.07) 40%,
+      rgba(255, 230, 188, 0) 74%);
+}
+
+/* warm bounce off the floor the vessel is standing on */
+.tt-floor {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 34%;
+  pointer-events: none;
+  background:
+    radial-gradient(46% 74% at 50% 100%, rgba(176, 137, 79, 0.18) 0%, rgba(176, 137, 79, 0) 72%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.34) 100%);
+}
+
+/* ─── HUD ───────────────────────────────────────────────────────────── */
+
+.tt-hud {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex: none;
+}
+
+.tt-hud-l {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.tt-hud-l .meta {
+  color: var(--tint-on-deep);
+}
+
+.tt-hud-sub {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  letter-spacing: 0.01em;
+  color: var(--dim-on-deep);
+}
+
+.tt-hud-c {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding-top: 0.15rem;
+  text-align: center;
+}
+
+.tt-hud-c em {
+  font-style: normal;
+  color: var(--on-deep);
+  white-space: nowrap;
+}
+
+.tt-hud-c i {
+  font-style: normal;
+  font-size: 0.8rem;
+  line-height: 1;
+  color: var(--tint-on-deep);
+  opacity: 0.7;
+}
+
+.tt-hud-r {
+  display: none;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.1rem;
+}
+
+.tt-hud-r .meta {
+  color: var(--dim-on-deep);
+}
+
+.tt-deg {
+  font-family: var(--font-display);
+  font-stretch: 125%;
+  font-weight: 700;
+  font-size: clamp(1.4rem, 2.2vw, 2.1rem);
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+  color: var(--tint-on-deep);
+}
+
+/* ─── the rig — a box exactly one diameter tall, so every callout row's
+       horizontal offset can be derived from the circle it points at ────── */
+
+.tt-rig {
+  position: relative;
+  z-index: 2;
+  flex: none;
+  width: 100%;
+  max-width: 1560px;
+  height: var(--form);
+  margin-inline: auto;
+  margin-block: auto;
+  padding-inline: var(--gutter);
+}
+
+/* ─── the vessel ────────────────────────────────────────────────────── */
+
+.tt-form {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  /* independent `translate` — GSAP writes `transform`, so the two never
+     fight and the scale breath keeps its centre through the dissolve */
+  translate: -50% 0;
+  width: var(--form);
+  height: var(--form);
+  border-radius: 50%;
+  box-shadow:
+    0 1px 0 rgba(255, 246, 224, 0.16),
+    0 30px 60px -26px rgba(0, 0, 0, 0.9),
+    0 80px 110px -60px rgba(0, 0, 0, 0.75);
+}
+
+.tt-form.is-frames {
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.tt-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.tt-group {
+  position: absolute;
+  inset: 0;
+}
+
+.tt-skin {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  /* keeps each material's overlay/screen layers compositing inside its own
+     stack — otherwise brass would blend into the walnut waiting behind it */
+  isolation: isolate;
+}
+
+.tt-lay {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+
+.tt-strip {
+  position: absolute;
+  top: 0;
+  left: var(--strip-x);
+  width: var(--strip-w);
+  height: 100%;
+  display: block;
+}
+
+/* ── brass ── */
+
+.tt-skin.is-brass .tt-base {
+  background:
+    radial-gradient(142% 120% at 30% 13%,
+      #fff4da 0%, #f1d9a8 8%, #d7b073 20%, #b0894f 38%,
+      #94703a 54%, #6b4e26 72%, #3f2d12 90%, #241804 100%);
+}
+
+/* the broad specular lobes — five across the face, period 7% of the strip */
+.tt-skin.is-brass .tt-bands {
+  background-image: repeating-linear-gradient(90deg,
+    rgba(255, 247, 222, 0) 0%,
+    rgba(255, 247, 222, 0.05) 0.7%,
+    rgba(255, 250, 232, 0.40) 1.8%,
+    rgba(255, 253, 244, 0.74) 2.4%,
+    rgba(255, 245, 218, 0.32) 3.1%,
+    rgba(255, 247, 222, 0) 4.1%,
+    rgba(52, 34, 12, 0.20) 5.1%,
+    rgba(30, 19, 6, 0.32) 5.7%,
+    rgba(52, 34, 12, 0.13) 6.3%,
+    rgba(255, 247, 222, 0) 7%);
+}
+
+/* fine facet chatter — twenty lines across the face, and it travels faster
+   than the lobes above it. That lag is the whole rotation illusion. */
+.tt-skin.is-brass .tt-chatter {
+  opacity: 0.52;
+  mix-blend-mode: overlay;
+  background-image: repeating-linear-gradient(90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 246, 218, 0.34) 0.42%,
+    rgba(255, 255, 255, 0) 0.9%,
+    rgba(0, 0, 0, 0.24) 1.28%,
+    rgba(255, 255, 255, 0) 1.75%);
+}
+
+/* struck by hand on a spun blank: lathe rings under a staggered dimple field */
+.tt-skin.is-brass .tt-tex {
+  inset: -35%;
+  opacity: 0.58;
+  mix-blend-mode: overlay;
+  background-image:
+    radial-gradient(circle at 32% 30%, rgba(255, 250, 232, 0.34) 0 17%, rgba(255, 250, 232, 0) 47%),
+    radial-gradient(circle at 74% 72%, rgba(24, 14, 3, 0.30) 0 15%, rgba(24, 14, 3, 0) 44%),
+    repeating-radial-gradient(circle at 50% 50%,
+      rgba(255, 248, 226, 0.09) 0 1px,
+      rgba(0, 0, 0, 0.07) 1px 2px,
+      rgba(255, 255, 255, 0) 2px 7px);
+  background-size: 3.6% 3.6%, 3.6% 3.6%, auto;
+  background-position: 0 0, 1.8% 1.8%, 0 0;
+}
+
+/* ── walnut ── */
+
+.tt-skin.is-wood .tt-base {
+  background:
+    radial-gradient(142% 120% at 30% 13%,
+      #e0c096 0%, #c49a68 9%, #a37a4d 22%, #7d573a 42%,
+      #6b4a2e 58%, #4d3220 76%, #33210f 92%, #241505 100%);
+}
+
+/* three co-prime line periods stacked = grain that never visibly repeats,
+   plus one off-axis pass for cathedral figure */
+.tt-skin.is-wood .tt-chatter {
+  opacity: 0.62;
+  mix-blend-mode: multiply;
+  background-image:
+    repeating-linear-gradient(90deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(58, 39, 24, 0.42) 0.28%,
+      rgba(255, 255, 255, 0) 0.62%,
+      rgba(255, 255, 255, 0) 1.9%),
+    repeating-linear-gradient(90deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(38, 24, 13, 0.30) 0.5%,
+      rgba(255, 255, 255, 0) 1.1%,
+      rgba(255, 255, 255, 0) 3.1%),
+    repeating-linear-gradient(88.4deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(72, 49, 30, 0.22) 1.4%,
+      rgba(255, 255, 255, 0) 3.2%,
+      rgba(255, 255, 255, 0) 5.7%);
+}
+
+.tt-skin.is-wood .tt-tex {
+  inset: -35%;
+  opacity: 0.5;
+  mix-blend-mode: overlay;
+  background-image:
+    repeating-linear-gradient(91.2deg,
+      rgba(255, 236, 204, 0.16) 0 0.18%,
+      rgba(0, 0, 0, 0.16) 0.18% 0.42%,
+      rgba(255, 255, 255, 0) 0.42% 1.05%),
+    repeating-linear-gradient(89deg,
+      rgba(255, 255, 255, 0) 0 2.2%,
+      rgba(28, 17, 8, 0.14) 2.2% 2.5%,
+      rgba(255, 255, 255, 0) 2.5% 4.4%);
+}
+
+/* ── shared: raking hotspot, cylinder falloff, mouth ── */
+
+/* a specular hotspot parked just inside the rim; orbiting it once is the
+   raking key light travelling around the form */
+.tt-rake {
+  mix-blend-mode: screen;
+  background:
+    radial-gradient(42% 33% at 50% 6%,
+      rgba(255, 252, 240, 0.92) 0%,
+      rgba(255, 238, 198, 0.44) 36%,
+      rgba(255, 226, 170, 0.13) 62%,
+      rgba(255, 226, 170, 0) 82%);
+}
+
+.tt-skin.is-wood .tt-rake {
+  opacity: 0.32;
+}
+
+/* the layer that makes a flat disc read as a cylinder: hard falloff at both
+   silhouettes, contact darkening at the foot, a lick of bounce at the top */
+.tt-vol {
+  background:
+    linear-gradient(90deg,
+      rgba(12, 7, 2, 0.88) 0%,
+      rgba(12, 7, 2, 0.44) 8%,
+      rgba(12, 7, 2, 0.07) 23%,
+      rgba(12, 7, 2, 0) 40%,
+      rgba(12, 7, 2, 0) 57%,
+      rgba(12, 7, 2, 0.11) 74%,
+      rgba(12, 7, 2, 0.52) 91%,
+      rgba(12, 7, 2, 0.92) 100%),
+    radial-gradient(78% 42% at 50% 107%,
+      rgba(6, 3, 0, 0.9) 0%, rgba(6, 3, 0, 0.34) 52%, rgba(6, 3, 0, 0) 76%),
+    radial-gradient(66% 38% at 50% -8%,
+      rgba(255, 246, 222, 0.2) 0%, rgba(255, 246, 222, 0) 62%);
+}
+
+/* the opening. A vessel turning on its own axis presents the same ellipse
+   at every angle, so this one is deliberately static. */
+.tt-mouth {
+  position: absolute;
+  left: 25.5%;
+  right: 25.5%;
+  top: 5.2%;
+  height: 12.6%;
+  border-radius: 50%;
+  background:
+    radial-gradient(94% 128% at 50% 122%,
+      rgba(255, 240, 208, 0.30) 0%,
+      rgba(126, 90, 42, 0.26) 34%,
+      rgba(24, 15, 4, 0.9) 76%);
+  box-shadow:
+    inset 0 2px 4px rgba(0, 0, 0, 0.7),
+    0 1px 0 rgba(255, 244, 214, 0.32),
+    0 -1px 3px rgba(0, 0, 0, 0.45);
+}
+
+.tt-skin.is-wood .tt-mouth {
+  background:
+    radial-gradient(94% 128% at 50% 122%,
+      rgba(226, 190, 140, 0.28) 0%,
+      rgba(92, 63, 38, 0.3) 34%,
+      rgba(20, 12, 5, 0.92) 76%);
+  box-shadow:
+    inset 0 2px 4px rgba(0, 0, 0, 0.72),
+    0 1px 0 rgba(232, 215, 189, 0.24),
+    0 -1px 3px rgba(0, 0, 0, 0.5);
+}
+
+/* ── the silhouette's own raking light ── */
+
+.tt-rim {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.tt-rim circle {
+  fill: none;
+}
+
+.tt-rim-base {
+  stroke: rgba(255, 238, 200, 0.17);
+  stroke-width: 1.1;
+}
+
+.tt-rim-hot {
+  stroke: #fff6e0;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  opacity: 0.85;
+}
+
+.tt-rim-hot2 {
+  stroke: var(--brass-lt);
+  stroke-width: 1.3;
+  stroke-linecap: round;
+  opacity: 0.6;
+}
+
+.tt-rim.is-wood .tt-rim-base {
+  stroke: rgba(232, 215, 189, 0.13);
+}
+
+.tt-rim.is-wood .tt-rim-hot {
+  stroke: #f2ddbb;
+  opacity: 0.4;
+}
+
+.tt-rim.is-wood .tt-rim-hot2 {
+  stroke: var(--oak);
+  opacity: 0.3;
+}
+
+/* ─── cast shadow ───────────────────────────────────────────────────── */
+
+.tt-ground {
+  position: absolute;
+  left: 50%;
+  top: calc(100% - var(--form) * 0.028);
+  translate: -50% 0;
+  width: calc(var(--form) * 0.88);
+  height: calc(var(--form) * 0.11);
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(9px);
+  background:
+    radial-gradient(closest-side,
+      rgba(0, 0, 0, 0.86) 0%, rgba(0, 0, 0, 0.42) 54%, rgba(0, 0, 0, 0) 78%);
+}
+
+/* ─── callouts ──────────────────────────────────────────────────────── */
+
+.tt-notes {
+  display: none;
+}
+
+.tt-note {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  translate: 0 -50%;
+  pointer-events: none;
+}
+
+.tt-note.side-l {
+  flex-direction: row;
+  text-align: right;
+}
+
+.tt-note.side-r {
+  flex-direction: row-reverse;
+  text-align: left;
+}
+
+.tt-note-body {
+  display: block;
+  max-width: clamp(148px, 15vw, 238px);
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(243, 237, 227, 0.16);
+}
+
+.tt .tt-note-tag {
+  display: block;
+  margin-bottom: 0.34rem;
+  font-size: 0.625rem;
+  color: var(--tint-on-deep);
+}
+
+.tt-note-text {
+  display: block;
+  font-family: var(--font-body);
+  font-size: clamp(0.82rem, 1.02vw, 0.98rem);
+  line-height: 1.36;
+  letter-spacing: -0.005em;
+  color: var(--on-deep);
+  text-wrap: balance;
+}
+
+.tt-note-line {
+  flex: none;
+  width: clamp(38px, 5vw, 78px);
+  height: 1px;
+  margin-inline: 0.7rem;
+  background: linear-gradient(90deg,
+    rgba(227, 200, 143, 0.15), rgba(227, 200, 143, 0.85));
+}
+
+.tt-note.side-l .tt-note-line {
+  transform-origin: right center;
+}
+
+.tt-note.side-r .tt-note-line {
+  transform-origin: left center;
+  background: linear-gradient(270deg,
+    rgba(227, 200, 143, 0.15), rgba(227, 200, 143, 0.85));
+}
+
+.tt-note-dot {
+  flex: none;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--brass-lt);
+  box-shadow:
+    0 0 0 1px rgba(227, 200, 143, 0.3),
+    0 0 12px 2px rgba(227, 200, 143, 0.38);
+}
+
+/* Each row's horizontal offset is cos-derived from its height on the circle
+   (x = r·√(1−d²)) plus a 10px breath, so every leader lands on the true
+   silhouette rather than on the bounding box. */
+.tt-note.a1 { top: 26%; right: calc(50% + var(--form) * 0.438 + 10px); }
+.tt-note.a2 { top: 44%; left:  calc(50% + var(--form) * 0.496 + 10px); }
+.tt-note.a3 { top: 74%; right: calc(50% + var(--form) * 0.438 + 10px); }
+.tt-note.a4 { top: 20%; left:  calc(50% + var(--form) * 0.400 + 10px); }
+.tt-note.a5 { top: 50%; right: calc(50% + var(--form) * 0.500 + 10px); }
+.tt-note.a6 { top: 68%; left:  calc(50% + var(--form) * 0.466 + 10px); }
+
+/* ─── progress rule ─────────────────────────────────────────────────── */
+
+.tt-bar {
+  display: none;
+  position: relative;
+  z-index: 3;
+  flex: none;
+  height: 2px;
+  margin-inline: var(--gutter);
+  border-radius: var(--r-pill);
+  overflow: hidden;
+  background: rgba(243, 237, 227, 0.1);
+}
+
+.tt-bar > i {
+  position: absolute;
+  inset: 0;
+  display: block;
+  transform: scaleX(0);
+  transform-origin: left center;
+  background: linear-gradient(90deg, var(--brass-dk), var(--brass) 42%, var(--brass-lt) 74%, #fff6e2);
+}
+
+/* ─── the spec list ─────────────────────────────────────────────────── */
+
+.tt-specs {
+  margin-top: clamp(2.2rem, 5vw, 3.6rem);
+}
+
+.tt-spec-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(1.6rem, 4vw, 3rem);
+}
+
+.tt-spec-h {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--hair);
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: -0.01em;
+  color: var(--graphite);
+}
+
+.tt-spec-h::before {
+  content: '';
+  flex: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  box-shadow: var(--lift-1);
+}
+
+.tt-spec-col.is-brass .tt-spec-h::before {
+  background: linear-gradient(140deg, #f2dcae, var(--brass) 52%, var(--brass-dk));
+}
+
+.tt-spec-col.is-wood .tt-spec-h::before {
+  background: linear-gradient(140deg, var(--oak), var(--walnut) 52%, var(--walnut-dk));
+}
+
+.tt-spec-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1rem;
+}
+
+.tt-spec-list li {
+  display: grid;
+  gap: 0.22rem;
+  padding-left: 0.9rem;
+  border-left: 2px solid var(--chrome-3);
+}
+
+.tt .tt-spec-tag {
+  color: var(--tint-deep);
+  font-size: 0.625rem;
+}
+
+.tt-spec-text {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--graphite-2);
+  max-width: 42ch;
+}
+
+@media (min-width: 640px) {
+  .tt-spec-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* ═══ FLAT — phones, tablets, and anyone who asked for less motion ═══
+   Not a fallback: a plate. The form holds a posed three-quarter light and
+   the six callouts become the spec list, which is where they belong on a
+   screen too narrow to hang leader lines off. */
+@media (max-width: 999.98px), (prefers-reduced-motion: reduce) {
+  .tt {
+    --form: clamp(230px, 72vw, 420px);
+  }
+
+  .tt-stage {
+    padding-block: clamp(2.2rem, 7vw, 3.4rem);
+  }
+
+  /* posed, not parked: the key light sits high-left, the surface is caught
+     part-way through a turn rather than square-on */
+  .tt-rake {
+    transform: rotate(-26deg);
+  }
+
+  .tt-tex {
+    transform: rotate(-7deg);
+  }
+
+  .tt-strip {
+    transform: translateX(-7%);
+  }
+
+  [data-rimg] {
+    transform: rotate(-38deg);
+    transform-origin: 100px 100px;
+  }
+
+  .tt-hud {
+    flex-wrap: wrap;
+    gap: 0.9rem 1.2rem;
+  }
+
+  .tt-hud-c {
+    padding-top: 0;
+  }
+}
+
+@media (max-width: 559.98px) {
+  .tt-hud-c {
+    flex-basis: 100%;
+    justify-content: flex-start;
+    text-align: left;
+  }
+
+  .tt-note-text,
+  .tt-spec-text {
+    text-wrap: pretty;
+  }
+}
+
+/* ═══ PINNED — desktop, motion allowed ═══ */
+@media (min-width: 1000px) and (prefers-reduced-motion: no-preference) {
+  .tt-stage {
+    height: 100svh;
+    min-height: 620px;
+  }
+
+  .tt-notes,
+  .tt-bar {
+    display: block;
+  }
+
+  .tt-hud-r {
+    display: flex;
+  }
+
+  /* The spec list is the callouts' accessible twin — the plate shows the
+     leader lines, assistive tech still gets the prose. Never display:none. */
+  .tt-specs {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    clip-path: inset(50%);
+  }
+}
+
+/* Tall-and-narrow desktops get a slightly smaller vessel so the callout
+   columns keep their air instead of crowding the silhouette. */
+@media (min-width: 1000px) and (max-width: 1240px) {
+  .tt {
+    --form: clamp(240px, min(28vw, 42svh), 380px);
+  }
+
+  .tt-note-body {
+    max-width: clamp(132px, 13vw, 190px);
+  }
+
+  .tt-note-line {
+    width: clamp(28px, 3.4vw, 52px);
+    margin-inline: 0.5rem;
+  }
+}

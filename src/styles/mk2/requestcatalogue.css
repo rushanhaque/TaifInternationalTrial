@@ -1,0 +1,196 @@
+/* ============ Request the catalogue ============
+   Short by design. A two-column band on espresso: the ask on the left, one
+   pale card on the right. This replaced a much longer treatment (a 3-D hinged
+   catalogue plus a full air waybill) that was the heaviest block on the page
+   at exactly the point where a buyer just wants to hand over an address. */
+
+.rq {
+  position: relative;
+  background: var(--deep);
+  color: var(--on-deep);
+  padding-block: clamp(4.5rem, 9vw, 8rem);
+  overflow: hidden;
+}
+
+/* one warm pool of light behind the card, so the espresso is not flat */
+.rq::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(58% 70% at 78% 42%, rgba(176, 137, 79, 0.16), transparent 70%);
+}
+
+.rq-inner {
+  position: relative;
+  display: grid;
+  gap: clamp(2.4rem, 5vw, 5rem);
+  align-items: center;
+}
+
+@media (min-width: 900px) {
+  .rq-inner { grid-template-columns: 1fr minmax(360px, 27rem); }
+}
+
+/* ---- the ask ---- */
+.rq-kicker { color: var(--tint-on-deep); display: block; margin-bottom: 1.1rem; }
+
+.rq-title {
+  font-family: var(--font-display);
+  font-stretch: 125%;
+  font-weight: 700;
+  font-size: clamp(2.3rem, 5.4vw, 4.4rem);
+  line-height: 0.96;
+  letter-spacing: -0.035em;
+  color: var(--on-deep);
+  text-wrap: balance;
+}
+
+.rq-lede {
+  margin-top: 1.1rem;
+  max-width: 34ch;
+  font-size: clamp(1rem, 1.4vw, 1.2rem);
+  line-height: 1.55;
+  color: var(--dim-on-deep);
+}
+
+/* what actually ships — three figures on a hairline */
+.rq-ships {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 clamp(1.6rem, 3.4vw, 3rem);
+  margin-top: clamp(1.8rem, 3.4vw, 2.6rem);
+  padding-top: 1.3rem;
+  border-top: 1px solid var(--hair-on-deep);
+}
+
+.rq-ships li { display: flex; align-items: baseline; gap: 0.5rem; }
+
+.rq-ships b {
+  font-family: var(--font-display);
+  font-stretch: 125%;
+  font-weight: 700;
+  font-size: clamp(1.5rem, 2.6vw, 2.1rem);
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+  color: var(--tint-on-deep);
+}
+
+.rq-ships span {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--dim-on-deep);
+}
+
+/* ---- the card ---- */
+.rq-card {
+  position: relative;
+  background: var(--chrome);
+  border-radius: var(--r-lg);
+  padding: clamp(1.6rem, 2.6vw, 2.2rem);
+  box-shadow: var(--lift-4);
+  color: var(--graphite);
+}
+
+/* a thin brass edge along the top — the only trim on the card */
+.rq-card::before {
+  content: '';
+  position: absolute;
+  left: clamp(1.6rem, 2.6vw, 2.2rem);
+  right: clamp(1.6rem, 2.6vw, 2.2rem);
+  top: 0;
+  height: 2px;
+  border-radius: var(--r-pill);
+  background: linear-gradient(90deg, var(--brass-lt), var(--brass) 45%, transparent);
+}
+
+.rq-form { display: grid; gap: 0.9rem; }
+.rq-send { width: 100%; margin-top: 0.4rem; }
+
+/* ---- sent state ---- */
+.rq-done {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 1rem;
+  text-align: center;
+  padding-block: 1.4rem 0.6rem;
+  min-height: 15rem;
+}
+
+.rq-stamp {
+  display: grid;
+  justify-items: center;
+  gap: 0.2rem;
+  padding: 0.7rem 1.5rem;
+  border: 2.5px solid var(--tint-deep);
+  border-radius: var(--r-sm);
+  color: var(--tint-deep);
+  transform: rotate(-7deg);
+  /* ink never sits perfectly flat on paper */
+  opacity: 0.92;
+}
+
+.rq-stamp b {
+  font-family: var(--font-display);
+  font-stretch: 125%;
+  font-weight: 700;
+  font-size: clamp(1.2rem, 2.2vw, 1.7rem);
+  letter-spacing: 0.16em;
+  line-height: 1;
+}
+
+.rq-stamp i {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.8;
+}
+
+.rq-done-line {
+  font-size: 0.98rem;
+  line-height: 1.5;
+  color: var(--graphite-2);
+  max-width: 26ch;
+}
+
+.rq-reset {
+  position: relative;
+  background: none;
+  border: 0;
+  padding: 0.3rem 0;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--dim);
+  cursor: pointer;
+  transition: color 0.3s var(--ease-fluid);
+}
+
+.rq-reset::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0.35);
+  transform-origin: 0 50%;
+  transition: transform 0.4s var(--ease-surge);
+}
+
+.rq-reset:hover { color: var(--tint-deep); }
+.rq-reset:hover::after { transform: scaleX(1); }
+
+@media (prefers-reduced-motion: reduce) {
+  .rq-reset,
+  .rq-reset::after { transition: none; }
+}

@@ -10,9 +10,14 @@ import Footer from './components/Footer'
 import Blobber from './components/Blobber'
 import SectionStack from './components/SectionStack'
 import ClickSpark from './components/ClickSpark'
+import Ambient from './components/mk2/Ambient'
+import { CursorLabel } from './components/mk2/Micro'
+import Cart from './components/mk2/Cart'
+import { CartProvider } from './lib/cart'
 
 import Home from './pages/Home'
 import CollectionsPage from './pages/CollectionsPage'
+import CollectionPage, { resolveFamily } from './pages/CollectionPage'
 import CataloguePage from './pages/CataloguePage'
 import ProductPage from './pages/ProductPage'
 import MaterialsPage from './pages/MaterialsPage'
@@ -27,6 +32,11 @@ import NotFoundPage from './pages/NotFoundPage'
 const B = BRAND.name
 const t = (s) => `${s} — ${B}`
 
+/* recover the family name from its URL slug. resolveFamily knows both the
+   declared families and the raw catalogue categories, so titles are right
+   for every collection — including the ones with no stock filed yet. */
+const familyName = (slug) => resolveFamily(slug) || 'Collection'
+
 const ROUTES = [
   { path: '/', page: Home, idx: '0.1', name: 'Home',
     title: `${B} — ${BRAND.line} · Metal & Wood Handicraft`,
@@ -34,6 +44,10 @@ const ROUTES = [
   { path: '/collections', page: CollectionsPage, idx: '0.2', name: 'Collections',
     title: t('Collections'),
     desc: 'Five families — tableware, barware, décor, lighting and furniture — with bespoke waiting at the end.' },
+  { path: '/collections/:family', page: CollectionPage, idx: '0.2',
+    name: (p) => familyName(p.family),
+    title: (p) => t(familyName(p.family)),
+    desc: (p) => `${familyName(p.family)} — production pieces with dimensions, MOQ and lead times.` },
   { path: '/catalogue', page: CataloguePage, idx: '0.25', name: 'Catalogue',
     title: t('Catalogue'),
     desc: '20 production pieces across tableware, barware, décor, lighting, furniture and bespoke.' },
@@ -114,14 +128,19 @@ export default function App() {
 
   return (
     <ErrorBoundary>
+      <CartProvider>
       <a className="skip" href="#main">Skip to content</a>
       <Preloader />
       <Viscosity />
       <Navbar />
       <Router routes={ROUTES} notFound={NOT_FOUND} after={<><SectionStack /><Footer /></>} />
+      <Ambient />
       <div className="grain" aria-hidden="true" />
       <ClickSpark />
+      <CursorLabel />
       <Blobber />
+      <Cart />
+      </CartProvider>
     </ErrorBoundary>
   )
 }

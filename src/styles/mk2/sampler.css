@@ -1,0 +1,777 @@
+/* ══════════════════════════════════════════════════════════════════════════
+   Sampler — one object, five surfaces.
+
+   Every state that carries content (surface layers, text panels, swatch ring)
+   is a CSS class transition driven by React, never a JS-seeded opacity. If
+   GSAP never loads the section still reads correctly; all that is lost is the
+   moving light.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.smp {
+  position: relative;
+  --tex: 46px;   /* default feature scale; overridden per surface below */
+}
+
+.smp-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* ── head ────────────────────────────────────────────────────────────────── */
+.smp-top {
+  display: grid;
+  gap: clamp(1.1rem, 2vw, 1.6rem);
+  margin-bottom: clamp(2.4rem, 5vw, 4.2rem);
+}
+
+/* Selectors that restyle a shared global class (.d1, .lede, .chip, .meta,
+   .body) are deliberately over-qualified: without the extra weight they tie
+   on specificity with global.css and the winner would depend on stylesheet
+   import order, which this component does not control. */
+.smp .smp-head {
+  font-size: clamp(2.1rem, 4.6vw, 4rem);
+  max-width: 16ch;
+  text-wrap: balance;
+}
+
+.smp .smp-lede {
+  max-width: 52ch;
+}
+
+@media (min-width: 1000px) {
+  .smp-top {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+    align-items: end;
+    gap: clamp(2rem, 5vw, 5rem);
+  }
+
+  .smp .smp-lede {
+    padding-bottom: 0.35rem;
+  }
+}
+
+.smp-grid {
+  display: grid;
+  gap: clamp(2.6rem, 5vw, 4rem);
+  align-items: start;
+}
+
+@media (min-width: 1000px) {
+  .smp-grid {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+    gap: clamp(2.5rem, 5vw, 6rem);
+  }
+
+  .smp-info {
+    /* the readout sits with the belly of the vessel, not with its rim */
+    padding-top: clamp(1rem, 3vw, 3.4rem);
+  }
+}
+
+/* ══ THE PLINTH ═══════════════════════════════════════════════════════════ */
+.smp-stage {
+  position: relative;
+  display: grid;
+  place-items: end center;
+  padding:
+    clamp(2rem, 4vw, 3.4rem)
+    clamp(1.4rem, 3vw, 3rem)
+    clamp(3.4rem, 6vw, 5rem);
+  border-radius: var(--r-lg);
+  background:
+    radial-gradient(ellipse 80% 46% at 50% 6%, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0) 70%),
+    linear-gradient(178deg, var(--white) 0%, #f8f3ea 48%, var(--chrome-2) 100%);
+  box-shadow:
+    inset 0 0 0 1px var(--hair),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 34px 74px -48px var(--shadow-soft);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* the tabletop the object stands on */
+.smp-horizon {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: clamp(3.4rem, 6vw, 5rem);
+  height: 1px;
+  background: linear-gradient(90deg,
+      rgba(227, 217, 201, 0) 0%,
+      var(--chrome-3) 14%,
+      var(--chrome-3) 86%,
+      rgba(227, 217, 201, 0) 100%);
+  pointer-events: none;
+}
+
+/* register marks — the corners of a real sample board */
+.smp-corner {
+  position: absolute;
+  width: 13px;
+  height: 13px;
+  border: 1.5px solid var(--brass);
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.smp-corner.tl { top: 15px; left: 15px; border-right: 0; border-bottom: 0; border-radius: 3px 0 0; }
+.smp-corner.tr { top: 15px; right: 15px; border-left: 0; border-bottom: 0; border-radius: 0 3px 0 0; }
+.smp-corner.bl { bottom: 15px; left: 15px; border-right: 0; border-top: 0; border-radius: 0 0 0 3px; }
+.smp-corner.br { bottom: 15px; right: 15px; border-left: 0; border-top: 0; border-radius: 0 0 3px; }
+
+.smp .smp-mark {
+  position: absolute;
+  left: clamp(1.4rem, 3vw, 2.4rem);
+  bottom: clamp(1.1rem, 2.4vw, 1.8rem);
+  font-size: 0.56rem;
+  letter-spacing: 0.18em;
+  color: var(--faint);
+  pointer-events: none;
+}
+
+/* ══ THE OBJECT ═══════════════════════════════════════════════════════════ */
+.smp-object {
+  position: relative;
+  width: min(100%, 440px);
+  aspect-ratio: 5 / 6;
+}
+
+/* warm bounce light pooling at the foot — tinted by the live finish */
+.smp-glows {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.smp-glow {
+  position: absolute;
+  left: 50%;
+  bottom: -6%;
+  width: 84%;
+  height: 17%;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  filter: blur(20px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.66s var(--ease-fluid), visibility 0s linear 0.66s;
+}
+
+.smp-glow.is-on {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.66s var(--ease-fluid), visibility 0s;
+}
+
+.g-hammered  { background: radial-gradient(closest-side, rgba(160, 118, 52, 0.60), rgba(160, 118, 52, 0) 100%); }
+.g-antique   { background: radial-gradient(closest-side, rgba(74, 58, 30, 0.55), rgba(74, 58, 30, 0) 100%); }
+.g-burnished { background: radial-gradient(closest-side, rgba(160, 88, 44, 0.55), rgba(160, 88, 44, 0) 100%); }
+.g-natural   { background: radial-gradient(closest-side, rgba(150, 112, 66, 0.50), rgba(150, 112, 66, 0) 100%); }
+.g-inlay     { background: radial-gradient(closest-side, rgba(62, 42, 24, 0.58), rgba(62, 42, 24, 0) 100%); }
+
+.smp-vessel {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  /* a base ground so the screen-blended sweep always has something to sit on */
+  background: var(--walnut-dk);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  /* keeps the specular sweep blending against the surface, not the page */
+  isolation: isolate;
+  will-change: transform;
+  --tex: 46px;
+}
+
+/* ── stacked material recipes ────────────────────────────────────────────── */
+.smp-layer {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  visibility: hidden;
+  /* visibility flips only after the fade so inactive recipes stop painting */
+  transition: opacity 0.66s var(--ease-fluid), visibility 0s linear 0.66s;
+}
+
+.smp-layer.is-on {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.66s var(--ease-fluid), visibility 0s;
+}
+
+/* ── form shading — shared by every recipe, so the silhouette stays solid
+      while the skin changes underneath it ─────────────────────────────────── */
+.smp-form {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  background:
+    /* rim light along the mouth */
+    linear-gradient(180deg, rgba(255, 253, 246, 0.34) 0%, rgba(255, 253, 246, 0) 8%),
+    /* the near edge turning toward the key light */
+    linear-gradient(90deg, rgba(255, 252, 244, 0.22) 0%, rgba(255, 252, 244, 0) 17%),
+    /* the far edge turning away */
+    linear-gradient(270deg, rgba(26, 16, 7, 0.46) 0%, rgba(26, 16, 7, 0) 27%),
+    /* contact shade where the foot meets the table */
+    linear-gradient(0deg, rgba(22, 14, 6, 0.52) 0%, rgba(22, 14, 6, 0) 17%),
+    /* barrel curvature */
+    radial-gradient(ellipse 94% 60% at 33% 32%, rgba(255, 250, 238, 0.20), rgba(0, 0, 0, 0) 64%);
+}
+
+/* the mouth — a dark ellipse with a lit far wall. Sells "vessel" more than
+   any amount of silhouette does. */
+.smp-rim {
+  position: absolute;
+  left: 30.2%;
+  right: 30.2%;
+  top: 0.9%;
+  z-index: 6;
+  aspect-ratio: 5 / 1.4;
+  border-radius: 50%;
+  pointer-events: none;
+  background: linear-gradient(180deg,
+      rgba(16, 10, 4, 0.94) 0%,
+      rgba(30, 20, 10, 0.78) 46%,
+      rgba(128, 94, 50, 0.44) 100%);
+  box-shadow:
+    inset 0 2px 4px rgba(0, 0, 0, 0.65),
+    0 1px 0 rgba(255, 246, 228, 0.30);
+}
+
+/* ── the specular sweep ──────────────────────────────────────────────────── */
+.smp-spec {
+  position: absolute;
+  inset: -38%;
+  z-index: 7;
+  pointer-events: none;
+  background: linear-gradient(90deg,
+      rgba(255, 252, 242, 0) 33%,
+      rgba(255, 249, 230, 0.26) 43%,
+      rgba(255, 255, 255, 0.90) 50%,
+      rgba(255, 249, 230, 0.26) 57%,
+      rgba(255, 252, 242, 0) 67%);
+  mix-blend-mode: screen;
+  filter: blur(13px);
+  /* NOT zero: with motion off, or before GSAP wakes, the form keeps a
+     standing highlight rather than going flat. */
+  opacity: 0.3;
+  transform: translateX(2%) rotate(-9deg);
+  will-change: transform, opacity;
+}
+
+/* ══ THE 1:1 SAMPLE CARD ══════════════════════════════════════════════════ */
+.smp-card {
+  position: absolute;
+  right: clamp(1rem, 3vw, 2.2rem);
+  bottom: clamp(1.1rem, 2.4vw, 1.9rem);
+  z-index: 4;
+  width: clamp(80px, 15%, 124px);
+  display: grid;
+  gap: 0.45rem;
+  padding: 0.45rem 0.45rem 0.5rem;
+  border-radius: var(--r-sm);
+  background: var(--white);
+  transform: rotate(-3.5deg);
+  box-shadow:
+    0 0 0 1px var(--hair),
+    0 16px 30px -18px rgba(58, 42, 26, 0.6);
+  pointer-events: none;
+}
+
+.smp-cardface {
+  position: relative;
+  display: block;
+  aspect-ratio: 1;
+  border-radius: 5px;
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px rgba(36, 28, 20, 0.16);
+  --tex: 22px;
+}
+
+.smp-card .smp-cardlabel {
+  font-size: 0.5rem;
+  letter-spacing: 0.16em;
+  text-align: center;
+  color: var(--dim);
+}
+
+/* ══ MATERIAL RECIPES ═════════════════════════════════════════════════════
+   --tex scales the features that are a function of the OBJECT (hammer
+   dimples, cathedral figure, inlay pitch). Feature widths that are physical
+   — a burnisher stroke, a wood pore, the gauge of a brass wire — stay in
+   fixed px so the swatch reads as the same material, not a smaller one.
+   ═══════════════════════════════════════════════════════════════════════ */
+/* --tex is set by the ANCESTOR (vessel / card / swatch), never here: a
+   declaration on .smp-rcp itself would beat the inherited value and every
+   surface would render at object scale. */
+.smp-rcp {
+  display: block;
+  background-repeat: repeat;
+}
+
+/* hammered — bright brass, high specular, faceted.
+   Two dimple grids at incommensurate pitches so the field never tiles
+   visibly; each dimple is a highlight plus its own seated shadow ring. */
+.smp-rcp-hammered {
+  background-image:
+    radial-gradient(circle at 30% 26%, rgba(255, 251, 236, 0.62) 0 6%, rgba(255, 251, 236, 0) 30%),
+    radial-gradient(circle at 30% 26%, rgba(72, 44, 12, 0) 33%, rgba(72, 44, 12, 0.36) 45%, rgba(72, 44, 12, 0) 58%),
+    radial-gradient(circle at 76% 70%, rgba(255, 248, 228, 0.48) 0 5%, rgba(255, 248, 228, 0) 27%),
+    radial-gradient(circle at 76% 70%, rgba(72, 44, 12, 0) 30%, rgba(72, 44, 12, 0.28) 42%, rgba(72, 44, 12, 0) 55%),
+    linear-gradient(148deg, #f5e2b6 0%, #dcb872 21%, #b0894f 47%, #d2ab68 67%, #8a6733 100%);
+  background-size:
+    var(--tex) var(--tex),
+    var(--tex) var(--tex),
+    calc(var(--tex) * 1.37) calc(var(--tex) * 1.19),
+    calc(var(--tex) * 1.37) calc(var(--tex) * 1.19),
+    100% 100%;
+}
+
+/* antique — brass aged forward, relieved on the high points, matte. Low
+   contrast on purpose; this finish is meant to absorb light, not throw it. */
+.smp-rcp-antique {
+  background-image:
+    radial-gradient(ellipse 58% 44% at 33% 28%, rgba(196, 164, 108, 0.22), rgba(196, 164, 108, 0) 72%),
+    radial-gradient(circle at 22% 68%, rgba(22, 16, 8, 0.32) 0 11%, rgba(22, 16, 8, 0) 46%),
+    radial-gradient(circle at 74% 26%, rgba(22, 16, 8, 0.26) 0 9%, rgba(22, 16, 8, 0) 42%),
+    radial-gradient(circle at 52% 88%, rgba(150, 122, 74, 0.16) 0 8%, rgba(150, 122, 74, 0) 40%),
+    linear-gradient(152deg, #755d38 0%, #55421f 33%, #3c2e15 62%, #614c2a 100%);
+  background-size:
+    100% 100%,
+    calc(var(--tex) * 2.7) calc(var(--tex) * 2.3),
+    calc(var(--tex) * 1.9) calc(var(--tex) * 1.7),
+    calc(var(--tex) * 2.2) calc(var(--tex) * 2.0),
+    100% 100%;
+}
+
+/* burnished — copper worked with a steel burnisher, not a buffing mop, so it
+   keeps directional satin instead of a mirror. Stroke gauge is fixed px. */
+.smp-rcp-burnished {
+  background-image:
+    repeating-linear-gradient(102deg,
+      rgba(255, 236, 214, 0.14) 0 1px,
+      rgba(255, 236, 214, 0) 1px 3px,
+      rgba(94, 42, 14, 0.11) 3px 4px,
+      rgba(94, 42, 14, 0) 4px 7px),
+    linear-gradient(100deg,
+      rgba(255, 232, 206, 0) 16%,
+      rgba(255, 232, 206, 0.34) 40%,
+      rgba(255, 232, 206, 0) 64%),
+    linear-gradient(150deg, #e6ac80 0%, #c5804a 25%, #b4703c 51%, #96572b 77%, #703d19 100%);
+  background-size: auto, 100% 100%, 100% 100%;
+}
+
+/* natural — oak-to-walnut ground under fine pore lines and two cathedral
+   figures running out of opposite ends of the board. */
+.smp-rcp-natural {
+  background-image:
+    repeating-linear-gradient(91deg,
+      rgba(90, 58, 28, 0.17) 0 1px,
+      rgba(90, 58, 28, 0) 1px 4px,
+      rgba(142, 100, 56, 0.11) 4px 5px,
+      rgba(142, 100, 56, 0) 5px 9px),
+    repeating-radial-gradient(ellipse calc(var(--tex) * 2.3) calc(var(--tex) * 8) at 44% 114%,
+      rgba(94, 60, 30, 0.20) 0 2px,
+      rgba(94, 60, 30, 0) 2px calc(var(--tex) * 0.34)),
+    repeating-radial-gradient(ellipse calc(var(--tex) * 1.7) calc(var(--tex) * 6) at 79% -16%,
+      rgba(76, 46, 22, 0.16) 0 2px,
+      rgba(76, 46, 22, 0) 2px calc(var(--tex) * 0.44)),
+    linear-gradient(154deg, #e8d7bd 0%, #d4b487 22%, #c7a579 46%, #a8834f 72%, #7d5a33 100%);
+  background-size: auto, 100% 100%, 100% 100%, 100% 100%;
+}
+
+/* inlay — brass wire seated into dark hardwood on a diamond pitch. Each line
+   carries a dark seat either side of the metal: that shadowless seam is what
+   "flush" looks like. Pitch scales with the object, wire gauge does not. */
+.smp-rcp-inlay {
+  background-image:
+    repeating-linear-gradient(58deg,
+      rgba(18, 10, 4, 0.6) 0 1px,
+      #e8d09c 1px 3px,
+      #ab8449 3px 4px,
+      rgba(18, 10, 4, 0.6) 4px 5px,
+      rgba(0, 0, 0, 0) 5px calc(var(--tex) * 0.95)),
+    repeating-linear-gradient(-58deg,
+      rgba(18, 10, 4, 0.6) 0 1px,
+      #dcc38d 1px 3px,
+      #9e7a45 3px 4px,
+      rgba(18, 10, 4, 0.6) 4px 5px,
+      rgba(0, 0, 0, 0) 5px calc(var(--tex) * 0.95)),
+    repeating-linear-gradient(92deg,
+      rgba(16, 9, 3, 0.34) 0 1px,
+      rgba(16, 9, 3, 0) 1px 5px),
+    linear-gradient(150deg, #61422a 0%, #452d1a 33%, #2c1c0f 64%, #4e341f 100%);
+  background-size: auto, auto, auto, 100% 100%;
+}
+
+/* ══ SWATCH RAIL ══════════════════════════════════════════════════════════ */
+.smp-swatches {
+  position: relative;
+  margin-top: clamp(1.4rem, 2.6vw, 2rem);
+}
+
+.smp-strip {
+  position: relative;   /* offsetParent for the centre-on-commit scroll */
+  display: flex;
+  gap: clamp(0.5rem, 1.2vw, 0.9rem);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+  padding: 0.5rem 0.25rem 0.9rem;
+  margin-inline: -0.25rem;
+}
+
+.smp-strip::-webkit-scrollbar {
+  display: none;
+}
+
+.smp-sw {
+  flex: 1 0 clamp(86px, 17vw, 138px);
+  scroll-snap-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.smp-sw-face {
+  position: relative;
+  display: block;
+  aspect-ratio: 4 / 5;
+  border-radius: var(--r-md);
+  overflow: hidden;
+  --tex: 17px;
+  transform: scale(1);
+  transition:
+    transform 0.5s var(--ease-surge),
+    box-shadow 0.45s var(--ease-fluid);
+  box-shadow:
+    0 0 0 1px var(--hair),
+    0 10px 20px -14px rgba(58, 42, 26, 0.55);
+}
+
+.smp-sw-face > .smp-rcp {
+  position: absolute;
+  inset: 0;
+}
+
+/* a fixed sheen so each chip reads as a curved, lit surface even at rest */
+.smp-sw-gloss {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(160deg, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0) 38%),
+    linear-gradient(0deg, rgba(24, 15, 6, 0.24) 0%, rgba(24, 15, 6, 0) 34%);
+}
+
+.smp-sw:hover .smp-sw-face {
+  transform: scale(1.035);
+}
+
+/* the live surface — ringed in brass and slightly larger */
+.smp-sw.is-shown .smp-sw-face {
+  transform: scale(1.075);
+  box-shadow:
+    0 0 0 2px var(--brass),
+    0 0 0 6px rgba(176, 137, 79, 0.18),
+    0 18px 32px -16px rgba(58, 42, 26, 0.55);
+}
+
+.smp-sw:focus-visible {
+  outline: none;
+}
+
+.smp-sw:focus-visible .smp-sw-face {
+  box-shadow:
+    0 0 0 2px var(--white),
+    0 0 0 5px var(--tint),
+    0 18px 32px -16px rgba(58, 42, 26, 0.55);
+}
+
+.smp-sw:active .smp-sw-face {
+  transform: scale(0.985);
+}
+
+.smp-sw-name {
+  display: flex;
+  align-items: baseline;
+  gap: 0.42rem;
+  min-height: 2.3em;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.63rem;
+  line-height: 1.3;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--dim);
+  transition: color 0.3s var(--ease-fluid);
+}
+
+.smp-sw.is-shown .smp-sw-name {
+  color: var(--graphite);
+}
+
+/* brass pip marks what is COMMITTED, so a hover preview never hides where
+   you will land when you let go */
+.smp-sw-name::before {
+  content: '';
+  flex: none;
+  width: 5px;
+  height: 5px;
+  margin-top: 0.1em;
+  border-radius: 50%;
+  background: var(--brass);
+  opacity: 0;
+  transform: scale(0.3);
+  transition: opacity 0.3s var(--ease-fluid), transform 0.45s var(--ease-surge);
+}
+
+.smp-sw.is-on .smp-sw-name::before {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.smp-note {
+  margin-top: 0.2rem;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--dim);
+  max-width: 54ch;
+}
+
+/* overflow hint — only at widths where the rail can actually overflow.
+   --edge tracks whatever ground the section was dropped onto. */
+@media (max-width: 760px) {
+  .smp-swatches::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: -0.25rem;
+    width: 2.6rem;
+    height: calc(100% - 3.2rem);
+    pointer-events: none;
+    background: linear-gradient(90deg, transparent, var(--edge, var(--chrome)) 78%);
+  }
+}
+
+.smp.alt { --edge: var(--white); }
+.smp.deep { --edge: var(--deep); }
+
+/* ══ READOUT ══════════════════════════════════════════════════════════════ */
+.smp-panels {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* every panel occupies the same cell, so the block is sized by the longest
+   copy and nothing below it ever jumps between finishes */
+.smp-panel {
+  grid-area: 1 / 1;
+  opacity: 0;
+  visibility: hidden;
+  transform: translate3d(0, 15px, 0);
+  pointer-events: none;
+  transition:
+    opacity 0.4s var(--ease-fluid),
+    transform 0.62s var(--ease-surge),
+    visibility 0s linear 0.62s;
+}
+
+.smp-panel.is-on {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  pointer-events: auto;
+  transition:
+    opacity 0.5s var(--ease-fluid) 0.09s,
+    transform 0.7s var(--ease-surge),
+    visibility 0s;
+}
+
+.smp-panel .smp-idx {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  letter-spacing: 0.06em;
+}
+
+.smp-idx i {
+  display: block;
+  width: 26px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--chrome-3);
+}
+
+.smp-name {
+  margin-top: 0.6rem;
+  font-family: var(--font-display);
+  font-stretch: 125%;
+  font-weight: 700;
+  font-size: clamp(2.2rem, 4.4vw, 3.7rem);
+  letter-spacing: -0.04em;
+  line-height: 0.94;
+  color: var(--graphite);
+  text-wrap: balance;
+}
+
+.smp-subs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 1.15rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.smp-subs .smp-sub {
+  padding: 0.32rem 0.78rem;
+  font-size: 0.73rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  background: var(--chrome-2);
+  border-color: transparent;
+  color: var(--graphite-2);
+}
+
+.smp-subs .smp-sub:hover {
+  transform: none;   /* these are labels, not controls */
+  border-color: transparent;
+}
+
+.smp-panel .smp-char {
+  margin-top: 1.3rem;
+  max-width: 42ch;
+  color: var(--graphite-2);
+}
+
+.smp-facts {
+  display: grid;
+  gap: clamp(0.9rem, 1.6vw, 1.25rem);
+  margin: clamp(1.6rem, 2.8vw, 2.2rem) 0 0;
+  padding-top: clamp(1.3rem, 2.4vw, 1.8rem);
+  border-top: 1px solid var(--hair);
+}
+
+.smp-facts dt {
+  margin-bottom: 0.35rem;
+  color: var(--tint-deep);
+}
+
+/* element-qualified so it outweighs global .body without !important */
+.smp-facts dd.body {
+  margin: 0;
+  max-width: 48ch;
+  font-size: 0.94rem;
+  line-height: 1.6;
+  color: var(--dim);
+}
+
+.smp-cta {
+  margin-top: clamp(1.7rem, 3vw, 2.4rem);
+}
+
+/* live region for assistive tech — the visible stack is decorative */
+.smp-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  clip-path: inset(50%);
+}
+
+/* ══ ESPRESSO GROUND (insurance if this section is dropped onto .deep) ════ */
+.deep .smp-stage {
+  background:
+    radial-gradient(ellipse 80% 46% at 50% 6%, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0) 70%),
+    linear-gradient(178deg, #2b2219 0%, #221a12 48%, #16100a 100%);
+  box-shadow:
+    inset 0 0 0 1px var(--hair-on-deep),
+    0 34px 74px -48px rgba(0, 0, 0, 0.7);
+}
+
+.deep .smp-horizon { background: linear-gradient(90deg, transparent, var(--hair-on-deep) 14%, var(--hair-on-deep) 86%, transparent); }
+.deep .smp-name { color: var(--on-deep); }
+.deep .smp-char { color: var(--dim-on-deep); }
+.deep .smp-facts { border-top-color: var(--hair-on-deep); }
+.deep .smp-facts dt { color: var(--tint-on-deep); }
+.deep .smp-facts dd.body,
+.deep .smp-note,
+.deep .smp-sw-name { color: var(--dim-on-deep); }
+.deep .smp-sw.is-shown .smp-sw-name { color: var(--on-deep); }
+.deep .smp-idx i { background: var(--hair-on-deep); }
+.deep .smp-subs .smp-sub { background: rgba(243, 237, 227, 0.07); color: var(--dim-on-deep); }
+.deep .smp-card { background: #2b2219; box-shadow: 0 0 0 1px var(--hair-on-deep), 0 16px 30px -18px rgba(0, 0, 0, 0.8); }
+.deep .smp-sw:focus-visible .smp-sw-face { box-shadow: 0 0 0 2px var(--deep), 0 0 0 5px var(--tint-on-deep); }
+
+/* ══ NARROW ═══════════════════════════════════════════════════════════════
+   Nothing is dropped on mobile: the object keeps its full treatment, the
+   rail becomes a swipe strip, the readout stacks underneath.
+   ═══════════════════════════════════════════════════════════════════════ */
+@media (max-width: 640px) {
+  .smp-object {
+    width: min(100%, 330px);
+    aspect-ratio: 5 / 5.7;
+  }
+
+  .smp-card {
+    width: 76px;
+    right: 0.9rem;
+  }
+
+  .smp-corner {
+    width: 10px;
+    height: 10px;
+  }
+
+  .smp-facts dd {
+    font-size: 0.9rem;
+  }
+}
+
+/* ══ REDUCED MOTION ═══════════════════════════════════════════════════════
+   Content switches instantly and completely; the light stops moving but the
+   form keeps its standing highlight, so nothing reads as flat or broken.
+   ═══════════════════════════════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+
+  .smp-layer,
+  .smp-layer.is-on,
+  .smp-glow,
+  .smp-glow.is-on,
+  .smp-panel,
+  .smp-panel.is-on,
+  .smp-sw-face,
+  .smp-sw-name,
+  .smp-sw-name::before {
+    transition: none;
+  }
+
+  .smp-panel {
+    transform: none;
+  }
+
+  .smp-sw:hover .smp-sw-face {
+    transform: scale(1);
+  }
+
+  .smp-spec {
+    opacity: 0.28;
+  }
+}

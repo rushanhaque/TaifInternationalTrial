@@ -1,0 +1,36 @@
+/* ============ Mark II stylesheet barrel ============
+   Every mk2 component ships its own stylesheet so the components could be
+   written in parallel without colliding in a shared file. This barrel is the
+   single place they are pulled in, imported once from main.jsx after the
+   base layers so mk2 rules win where they overlap.
+
+   NOT imported: measured.css and ledger.css. Both components are built and
+   working but are on no page right now, so their CSS would be dead weight in
+   the bundle. Re-add the import if either is wired back in. */
+
+/* --- global layers (mounted once in App) --- */
+@import './ambient.css';
+@import './seam.css';
+@import './micro.css';
+@import './chapterrail.css';
+
+/* --- homepage sections --- */
+@import './quotestage.css';
+@import './caseribbon.css';
+@import './theturn.css';
+@import './sampler.css';
+@import './twofloors.css';
+@import './craftindex.css';
+@import './requestcatalogue.css';
+
+@import './materialrig.css';
+
+/* --- inner pages ---
+   pages-mk2.css polishes the shared furniture (masthead, cards, rows, pills)
+   that every inner page is built from, so they lift together. It must come
+   before the per-page sheets so those can still override it. */
+@import './pages-mk2.css';
+@import './page-prt.css';
+@import './cart.css';
+@import './page-collection.css';
+

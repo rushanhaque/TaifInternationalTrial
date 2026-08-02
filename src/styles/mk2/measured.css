@@ -1,0 +1,309 @@
+/* ============================================================
+   Measured — the numbers band
+   ============================================================
+
+   LAYOUT NOTE. The row runs with ZERO column gap and pads the cells from the
+   inside instead. That is deliberate: each cell carries its own top hairline,
+   and with no gap those four hairlines meet edge to edge and read as one
+   continuous rule drawn across the whole band. A column gap would have
+   chopped it into four floating segments. The brass verticals then land
+   exactly on the grid lines, which is where a rule belongs.
+
+   FAIL-OPEN. Nothing here rests at opacity:0 and no strip rests on a
+   transform. The finished band is the CSS default; the animation only ever
+   travels back to it. */
+
+.mk-ms {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;             /* the warm wash must not widen the page */
+  background: var(--chrome);
+  padding-block: clamp(5rem, 10vw, 9rem);
+}
+
+/* two low warm washes — raking light off a brass floor, not a gradient */
+.mk-ms::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(76% 54% at 20% -4%, rgba(176, 137, 79, 0.11), transparent 68%),
+    radial-gradient(54% 46% at 98% 104%, rgba(180, 112, 60, 0.08), transparent 70%);
+}
+
+.mk-ms-h {
+  margin: 0;
+  font-weight: 600;
+}
+
+.mk-ms-lede {
+  margin: 0 0 clamp(2.6rem, 5.5vw, 4.4rem);
+  max-width: 42ch;
+  text-wrap: pretty;
+}
+
+/* ---------- the row ---------- */
+
+.mk-ms-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  row-gap: clamp(2.2rem, 5.5vw, 3.1rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mk-ms-cell {
+  position: relative;
+  min-width: 0;                 /* a wide numeral must never widen its track */
+  padding-block-start: clamp(1.4rem, 2.6vw, 2.1rem);
+}
+
+/* horizontal rule — brass at the ignition point, then dropping to ink.
+   Four of these in a row give the band a repeating tick without a repeat. */
+.mk-ms-hr {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: 0;
+  height: 1px;
+  transform-origin: left center;
+  background: linear-gradient(
+    90deg,
+    rgba(138, 90, 32, 0.62) 0,
+    rgba(36, 28, 20, 0.18) 34%,
+    rgba(36, 28, 20, 0.13) 100%
+  );
+}
+
+/* vertical brass hairline — hung from the horizontal rule and faded out
+   before the cell ends, so it reads as a scribed line rather than a border */
+.mk-ms-vr {
+  display: none;
+  position: absolute;
+  inset-block-start: -1px;
+  inset-block-end: clamp(0.4rem, 1vw, 0.9rem);
+  inset-inline-start: 0;
+  width: 1px;
+  opacity: 0.8;
+  transform-origin: top center;
+  background: linear-gradient(
+    180deg,
+    var(--brass) 0,
+    rgba(176, 137, 79, 0.5) 32%,
+    rgba(176, 137, 79, 0) 92%
+  );
+  transition: opacity 0.4s var(--ease-fluid);
+}
+
+/* ---------- the tag ---------- */
+
+.mk-ms-tag {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--dim);
+  margin-block-end: clamp(0.9rem, 2vw, 1.35rem);
+}
+
+.mk-ms-tag::before {
+  content: '';
+  flex: none;
+  width: 15px;
+  height: 1px;
+  background: var(--brass);
+}
+
+/* ---------- the numerals ---------- */
+
+.mk-ms-val {
+  /* one line box, shared by the masks, the strips and the punctuation, so
+     every glyph in the figure sits on exactly the same baseline */
+  --ms-line: 1.12em;
+
+  display: flex;
+  align-items: flex-end;
+  flex-wrap: nowrap;
+  font-family: var(--font-display);
+  font-stretch: 125%;
+  font-weight: 700;
+  font-size: clamp(3.5rem, 8vw, 7rem);
+  font-variant-numeric: tabular-nums;  /* load-bearing: the masks are fixed
+                                          width, so the ghosts and the answer
+                                          must share one advance */
+  letter-spacing: -0.045em;
+  line-height: var(--ms-line);
+  color: var(--graphite);
+}
+
+/* the window. justify-content:flex-end pins the LAST strip row — the real
+   digit — to the mask; the ghosts overflow upward and are clipped. This is
+   the resting state, achieved with layout alone. */
+.mk-ms-col {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: var(--ms-line);
+  overflow: hidden;
+}
+
+.mk-ms-strip {
+  flex: none;
+}
+
+.mk-ms-gh,
+.mk-ms-gl {
+  display: block;
+  height: var(--ms-line);
+  line-height: var(--ms-line);
+}
+
+/* the passing digits sit back in shadow so the answer lands as the darkest
+   thing on the wheel */
+.mk-ms-gh {
+  color: rgba(36, 28, 20, 0.34);
+}
+
+.mk-ms-sep {
+  flex: none;
+  height: var(--ms-line);
+  line-height: var(--ms-line);
+  padding-inline: 0.04em;
+  color: var(--brass-dk);       /* the en-dash in 8–10 reads as a brass tick */
+}
+
+/* a tabular period carries a full digit advance and floats away from the
+   figure; pull it back in on both sides */
+.mk-ms-sep.is-dot {
+  padding-inline: 0;
+  margin-inline: -0.08em;
+  color: var(--graphite);
+}
+
+/* ---------- unit + label ---------- */
+
+.mk-ms-unit {
+  display: block;
+  margin-block-start: clamp(0.75rem, 1.5vw, 1.05rem);
+  font-size: 0.74rem;
+  letter-spacing: 0.14em;
+  color: var(--tint-deep);
+}
+
+.mk-ms-label {
+  display: block;
+  margin-block-start: clamp(0.55rem, 1.1vw, 0.8rem);
+  max-width: 27ch;
+  font-size: 0.95rem;
+  line-height: 1.48;
+  color: var(--dim);
+  text-wrap: pretty;
+}
+
+/* ---------- the ruler ---------- */
+
+/* An actual measuring scale closes the band: a solid edge with minor ticks
+   every 14px and a major tick every 70px. Two repeating gradients rather than
+   a repeated element — no DOM, no reflow. */
+.mk-ms-scale {
+  margin-block-start: clamp(2.4rem, 5vw, 3.4rem);
+  height: 13px;
+  border-block-start: 1px solid var(--hair-strong);
+  background-image:
+    repeating-linear-gradient(90deg, rgba(176, 137, 79, 0.62) 0 1px, transparent 1px 14px),
+    repeating-linear-gradient(90deg, rgba(138, 90, 32, 0.85) 0 1px, transparent 1px 70px);
+  background-size: 100% 6px, 100% 12px;
+  background-position: 0 0, 0 0;
+  background-repeat: no-repeat;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 3%, #000 88%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 3%, #000 88%, transparent 100%);
+}
+
+.mk-ms-note {
+  margin: clamp(1rem, 2vw, 1.45rem) 0 0;
+  max-width: 68ch;
+  font-size: 0.78rem;
+  font-weight: 500;
+  line-height: 1.7;
+  letter-spacing: 0.005em;
+  color: var(--dim);
+  text-wrap: pretty;
+}
+
+/* ---------- tablet: 2 x 2 ---------- */
+
+@media (min-width: 620px) {
+  .mk-ms-row {
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: clamp(2.6rem, 5vw, 3.6rem);
+  }
+
+  .mk-ms-cell {
+    padding-inline: clamp(1rem, 2.4vw, 2.1rem);
+  }
+
+  /* the outer edges of each pair stay flush with the wrap */
+  .mk-ms-cell:nth-child(odd) {
+    padding-inline-start: 0;
+  }
+
+  .mk-ms-cell:nth-child(even) {
+    padding-inline-end: 0;
+  }
+
+  .mk-ms-cell:nth-child(even) .mk-ms-vr {
+    display: block;
+  }
+}
+
+/* ---------- desktop: 4 across ---------- */
+
+@media (min-width: 1040px) {
+  .mk-ms-row {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .mk-ms-cell:nth-child(odd),
+  .mk-ms-cell:nth-child(even) {
+    padding-inline: clamp(1rem, 2vw, 1.9rem);
+  }
+
+  .mk-ms-cell:first-child {
+    padding-inline-start: 0;
+  }
+
+  .mk-ms-cell:last-child {
+    padding-inline-end: 0;
+  }
+
+  .mk-ms-cell:not(:first-child) .mk-ms-vr {
+    display: block;
+  }
+
+  /* Four columns of a 1560px band are ~350px wide; a four-character figure at
+     7rem in a 125%-stretched display face simply does not fit one. This is the
+     largest step that clears the cell at every width from 1040 up. */
+  .mk-ms-val {
+    font-size: clamp(3.6rem, 6vw, 6.5rem);
+  }
+
+  .mk-ms-label {
+    max-width: 24ch;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .mk-ms-cell:hover .mk-ms-vr {
+    opacity: 1;
+  }
+}
+
+/* Belt and braces alongside the JS guard: if the reveal were ever seeded
+   outside the matchMedia branch, this still leaves the band at rest. */
+@media (prefers-reduced-motion: reduce) {
+  .mk-ms-vr {
+    transition: none;
+  }
+}

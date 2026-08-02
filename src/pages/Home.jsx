@@ -1,6 +1,5 @@
-import { useState } from 'react'
 import { Link } from '../lib/router'
-import { PROCESS_STAGES, PARTNERS, RIBBON_TERMS, CERTS, HOME_COLLECTIONS } from '../data/site'
+import { PROCESS_STAGES, RIBBON_TERMS, HOME_COLLECTIONS } from '../data/site'
 import { railItems } from '../data/catalogue'
 import { CharCascade, Dilate } from '../components/Reveal'
 import HeroBrand from '../components/HeroBrand'
@@ -10,28 +9,59 @@ import Ribbon from '../components/Ribbon'
 import DragRail from '../components/DragRail'
 import FinishMorph from '../components/FinishMorph'
 import Stepper from '../components/Stepper'
-import Toggle from '../components/Toggle'
 import Tension from '../components/Tension'
 import Deep from '../components/Deep'
 import { productImg } from '../data/images'
 
-const PARTNER_CATS = ['All', 'Hospitality', 'Retail', 'Design', 'Architecture']
+/* ── Mark II sections ────────────────────────────────────────────────────
+   Each ships its own stylesheet, barrelled through src/styles/mk2/index.css.
+   Deliberately NOT on this page: Measured and Ledger — the page was too long,
+   so it keeps only the moments that earn their height. Both still exist and
+   can be dropped back in. */
+import { familySlug } from './CollectionPage'
+import TheTurn from '../components/mk2/TheTurn'
+import TwoFloors from '../components/mk2/TwoFloors'
+import Sampler from '../components/mk2/Sampler'
+import QuoteStage from '../components/mk2/QuoteStage'
+import CaseRibbon from '../components/mk2/CaseRibbon'
+import CraftIndex from '../components/mk2/CraftIndex'
+import RequestCatalogue from '../components/mk2/RequestCatalogue'
+import ChapterRail from '../components/mk2/ChapterRail'
+
+/* the chapter rail's map of the page — ids must match the section ids below */
+const CHAPTERS = [
+  { id: 'top', label: 'Taif' },
+  { id: 'collections', label: 'Collections' },
+  { id: 'catalogue', label: 'Catalogue' },
+  { id: 'the-turn', label: 'The Turn' },
+  { id: 'two-floors', label: 'Two Floors' },
+  { id: 'sampler', label: 'Finishes' },
+  { id: 'process', label: 'Process' },
+  { id: 'proof', label: 'Proof' },
+  { id: 'craft', label: 'Craft' },
+  { id: 'request', label: 'Request' },
+]
 
 export default function Home() {
-  const [pcat, setPcat] = useState('All')
-  const partners = pcat === 'All' ? PARTNERS : PARTNERS.filter((p) => p.cat === pcat)
-
   return (
     <>
+      <ChapterRail sections={CHAPTERS} />
+
       {/* 0.1 · hero — the brand name, and nothing else (E18) */}
+      <span id="top" />
       <HeroBrand />
 
-      {/* 0.2 · collections (formerly finishes) — slides up like a stacked card after the hero */}
-      <section className="fm-section alt home-position">
+      {/* 0.2 · collections — slides up like a stacked card after the hero */}
+      <section className="fm-section alt home-position" id="collections">
         <div className="wrap">
           <div className="sec-head"><span className="idx">0.1</span><span className="meta">Collections</span></div>
         </div>
-        <FinishMorph mode="scroll" finishes={HOME_COLLECTIONS} label="COLLECTIONS" />
+        <FinishMorph
+          mode="scroll"
+          finishes={HOME_COLLECTIONS}
+          label="COLLECTIONS"
+          hrefFor={(c) => `/collections/${familySlug(c.name)}`}
+        />
         <div className="wrap fm-after">
           <Button to="/catalogue" variant="ghost">See it on the pieces</Button>
         </div>
@@ -41,7 +71,7 @@ export default function Home() {
       <Ribbon terms={RIBBON_TERMS} />
 
       {/* 0.4 · drag rail — the signature interaction */}
-      <section className="section alt">
+      <section className="section alt" id="catalogue">
         <div className="wrap">
           <div className="sec-head"><span className="idx">0.2</span><span className="meta">Catalogue</span></div>
           <DragRail label="Featured catalogue" hint="Drag · fling · release">
@@ -60,49 +90,27 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 0.5 · positioning */}
-      <section className="section alt">
-        <div className="wrap">
-          <div className="sec-head"><span className="idx">0.3</span><span className="meta">Position</span></div>
-          <div className="grid">
-            <div className="sp-7">
-              <CharCascade as="h2" className="d1">
-                Handmade is the easy part. Repeating it is the business.
-              </CharCascade>
-              <Dilate>
-                <p className="body" style={{ marginTop: '1.4rem' }}>
-                  Anyone can strike one good bowl or carve one good panel. What a buyer
-                  actually purchases is <span className="iris-phrase">the joint</span> —
-                  brass set flush into rosewood, still flush after a container crossing,
-                  in the two-thousandth piece as much as the first.
-                </p>
-                <div className="hero-cta">
-                  <Button to="/catalogue">View the catalogue</Button>
-                  <Button to="/about" variant="ghost">About us</Button>
-                </div>
-              </Dilate>
-            </div>
-            <div className="sp-4 st-8">
-              <Dilate delay={0.15}>
-                <p className="body dim">
-                  Audited, documented and metered at every stage. The papers travel inside the container.
-                </p>
-                <div className="cert-chips">
-                  {CERTS.map((c) => <span key={c} className="chip">{c}</span>)}
-                </div>
-              </Dilate>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* 0.5 · THE TURN — the signature. A hand-raised brass vessel turns a
+          full 360° under raking light, then dissolves into its walnut twin. */}
+      <span id="the-turn" />
+      <TheTurn />
 
-      {/* 0.6 · surface tension into the deep section */}
+      {/* 0.6 · TWO FLOORS — drag the brass seam: metal (Moradabad) vs wood
+          (Saharanpur). The brand line made literal and operable. */}
+      <span id="two-floors" />
+      <TwoFloors />
+
+      {/* 0.7 · SAMPLER — five finishes morphing live on one object */}
+      <span id="sampler" />
+      <Sampler />
+
+      {/* 0.8 · surface tension into the deep section */}
       <Tension from="white" />
 
-      {/* 0.7 · process teaser — transparent ground, sits on the page colour */}
-      <section className="section clear">
+      {/* 0.9 · process teaser — transparent ground, sits on the page colour */}
+      <section className="section clear" id="process">
         <div className="wrap">
-          <div className="sec-head"><span className="idx">0.4</span><span className="meta">Process</span></div>
+          <div className="sec-head"><span className="idx">0.3</span><span className="meta">Process</span></div>
           <div className="grid">
             <div className="sp-8">
               <Stepper stages={PROCESS_STAGES} teaser />
@@ -120,29 +128,23 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 0.8 · partners strip */}
-      <section className="section alt">
-        <div className="wrap">
-          <div className="sec-head"><span className="idx">0.5</span><span className="meta">Partners</span></div>
-          <div className="partner-bar">
-            <Toggle
-              label="Filter partners"
-              options={PARTNER_CATS.map((c) => ({ value: c, label: c }))}
-              value={pcat}
-              onChange={setPcat}
-            />
-            <Link to="/partners" className="chip">Case studies →</Link>
-          </div>
-          <div className="chip-wall">
-            {partners.map((p) => <span key={p.name} className="chip">{p.name}</span>)}
-          </div>
-        </div>
-      </section>
+      {/* 1.0 · PROOF — named buyers on the record, then the case evidence */}
+      <span id="proof" />
+      <QuoteStage />
+      <CaseRibbon />
 
-      {/* 0.9 · closing CTA */}
+      {/* 1.1 · CRAFT INDEX — the vocabulary of the two floors */}
+      <span id="craft" />
+      <CraftIndex />
+
+      {/* 1.2 · REQUEST THE CATALOGUE — the conversion moment */}
+      <span id="request" />
+      <RequestCatalogue />
+
+      {/* 1.3 · closing CTA */}
       <Deep className="cta-deep">
         <div className="wrap" style={{ textAlign: 'left' }}>
-          <span className="idx">0.6</span>
+          <span className="idx">1.2</span>
           <CharCascade as="h2" className="mega cta-mega">Make it in both.</CharCascade>
           <Dilate>
             <p className="lede">Send a drawing, a photograph or a sample. A priced quote returns in five working days.</p>

@@ -1,0 +1,389 @@
+/* ============================================================
+   QuoteStage — the testimonial stage
+   The site is white; this is the one place it goes to espresso.
+   Everything below assumes the RESTING layout is the stacked one
+   (mobile + reduced motion + no-JS). `.is-stage` is added from JS
+   on desktop to collapse the three figures into a single cell for
+   the pinned cross-fade — so nothing here ever hides content.
+   ============================================================ */
+
+.qs {
+  position: relative;
+  isolation: isolate;
+}
+
+/* struck brass edges — the tonal block reads as an inlaid panel,
+   not as a colour change */
+.qs::before,
+.qs::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  z-index: 3;
+  pointer-events: none;
+  background: linear-gradient(90deg,
+    transparent,
+    rgba(176, 137, 79, .45) 18%,
+    rgba(227, 200, 143, .8) 50%,
+    rgba(176, 137, 79, .45) 82%,
+    transparent);
+}
+
+.qs::before { top: 0; }
+.qs::after  { bottom: 0; }
+
+/* ── the stage: pinned box on desktop, plain flow below 900px ── */
+.qs-stage {
+  position: relative;
+}
+
+/* fine raking weave + a soft corner fall-off, so the espresso reads
+   as a surface with a grain rather than a flat fill */
+.qs-field {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    repeating-linear-gradient(112deg,
+      rgba(243, 237, 227, .022) 0 1px, transparent 1px 5px),
+    radial-gradient(125% 85% at 50% 46%, transparent 38%, rgba(0, 0, 0, .42) 100%);
+}
+
+/* brass light pooled behind the type; drifts across the pin */
+.qs-halo {
+  position: absolute;
+  inset: -25%;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(52% 44% at 40% 46%,
+    rgba(176, 137, 79, .22),
+    rgba(138, 103, 51, .085) 44%,
+    transparent 72%);
+}
+
+.qs-inner {
+  position: relative;
+  z-index: 1;
+  padding-block: clamp(5rem, 10vw, 9rem);
+}
+
+/* ── header ── */
+.qs-head {
+  display: grid;
+  gap: .5rem;
+  margin-bottom: clamp(2.6rem, 6vw, 4rem);
+}
+
+.qs-kicker {
+  color: var(--tint-on-deep);
+}
+
+.qs-h2 {
+  color: var(--on-deep);
+  letter-spacing: -.015em;
+}
+
+.qs-note {
+  color: var(--dim-on-deep);
+  font-size: .86rem;
+  line-height: 1.5;
+  max-width: 34ch;
+}
+
+@media (min-width: 900px) {
+  .qs-head {
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    column-gap: 2rem;
+    border-bottom: 1px solid var(--hair-on-deep);
+    padding-bottom: 1.1rem;
+  }
+
+  .qs-head-l { display: grid; gap: .5rem; }
+  .qs-note { text-align: right; }
+}
+
+/* ── the deck ── */
+.qs-deck {
+  display: grid;
+  gap: clamp(3.2rem, 9vw, 5rem);
+}
+
+.qs-fig {
+  position: relative;
+  margin: 0;
+}
+
+.qs-fig + .qs-fig {
+  border-top: 1px solid var(--hair-on-deep);
+  padding-top: clamp(3rem, 8vw, 4.5rem);
+}
+
+/* the open quote — brass, huge, hung off the text column as a watermark.
+   Low alpha lives in the gradient, not in `opacity`, so JS can fade the
+   whole glyph 0 → 1 without ever making it solid. */
+.qs-mark {
+  position: absolute;
+  z-index: 0;
+  top: -1.6rem;
+  left: -.7rem;
+  font-family: var(--font-display);
+  font-stretch: 125%;
+  font-weight: 700;
+  font-size: clamp(9rem, 26vw, 20rem);
+  line-height: .74;
+  pointer-events: none;
+  user-select: none;
+  background-image: linear-gradient(158deg,
+    rgba(227, 200, 143, .30),
+    rgba(176, 137, 79, .17) 46%,
+    rgba(138, 103, 51, .05));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.qs-quote {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+}
+
+.qs-text {
+  font-family: var(--font-display);
+  font-stretch: 125%;
+  font-weight: 700;
+  /* the loaded Archivo carries no italic cut — the synthetic slant is the
+     effect we want here, tracked back a hair so the wide face doesn't crowd */
+  font-style: italic;
+  font-synthesis: style;
+  font-size: clamp(1.8rem, 4.2vw, 3.4rem);
+  line-height: 1.12;
+  letter-spacing: -.028em;
+  color: var(--on-deep);
+  max-width: 21ch;
+  margin: 0;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, .25);
+}
+
+/* word masks (JS-built). Padding widens the clip box past the line box so
+   ascenders and descenders survive; the matching negative margin hands the
+   extra height back, keeping the paragraph's rhythm untouched. */
+.qs-w {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  padding-block: .09em .2em;
+  margin-block: -.09em -.2em;
+}
+
+/* no will-change here on purpose: three quotes is ~60 spans, and promoting
+   every one of them costs more than GSAP's own 3d transform hint saves */
+.qs-wi {
+  display: inline-block;
+}
+
+/* ── attribution ── */
+.qs-attr {
+  overflow: hidden;
+  padding-block: .12em;
+  margin-top: clamp(1.5rem, 3vw, 2.3rem);
+}
+
+.qs-attr-in {
+  display: flex;
+  align-items: center;
+  gap: .7rem;
+  flex-wrap: wrap;
+}
+
+/* the attribution has to hold its own next to 3.4rem of quote */
+.qs-attr .meta {
+  font-size: .78rem;
+  letter-spacing: .13em;
+}
+
+.qs-attr-rule {
+  flex: none;
+  width: clamp(26px, 4vw, 54px);
+  height: 2px;
+  border-radius: var(--r-pill);
+  background: linear-gradient(90deg, var(--brass-dk), var(--brass-lt));
+}
+
+.qs-no {
+  color: var(--dim-on-deep);
+  font-variant-numeric: tabular-nums;
+}
+
+.qs-who {
+  color: var(--tint-on-deep);
+}
+
+.qs-org {
+  color: var(--dim-on-deep);
+}
+
+.qs-dot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--brass);
+  flex: none;
+}
+
+/* ── tick rail ── */
+.qs-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.2rem;
+  margin-top: clamp(2.4rem, 6vw, 3.4rem);
+  padding-top: 1rem;
+  border-top: 1px solid var(--hair-on-deep);
+}
+
+.qs-ticks {
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+}
+
+.qs-tick {
+  appearance: none;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  /* the bar is 3px; the target around it is not */
+  min-height: 44px;
+  padding-inline: .2rem;
+  display: flex;
+  align-items: center;
+  border-radius: var(--r-sm);
+}
+
+.qs-track {
+  display: block;
+  width: clamp(32px, 6vw, 62px);
+  height: 3px;
+  border-radius: var(--r-pill);
+  background: var(--hair-on-deep);
+  transition: background-color .35s var(--ease-fluid);
+}
+
+.qs-tick:hover .qs-track,
+.qs-tick:focus-visible .qs-track {
+  background: rgba(243, 237, 227, .34);
+}
+
+/* the tick that elongates into a bar. In the pin, --fill is written every
+   frame from the scrub; in flow it flips with the active class. */
+.qs-fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--brass-dk), var(--brass) 40%, var(--brass-lt));
+  transform: scaleX(var(--fill, .16));
+  transform-origin: left center;
+  box-shadow: var(--glow-brass);
+}
+
+.qs:not(.is-stage) .qs-fill {
+  transition: transform .55s var(--ease-fluid);
+}
+
+.qs:not(.is-stage) .qs-tick.is-on .qs-fill {
+  --fill: 1;
+}
+
+.qs-count {
+  color: var(--dim-on-deep);
+  display: flex;
+  align-items: baseline;
+  gap: .45rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.qs-count-now { color: var(--tint-on-deep); }
+.qs-count-sep { color: rgba(243, 237, 227, .3); }
+
+/* ============================================================
+   .is-stage — desktop only, added from JS. Collapses the deck into
+   one cell so the three reports can cross-fade in place.
+   ============================================================ */
+@media (min-width: 900px) {
+  .qs.is-stage .qs-stage {
+    min-height: 100vh;
+    min-height: 100svh;
+    display: flex;
+  }
+
+  .qs.is-stage .qs-inner {
+    flex: 1;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    padding-block: clamp(4.5rem, 8vh, 6.5rem);
+  }
+
+  .qs.is-stage .qs-deck {
+    align-self: center;
+    gap: 0;
+    padding-left: clamp(1.5rem, 6vw, 7rem);  /* the glyph gets a margin to hang in */
+  }
+
+  .qs.is-stage .qs-fig {
+    grid-area: 1 / 1;
+    /* stacked figures would otherwise trade clicks and selections with the
+       two that are currently invisible */
+    pointer-events: none;
+  }
+
+  .qs.is-stage .qs-fig + .qs-fig {
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  .qs.is-stage .qs-mark {
+    top: -2.6rem;
+    left: -2.6rem;
+    font-size: clamp(12rem, 17vw, 19rem);
+  }
+}
+
+/* short laptop screens: the pin must hold five lines of quote, a header
+   and the rail inside one viewport */
+@media (min-width: 900px) and (max-height: 780px) {
+  .qs.is-stage .qs-text { font-size: clamp(1.6rem, 3vw, 2.45rem); }
+  .qs.is-stage .qs-inner { padding-block: clamp(3rem, 6vh, 4.5rem); }
+  .qs.is-stage .qs-mark { font-size: clamp(9rem, 13vw, 14rem); top: -2rem; left: -2rem; }
+  .qs.is-stage .qs-head { margin-bottom: clamp(1.6rem, 3vh, 2.4rem); }
+}
+
+/* ── under 900px ── */
+@media (max-width: 899px) {
+  .qs-mark {
+    top: -1.1rem;
+    left: -.35rem;
+    font-size: clamp(7.5rem, 30vw, 12rem);
+  }
+
+  .qs-nav {
+    flex-wrap: wrap;
+    gap: .6rem 1rem;
+  }
+}
+
+/* ── reduced motion: static, complete, still large ── */
+@media (prefers-reduced-motion: reduce) {
+  .qs-track,
+  .qs-fill {
+    transition: none;
+  }
+
+  .qs-wi {
+    will-change: auto;
+  }
+}

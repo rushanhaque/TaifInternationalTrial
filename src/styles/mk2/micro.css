@@ -1,0 +1,271 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   mk2 · micro — Magnetic · CursorLabel · LightLeak
+   Three small parts, one idea: the page should feel like it has a surface.
+   Things lean toward the hand, the hand is told what it may do, and the
+   seam between light and dark glows instead of clicking shut.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+
+/* ══ (A) Magnetic ══════════════════════════════════════════════════════════
+   The wrapper is layout-neutral by design. No position, no padding, no
+   pointer rules — anything else here would sit between the child and the
+   cursor, and the child owns its own hit area. Transform is written by GSAP
+   and by nothing else. */
+.mag {
+  display: inline-block;
+  vertical-align: middle;
+  max-width: 100%;
+}
+
+/* for a child that must fill its column (a full-bleed card, a stretched CTA) */
+.mag-block {
+  display: block;
+  max-width: none;
+}
+
+/* Opt-in bloom. Only this variant takes `position`, because a positioned
+   wrapper re-parents any absolutely positioned descendant inside the child —
+   fine when you asked for it, a bug when you didn't. */
+.mag-halo {
+  position: relative;
+  isolation: isolate;
+}
+
+.mag-halo::before {
+  content: '';
+  position: absolute;
+  inset: -18%;
+  z-index: -1;
+  border-radius: var(--r-pill);
+  pointer-events: none;
+  background:
+    radial-gradient(58% 62% at 50% 50%, rgba(176, 137, 79, 0.26) 0%, rgba(176, 137, 79, 0.10) 42%, transparent 72%);
+  opacity: 0;
+  transform: scale(0.82);
+  transition:
+    opacity 0.4s var(--ease-fluid),
+    transform 0.6s var(--ease-surge);
+}
+
+.mag-halo[data-mag='on']::before {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* the field is a pointer affordance; a keyboard visitor gets the ring, not
+   the glow — and the glow must never outrank the focus ring */
+@media (prefers-reduced-motion: reduce) {
+  .mag-halo::before { transition: none; }
+}
+
+
+/* ══ (B) CursorLabel ═══════════════════════════════════════════════════════
+   z-index 121: over the arrow cursor (120), under the strike sparks (122) —
+   a filing thrown by a click should pass in front of the label. */
+.curlab {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 121;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.curlab-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.46rem;
+  padding: 0.44rem 0.78rem 0.42rem 0.62rem;
+  border-radius: var(--r-pill);
+  white-space: nowrap;
+
+  /* struck brass: a lit top edge, the alloy through the middle, the dark
+     bevel where the blank was pressed */
+  background: linear-gradient(166deg,
+      var(--brass-lt) 0%,
+      var(--brass) 44%,
+      var(--brass-dk) 100%);
+  color: var(--deep);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 250, 238, 0.62),
+    inset 0 -1px 0 rgba(58, 42, 26, 0.30),
+    0 1px 2px rgba(36, 28, 20, 0.22),
+    0 12px 26px -12px rgba(36, 28, 20, 0.62);
+
+  /* Decorative cursor affordance, never content: its correct fail state is
+     invisible. JS raises it — and JS is the only thing that can put a word
+     inside it in the first place. */
+  opacity: 0;
+  transform: scale(0);
+}
+
+/* beats .meta on font-size while keeping the shared type identity */
+.curlab .curlab-pill {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.635rem;
+  line-height: 1;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+}
+
+/* the maker's punch-mark, at 4px */
+.curlab-tick {
+  flex: none;
+  width: 5px;
+  height: 5px;
+  border-radius: 1px;
+  transform: rotate(45deg);
+  background: var(--deep);
+  opacity: 0.66;
+}
+
+.curlab-word {
+  display: block;
+  transform: translateY(0.03em);   /* optical centre — caps sit high */
+}
+
+/* ── touch + reduced-motion parity ─────────────────────────────────────────
+   No pointer means no pointer label, so the word moves onto the element
+   itself. Opt-in with data-cursor-tag so we never clobber a ::after that
+   the host component is already using; the host needs position: relative. */
+@media (pointer: coarse) {
+  [data-cursor][data-cursor-tag] {
+    position: relative;
+  }
+
+  [data-cursor][data-cursor-tag]::after {
+    content: attr(data-cursor);
+    position: absolute;
+    top: 0.7rem;
+    right: 0.7rem;
+    z-index: 3;
+    padding: 0.34rem 0.6rem 0.32rem;
+    border-radius: var(--r-pill);
+    background: linear-gradient(166deg, var(--brass-lt), var(--brass) 48%, var(--brass-dk));
+    color: var(--deep);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 250, 238, 0.55),
+      0 6px 16px -8px rgba(36, 28, 20, 0.6);
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 0.58rem;
+    line-height: 1;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    pointer-events: none;
+  }
+}
+
+
+/* ══ (C) LightLeak ═════════════════════════════════════════════════════════
+   PARENT MUST BE position: relative.
+   z-index 0 keeps the band above the section's own ground and below anything
+   that establishes its own layer. Keep it in the section's padding band —
+   it is a bloom across a seam, not a wash over type. */
+.leak {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: clamp(96px, 11vw, 148px);
+  z-index: 0;
+  pointer-events: none;
+  /* additive: it lifts a dark ground and all but vanishes over a light one,
+     which is exactly how a leak behaves in a lens */
+  mix-blend-mode: screen;
+}
+
+/* Bloom peaks past the edge and falls off inward, with two smaller off-axis
+   lobes — a real leak is never symmetrical. */
+.leak-bottom {
+  bottom: 0;
+  transform-origin: 50% 100%;
+  background:
+    radial-gradient(124% 136% at 50% 120%, var(--leak-core) 0%, var(--leak-mid) 36%, transparent 72%),
+    radial-gradient(44% 116% at 17% 118%, var(--leak-edge) 0%, transparent 68%),
+    radial-gradient(36% 104% at 83% 116%, var(--leak-edge) 0%, transparent 72%);
+}
+
+.leak-top {
+  top: 0;
+  transform-origin: 50% 0;
+  background:
+    radial-gradient(124% 136% at 50% -20%, var(--leak-core) 0%, var(--leak-mid) 36%, transparent 72%),
+    radial-gradient(44% 116% at 17% -18%, var(--leak-edge) 0%, transparent 68%),
+    radial-gradient(36% 104% at 83% -16%, var(--leak-edge) 0%, transparent 72%);
+}
+
+/* the specular thread on the seam itself — the detail that sells the join */
+.leak::after {
+  content: '';
+  position: absolute;
+  left: 7%;
+  right: 7%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--leak-core), transparent);
+  opacity: 0.85;
+}
+
+.leak-bottom::after { bottom: 0; }
+.leak-top::after    { top: 0; }
+
+/* ── tones ── */
+.leak-brass {
+  --leak-core: rgba(227, 200, 143, 0.44);
+  --leak-mid:  rgba(176, 137, 79, 0.21);
+  --leak-edge: rgba(240, 222, 180, 0.22);
+  opacity: 0.92;
+}
+
+.leak-copper {
+  --leak-core: rgba(224, 162, 117, 0.42);
+  --leak-mid:  rgba(180, 112, 60, 0.22);
+  --leak-edge: rgba(240, 200, 162, 0.19);
+  opacity: 0.92;
+}
+
+.leak-oak {
+  --leak-core: rgba(232, 215, 189, 0.40);
+  --leak-mid:  rgba(199, 165, 121, 0.19);
+  --leak-edge: rgba(250, 243, 228, 0.21);
+  opacity: 0.9;
+}
+
+/* the light side of the same seam: warm ambient occlusion, not glow.
+   Declared after .leak so it wins the blend mode on equal specificity. */
+.leak-shade {
+  --leak-core: rgba(88, 68, 48, 0.17);
+  --leak-mid:  rgba(122, 98, 70, 0.075);
+  --leak-edge: rgba(88, 68, 48, 0.06);
+  mix-blend-mode: multiply;
+  opacity: 0.85;
+}
+
+.leak-shade::after {
+  display: none;   /* a shadow has no specular edge */
+}
+
+/* A 30-second drift, transform only, pinned at the seam so the edge never
+   moves — the light breathes, the join does not. */
+@media (prefers-reduced-motion: no-preference) {
+  .leak {
+    animation: leak-drift 30s var(--ease-fluid) infinite alternate;
+  }
+
+  @keyframes leak-drift {
+    from { transform: translate3d(-2%, 0, 0) scaleY(0.94); }
+    to   { transform: translate3d(2%, 0, 0)  scaleY(1.06); }
+  }
+}
+
+@media (max-width: 720px) {
+  .leak {
+    height: clamp(72px, 19vw, 108px);
+  }
+
+  .leak::after {
+    left: 4%;
+    right: 4%;
+  }
+}

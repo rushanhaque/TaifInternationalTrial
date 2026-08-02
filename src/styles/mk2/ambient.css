@@ -1,0 +1,110 @@
+/* ============ the living ground ============
+   Sits behind everything at z-index 0. Section grounds are opaque, so these
+   layers read through the page's own translucency and around its edges
+   rather than washing over the content. */
+
+.amb {
+  position: fixed;
+  inset: 0;
+  /* ABOVE the section grounds (which are opaque and would otherwise hide
+     this entirely), below the nav/cursor/cart chrome. */
+  z-index: 5;
+  pointer-events: none;
+  overflow: hidden;
+
+  /* Multiply, because this is a warm lamp on pale paper: physically the
+     paper goes GOLDER where the light lands, it does not go whiter. Screen
+     would wash it out; multiply warms it. Alphas are kept low enough that
+     body text — already near-black — is untouched. */
+  mix-blend-mode: multiply;
+
+  /* the layer repaints on every pointer move; contain the damage */
+  contain: strict;
+}
+
+/* ── 1 · the forge ── heat pools low, the way it does in a workshop ── */
+.amb-forge {
+  position: absolute;
+  left: 50%;
+  bottom: -30vh;
+  width: 140vw;
+  height: 80vh;
+  transform: translateX(-50%);
+  background: radial-gradient(
+    50% 50% at 50% 50%,
+    rgba(176, 137, 79, 0.10),
+    rgba(180, 112, 60, 0.045) 45%,
+    transparent 72%);
+  animation: amb-breathe 19s ease-in-out infinite alternate;
+}
+
+/* ── 2 · the drift ── two blooms on long out-of-phase cycles ── */
+.amb-drift {
+  position: absolute;
+  width: 62vw;
+  height: 62vw;
+  border-radius: 50%;
+  will-change: transform;
+}
+
+.amb-drift-a {
+  top: -18vh;
+  left: -10vw;
+  background: radial-gradient(50% 50% at 50% 50%,
+    rgba(199, 165, 121, 0.13), transparent 68%);
+  animation: amb-drift-a 34s ease-in-out infinite alternate;
+}
+
+.amb-drift-b {
+  bottom: -22vh;
+  right: -14vw;
+  background: radial-gradient(50% 50% at 50% 50%,
+    rgba(180, 112, 60, 0.10), transparent 68%);
+  /* a different period from A, so the two never fall into step */
+  animation: amb-drift-b 47s ease-in-out infinite alternate;
+}
+
+/* ── 3 · the lamp ── carried across the bench by the pointer ── */
+.amb-lamp {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 46rem;
+  height: 46rem;
+  margin: -23rem 0 0 -23rem;   /* centre on the cursor without a transform */
+  border-radius: 50%;
+  opacity: 0;                  /* JS fades it in on first pointer move */
+  background: radial-gradient(
+    50% 50% at 50% 50%,
+    rgba(240, 220, 176, 0.16),
+    rgba(199, 165, 121, 0.07) 38%,
+    transparent 68%);
+  will-change: transform, opacity;
+}
+
+@keyframes amb-breathe {
+  from { transform: translateX(-50%) scale(1); opacity: 0.75; }
+  to   { transform: translateX(-50%) scale(1.14); opacity: 1; }
+}
+
+@keyframes amb-drift-a {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to   { transform: translate3d(14vw, 12vh, 0) scale(1.18); }
+}
+
+@keyframes amb-drift-b {
+  from { transform: translate3d(0, 0, 0) scale(1.1); }
+  to   { transform: translate3d(-16vw, -10vh, 0) scale(0.92); }
+}
+
+/* the ground is decoration; it must never move for someone who asked it not
+   to, and it is useless on a touch device with no pointer to follow */
+@media (prefers-reduced-motion: reduce) {
+  .amb-forge,
+  .amb-drift { animation: none; }
+  .amb-lamp { display: none; }
+}
+
+@media (hover: none) {
+  .amb-lamp { display: none; }
+}

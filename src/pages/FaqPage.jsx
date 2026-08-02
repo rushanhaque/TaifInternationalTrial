@@ -9,31 +9,28 @@ import Button from '../components/Button'
    Real buttons, aria-expanded/aria-controls (§10). */
 function Row({ q, a, id }) {
   const [open, setOpen] = useState(false)
-  const panel = useRef(null)
   const bead = useRef(null)
   const row = useRef(null)
 
+  /* The panel opens on grid-template-rows 0fr → 1fr, driven purely by the
+     `open` class. This used to tween `height` to 'auto' in GSAP, which meant
+     every frame of every open reflowed the whole column beneath it — the one
+     layout-thrashing animation left in the codebase. The grid technique
+     needs no measurement, no JS per frame, and no fixed height, so it also
+     stays correct when the answer rewraps at a different width.
+
+     FAIL-OPEN: the row is readable with no JS — the button is still a real
+     disclosure control and the panel is in the DOM. */
   function toggle() {
     const next = !open
     setOpen(next)
-    if (reduced()) {
-      panel.current.style.height = next ? 'auto' : '0'
-      return
-    }
+    if (reduced() || !bead.current || !row.current) return
+    /* the bead is the only thing still tweened: pure transform, no layout */
     if (next) {
-      row.current.classList.add('open')
-      gsap.to(panel.current, { height: 'auto', duration: 0.55, ease: 'surge' })
-      gsap.fromTo(
-        panel.current.firstChild,
-        { scale: 0.96, opacity: 0 },
-        { scale: 1, opacity: 1, duration: 0.5, delay: 0.12, ease: 'surge' }
-      )
       gsap.fromTo(bead.current, { x: 0 }, {
         x: () => row.current.offsetWidth - 58, duration: 0.65, ease: 'fluid',
       })
     } else {
-      row.current.classList.remove('open')
-      gsap.to(panel.current, { height: 0, duration: 0.45, ease: 'fluid' })
       gsap.to(bead.current, { x: 0, duration: 0.5, ease: 'fluid' })
     }
   }
@@ -44,7 +41,7 @@ function Row({ q, a, id }) {
         <span>{q}</span>
         <span className="faq-bead" ref={bead} aria-hidden="true" />
       </button>
-      <div className="faq-a" id={id} role="region" ref={panel} style={{ height: 0 }}>
+      <div className="faq-a" id={id} role="region">
         <div className="faq-a-inner"><p className="body">{a}</p></div>
       </div>
     </div>

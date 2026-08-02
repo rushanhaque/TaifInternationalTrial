@@ -8,6 +8,7 @@ import Slab from '../components/Slab'
 import Deep from '../components/Deep'
 import Button from '../components/Button'
 import { MATERIAL_IMGS } from '../data/images'
+import MaterialRig from '../components/mk2/MaterialRig'
 
 export default function MaterialsPage() {
   const containerRef = useRef(null)
@@ -123,6 +124,9 @@ export default function MaterialsPage() {
           </div>
         </div>
       </section>
+
+      {/* the comparison rig — eighteen figures made comparable */}
+      <MaterialRig />
 
       <Deep>
         <div className="wrap">

@@ -1,6 +1,10 @@
 import { CharCascade, Dilate } from '../components/Reveal'
 import CollectionsDolly from '../components/CollectionsDolly'
 import Button from '../components/Button'
+import Seam from '../components/mk2/Seam'
+import { navigate } from '../lib/router'
+import { CATALOGUE, CATEGORIES } from '../data/catalogue'
+import { familySlug } from './CollectionPage'
 
 /* /collections — a single, cinematic pinned scroll: the camera pushes
    through five layered collection families and lands on the Bespoke wall.
@@ -9,6 +13,8 @@ import Button from '../components/Button'
 export default function CollectionsPage() {
   return (
     <>
+      {/* the brass spine — this page only */}
+      <Seam />
       <section className="section" style={{ paddingBottom: 0 }}>
         <div className="wrap">
           <div className="hero-kicker">
@@ -26,6 +32,31 @@ export default function CollectionsPage() {
       </section>
 
       <CollectionsDolly />
+
+      {/* the index — each family opens its own plate room */}
+      <section className="section">
+        <div className="wrap">
+          <div className="sec-head"><span className="idx">0.2.5</span><span className="meta">Open a family</span></div>
+          <ul className="pl-switch-list">
+            {CATEGORIES.map((c) => {
+              const n = CATALOGUE.filter((p) => p.category === c).length
+              return (
+                <li key={c} className="pl-switch-row">
+                  <button
+                    type="button"
+                    className="pl-switch-btn"
+                    onClick={() => navigate(`/collections/${familySlug(c)}`)}
+                  >
+                    <span className="pl-switch-name">{c}</span>
+                    <span className="pl-switch-n meta">{String(n).padStart(2, '0')} pieces</span>
+                    <span className="pl-switch-go" aria-hidden="true">→</span>
+                  </button>
+                </li>
+              )
+            })}
+          </ul>
+        </div>
+      </section>
 
       <section className="section alt">
         <div className="wrap">

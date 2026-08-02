@@ -55,12 +55,91 @@
   --alert:      #9e3324;
   --alert-soft: rgba(158, 51, 36, 0.25);
 
+  /* ═══ laid paper — the ground has a tooth ═══
+     Handmade rag paper, which is what a catalogue of this kind is actually
+     printed on: fine laid lines every 4px with wider chain lines every 58px,
+     plus one very soft warm bloom so a full-bleed panel is never dead flat.
+     Alpha is deliberately near the threshold of visibility — you should feel
+     it, not see it. Two repeating gradients, no image request, no filter. */
+  --paper:
+    repeating-linear-gradient(0deg,
+      rgba(107, 74, 46, 0.016) 0px, rgba(107, 74, 46, 0.016) 1px,
+      transparent 1px, transparent 4px),
+    repeating-linear-gradient(90deg,
+      rgba(107, 74, 46, 0.020) 0px, rgba(107, 74, 46, 0.020) 1px,
+      transparent 1px, transparent 58px),
+    radial-gradient(120% 80% at 50% 0%, rgba(199, 165, 121, 0.05), transparent 62%);
+
+  /* the same tooth for the espresso surface, lifted rather than darkened */
+  --paper-deep:
+    repeating-linear-gradient(0deg,
+      rgba(243, 237, 227, 0.014) 0px, rgba(243, 237, 227, 0.014) 1px,
+      transparent 1px, transparent 4px),
+    repeating-linear-gradient(90deg,
+      rgba(243, 237, 227, 0.016) 0px, rgba(243, 237, 227, 0.016) 1px,
+      transparent 1px, transparent 58px);
+
   /* ═══ metal sheen for placeholder frames — brass under raking light ═══ */
   --sheen: linear-gradient(160deg,
     #fff9ee 0%, #e0c696 20%, #fbf1dc 38%, #be9455 60%, #f2e2c2 78%, #a87f42 100%);
 
   --font-display: 'Archivo Expanded', 'Archivo', system-ui, sans-serif;
   --font-body:    'Inter Tight', system-ui, sans-serif;
+
+  /* ═══ THE LIGHT ═══════════════════════════════════════════════════════
+     One light source for the whole site: high and slightly left, which is
+     the angle every metal gradient already rakes at (100deg / 135deg). So
+     every shadow falls down and a touch right, and every specular sweep
+     travels the same way. Inconsistent light is the most visible tell that
+     a page was assembled rather than designed.
+
+     THE DEPTH RAMP. Five tiers, warm walnut, never grey. Each is TWO
+     shadows: a tight contact shadow that keeps the object anchored, and a
+     broad ambient one that grows softer and lighter as the object lifts.
+     That pairing is what real depth looks like — a single blurred shadow
+     always reads as a sticker.
+
+     Audit note: this replaced 45 ad-hoc box-shadow values. If you need a
+     depth that is not here, the right move is almost always to pick the
+     nearer tier, not to invent a 46th. ═══════════════════════════════════ */
+
+  --lift-1:                                   /* rest — sits on the page */
+    0 1px 2px -1px rgba(58, 42, 26, 0.10),
+    0 4px 12px -6px rgba(58, 42, 26, 0.10);
+  --lift-2:                                   /* raised — hover */
+    0 2px 4px -2px rgba(58, 42, 26, 0.12),
+    0 12px 28px -12px rgba(58, 42, 26, 0.16);
+  --lift-3:                                   /* floating — cards, panels */
+    0 4px 8px -4px rgba(58, 42, 26, 0.14),
+    0 26px 56px -24px rgba(58, 42, 26, 0.22);
+  --lift-4:                                   /* lifted far — modals, pane */
+    0 6px 12px -6px rgba(58, 42, 26, 0.16),
+    0 48px 96px -40px rgba(58, 42, 26, 0.30);
+
+  /* the same ramp on the espresso surface — darker and tighter, because a
+     soft shadow on a dark ground just reads as smudge */
+  --lift-deep-1:
+    0 2px 6px -2px rgba(0, 0, 0, 0.50),
+    0 14px 34px -14px rgba(0, 0, 0, 0.55);
+  --lift-deep-2:
+    0 4px 10px -4px rgba(0, 0, 0, 0.55),
+    0 30px 64px -26px rgba(0, 0, 0, 0.65);
+
+  /* brass is the only thing on this site that emits rather than reflects */
+  --glow-brass:  0 0 14px rgba(227, 200, 143, 0.45);
+  --glow-brass-hot: 0 0 22px rgba(240, 220, 176, 0.70);
+
+  /* the inner highlight along a lit top edge — pairs with --lift-* */
+  --edge-lit:   inset 0 1px 0 rgba(255, 252, 245, 0.72);
+  --edge-hair:  inset 0 0 0 1px var(--hair);
+
+  /* ═══ TIME ═══════════════════════════════════════════════════════════
+     Four durations with fixed intent. Reaching for a fifth is a sign the
+     interaction is doing two things at once. ═══════════════════════════ */
+  --t-quick: 0.18s;   /* state flips — colour, opacity, a tick appearing */
+  --t-base:  0.35s;   /* the default hover */
+  --t-slow:  0.60s;   /* movement — travel, lifts, drawers */
+  --t-cine:  1.00s;   /* entrances and anything scroll-linked */
 
   /* easings — elastic and viscous; distinct curves from siblings */
   --ease-fluid:   cubic-bezier(0.65, 0, 0.35, 1);

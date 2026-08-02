@@ -1,0 +1,4 @@
+# SPA fallback — this project uses a custom pushState router, so every path
+# must serve index.html or a direct visit to /collections/decor will 404.
+# Netlify / Cloudflare Pages read this file. Vercel uses vercel.json.
+/*    /index.html   200

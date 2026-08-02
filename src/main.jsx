@@ -6,6 +6,8 @@ import './styles/tokens.css'
 import './styles/global.css'
 import './styles/home.css'
 import './styles/pages.css'
+/* Mark II layers last so they win where they overlap the base sheets */
+import './styles/mk2/index.css'
 
 initLenis()
 startPointer()

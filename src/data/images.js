@@ -42,3 +42,10 @@ export const WORKSHOP_IMGS = [
 
 /* every catalogue product, keyed by slug — stable per piece */
 export const productImg = (slug) => pic(`taif-${slug}`, 900, 700)
+
+/* landscape plates for the collection grids — same seed as the portrait
+   version so a piece keeps its identity wherever it appears */
+export const productPlate = (slug) => pic(`taif-${slug}`, 1400, 880)
+
+/* the ground image behind a family masthead */
+export const familyPlate = (family) => pic(`taif-family-${family}`, 1600, 900)

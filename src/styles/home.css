@@ -21,19 +21,29 @@
     transparent 0%, transparent 72%, rgba(250, 247, 242, 0.55) 90%, var(--chrome) 100%);
 }
 .hb-stage { position: relative; text-align: center; }
+/* ── THE SEAM ──────────────────────────────────────────────────────────────
+   Each glyph carries two fills — polished brass above, walnut grain below —
+   blended into one another by a pair of soft gradient masks meeting at
+   --seam. "Where metal meets grain", rendered inside the letterforms.
+   On scroll the two halves shear apart. */
+
 .hb-mark {
   --seam: 0.52;
   position: relative; display: inline-block; white-space: nowrap;
   font-family: var(--font-display); font-stretch: 125%; font-weight: 700;
   font-size: clamp(5rem, 23vw, 21rem); line-height: 0.84; letter-spacing: -0.045em;
 }
+
 .hb-ch { position: relative; display: inline-block; }
+
 .hb-ch-wood, .hb-ch-metal {
   display: inline-block; color: transparent;
   background-clip: text; -webkit-background-clip: text;
   will-change: transform;
 }
-/* grain below the seam — soft gradient mask blends into brass at the join */
+
+/* grain below the seam — the mask fades out just past the join so the two
+   materials blend rather than meeting at a hard line */
 .hb-ch-wood {
   background-image: linear-gradient(165deg,
     #7c5634 0%, #4a331f 34%, #8a6136 58%, #56412a 82%, #3a2a1a 100%);
@@ -42,7 +52,8 @@
   mask-image: linear-gradient(to top,
     #000 0%, #000 calc(var(--seam) * 100% - 18%), transparent calc(var(--seam) * 100% + 6%));
 }
-/* polished brass above — soft gradient mask blends into wood at the join */
+
+/* polished brass above, blending down into the grain */
 .hb-ch-metal {
   position: absolute; left: 0; top: 0; width: 100%;
   background-image: linear-gradient(100deg,
@@ -52,6 +63,7 @@
   mask-image: linear-gradient(to bottom,
     #000 0%, #000 calc((1 - var(--seam)) * 100% - 18%), transparent calc((1 - var(--seam)) * 100% + 6%));
 }
+
 .hb-seam { display: none; }
 .hb-intl {
   margin-top: clamp(1.1rem, 2.6vw, 2rem);
@@ -103,8 +115,8 @@
 
 /* ============ finish morph (E11) ============ */
 /* .fm-section is not a .section, so it needs its own opaque ground */
-.fm-section { padding-block: clamp(5rem, 10vw, 9rem) 0; background: var(--chrome); }
-.fm-section.alt { background: var(--white); }
+.fm-section { padding-block: clamp(5rem, 10vw, 9rem) 0; background-color: var(--chrome); background-image: var(--paper); }
+.fm-section.alt { background-color: var(--white); background-image: var(--paper); }
 .fm-section .sec-head { margin-bottom: 0; }
 .fm-after { padding-block: clamp(2rem, 4vw, 3.5rem); }
 
@@ -176,3 +188,35 @@
 /* ============ closing CTA ============ */
 .cta-deep .cta-mega { font-size: clamp(2.8rem, 8vw, 7rem); margin-block: .8rem 1.2rem; }
 .cta-deep .lede { margin-bottom: 1.6rem; }
+
+
+/* ── the collection name is a door ─────────────────────────────────────────
+   The sequence on the homepage names four families. Those names were plain
+   spans, so clicking one did nothing. They are links now, and so is the
+   artwork beside them. */
+.fm-link { display: inline-flex; align-items: baseline; gap: .5rem; color: inherit; }
+.fm-link .fm-go {
+  font-style: normal;
+  font-size: .42em;
+  color: var(--tint-deep);
+  opacity: 0;
+  transform: translateX(-8px);
+  transition: opacity var(--t-base) var(--ease-fluid),
+              transform var(--t-slow) var(--ease-surge);
+}
+.fm-link:hover { color: var(--tint-deep); }
+.fm-link:hover .fm-go,
+.fm-link:focus-visible .fm-go { opacity: 1; transform: translateX(0); }
+
+/* the artwork is clickable too — an overlay rather than nesting anything
+   inside the Slab's own markup */
+.fm-slab-col { position: relative; }
+.fm-slab-hit { position: absolute; inset: 0; z-index: 4; border-radius: var(--r-lg); }
+
+.fm-cell-link { display: block; color: inherit; }
+.fm-cell-link h3 { transition: color var(--t-base) var(--ease-fluid); }
+.fm-cell-link:hover h3 { color: var(--tint-deep); }
+
+@media (prefers-reduced-motion: reduce) {
+  .fm-link .fm-go { transition: none; }
+}

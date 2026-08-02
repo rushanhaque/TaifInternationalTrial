@@ -3,6 +3,7 @@ import { gsap, reduced, splitChars } from '../lib/gsap'
 import { FINISHES } from '../data/site'
 import Slab from './Slab'
 import Toggle from './Toggle'
+import { Link } from '../lib/router'
 
 /* E11 Finish Morph — one object, five finishes. In scroll mode the section
    pins and the slab cross-dissolves through the finishes while its meniscus
@@ -14,6 +15,12 @@ import Toggle from './Toggle'
 /* [amplitude, speed] of the slab's meniscus edge, per finish — the boundary
    still visibly breathes on every finish but calms progressively as the
    sequence runs from struck metal down to a flush inlay. */
+function FmCell({ href, children }) {
+  return href
+    ? <Link className="fm-cell fm-cell-link" to={href}>{children}</Link>
+    : <div className="fm-cell">{children}</div>
+}
+
 const EDGES = {
   hammered: [0.028, 0.95],
   antique: [0.025, 0.78],
@@ -22,7 +29,14 @@ const EDGES = {
   inlay: [0.019, 0.46],
 }
 
-export default function FinishMorph({ mode = 'scroll', finishes = FINISHES, detail = false, label = 'FINISH DEMO' }) {
+export default function FinishMorph({
+  mode = 'scroll', finishes = FINISHES, detail = false, label = 'FINISH DEMO',
+  /* hrefFor(item) -> url. When supplied, the name and the slab both become
+     links into that item's own page. The homepage passes this so clicking a
+     collection actually opens it; the product page omits it, because there
+     the finishes are a control, not navigation. */
+  hrefFor = null,
+}) {
   const root = useRef(null)
   const slabRef = useRef(null)
 
@@ -185,6 +199,16 @@ export default function FinishMorph({ mode = 'scroll', finishes = FINISHES, deta
       {/* pinned variant — ≥900px, motion allowed */}
       <div className="fm fm-pinned">
         <div className="fm-slab-col">
+          {hrefFor && (
+            /* an overlay link so the artwork is clickable without nesting
+               anything inside the Slab's own markup */
+            <Link
+              className="fm-slab-hit"
+              to={hrefFor(finishes[active] || finishes[0])}
+              data-cursor="OPEN"
+              aria-label={`Open ${(finishes[active] || finishes[0])?.name}`}
+            />
+          )}
           <Slab blob quietHover ref={slabRef} tone={finishes[0].tone} ratio="7/6" className="fm-slab">
             {finishes.map((x) => (
               <span key={x.key} className={`fm-layer tone-${x.tone}`} data-l aria-hidden="true" />
@@ -195,7 +219,15 @@ export default function FinishMorph({ mode = 'scroll', finishes = FINISHES, deta
         <div className="fm-info">
           <span className="meta fm-kicker">One object · {finishes.length} finishes</span>
           <div className="fm-names">
-            {finishes.map((x) => <span key={x.key} className="fm-name d1" data-n>{x.name}</span>)}
+            {finishes.map((x) => (
+              hrefFor
+                ? (
+                  <Link key={x.key} className="fm-name d1 fm-link" data-n data-cursor="OPEN" to={hrefFor(x)}>
+                    {x.name}<i className="fm-go" aria-hidden="true">→</i>
+                  </Link>
+                )
+                : <span key={x.key} className="fm-name d1" data-n>{x.name}</span>
+            ))}
           </div>
           <div className="fm-copies">
             {finishes.map((x) => (
@@ -223,12 +255,12 @@ export default function FinishMorph({ mode = 'scroll', finishes = FINISHES, deta
       {/* static fallback — mobile / reduced motion */}
       <div className="fm-fallback">
         {finishes.map((x) => (
-          <div key={x.key} className="fm-cell">
+          <FmCell key={x.key} href={hrefFor ? hrefFor(x) : null}>
             <Slab tone={x.tone} ratio="4/3" label={x.name.toUpperCase()} />
             <h3 className="d3">{x.name}</h3>
             <p className="body">{x.character}</p>
             {detail && <p className="body dim">{x.durability}</p>}
-          </div>
+          </FmCell>
         ))}
       </div>
     </div>

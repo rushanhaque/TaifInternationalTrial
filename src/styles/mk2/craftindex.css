@@ -1,0 +1,504 @@
+/* ═══ CRAFT INDEX — the vocabulary of the workshop ═══════════════════════════
+   An index page, built as one: hairline rules edge to edge, numerals hanging
+   in the margin, a spine down the left, and ten terms in display type resting
+   at a taupe that reads as texture rather than as a list.
+
+   CONTRAST NOTE. The brief asks for a low-contrast rest state. --faint
+   (0.28 alpha) lands at 1.8:1 on --chrome, which fails even the large-text
+   floor. --cix-rest is pitched at 0.50 alpha instead: 3.2:1, which clears
+   1.4.3 for large text (every term is ≥ 28.8px, 700 weight) while still
+   reading as a quiet grey wash from two feet back. The sibling dim is a
+   transient, user-initiated state on rows the reader is explicitly not
+   reading, and only applies where there is a pointer.
+
+   FAIL-OPEN CONTRACT. Nothing in this file hides content at rest EXCEPT the
+   definition, and that single rule lives inside
+   `(hover:hover) and (min-width:1040px) and (prefers-reduced-motion:
+   no-preference)` — a pure-CSS disclosure that needs no JS to run. Touch,
+   narrow and reduced-motion visitors read both lines permanently.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.cix {
+  --cix-size: clamp(1.8rem, 5.5vw, 4.5rem);   /* the term */
+  --cix-gut: clamp(2.2rem, 5.2vw, 4.4rem);    /* numeral column / hanging indent */
+  --cix-rest: rgba(36, 28, 20, .5);           /* resting ink — see note above */
+  --cix-nudge: 10px;
+  /* the definition parks 38px right of home before it slides in; clip rather
+     than hidden so no scroll container is created and nothing sticky breaks */
+  overflow-x: clip;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── head ───────────────────────────────────────────────────────────────── */
+
+.cix-count {
+  color: var(--dim);
+  white-space: nowrap;
+}
+
+.cix-top {
+  align-items: end;
+  margin-bottom: clamp(2.4rem, 4.6vw, 4.2rem);
+}
+
+.cix-top h2 {
+  max-width: 15ch;
+  text-wrap: balance;
+}
+
+.cix-top-r {
+  display: flex;
+  align-items: flex-end;
+}
+
+@media (max-width: 899px) {
+  .cix-top-r {
+    margin-top: 1.3rem;
+  }
+}
+
+/* ── the sheet ──────────────────────────────────────────────────────────── */
+
+.cix-list {
+  position: relative;   /* offsetParent for the spine marker */
+  margin: 0;
+  border-top: 1px solid var(--hair-strong);
+}
+
+/* the binding edge — a hairline down the left margin, fading out at the foot
+   so the index reads as continuing rather than stopping */
+.cix-spine {
+  display: none;
+  pointer-events: none;
+}
+
+/* brass marker that tracks the engaged row. Decorative, aria-hidden, and the
+   only element here whose rest state is opacity 0 — it carries no content. */
+.cix-cursor {
+  display: none;
+  pointer-events: none;
+}
+
+@media (hover: hover) and (min-width: 1040px) and (prefers-reduced-motion: no-preference) {
+  .cix-spine {
+    display: block;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 1px;
+    background: linear-gradient(180deg,
+        var(--hair-strong) 0%,
+        var(--hair) 10%,
+        var(--hair) 84%,
+        transparent 100%);
+  }
+
+  .cix-cursor {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: -1px;
+    width: 3px;
+    height: 34px;
+    border-radius: var(--r-pill);
+    background: linear-gradient(180deg, var(--brass-lt), var(--brass) 55%, var(--brass-dk));
+    box-shadow: var(--glow-brass);
+    opacity: 0;
+  }
+}
+
+/* ── row ────────────────────────────────────────────────────────────────── */
+
+.cix-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: .6rem;
+  padding-block: clamp(1.05rem, 2.1vw, 1.75rem);
+  border-bottom: 1px solid var(--hair);
+  transition: opacity .42s var(--ease-fluid);
+}
+
+.cix-row:last-child {
+  border-bottom-color: var(--hair-strong);
+}
+
+.cix-row:focus-visible {
+  outline: 2px solid var(--tint);
+  outline-offset: -4px;
+  border-radius: 6px;
+}
+
+/* content rides above the wash; the wash and the brass rule are pseudo-
+   elements, so the emphasis costs zero extra DOM across ten rows */
+.cix-term,
+.cix-def {
+  position: relative;
+  z-index: 1;
+}
+
+/* (a) the wash — a warm bloom that trails the rule across the row */
+.cix-row::before {
+  content: '';
+  position: absolute;
+  inset: 0 -1.1rem;
+  z-index: 0;
+  background: linear-gradient(90deg,
+      rgba(176, 137, 79, .14) 0%,
+      rgba(176, 137, 79, .05) 46%,
+      rgba(176, 137, 79, 0) 84%);
+  transform: scaleX(0);
+  transform-origin: right center;   /* retracts to the right on exit … */
+  transition: transform .4s var(--ease-fluid);
+  pointer-events: none;
+}
+
+/* (b) the brass rule — thickens the hairline into metal, left to right */
+.cix-row::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  z-index: 2;
+  height: 2px;
+  background: linear-gradient(90deg,
+      var(--brass-dk) 0%,
+      var(--brass) 24%,
+      var(--brass-lt) 56%,
+      var(--brass) 76%,
+      rgba(176, 137, 79, 0) 100%);
+  box-shadow: var(--glow-brass);
+  transform: scaleX(0);
+  transform-origin: right center;
+  transition: transform .36s var(--ease-fluid);
+  pointer-events: none;
+}
+
+/* ── term ───────────────────────────────────────────────────────────────── */
+
+.cix-term {
+  display: grid;
+  grid-template-columns: var(--cix-gut) minmax(0, 1fr);
+  align-items: start;
+  min-width: 0;
+  margin: 0;
+}
+
+.cix-no {
+  position: relative;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: clamp(.62rem, 1.05vw, .78rem);
+  line-height: 1;
+  letter-spacing: .11em;
+  font-variant-numeric: tabular-nums;
+  color: var(--faint);
+  /* optically aligned to the cap-line of the term rather than its baseline —
+     .cix-mask clips its overflow, which makes its baseline unusable for
+     grid alignment */
+  padding-top: calc(var(--cix-size) * .17);
+  transition: transform .42s var(--ease-fluid), color .42s var(--ease-fluid);
+}
+
+/* a brass tick struck under the numeral on engage */
+.cix-no::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: calc(100% + .5em);
+  width: 1.6em;
+  height: 2px;
+  border-radius: var(--r-pill);
+  background: linear-gradient(90deg, var(--brass), var(--brass-dk));
+  transform: scaleX(0);
+  transform-origin: right center;
+  transition: transform .3s var(--ease-fluid);
+}
+
+/* the mask travels; .cix-line inside it is what GSAP raises on scroll.
+   Padding/negative-margin keeps descenders (g, p, y, q, j) off the clip. */
+.cix-mask {
+  display: block;
+  overflow: hidden;
+  padding-bottom: .18em;
+  margin-bottom: -.18em;
+  transition: transform .45s var(--ease-fluid);
+}
+
+.cix-line {
+  display: block;
+  font-family: var(--font-display);
+  font-stretch: 125%;
+  font-weight: 700;
+  font-size: var(--cix-size);
+  line-height: 1;
+  letter-spacing: -.035em;
+  color: var(--cix-rest);
+  transition: color .48s var(--ease-fluid);
+}
+
+/* ── definition column ──────────────────────────────────────────────────── */
+
+.cix-def {
+  margin: 0;
+  min-width: 0;
+  padding-left: var(--cix-gut);   /* hangs off the same indent as the term */
+}
+
+.cix-floor {
+  display: block;
+  margin-bottom: .48rem;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: .625rem;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: .14em;
+  color: var(--dim);
+  transition: color .42s var(--ease-fluid);
+}
+
+/* struck lozenge, brass for the metal floor, walnut for wood, split for both */
+.cix-floor::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: .72em;
+  border-radius: 1.5px;
+  vertical-align: middle;
+  transform: rotate(45deg);
+  background: var(--brass);
+  box-shadow: 0 1px 2px rgba(107, 74, 46, .3);
+}
+
+.cix-row[data-floor='wood'] .cix-floor::before {
+  background: var(--walnut);
+}
+
+.cix-row[data-floor='both'] .cix-floor::before {
+  background: linear-gradient(135deg, var(--brass) 0 50%, var(--walnut) 50% 100%);
+}
+
+.cix-def-t {
+  display: block;
+  max-width: 42ch;
+  font-size: .875rem;
+  line-height: 1.58;
+  letter-spacing: -.002em;
+  color: var(--graphite-2);
+  text-wrap: pretty;
+}
+
+/* ── wide layout ────────────────────────────────────────────────────────── */
+
+@media (min-width: 1040px) {
+  .cix {
+    --cix-nudge: 14px;
+  }
+
+  .cix-row {
+    grid-template-columns: minmax(0, 1fr) minmax(0, clamp(16rem, 24vw, 25rem));
+    align-items: center;
+    gap: clamp(1.5rem, 3vw, 3rem);
+    padding-left: clamp(1rem, 2vw, 1.8rem);   /* clears the spine */
+  }
+
+  .cix-def {
+    padding-left: 0;
+  }
+}
+
+/* ── engaged state — pointer and keyboard resolve to the same picture ────── */
+
+.cix-row:focus .cix-line {
+  color: var(--graphite);
+}
+
+.cix-row:focus .cix-mask {
+  transform: translateX(var(--cix-nudge));
+  transition: transform .78s var(--ease-surge);
+}
+
+.cix-row:focus .cix-no {
+  transform: translateX(calc(var(--cix-nudge) * .42));
+  color: var(--tint-deep);
+  transition: transform .78s var(--ease-surge), color .38s var(--ease-fluid);
+}
+
+.cix-row:focus .cix-no::after,
+.cix-row:focus::after {
+  transform: scaleX(1);
+  transform-origin: left center;   /* … and grows from the left on enter */
+}
+
+.cix-row:focus .cix-no::after {
+  transition: transform .58s var(--ease-surge) .06s;
+}
+
+.cix-row:focus::after {
+  transition: transform .78s var(--ease-surge);
+}
+
+.cix-row:focus::before {
+  transform: scaleX(1);
+  transform-origin: left center;
+  transition: transform .96s var(--ease-surge);
+}
+
+.cix-row:focus .cix-floor {
+  color: var(--tint-deep);
+}
+
+@media (hover: hover) {
+  .cix-row:hover .cix-line {
+    color: var(--graphite);
+  }
+
+  .cix-row:hover .cix-mask {
+    transform: translateX(var(--cix-nudge));
+    transition: transform .78s var(--ease-surge);
+  }
+
+  .cix-row:hover .cix-no {
+    transform: translateX(calc(var(--cix-nudge) * .42));
+    color: var(--tint-deep);
+    transition: transform .78s var(--ease-surge), color .38s var(--ease-fluid);
+  }
+
+  .cix-row:hover .cix-no::after,
+  .cix-row:hover::after {
+    transform: scaleX(1);
+    transform-origin: left center;
+  }
+
+  .cix-row:hover .cix-no::after {
+    transition: transform .58s var(--ease-surge) .06s;
+  }
+
+  .cix-row:hover::after {
+    transition: transform .78s var(--ease-surge);
+  }
+
+  .cix-row:hover::before {
+    transform: scaleX(1);
+    transform-origin: left center;
+    transition: transform .96s var(--ease-surge);
+  }
+
+  .cix-row:hover .cix-floor {
+    color: var(--tint-deep);
+  }
+}
+
+/* only the engaged row is lit — the rest of the block steps back. Gated to
+   wide pointer layouts so the default reading state is never degraded. */
+@media (min-width: 1040px) {
+  .cix-list:focus-within .cix-row:not(:focus):not(:hover) {
+    opacity: .72;
+  }
+}
+
+@media (hover: hover) and (min-width: 1040px) {
+  .cix-list:hover .cix-row:not(:hover):not(:focus) {
+    opacity: .72;
+  }
+}
+
+/* ── the disclosure ─────────────────────────────────────────────────────────
+   The ONLY rule in this file that hides content, and it is fenced three ways.
+   Narrow, touch and reduced-motion visitors never enter this block, so the
+   definition is simply printed under its term. The space it occupies is
+   reserved at all times, so revealing it moves nothing. */
+
+@media (hover: hover) and (min-width: 1040px) and (prefers-reduced-motion: no-preference) {
+  .cix-def-t {
+    opacity: 0;
+    transform: translateX(38px);
+    transition: opacity .26s var(--ease-fluid), transform .32s var(--ease-fluid);
+  }
+
+  .cix-row:hover .cix-def-t,
+  .cix-row:focus .cix-def-t {
+    opacity: 1;
+    transform: none;
+    transition: opacity .5s var(--ease-surge) .05s, transform .82s var(--ease-surge) .05s;
+  }
+}
+
+/* ── foot ───────────────────────────────────────────────────────────────── */
+
+.cix-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.4rem clamp(2rem, 4vw, 4rem);
+  margin-top: clamp(2.4rem, 4.6vw, 3.8rem);
+}
+
+.cix-fine {
+  margin: 0;
+  flex: 1 1 32ch;
+  max-width: 58ch;
+  color: var(--dim);
+  font-size: .815rem;
+  line-height: 1.62;
+}
+
+.cix-foot .btn {
+  flex: none;
+}
+
+/* ── narrow ─────────────────────────────────────────────────────────────────
+   Not a fallback — the index page at phone width. Numeral hangs, term drops
+   a step so the longest word ("Seasoning yard") holds one line, floor tag and
+   definition are simply printed. No hover, nothing to discover. */
+
+@media (max-width: 420px) {
+  .cix {
+    --cix-size: 1.62rem;
+    --cix-gut: 2rem;
+  }
+
+  .cix-row {
+    padding-block: 1.15rem;
+  }
+
+  .cix-def-t {
+    font-size: .845rem;
+  }
+}
+
+/* ── reduced motion — full contrast at rest, no sweep, nothing moves ─────── */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .cix-line {
+    color: var(--graphite);
+  }
+
+  .cix-row::before,
+  .cix-row::after,
+  .cix-no::after {
+    display: none;
+  }
+
+  .cix-row,
+  .cix-no,
+  .cix-mask,
+  .cix-line,
+  .cix-floor,
+  .cix-def-t {
+    transition: none;
+  }
+
+  .cix-row:hover .cix-mask,
+  .cix-row:focus .cix-mask,
+  .cix-row:hover .cix-no,
+  .cix-row:focus .cix-no {
+    transform: none;
+  }
+}

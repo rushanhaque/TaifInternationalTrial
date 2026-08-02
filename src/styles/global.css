@@ -25,7 +25,8 @@ body {
   font-size: 1.0625rem;
   line-height: 1.62;
   color: var(--graphite);
-  background: var(--chrome);
+  background-color: var(--chrome);
+  background-image: var(--paper);
   -webkit-font-smoothing: antialiased;
   /* `clip`, not `hidden` — `hidden` makes body a scroll container and
      silently breaks every position:sticky inside it (the stack) */
@@ -58,10 +59,22 @@ ol {
   color: var(--graphite);
 }
 
+/* One focus treatment for the whole site: a brass ring floated off the
+   element with a soft warm halo, so it reads as part of the design rather
+   than as a browser default. Never removed — only restyled. */
 :focus-visible {
   outline: 2px solid var(--tint);
   outline-offset: 3px;
   border-radius: var(--r-sm);
+  box-shadow: 0 0 0 6px rgba(169, 118, 47, 0.14);
+}
+
+/* on the espresso surface the ring has to be the light one */
+.deep :focus-visible,
+.rq :focus-visible,
+.qs :focus-visible {
+  outline-color: var(--tint-on-deep);
+  box-shadow: 0 0 0 6px rgba(224, 187, 128, 0.16);
 }
 
 .sr-only {
@@ -98,7 +111,14 @@ ol {
   font-stretch: 125%;
   font-weight: 700;
   color: var(--graphite);
+  /* balance wraps the headline into even lines instead of leaving one word
+     stranded on the last line — the single cheapest typographic upgrade
+     available, and nothing on this site was using it */
+  text-wrap: balance;
 }
+
+/* h3-weight display face gets it too */
+.d3 { text-wrap: balance; }
 
 .mega {
   font-size: clamp(3.6rem, 12vw, 11rem);
@@ -131,6 +151,9 @@ ol {
   font-size: 1.0625rem;
   line-height: 1.62;
   max-width: 58ch;
+  /* pretty is the body-copy counterpart: it only prevents orphans, it does
+     not even out every line, so long text keeps its natural rag */
+  text-wrap: pretty;
 }
 
 .lede {
@@ -138,6 +161,7 @@ ol {
   line-height: 1.55;
   color: var(--graphite-2);
   max-width: 46ch;
+  text-wrap: pretty;
 }
 
 .meta {
@@ -283,7 +307,8 @@ ol {
    anything transparent lets the backdrop read through it. */
 .section {
   padding-block: clamp(5rem, 10vw, 9rem);
-  background: var(--chrome);
+  background-color: var(--chrome);
+  background-image: var(--paper);
 }
 
 .section.tight {
@@ -291,7 +316,8 @@ ol {
 }
 
 .section.alt {
-  background: var(--white);
+  background-color: var(--white);
+  background-image: var(--paper);
 }
 
 /* opt-out for a section that should let the ground below show through */
@@ -300,7 +326,8 @@ ol {
 }
 
 .deep {
-  background: var(--deep);
+  background-color: var(--deep);
+  background-image: var(--paper-deep);
   color: var(--on-deep);
   position: relative;
   overflow: hidden;
@@ -732,7 +759,7 @@ ol {
   background: rgba(250, 247, 242, 0.82);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  box-shadow: 0 18px 50px -18px var(--shadow-soft), inset 0 1px 0 rgba(255, 252, 245, .7);
+  box-shadow: var(--lift-3), var(--edge-lit);
   transition: transform .5s var(--ease-fluid);
 }
 
@@ -828,7 +855,7 @@ ol {
   transform: translateY(-50%);
   border-radius: var(--r-pill);
   background: var(--white);
-  box-shadow: 0 4px 14px -6px var(--shadow-soft);
+  box-shadow: var(--lift-1);
   opacity: 0;
   will-change: transform, width;
 }
@@ -1042,7 +1069,7 @@ ol {
   border-radius: var(--r-pill);
   background: var(--sheen);
   opacity: 0;
-  box-shadow: 0 18px 50px -18px var(--shadow-soft);
+  box-shadow: var(--lift-3);
 }
 
 .pre-word {
@@ -1167,7 +1194,7 @@ ol {
 }
 
 .slab:not(.has-blob) {
-  box-shadow: 0 18px 50px -18px var(--shadow-soft);
+  box-shadow: var(--lift-3);
 }
 
 .slab-core {
@@ -1624,7 +1651,7 @@ ol {
   width: 0;
   background: var(--white);
   border-radius: var(--r-pill);
-  box-shadow: 0 4px 14px -6px var(--shadow-soft);
+  box-shadow: var(--lift-1);
   opacity: 0;
   will-change: transform, width;
 }

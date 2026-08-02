@@ -1,0 +1,743 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   MK2 · TWO FLOORS
+   One full-bleed section, two grounds, one draggable brass seam.
+
+   Everything derives from three custom properties written by JS:
+     --split  0..1  seam position → both clip-paths + the seam's translate
+     --m-k    0..1  the metal floor's share of the frame
+     --w-k    0..1  the wood floor's share
+   The resting values below ARE the finished state: 50/50, both floors fully
+   legible with no script running at all.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@property --split { syntax: '<number>'; initial-value: 0.5; inherits: true; }
+@property --m-k   { syntax: '<number>'; initial-value: 0.5; inherits: true; }
+@property --w-k   { syntax: '<number>'; initial-value: 0.5; inherits: true; }
+
+.tf {
+  --split: 0.5;
+  --m-k: 0.5;
+  --w-k: 0.5;
+
+  --tf-col: min(38vw, 34rem);
+  --tf-pad: max(var(--gutter), 3vw);
+
+  position: relative;
+  width: 100%;
+  height: 100svh;
+  min-height: 620px;
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--deep);
+  color: var(--on-deep);
+  contain: paint;
+}
+
+.tf.is-dragging {
+  cursor: col-resize;
+  user-select: none;
+}
+
+/* Section heading — the visible equivalent sits on the seam plaque. */
+.tf-vh {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  clip-path: inset(50%);
+}
+
+/* ─────────────────────────────────────────────────────────────── panels ── */
+
+.tf-panel {
+  position: absolute;
+  inset: 0;
+  will-change: clip-path;
+}
+
+/* Each floor is a full-bleed layer; the seam is a window cut into it, so the
+   grounds never reflow — only the clip moves. */
+.tf-metal {
+  z-index: 1;
+  clip-path: inset(0 calc((1 - var(--split)) * 100%) 0 0);
+}
+
+.tf-wood {
+  z-index: 2;
+  clip-path: inset(0 0 0 calc(var(--split) * 100%));
+}
+
+/* Oversized so the split-driven parallax never exposes an edge. */
+.tf-ground {
+  position: absolute;
+  inset: -6%;
+  transform: translate3d(calc((var(--split) - 0.5) * 3%), 0, 0);
+}
+
+.tf-ground > span {
+  position: absolute;
+  inset: 0;
+}
+
+/* ── metal ground: espresso raked into brass ── */
+.tf-metal .tf-ground {
+  background:
+    radial-gradient(120% 85% at 8% 6%, rgba(227, 200, 143, 0.20), transparent 62%),
+    radial-gradient(90% 70% at 96% 96%, rgba(138, 78, 36, 0.34), transparent 66%),
+    linear-gradient(148deg,
+      #17110a 0%,
+      #2b2015 26%,
+      #4d3819 52%,
+      #7a5a2c 78%,
+      var(--brass-dk) 100%);
+}
+
+/* Hammered: two dimple grids at incommensurate scales. The beat between 62px
+   and 101px is what stops it reading as wallpaper. */
+.tf-hammer {
+  background-image:
+    radial-gradient(circle at 34% 30%, rgba(255, 247, 226, 0.20) 0 16%, rgba(255, 247, 226, 0) 42%),
+    radial-gradient(circle at 66% 70%, rgba(22, 13, 5, 0.36) 0 17%, rgba(22, 13, 5, 0) 44%),
+    radial-gradient(circle at 34% 30%, rgba(255, 247, 226, 0.11) 0 14%, rgba(255, 247, 226, 0) 40%),
+    radial-gradient(circle at 66% 70%, rgba(22, 13, 5, 0.22) 0 15%, rgba(22, 13, 5, 0) 42%);
+  background-size: 62px 62px, 62px 62px, 101px 101px, 101px 101px;
+  background-position: 0 0, 0 0, 31px 18px, 31px 18px;
+  opacity: 0.85;
+}
+
+/* A slow specular crawl — the only ambient motion in the section. */
+.tf-ground .tf-sheen {
+  inset: -25%;
+  background: var(--metal);
+  background-size: 220% 100%;
+  opacity: 0.15;
+  mix-blend-mode: soft-light;
+  filter: blur(34px);
+  animation: tf-sheen 17s var(--ease-fluid) infinite alternate;
+}
+
+@keyframes tf-sheen {
+  from { transform: translate3d(-7%, 2%, 0) rotate(-1.5deg); }
+  to   { transform: translate3d(7%, -2%, 0) rotate(1.5deg); }
+}
+
+/* ── wood ground: walnut into oak ── */
+.tf-wood .tf-ground {
+  background:
+    radial-gradient(110% 80% at 92% 8%, rgba(232, 215, 189, 0.20), transparent 60%),
+    radial-gradient(100% 90% at 10% 100%, rgba(26, 15, 7, 0.55), transparent 62%),
+    linear-gradient(202deg,
+      var(--walnut-dk) 0%,
+      #5c3d24 30%,
+      var(--walnut) 56%,
+      #8b6238 80%,
+      var(--oak) 104%);
+}
+
+/* Grain: three near-vertical repeats at 91° / 89.3° / 90.6°. The near-misses
+   beat against each other and produce irregular figure — real boards do too. */
+.tf-grain {
+  background-image:
+    repeating-linear-gradient(91deg, rgba(28, 16, 8, 0.30) 0 1px, rgba(28, 16, 8, 0) 1px 4px),
+    repeating-linear-gradient(89.3deg, rgba(232, 215, 189, 0.10) 0 1px, rgba(232, 215, 189, 0) 1px 7px),
+    repeating-linear-gradient(90.6deg, rgba(28, 16, 8, 0.17) 0 2px, rgba(28, 16, 8, 0) 2px 13px),
+    repeating-linear-gradient(90deg, rgba(20, 11, 4, 0.22) 0 1px, rgba(20, 11, 4, 0) 1px 96px);
+  opacity: 0.62;
+}
+
+/* One knot, off-centre, masked to an ellipse so it fades into the field. */
+.tf-ground .tf-knot {
+  inset: auto;
+  right: 14%;
+  top: 17%;
+  width: 30vmin;
+  height: 21vmin;
+  background: repeating-radial-gradient(ellipse at 50% 50%,
+    rgba(30, 18, 8, 0.36) 0 3px, rgba(30, 18, 8, 0) 3px 12px);
+  -webkit-mask-image: radial-gradient(ellipse at 50% 50%, #000 6%, transparent 68%);
+  mask-image: radial-gradient(ellipse at 50% 50%, #000 6%, transparent 68%);
+  filter: blur(0.4px);
+  opacity: 0.9;
+}
+
+.tf-vig {
+  background:
+    radial-gradient(130% 100% at 50% 50%, transparent 42%, rgba(10, 6, 2, 0.62) 100%);
+}
+
+/* ────────────────────────────────────────────────────── panel furniture ── */
+
+.tf-strip {
+  position: absolute;
+  top: clamp(1.6rem, 3.4vh, 2.6rem);
+  z-index: 3;
+  margin: 0;
+  padding-bottom: 0.7rem;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.66rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(243, 237, 227, 0.5);
+  border-bottom: 1px solid var(--hair-on-deep);
+}
+
+.tf-metal .tf-strip { left: var(--tf-pad); }
+.tf-wood  .tf-strip { right: var(--tf-pad); }
+
+/* Watermark numeral — alpha lives in `color`, so opacity stays free for the
+   entrance tween to own. */
+.tf-numeral {
+  position: absolute;
+  bottom: -0.14em;
+  z-index: 1;
+  font-family: var(--font-display);
+  font-stretch: 125%;
+  font-weight: 700;
+  font-size: clamp(7rem, 15vw, 15rem);
+  line-height: 0.76;
+  letter-spacing: -0.05em;
+  color: rgba(227, 200, 143, 0.085);
+  pointer-events: none;
+}
+
+.tf-metal .tf-numeral { left: calc(var(--tf-pad) - 0.08em); }
+.tf-wood  .tf-numeral { right: calc(var(--tf-pad) - 0.08em); }
+
+/* ──────────────────────────────────────────────────────────── content ── */
+
+.tf-content {
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  width: var(--tf-col);
+  will-change: transform, opacity;
+}
+
+/* Focus weighting. The dominant floor grows a hair, holds full opacity and
+   stays sharp; the receding one shrinks, dims and takes a whisper of blur.
+   At the 0.5 resting state both resolve to scale 1 / opacity 1 / blur 0. */
+.tf-metal .tf-content {
+  left: var(--tf-pad);
+  transform-origin: 0% 50%;
+  transform:
+    translate3d(calc((var(--m-k) - 0.5) * 5rem), -50%, 0)
+    scale(calc(0.93 + 0.14 * var(--m-k)));
+  opacity: calc(0.4 + 1.2 * var(--m-k));
+  filter: blur(max(0px, calc((0.5 - var(--m-k)) * 4px)));
+}
+
+.tf-wood .tf-content {
+  right: var(--tf-pad);
+  text-align: right;
+  transform-origin: 100% 50%;
+  transform:
+    translate3d(calc((var(--w-k) - 0.5) * -5rem), -50%, 0)
+    scale(calc(0.93 + 0.14 * var(--w-k)));
+  opacity: calc(0.4 + 1.2 * var(--w-k));
+  filter: blur(max(0px, calc((0.5 - var(--w-k)) * 4px)));
+}
+
+.tf-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(1rem, 1.8vh, 1.6rem);
+}
+
+.tf-wood .tf-stack { align-items: flex-end; }
+
+.tf-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin: 0;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+  color: var(--tint-on-deep);
+}
+
+.tf-wood .tf-eyebrow { flex-direction: row-reverse; }
+
+.tf-tick {
+  flex: none;
+  width: 26px;
+  height: 2px;
+  border-radius: var(--r-pill);
+  background: linear-gradient(90deg, var(--brass-dk), var(--brass-lt));
+}
+
+.tf-head {
+  margin: 0;
+  font-family: var(--font-display);
+  font-stretch: 125%;
+  font-weight: 700;
+  font-size: clamp(2rem, 3.6vw, 3.4rem);
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  color: var(--on-deep);
+  text-wrap: balance;
+}
+
+.tf-copy {
+  margin: 0;
+  max-width: 46ch;
+  font-family: var(--font-body);
+  font-size: clamp(0.95rem, 1.05vw, 1.0625rem);
+  line-height: 1.62;
+  color: rgba(243, 237, 227, 0.7);
+}
+
+.tf-stat {
+  display: flex;
+  align-items: center;
+  gap: 0.95rem;
+  margin: 0;
+  padding-top: clamp(0.8rem, 1.6vh, 1.2rem);
+  border-top: 1px solid var(--hair-on-deep);
+  min-width: min(20rem, 100%);
+}
+
+.tf-wood .tf-stat { flex-direction: row-reverse; }
+
+.tf-stat-n {
+  font-family: var(--font-display);
+  font-stretch: 125%;
+  font-weight: 700;
+  font-size: clamp(1.9rem, 2.9vw, 2.75rem);
+  line-height: 0.9;
+  letter-spacing: -0.035em;
+  font-variant-numeric: tabular-nums;
+  color: var(--tint-on-deep);
+  white-space: nowrap;
+}
+
+.tf-stat-l {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.68rem;
+  line-height: 1.4;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(243, 237, 227, 0.52);
+}
+
+.tf-spec {
+  margin: 0;
+  padding: 0.5rem 1rem 0.55rem;
+  border: 1px solid rgba(227, 200, 143, 0.3);
+  border-radius: var(--r-pill);
+  background: rgba(20, 13, 6, 0.42);
+  backdrop-filter: blur(6px);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+  color: rgba(243, 237, 227, 0.82);
+}
+
+/* ─────────────────────────────────────────────────────────────── seam ── */
+
+/* The layer is section-sized and slides by --split; every child is anchored to
+   its left edge, so one transform carries the seam, its shadows and its
+   controls together. Percentage translate resolves against this layer's own
+   width, i.e. the section width. */
+.tf-seam {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  transform: translate3d(calc(var(--split) * 100%), 0, 0);
+  will-change: transform;
+}
+
+/* Both floors fall away into the seam — it reads as a valley, not a cut. */
+.tf-shade {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 26vw;
+}
+
+.tf-shade-l {
+  margin-left: -26vw;
+  background: linear-gradient(90deg, rgba(21, 13, 5, 0) 0%, rgba(21, 13, 5, 0.66) 100%);
+}
+
+.tf-shade-r {
+  background: linear-gradient(90deg, rgba(21, 13, 5, 0.66) 0%, rgba(21, 13, 5, 0) 100%);
+}
+
+.tf-halo {
+  position: absolute;
+  top: -10%;
+  bottom: -10%;
+  left: 0;
+  width: 260px;
+  margin-left: -130px;
+  background: radial-gradient(closest-side ellipse at 50% 50%,
+    rgba(227, 200, 143, 0.26), rgba(227, 200, 143, 0.06) 55%, transparent 78%);
+  filter: blur(6px);
+  opacity: 0.72;
+  transition: opacity 0.4s var(--ease-fluid);
+}
+
+/* Approaching the seam warms it, grabbing it lights it. Both selectors carry
+   four classes so the later (dragging) one wins while the pointer is captured. */
+.tf-seam:has(.tf-hit:hover) .tf-halo { opacity: 0.9; }
+.tf.is-dragging .tf-seam .tf-halo { opacity: 1; }
+
+.tf-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 2px;
+  margin-left: -1px;
+  transform-origin: 50% 0;
+  background: linear-gradient(180deg,
+    rgba(227, 200, 143, 0) 0%,
+    var(--brass-dk) 5%,
+    var(--brass) 22%,
+    #f6e6c2 50%,
+    var(--brass) 78%,
+    var(--brass-dk) 95%,
+    rgba(227, 200, 143, 0) 100%);
+  box-shadow:
+    0 0 14px rgba(227, 200, 143, 0.55),
+    0 0 44px rgba(176, 137, 79, 0.3);
+}
+
+/* Hit strip — full height so the seam is grabbable anywhere along it. */
+.tf-hit {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 52px;
+  margin-left: -26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+  cursor: col-resize;
+  touch-action: none;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tf-grip {
+  position: relative;
+  flex: none;
+  width: 42px;
+  height: 118px;
+  border-radius: var(--r-pill);
+  /* Raking light across a turned brass capsule: dark shoulder, hot crest,
+     shadowed waist, warm bounce off the far edge. */
+  background: linear-gradient(102deg,
+    #6d4f24 0%,
+    #c9a15c 14%,
+    #f7ecd2 34%,
+    #b0894f 56%,
+    #8a6733 74%,
+    #e3c88f 100%);
+  box-shadow:
+    0 14px 34px rgba(0, 0, 0, 0.52),
+    0 2px 6px rgba(0, 0, 0, 0.38),
+    inset 0 1px 0 rgba(255, 252, 240, 0.72),
+    inset 0 -1px 0 rgba(50, 32, 14, 0.55),
+    inset 0 0 0 1px rgba(58, 39, 24, 0.28);
+  transition: transform 0.35s var(--ease-surge), box-shadow 0.35s var(--ease-fluid);
+}
+
+/* Two hairlines — the grip affordance, scored into the brass. */
+.tf-grip::before,
+.tf-grip::after {
+  content: '';
+  position: absolute;
+  top: 34%;
+  bottom: 34%;
+  width: 1px;
+  background: rgba(48, 31, 14, 0.6);
+  box-shadow: 1px 0 0 rgba(255, 248, 230, 0.42);
+}
+
+.tf-grip::before { left: calc(50% - 4px); }
+.tf-grip::after  { left: calc(50% + 3px); }
+
+.tf-hit:hover .tf-grip { transform: scaleX(1.14) scaleY(1.03); }
+
+/* Matches :hover's specificity and follows it, so a captured drag keeps the
+   pressed state even while the pointer is still technically over the strip. */
+.tf.is-dragging .tf-hit .tf-grip {
+  transform: scaleX(1.2) scaleY(0.95);
+  box-shadow:
+    0 18px 44px rgba(0, 0, 0, 0.6),
+    0 0 26px rgba(227, 200, 143, 0.45),
+    inset 0 1px 0 rgba(255, 252, 240, 0.8),
+    inset 0 -1px 0 rgba(50, 32, 14, 0.55);
+}
+
+.tf-hit:focus-visible .tf-grip {
+  box-shadow:
+    0 0 0 3px var(--deep),
+    0 0 0 6px var(--tint-on-deep),
+    0 14px 34px rgba(0, 0, 0, 0.52);
+}
+
+/* CSS triangles: transparent block borders, one coloured inline border.
+   `top` is explicit rather than relying on the flex static position. */
+.tf-arrow {
+  position: absolute;
+  top: calc(50% - 5px);
+  width: 0;
+  height: 0;
+  border-block: 5px solid transparent;
+  transition: opacity 0.3s var(--ease-fluid), transform 0.35s var(--ease-surge);
+}
+
+.tf-arrow-l {
+  right: calc(50% + 30px);
+  border-right: 7px solid rgba(227, 200, 143, 0.75);
+}
+
+.tf-arrow-r {
+  left: calc(50% + 30px);
+  border-left: 7px solid rgba(227, 200, 143, 0.75);
+}
+
+.tf-hit:hover .tf-arrow-l { transform: translateX(-4px); }
+.tf-hit:hover .tf-arrow-r { transform: translateX(4px); }
+
+.tf.is-dragging .tf-arrow { opacity: 0; }
+
+/* Plaque — the one piece of copy that belongs to neither floor. */
+.tf-plaque {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  margin: 5.1rem 0 0;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  white-space: nowrap;
+  padding: 0.62rem 1.15rem 0.68rem;
+  border: 1px solid rgba(227, 200, 143, 0.32);
+  border-radius: var(--r-pill);
+  background: rgba(16, 10, 4, 0.62);
+  backdrop-filter: blur(12px);
+  box-shadow: var(--lift-deep-1);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.68rem;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+  color: rgba(243, 237, 227, 0.86);
+}
+
+/* Each phrase stays whole when the plaque wraps in the stacked layout. */
+.tf-plaque-i { white-space: nowrap; }
+
+.tf-plaque b {
+  font-weight: 700;
+  color: var(--tint-on-deep);
+}
+
+.tf-slash {
+  color: rgba(227, 200, 143, 0.42);
+  font-weight: 400;
+}
+
+.tf-hint {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  margin: 8.1rem 0 0;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.6rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(243, 237, 227, 0.42);
+  transition: opacity 0.35s var(--ease-fluid);
+}
+
+.tf.is-dragging .tf-hint { opacity: 0; }
+
+/* ══════════════════════════════════════════════════════ stacked layout ══
+   Coarse pointers and narrow viewports get the same two floors with the same
+   copy — stacked full-width, divided by a horizontal brass seam. Nothing is
+   dropped; only the drag affordance, which has no meaning without a mouse.
+   Selectors here match desktop specificity so no !important is needed.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 860px), (pointer: coarse) {
+  .tf {
+    height: auto;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    cursor: auto;
+  }
+
+  .tf-panel {
+    position: relative;
+    inset: auto;
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+    min-height: 46svh;
+    padding: clamp(4.2rem, 13vw, 6.5rem) 0 clamp(4.6rem, 15vw, 7rem);
+    will-change: auto;
+  }
+
+  .tf-metal { order: 1; clip-path: none; }
+  .tf-seam  { order: 2; }
+  .tf-wood  { order: 3; clip-path: none; }
+
+  .tf-ground { transform: none; }
+
+  .tf-metal .tf-content,
+  .tf-wood .tf-content {
+    position: relative;
+    top: auto;
+    left: auto;
+    right: auto;
+    width: 100%;
+    padding-inline: var(--gutter);
+    text-align: left;
+    transform: none;
+    opacity: 1;
+    filter: none;
+    will-change: auto;
+  }
+
+  .tf-wood .tf-stack { align-items: flex-start; }
+  .tf-wood .tf-eyebrow { flex-direction: row; }
+  .tf-wood .tf-stat { flex-direction: row; }
+
+  .tf-metal .tf-strip,
+  .tf-wood .tf-strip {
+    left: var(--gutter);
+    right: var(--gutter);
+    top: clamp(1.5rem, 5vw, 2.2rem);
+    font-size: 0.6rem;
+    letter-spacing: 0.14em;
+  }
+
+  .tf-metal .tf-numeral,
+  .tf-wood .tf-numeral {
+    left: auto;
+    right: calc(var(--gutter) - 0.06em);
+    bottom: -0.1em;
+    font-size: clamp(5.5rem, 26vw, 10rem);
+  }
+
+  .tf-head { font-size: clamp(2.1rem, 9.5vw, 3.1rem); }
+  .tf-copy { max-width: 42ch; }
+  .tf-stat { min-width: 0; width: 100%; }
+
+  /* The seam becomes a band: two brass rules bracketing the plaque. */
+  .tf-seam {
+    position: relative;
+    inset: auto;
+    transform: none;
+    will-change: auto;
+    pointer-events: auto;   /* nothing to drag here — but the plaque is real copy */
+    display: flex;
+    justify-content: center;
+    padding: clamp(1.15rem, 4.5vw, 1.7rem) var(--gutter);
+    background: linear-gradient(180deg, #120c05, #1d1610 50%, #120c05);
+  }
+
+  .tf-seam::before,
+  .tf-seam::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg,
+      rgba(227, 200, 143, 0) 0%,
+      var(--brass) 16%,
+      #f6e6c2 50%,
+      var(--brass) 84%,
+      rgba(227, 200, 143, 0) 100%);
+    box-shadow: var(--glow-brass);
+  }
+
+  .tf-seam::before { top: 0; }
+  .tf-seam::after { bottom: 0; }
+
+  .tf-shade,
+  .tf-halo,
+  .tf-line,
+  .tf-hit,
+  .tf-hint {
+    display: none;
+  }
+
+  .tf-plaque {
+    position: relative;
+    top: auto;
+    left: auto;
+    margin: 0;
+    transform: none;
+    flex-wrap: wrap;
+    justify-content: center;
+    white-space: normal;
+    gap: 0.6rem;
+    font-size: 0.63rem;
+    letter-spacing: 0.11em;
+  }
+}
+
+@media (max-width: 420px) {
+  .tf-plaque { padding-inline: 0.85rem; gap: 0.45rem; }
+  .tf-stat-n { font-size: 1.9rem; }
+}
+
+/* ══════════════════════════════════════════════════════ reduced motion ══
+   JS already early-returns; this stops the one ambient CSS animation and the
+   hover/state transitions. The section stays a complete, static 50/50.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: reduce) {
+  .tf-ground .tf-sheen { animation: none; }
+
+  .tf-grip,
+  .tf-arrow,
+  .tf-halo,
+  .tf-hint {
+    transition: none;
+  }
+
+  /* Nothing moves — so hover states change value, not position. */
+  .tf-hit:hover .tf-grip,
+  .tf-hit:hover .tf-arrow-l,
+  .tf-hit:hover .tf-arrow-r {
+    transform: none;
+  }
+
+  .tf-hit:hover .tf-grip {
+    box-shadow:
+      0 0 0 2px rgba(227, 200, 143, 0.6),
+      0 14px 34px rgba(0, 0, 0, 0.52),
+      inset 0 1px 0 rgba(255, 252, 240, 0.72);
+  }
+}
