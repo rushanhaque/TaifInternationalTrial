@@ -66,6 +66,9 @@ const PORTRAIT_COUNT  = 10
 
 export function Router({ routes, notFound, after = null }) {
   const [path, setPath]   = useState(window.location.pathname)
+  /* teardown() runs from a timer and would otherwise close over a stale
+     `path`; this ref always reports what is actually mounted */
+  const pathRef           = useRef(path)
   const busy              = useRef(false)
   const stripsRef         = useRef(null)
 
@@ -80,6 +83,7 @@ export function Router({ routes, notFound, after = null }) {
   }, [path]) // eslint-disable-line react-hooks/exhaustive-deps
 
   function settle(to) {
+    pathRef.current = to
     setPath(to)
     const l = getLenis()
     if (l) l.scrollTo(0, { immediate: true, force: true })
@@ -134,6 +138,18 @@ export function Router({ routes, notFound, after = null }) {
       busy.current = false
       try { getLenis()?.start() } catch (_) {}
       document.getElementById('main')?.focus({ preventScroll: true })
+
+      /* The page swap lives in PHASE 1's onComplete, which is driven by
+         GSAP's ticker — i.e. by rAF. A tab that is backgrounded or badly
+         starved mid-navigation never advances that tween, so the safety
+         timer fires with the URL already changed and the OLD page still
+         mounted. Re-running go() from here would start the whole curtain
+         again on the same starved clock and simply repeat every 3.5s.
+         Swap directly instead: the transition is decoration, arriving is not.
+
+         Measured with frames frozen: the URL updated and the page never
+         changed until this landed. */
+      if (pathRef.current !== to) { settle(to); return }
       if (window.location.pathname !== to) go(window.location.pathname, false)
     }
 

@@ -1,0 +1,134 @@
+/* ============ the works order ============
+   The contact form as a docket being raised: a reference at the head that
+   fills in as the buyer types, the enquiry pieces attached below the brief,
+   and a brass stamp when it goes out. */
+
+.wo-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding-bottom: 0.8rem;
+  margin-bottom: 1.4rem;
+  border-bottom: 1px solid var(--hair-strong);
+}
+
+.wo-head-label { color: var(--dim); }
+
+/* the reference is the one monospaced thing on the page — it reads as a
+   record locator rather than prose, and the em-dashes hold their width
+   while the buyer is still typing */
+.wo-ref {
+  font-family: ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, monospace;
+  font-size: clamp(0.92rem, 1.6vw, 1.1rem);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--tint-deep);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── attached pieces ── */
+.wo-attach {
+  margin-top: 0.4rem;
+  padding: 1rem 1.1rem;
+  border-radius: var(--r-md);
+  background: var(--chrome-2);
+  box-shadow: var(--edge-hair);
+}
+
+.wo-attach-head { color: var(--tint-deep); }
+
+.wo-attach-list {
+  list-style: none;
+  margin: 0.7rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.wo-attach-list li {
+  display: grid;
+  grid-template-columns: 1.9rem 1fr auto;
+  align-items: baseline;
+  gap: 0.6rem;
+  padding-bottom: 0.45rem;
+  border-bottom: 1px solid var(--hair);
+}
+
+.wo-attach-list li:last-child { border-bottom: 0; padding-bottom: 0; }
+
+.wo-n { color: var(--dim); font-variant-numeric: tabular-nums; }
+
+.wo-piece {
+  font-weight: 600;
+  font-size: 0.94rem;
+  color: var(--graphite);
+}
+
+.wo-figs {
+  color: var(--dim);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* ── the confirmation ── */
+.wo-done {
+  position: relative;
+  padding: clamp(1.6rem, 3.4vw, 2.6rem);
+  border-radius: var(--r-lg);
+  background: var(--white);
+  background-image: var(--paper);
+  box-shadow: var(--lift-2), var(--edge-hair);
+}
+
+.wo-done .body { margin-top: 0.9rem; max-width: 52ch; }
+
+/* the stamp: struck slightly off-square, ink sitting a touch unevenly */
+.wo-stamp {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  margin-top: 1.6rem;
+  padding: 0.6rem 1.4rem 0.5rem;
+  transform: rotate(-7deg);
+  border: 2.5px solid var(--tint-deep);
+  border-radius: 6px;
+  color: var(--tint-deep);
+  opacity: 0.82;
+  /* a faint bloom so the ink looks absorbed rather than printed */
+  box-shadow: 0 0 0 3px rgba(138, 90, 32, 0.06);
+}
+
+.wo-stamp-word {
+  font-family: var(--font-display);
+  font-stretch: 125%;
+  font-weight: 700;
+  font-size: clamp(1.3rem, 2.6vw, 1.9rem);
+  line-height: 1;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.wo-stamp-ref {
+  font-family: ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, monospace;
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  font-variant-numeric: tabular-nums;
+}
+
+.wo-quote {
+  margin-top: 1.4rem;
+  color: var(--dim);
+}
+
+.wo-quote b {
+  font-family: ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, monospace;
+  color: var(--tint-deep);
+  font-weight: 600;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wo-stamp { transform: rotate(-7deg); opacity: 0.82; }
+}
