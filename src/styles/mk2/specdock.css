@@ -1,0 +1,139 @@
+/* ============ the spec dock ============
+   The figures a buyer is judging follow them down the page, then retire near
+   the footer. Off-screen by transform only, so nothing is ever stranded on
+   top of the page if the script stops. */
+
+.sd {
+  position: fixed;
+  left: 50%;
+  bottom: clamp(0.8rem, 2vw, 1.4rem);
+  z-index: 60;
+  width: min(980px, calc(100vw - 2 * var(--gutter, 1.5rem)));
+  translate: -50% 0;
+  transform: translateY(calc(100% + 2rem));
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    transform var(--t-slow) var(--ease-surge),
+    opacity var(--t-base) var(--ease-fluid);
+}
+
+.sd.is-up {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.sd-in {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.7rem, 1.6vw, 1.2rem);
+  padding: 0.7rem 0.8rem 0.7rem 1.1rem;
+  border-radius: var(--r-pill);
+  background: rgba(255, 255, 255, 0.86);
+  -webkit-backdrop-filter: blur(14px) saturate(1.3);
+  backdrop-filter: blur(14px) saturate(1.3);
+  box-shadow: var(--lift-3), var(--edge-hair);
+}
+
+.sd-chip {
+  flex: none;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--brass);
+  box-shadow: inset 0 0 0 1px rgba(58, 42, 26, 0.22), var(--lift-1);
+}
+
+.sd-chip.tone-brass  { background: linear-gradient(135deg, var(--brass-lt), var(--brass)); }
+.sd-chip.tone-copper { background: linear-gradient(135deg, #e0a275, #b4703c); }
+.sd-chip.tone-wood   { background: linear-gradient(135deg, #c7a579, #7c5634); }
+.sd-chip.tone-walnut { background: linear-gradient(135deg, #a8814f, #5a3f26); }
+.sd-chip.tone-antique { background: linear-gradient(135deg, #b0894f, #6b5228); }
+.sd-chip.tone-inlay  { background: linear-gradient(135deg, #7c5634 48%, var(--brass) 52%); }
+
+.sd-name {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--graphite);
+  white-space: nowrap;
+}
+
+.sd-mat {
+  color: var(--dim);
+  white-space: nowrap;
+}
+
+/* the figures: tabular so they read as a spec, not a sentence */
+.sd-figs {
+  display: flex;
+  align-items: baseline;
+  gap: clamp(0.8rem, 2vw, 1.6rem);
+  margin: 0 0 0 auto;
+}
+
+.sd-figs > div {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  white-space: nowrap;
+}
+
+.sd-figs dt { color: var(--dim); }
+
+.sd-figs dd {
+  margin: 0;
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--graphite);
+}
+
+.sd-add {
+  flex: none;
+  appearance: none;
+  border: 0;
+  cursor: pointer;
+  border-radius: var(--r-pill);
+  padding: 0.6rem 1.15rem;
+  background: var(--graphite);
+  color: var(--chrome);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  white-space: nowrap;
+  transition:
+    background-color var(--t-quick) var(--ease-fluid),
+    color var(--t-quick) var(--ease-fluid),
+    box-shadow var(--t-quick) var(--ease-fluid);
+}
+
+.sd-add:hover {
+  background: var(--brass);
+  color: #2a1e10;
+  box-shadow: var(--glow-brass);
+}
+
+.sd-add.is-in {
+  background: transparent;
+  color: var(--tint-deep);
+  box-shadow: inset 0 0 0 1px var(--brass);
+}
+
+/* narrow screens keep the piece and the action; the figures are still one
+   scroll away at the top of the page */
+@media (max-width: 860px) {
+  .sd-figs > div:not(:last-child) { display: none; }
+  .sd-mat { display: none; }
+}
+
+@media (max-width: 620px) {
+  .sd-figs { display: none; }
+  .sd-name { overflow: hidden; text-overflow: ellipsis; max-width: 40vw; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sd { transition: opacity var(--t-base); transform: translateY(0); }
+  .sd:not(.is-up) { transform: translateY(calc(100% + 2rem)); }
+}

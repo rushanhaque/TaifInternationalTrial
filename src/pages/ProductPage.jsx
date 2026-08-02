@@ -7,6 +7,7 @@ import Button from '../components/Button'
 import FinishMorph from '../components/FinishMorph'
 import DragRail from '../components/DragRail'
 import DimensionPlate from '../components/mk2/DimensionPlate'
+import SpecDock from '../components/mk2/SpecDock'
 import NotFoundPage from './NotFoundPage'
 import { productImg } from '../data/images'
 import { useCart } from '../lib/cart'
@@ -29,6 +30,8 @@ export default function ProductPage({ params }) {
 
   return (
     <>
+      <SpecDock piece={p} />
+
       <section className="page-hero wrap">
         <div className="grid" style={{ alignItems: 'center' }}>
           <div className="sp-7">
