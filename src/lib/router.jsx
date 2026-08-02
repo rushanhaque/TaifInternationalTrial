@@ -116,11 +116,12 @@ export function Router({ routes, notFound, after = null }) {
 
     veil.classList.add('is-active')
 
-    /* reset all lines to collapsed before animating in */
+    /* reset all lines to collapsed before animating in, 
+       with a 1.03 scale on the orthogonal axis to cover sub-pixel gaps */
     if (isPortrait) {
-      gsap.set(lines, { scaleX: 0, transformOrigin: '100% 50%' })
+      gsap.set(lines, { scaleX: 0, scaleY: 1.03, transformOrigin: '100% 50%' })
     } else {
-      gsap.set(lines, { scaleY: 0, transformOrigin: '50% 100%' })
+      gsap.set(lines, { scaleY: 0, scaleX: 1.03, transformOrigin: '50% 100%' })
     }
 
     const safety = setTimeout(teardown, 3500)
