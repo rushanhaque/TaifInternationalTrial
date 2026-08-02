@@ -6,11 +6,14 @@ import Slab from '../components/Slab'
 import Button from '../components/Button'
 import FinishMorph from '../components/FinishMorph'
 import DragRail from '../components/DragRail'
+import DimensionPlate from '../components/mk2/DimensionPlate'
 import NotFoundPage from './NotFoundPage'
 import { productImg } from '../data/images'
+import { useCart } from '../lib/cart'
 
 export default function ProductPage({ params }) {
   const p = bySlug(params.slug)
+  const { add, has, setOpen } = useCart()
   if (!p) return <NotFoundPage />
 
   const finishes = FINISHES.filter((f) => p.finishes.includes(f.key))
@@ -47,9 +50,14 @@ export default function ProductPage({ params }) {
                   </div>
                 ))}
               </dl>
+              {/* a buyer who has read this far must be able to act HERE — the
+                  enquiry docket was reachable from every grid on the site
+                  except the page that actually argues for the piece */}
               <div className="hero-cta">
-                <Button to="/contact">Request a quote</Button>
-                <Button to="/catalogue" variant="ghost">Back to catalogue</Button>
+                <Button onClick={() => { add(p); setOpen(true) }}>
+                  {has(p.slug) ? 'In your enquiry' : 'Add to enquiry'}
+                </Button>
+                <Button to="/contact" variant="ghost">Request a quote</Button>
               </div>
             </Dilate>
           </div>
@@ -70,7 +78,7 @@ export default function ProductPage({ params }) {
           <div className="sec-head"><span className="idx">0.3</span><span className="meta">Dimensions</span></div>
           <div className="grid">
             <div className="sp-8">
-              <Slab tone="wood" ratio="21/9" label="DIMENSIONS" meta={p.dims} />
+              <DimensionPlate dims={p.dims} name={p.name} />
             </div>
             <div className="sp-4">
               <Dilate>

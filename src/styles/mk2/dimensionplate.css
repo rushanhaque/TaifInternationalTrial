@@ -1,0 +1,136 @@
+/* ============ the dimension plate ============
+   A drawing-office plate: thin ink on paper, tabular figures, and a scale bar
+   so the reader can trust the scale rather than take it on faith.
+
+   Every stroke defaults to fully drawn. The reveal only sets a dash offset in
+   JS and animates it away, so a page where the trigger never fires shows a
+   finished drawing rather than an empty frame. */
+
+.dp {
+  position: relative;
+  padding: clamp(1.1rem, 2.4vw, 2rem);
+  border-radius: var(--r-md);
+  background: var(--white);
+  background-image: var(--paper);
+  box-shadow: var(--lift-1), var(--edge-hair);
+}
+
+.dp-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+/* ── the envelope ── */
+.dp-shell {
+  fill: rgba(176, 137, 79, 0.07);
+  stroke: var(--graphite);
+  stroke-width: 1.6;
+  vector-effect: non-scaling-stroke;
+}
+
+/* centre lines: the long-dash-dot of a real drawing */
+.dp-centre {
+  stroke: var(--hair-strong);
+  stroke-width: 1;
+  stroke-dasharray: 14 4 2 4;
+  vector-effect: non-scaling-stroke;
+}
+
+/* extension lines run from the object out to the dimension line */
+.dp-ext {
+  stroke: var(--hair-strong);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.dp-dim-line {
+  stroke: var(--tint-deep);
+  stroke-width: 1.2;
+  vector-effect: non-scaling-stroke;
+}
+
+.dp-arrow path {
+  fill: none;
+  stroke: var(--tint-deep);
+  stroke-width: 1.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+/* ── figures ── */
+.dp-fig {
+  fill: var(--tint-deep);
+  font-family: var(--font-body);
+  font-size: 17px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.01em;
+}
+
+.dp-cap {
+  fill: var(--dim);
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+}
+
+/* ── the scale bar ── */
+.dp-scale-bar,
+.dp-scale-tick {
+  stroke: var(--graphite-2);
+  stroke-width: 1.2;
+  vector-effect: non-scaling-stroke;
+}
+
+.dp-scale-fig {
+  fill: var(--dim);
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.1em;
+  dominant-baseline: middle;
+}
+
+.dp-note {
+  margin-top: 0.9rem;
+  color: var(--dim);
+  text-align: right;
+}
+
+/* ── bespoke: no envelope to draw ── */
+.dp-none {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  justify-content: center;
+  min-height: 260px;
+}
+
+.dp-none-fig {
+  font-family: var(--font-display);
+  font-stretch: 125%;
+  font-weight: 700;
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  line-height: 1;
+  letter-spacing: -0.035em;
+  color: var(--graphite);
+}
+
+.dp-none-say {
+  max-width: 46ch;
+  font-size: 0.98rem;
+  line-height: 1.6;
+  color: var(--graphite-2);
+  text-wrap: pretty;
+}
+
+@media (max-width: 700px) {
+  .dp-fig { font-size: 22px; }
+  .dp-cap, .dp-scale-fig { font-size: 15px; }
+}
