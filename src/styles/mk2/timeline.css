@@ -1,0 +1,150 @@
+/* ============ the rail ============
+   A vertical brass rail that fills as you read, with a molten bead at the
+   leading edge. Years light as the bead passes and stay lit. */
+
+.tl {
+  position: relative;
+  background-color: var(--white);
+  background-image: var(--paper);
+  padding-block: clamp(4rem, 9vw, 8rem);
+}
+
+.tl-title {
+  font-family: var(--font-display);
+  font-stretch: 125%;
+  font-weight: 700;
+  font-size: clamp(2rem, 5vw, 4rem);
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+  color: var(--graphite);
+  text-wrap: balance;
+  margin-bottom: clamp(2.5rem, 5vw, 4.5rem);
+}
+
+.tl-track { position: relative; }
+
+/* ── the rail ── */
+.tl-rail {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 7px;
+  width: 2px;
+  border-radius: var(--r-pill);
+  background: var(--chrome-3);
+  pointer-events: none;
+}
+
+@media (min-width: 760px) {
+  .tl-rail { left: calc(8rem + 7px); }
+}
+
+/* the poured metal — scaleY only, so the rail's own box never changes */
+.tl-fill {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  transform-origin: 50% 0;
+  background: linear-gradient(180deg, var(--brass-lt), var(--brass) 40%, var(--brass-dk));
+}
+
+/* the bead sits at the fill's leading edge */
+.tl-bead {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 13px;
+  height: 13px;
+  margin: -6.5px 0 0 -6.5px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 38% 34%, #fff6e0, #f0dcb0 38%, var(--brass) 70%, var(--brass-dk));
+  box-shadow: var(--glow-brass-hot);
+}
+
+/* ── rows ── */
+.tl-list { position: relative; }
+
+.tl-row {
+  position: relative;
+  display: grid;
+  gap: 0.6rem;
+  padding: 0 0 clamp(2.2rem, 4.5vw, 3.6rem) 2.4rem;
+}
+
+@media (min-width: 760px) {
+  .tl-row {
+    grid-template-columns: 8rem 1fr;
+    gap: clamp(1.6rem, 4vw, 4rem);
+    padding-left: 0;
+    align-items: start;
+  }
+  /* the year sits in its own left column, right-aligned to the rail */
+  .tl-row .tl-body { display: contents; }
+}
+
+/* the node on the rail */
+.tl-node {
+  position: absolute;
+  left: 0;
+  top: 0.42em;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--white);
+  box-shadow: inset 0 0 0 2px var(--chrome-3);
+  transition:
+    box-shadow var(--t-slow) var(--ease-fluid),
+    transform var(--t-slow) var(--ease-surge);
+}
+
+@media (min-width: 760px) {
+  .tl-node { left: 8rem; }
+}
+
+/* lit: the node takes the metal and swells slightly */
+.tl-row.is-lit .tl-node {
+  box-shadow: inset 0 0 0 3px var(--brass), var(--glow-brass);
+  transform: scale(1.12);
+}
+
+.tl-year {
+  font-family: var(--font-display);
+  font-stretch: 125%;
+  font-weight: 700;
+  font-size: clamp(1.5rem, 3.4vw, 2.6rem);
+  line-height: 1;
+  letter-spacing: -0.035em;
+  font-variant-numeric: tabular-nums;
+  color: var(--faint);
+  transition: color var(--t-slow) var(--ease-fluid);
+}
+
+@media (min-width: 760px) {
+  .tl-year { text-align: right; padding-right: 2.6rem; }
+}
+
+/* lit years carry the metal */
+.tl-row.is-lit .tl-year {
+  color: transparent;
+  background-image: linear-gradient(135deg, var(--brass-lt), var(--brass) 55%, var(--brass-dk));
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.tl-copy {
+  max-width: 54ch;
+  font-size: clamp(0.98rem, 1.3vw, 1.1rem);
+  line-height: 1.62;
+  color: var(--graphite-2);
+  text-wrap: pretty;
+  transition: color var(--t-slow) var(--ease-fluid);
+}
+
+.tl-row.is-lit .tl-copy { color: var(--graphite); }
+
+@media (prefers-reduced-motion: reduce) {
+  .tl-node, .tl-year, .tl-copy { transition: none; }
+  .tl-bead { display: none; }
+  /* with no scroll animation the rail should simply read as filled */
+  .tl-fill { transform: scaleY(1); }
+}

@@ -1,9 +1,9 @@
 import { TIMELINE, PRINCIPLES, TEAM, BRAND } from '../data/site'
 import { CharCascade, Dilate } from '../components/Reveal'
 import Slab from '../components/Slab'
-import DragRail from '../components/DragRail'
 import Button from '../components/Button'
 import { WORKSHOP_IMGS } from '../data/images'
+import Timeline from '../components/mk2/Timeline'
 
 const TEAM_TONES = ['brass', 'wood', 'copper', 'antique', 'walnut', 'inlay']
 
@@ -22,19 +22,8 @@ export default function AboutPage() {
         </Dilate>
       </section>
 
-      <section className="section alt">
-        <div className="wrap">
-          <div className="sec-head"><span className="idx">0.8</span><span className="meta">Since {BRAND.est}</span></div>
-          <DragRail label="Company timeline" hint="Drag through the years">
-            {TIMELINE.map((tEntry) => (
-              <div key={tEntry.year} className="rail-card year-card">
-                <div className="year-num">{tEntry.year}</div>
-                <p className="body">{tEntry.copy}</p>
-              </div>
-            ))}
-          </DragRail>
-        </div>
-      </section>
+      {/* the chronology, as a rail that fills while you read */}
+      <Timeline />
 
       <section className="section">
         <div className="wrap">
