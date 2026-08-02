@@ -8,12 +8,17 @@ import Toggle from '../components/Toggle'
 import FlingGrid from '../components/FlingGrid'
 import GlowGrid from '../components/GlowGrid'
 import DragRail from '../components/DragRail'
+import CatalogueIndex from '../components/mk2/CatalogueIndex'
 import { productImg } from '../data/images'
 
 const OPTIONS = ['All', ...CATEGORIES]
 
 export default function CataloguePage() {
   const [cat, setCat] = useState('All')
+  /* two ways to read the same twenty pieces: the gallery is for looking, the
+     index is for buying. The filter is shared, so switching view never loses
+     the buyer's place. */
+  const [view, setView] = useState('gallery')
   const items = cat === 'All' ? CATALOGUE : CATALOGUE.filter((p) => p.category === cat)
 
   return (
@@ -44,20 +49,38 @@ export default function CataloguePage() {
             </div>
           </div>
 
-          <FlingGrid>
-            <GlowGrid className="grid cat-grid">
-              {items.map((p) => (
-                <Link key={p.slug} to={`/catalogue/${p.slug}`} className="sp-4 cat-card" data-col>
-                  <Slab tone={p.tone} label={p.name.toUpperCase()} meta={p.material} ratio="4/3" bead
-                    img={productImg(p.slug)} alt={p.name} />
-                  <div className="cat-card-meta">
-                    <span className="meta">{p.category}</span>
-                    <span className="meta dim2">{p.idx} · MOQ {p.moq}</span>
-                  </div>
-                </Link>
-              ))}
-            </GlowGrid>
-          </FlingGrid>
+          <div className="cv-bar">
+            <div className="cv-switch" role="group" aria-label="Catalogue view">
+              <button type="button" className="cv-btn" aria-pressed={view === 'gallery'}
+                onClick={() => setView('gallery')}>Gallery</button>
+              <button type="button" className="cv-btn" aria-pressed={view === 'index'}
+                onClick={() => setView('index')}>Index</button>
+            </div>
+            <p className="meta dim2">
+              {view === 'gallery'
+                ? 'Photographs and finishes'
+                : 'Dimensions, weight, MOQ and lead — sortable'}
+            </p>
+          </div>
+
+          {view === 'gallery' ? (
+            <FlingGrid>
+              <GlowGrid className="grid cat-grid">
+                {items.map((p) => (
+                  <Link key={p.slug} to={`/catalogue/${p.slug}`} className="sp-4 cat-card" data-col>
+                    <Slab tone={p.tone} label={p.name.toUpperCase()} meta={p.material} ratio="4/3" bead
+                      img={productImg(p.slug)} alt={p.name} />
+                    <div className="cat-card-meta">
+                      <span className="meta">{p.category}</span>
+                      <span className="meta dim2">{p.idx} · MOQ {p.moq}</span>
+                    </div>
+                  </Link>
+                ))}
+              </GlowGrid>
+            </FlingGrid>
+          ) : (
+            <CatalogueIndex items={items} />
+          )}
         </div>
       </section>
 
