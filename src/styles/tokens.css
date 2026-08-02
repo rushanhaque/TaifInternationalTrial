@@ -1,0 +1,79 @@
+:root {
+  /* ═══ ground — warm white. The site is white first; everything else is trim.
+     --white is the true white surface; --chrome is a barely-there alabaster
+     that lets white panels read as *lifted* rather than flat. ═══ */
+  --white:      #ffffff;
+  --chrome:     #faf7f2;   /* page ground — warm alabaster */
+  --chrome-2:   #f1ebe1;   /* sand — inset wells, tracks, segmented controls */
+  --chrome-3:   #e3d9c9;   /* light oak wash — rules, hints, dividers */
+  --shadow-soft: rgba(58, 42, 26, 0.09);   /* shadows are warm, never grey */
+
+  /* ═══ ink — warm walnut-black, never pure black ═══ */
+  --graphite:   #241c14;
+  --graphite-2: #5a4632;
+  --dim:        rgba(36, 28, 20, 0.62);
+  --faint:      rgba(36, 28, 20, 0.28);
+  --hair:       rgba(36, 28, 20, 0.11);
+  --hair-strong: rgba(36, 28, 20, 0.30);
+
+  /* ═══ the one dark surface — espresso walnut ═══ */
+  --deep:       #1e1710;
+  --on-deep:    #f3ede3;
+  --dim-on-deep: rgba(243, 237, 227, 0.62);
+  --hair-on-deep: rgba(243, 237, 227, 0.16);
+
+  /* ═══ the metals — the house palette ═══ */
+  --brass:      #b0894f;
+  --brass-lt:   #e3c88f;
+  --brass-dk:   #8a6733;
+  --copper:     #b4703c;
+  --copper-lt:  #e0a275;
+  --copper-dk:  #8a4e24;
+
+  /* ═══ the woods ═══ */
+  --walnut:     #6b4a2e;
+  --walnut-dk:  #3a2718;
+  --oak:        #c7a579;
+  --oak-lt:     #e8d7bd;
+
+  /* ═══ accent — polished metal, only ever in motion.
+     Alternating dark/light bands read as specular reflection off a turned
+     surface: copper into brass into a raw gold highlight and back. ═══ */
+  --metal: linear-gradient(100deg,
+    #8a5423 0%, #c58f4c 16%, #f0dcb0 32%, #c9a05a 48%,
+    #a66334 64%, #e7ce9b 80%, #90672e 100%);
+  --metal-soft: linear-gradient(100deg,
+    rgba(180, 112, 60, .20), rgba(176, 137, 79, .20), rgba(227, 200, 143, .24));
+
+  /* solid accents — used wherever type or a focus ring needs real contrast
+     (§10: --metal never carries small text) */
+  --tint:       #a9762f;   /* focus rings, active borders */
+  --tint-deep:  #8a5a20;   /* accent type on light — 5.9:1 on white */
+  --tint-on-deep: #e0bb80; /* accent type on espresso — 9.8:1 */
+
+  /* alert — terracotta, so even the errors belong to the palette */
+  --alert:      #9e3324;
+  --alert-soft: rgba(158, 51, 36, 0.25);
+
+  /* ═══ metal sheen for placeholder frames — brass under raking light ═══ */
+  --sheen: linear-gradient(160deg,
+    #fff9ee 0%, #e0c696 20%, #fbf1dc 38%, #be9455 60%, #f2e2c2 78%, #a87f42 100%);
+
+  --font-display: 'Archivo Expanded', 'Archivo', system-ui, sans-serif;
+  --font-body:    'Inter Tight', system-ui, sans-serif;
+
+  /* easings — elastic and viscous; distinct curves from siblings */
+  --ease-fluid:   cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-surge:   cubic-bezier(0.16, 1.1, 0.3, 1);   /* slight overshoot */
+  --ease-viscous: cubic-bezier(0.5, 0, 0.1, 1);      /* slow start, long settle */
+
+  /* radii — fully rounded is this site's signature */
+  --r-sm: 10px;
+  --r-md: 22px;
+  --r-lg: 34px;
+  --r-pill: 999px;
+
+  --gutter: clamp(1.25rem, 4vw, 3.5rem);
+  --nav-h: 68px;
+  --col: 12;
+}

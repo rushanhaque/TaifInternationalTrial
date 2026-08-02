@@ -1,0 +1,178 @@
+/* ============ hero — E18 The Seam ============
+   The brand name, and nothing else. Each glyph carries two fills — brass above,
+   walnut below — split by a glowing seam; on scroll the halves shear apart.
+   Drop a photograph in via --hero-image (here or on :root):
+     .hero-brand { --hero-image: url('/hero.jpg'); }                       */
+.hero-brand {
+  position: relative; height: 100vh; height: 100svh;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  overflow: hidden;
+  padding: calc(var(--nav-h) + 2rem) var(--gutter) 5rem;
+}
+.hb-bg {
+  position: absolute; inset: 0;
+  background: var(--hero-image, none) center / cover no-repeat;
+}
+/* only a whisper of warmth at the very bottom so the section meets the page
+   cleanly — the photograph itself stays clear */
+.hb-bg::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(180deg,
+    transparent 0%, transparent 72%, rgba(250, 247, 242, 0.55) 90%, var(--chrome) 100%);
+}
+.hb-stage { position: relative; text-align: center; }
+.hb-mark {
+  --seam: 0.52;
+  position: relative; display: inline-block; white-space: nowrap;
+  font-family: var(--font-display); font-stretch: 125%; font-weight: 700;
+  font-size: clamp(5rem, 23vw, 21rem); line-height: 0.84; letter-spacing: -0.045em;
+}
+.hb-ch { position: relative; display: inline-block; }
+.hb-ch-wood, .hb-ch-metal {
+  display: inline-block; color: transparent;
+  background-clip: text; -webkit-background-clip: text;
+  will-change: transform;
+}
+/* grain below the seam — soft gradient mask blends into brass at the join */
+.hb-ch-wood {
+  background-image: linear-gradient(165deg,
+    #7c5634 0%, #4a331f 34%, #8a6136 58%, #56412a 82%, #3a2a1a 100%);
+  -webkit-mask-image: linear-gradient(to top,
+    #000 0%, #000 calc(var(--seam) * 100% - 18%), transparent calc(var(--seam) * 100% + 6%));
+  mask-image: linear-gradient(to top,
+    #000 0%, #000 calc(var(--seam) * 100% - 18%), transparent calc(var(--seam) * 100% + 6%));
+}
+/* polished brass above — soft gradient mask blends into wood at the join */
+.hb-ch-metal {
+  position: absolute; left: 0; top: 0; width: 100%;
+  background-image: linear-gradient(100deg,
+    #8a5423 0%, #c58f4c 22%, #f0dcb0 40%, #c9a05a 55%, #a66334 74%, #e7ce9b 90%, #90672e 100%);
+  -webkit-mask-image: linear-gradient(to bottom,
+    #000 0%, #000 calc((1 - var(--seam)) * 100% - 18%), transparent calc((1 - var(--seam)) * 100% + 6%));
+  mask-image: linear-gradient(to bottom,
+    #000 0%, #000 calc((1 - var(--seam)) * 100% - 18%), transparent calc((1 - var(--seam)) * 100% + 6%));
+}
+.hb-seam { display: none; }
+.hb-intl {
+  margin-top: clamp(1.1rem, 2.6vw, 2rem);
+  font-weight: 600; font-size: clamp(0.7rem, 1.55vw, 1.02rem);
+  letter-spacing: 0.58em; padding-left: 0.58em; /* optical centring */
+  text-transform: uppercase; color: var(--graphite-2);
+}
+.hb-tag {
+  margin-top: clamp(1.4rem, 3vw, 2.4rem);
+  color: var(--tint-deep); letter-spacing: 0.34em; padding-left: 0.34em;
+  font-size: 0.78rem;
+}
+.hb-foot {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  display: grid; grid-template-columns: 1fr auto 1fr; align-items: end; gap: 1rem;
+  padding: 0 var(--gutter) 1.9rem;
+  max-width: 1560px; margin-inline: auto;
+}
+.hb-foot .meta { color: var(--dim); }
+.hb-foot > .hb-side:first-child { justify-self: start; }
+.hb-foot > .hb-side:last-child { justify-self: end; text-align: right; }
+.hb-hint { justify-self: center; display: flex; flex-direction: column; align-items: center; gap: 0.55rem; }
+.hb-hint i {
+  width: 2px; height: 34px; border-radius: var(--r-pill);
+  background: var(--chrome-3); position: relative; overflow: hidden;
+}
+.hb-hint i::after {
+  content: ''; position: absolute; left: 0; top: -45%; width: 100%; height: 45%;
+  border-radius: inherit;
+  background: linear-gradient(180deg, transparent, var(--brass));
+  animation: hint-drip 2.1s var(--ease-fluid) infinite;
+}
+@keyframes hint-drip { to { top: 115%; } }
+@media (max-width: 700px) { .hb-side { display: none; } }
+
+/* the section stack (E21) supplies this card's ground, radius and shadow —
+   only the paint hint stays here */
+.home-position { backface-visibility: hidden; }
+
+/* page-hero kicker + CTA rows (shared with inner pages) */
+.hero-kicker { display: flex; align-items: baseline; gap: .8rem; margin-bottom: 1.4rem; }
+.hero-kicker .meta { color: var(--dim); }
+.hero-cta { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1.8rem; }
+
+.dim { color: var(--graphite-2); }
+.deep .dim { color: var(--dim-on-deep); }
+
+.cert-chips { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1.1rem; }
+
+/* ============ finish morph (E11) ============ */
+/* .fm-section is not a .section, so it needs its own opaque ground */
+.fm-section { padding-block: clamp(5rem, 10vw, 9rem) 0; background: var(--chrome); }
+.fm-section.alt { background: var(--white); }
+.fm-section .sec-head { margin-bottom: 0; }
+.fm-after { padding-block: clamp(2rem, 4vw, 3.5rem); }
+
+.fm-pinned { display: none; }
+.fm-fallback {
+  display: grid; gap: 1.6rem; padding: 2rem var(--gutter);
+  max-width: 1560px; margin-inline: auto;
+}
+@media (min-width: 640px) { .fm-fallback { grid-template-columns: repeat(2, 1fr); } }
+.fm-cell h3 { margin-top: .9rem; }
+.fm-cell p { margin-top: .35rem; }
+
+@media (min-width: 900px) and (prefers-reduced-motion: no-preference) {
+  .fm-pinned {
+    display: grid; grid-template-columns: 6fr 5fr; align-items: center;
+    gap: clamp(1.6rem, 4vw, 4rem);
+    height: 100vh; max-width: 1560px; margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+  .fm-fallback { display: none; }
+}
+.fm-slab { width: 100%; }
+.fm-layer { position: absolute; inset: 0; background: var(--tone-bg); }
+.fm-info { position: relative; }
+.fm-kicker { color: var(--dim); display: block; margin-bottom: 1rem; }
+.fm-names { position: relative; height: clamp(3rem, 6.4vw, 5.4rem); }
+.fm-name { position: absolute; left: 0; top: 0; white-space: nowrap; }
+.fm-copies { position: relative; min-height: 7.5em; margin-top: 1rem; }
+.fm-copy { position: absolute; left: 0; top: 0; right: 0; }
+.fm-detail { margin-top: .6rem; font-size: .95rem; }
+.fm-swatches { display: flex; flex-wrap: wrap; gap: .7rem; margin-top: 1.2rem; }
+.fm-sw { display: flex; flex-direction: column; gap: .3rem; align-items: flex-start; }
+.fm-sw .meta { color: var(--dim); font-size: .58rem; }
+.fm-swi {
+  display: block; width: 76px; height: 22px; border-radius: var(--r-pill);
+  background: var(--tone-bg); transform-origin: 0 50%;
+  box-shadow: inset 0 0 0 1px var(--hair);
+}
+
+/* manual variant (product page) */
+.fm-manual { display: grid; gap: clamp(1.6rem, 4vw, 3rem); align-items: center; }
+@media (min-width: 900px) { .fm-manual { grid-template-columns: 6fr 5fr; } }
+.fm-manual .fm-names { height: clamp(2.4rem, 4vw, 3.4rem); }
+.fm-manual .fm-copies { min-height: 6em; margin-block: .8rem 1.2rem; }
+
+/* ============ capability cards ============ */
+.cap-card {
+  border: 1px solid var(--hair-on-deep); border-radius: var(--r-md);
+  padding: 1.6rem 1.5rem 1.8rem; background: rgba(243, 237, 227, 0.04);
+}
+.cap-card .cap-stat {
+  display: inline-block; font-family: var(--font-display); font-stretch: 125%;
+  font-weight: 700; font-size: clamp(1.6rem, 2.6vw, 2.3rem); letter-spacing: -0.03em;
+  color: var(--tint-on-deep); margin-bottom: .7rem; font-variant-numeric: tabular-nums;
+}
+.cap-card h3 { margin-bottom: .5rem; }
+
+/* ============ process teaser ============ */
+.proc-aside { display: flex; flex-direction: column; justify-content: center; }
+.proc-aside .btn { margin-top: 1.2rem; align-self: flex-start; }
+
+/* ============ partners ============ */
+.partner-bar {
+  display: flex; flex-wrap: wrap; gap: 1rem; align-items: center;
+  justify-content: space-between; margin-bottom: 1.6rem;
+}
+.chip-wall { display: flex; flex-wrap: wrap; gap: .6rem; }
+
+/* ============ closing CTA ============ */
+.cta-deep .cta-mega { font-size: clamp(2.8rem, 8vw, 7rem); margin-block: .8rem 1.2rem; }
+.cta-deep .lede { margin-bottom: 1.6rem; }

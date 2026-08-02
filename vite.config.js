@@ -1,0 +1,20 @@
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+export default defineConfig({
+  plugins: [react()],
+  // honour PORT so tooling that assigns a free port gets the server it expects
+  server: process.env.PORT ? { port: Number(process.env.PORT), strictPort: true } : undefined,
+  build: {
+    target: 'es2019',
+    cssCodeSplit: false,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+          motion: ['gsap', '@gsap/react', 'lenis'],
+        },
+      },
+    },
+  },
+})
