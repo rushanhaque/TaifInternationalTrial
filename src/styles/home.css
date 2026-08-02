@@ -142,8 +142,26 @@
 .fm-layer { position: absolute; inset: 0; background: var(--tone-bg); }
 .fm-info { position: relative; }
 .fm-kicker { color: var(--dim); display: block; margin-bottom: 1rem; }
-.fm-names { position: relative; height: clamp(3rem, 6.4vw, 5.4rem); }
-.fm-name { position: absolute; left: 0; top: 0; white-space: nowrap; }
+/* The family names are stacked absolutely, all at left:0 and nowrap, so the
+   LONGEST one sets how far this block reaches — including the ones sitting at
+   opacity 0 waiting their turn. At the .d1 size "Accessories" measured 604px
+   inside a 505px column: it ran 48px past the viewport and the whole homepage
+   panned sideways, and it would have run off the edge on screen the moment it
+   became the active name.
+
+   Sizing against the column itself rather than the viewport fixes both, and
+   keeps fixing them — a longer family name added later simply sets smaller
+   type instead of breaking the page. One size for all names, so the type
+   stays uniform as they cross-fade. */
+.fm-names {
+  position: relative;
+  height: clamp(3rem, 6.4vw, 5.4rem);
+  container-type: inline-size;
+}
+.fm-name {
+  position: absolute; left: 0; top: 0; white-space: nowrap;
+  font-size: min(clamp(2.4rem, 6vw, 5rem), 12cqw);
+}
 .fm-copies { position: relative; min-height: 7.5em; margin-top: 1rem; }
 .fm-copy { position: absolute; left: 0; top: 0; right: 0; }
 .fm-detail { margin-top: .6rem; font-size: .95rem; }
