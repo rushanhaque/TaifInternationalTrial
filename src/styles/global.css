@@ -1168,6 +1168,27 @@ ol {
   will-change: auto;
 }
 
+/* ============ page transition — simple slide ============ */
+.slide-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 4000;
+  background: linear-gradient(100deg, rgba(250, 247, 242, 0.72) 0%, rgba(224, 162, 117, 0.35) 100%); /* chrome fading into transparent copper-lt */
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-right: 1px solid rgba(180, 112, 60, 0.15); /* copper-tinted edge */
+  border-left: 1px solid rgba(180, 112, 60, 0.15);
+  box-shadow: 0 0 40px rgba(58, 42, 26, 0.08); /* soft warm shadow */
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.slide-overlay.is-active {
+  visibility: visible;
+  pointer-events: all;
+  will-change: transform;
+}
+
 /* ============ slab (E1 · E2 · H2 · H4) ============ */
 .slab {
   position: relative;

@@ -1,5 +1,4 @@
 import { CharCascade, Dilate } from '../components/Reveal'
-import CollectionsDolly from '../components/CollectionsDolly'
 import Button from '../components/Button'
 import Seam from '../components/mk2/Seam'
 import { navigate } from '../lib/router'
@@ -24,14 +23,12 @@ export default function CollectionsPage() {
           <CharCascade as="h1" className="mega">Five families, one bench.</CharCascade>
           <Dilate>
             <p className="lede" style={{ marginTop: '1.4rem' }}>
-              Scroll to walk the line: tableware, barware, décor, lighting,
-              furniture. The sixth family is bespoke — it waits at the end.
+              Tableware, barware, décor, lighting, and
+              furniture. The sixth family is bespoke — described in a drawing you send.
             </p>
           </Dilate>
         </div>
       </section>
-
-      <CollectionsDolly />
 
       {/* the index — each family opens its own plate room */}
       <section className="section">

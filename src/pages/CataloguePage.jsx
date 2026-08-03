@@ -64,20 +64,41 @@ export default function CataloguePage() {
           </div>
 
           {view === 'gallery' ? (
-            <FlingGrid>
-              <GlowGrid className="grid cat-grid">
-                {items.map((p) => (
-                  <Link key={p.slug} to={`/catalogue/${p.slug}`} className="sp-4 cat-card" data-col>
-                    <Slab tone={p.tone} label={p.name.toUpperCase()} meta={p.material} ratio="4/3" bead
-                      img={productImg(p.slug)} alt={p.name} />
-                    <div className="cat-card-meta">
-                      <span className="meta">{p.category}</span>
-                      <span className="meta dim2">{p.idx} · MOQ {p.moq}</span>
-                    </div>
-                  </Link>
-                ))}
-              </GlowGrid>
-            </FlingGrid>
+            <ol className="cat-collage">
+              {items.map((p, i) => {
+                /* 6-item repeating collage rhythm:
+                   row A: 8-col hero  +  4-col portrait
+                   row B: 4-col  +  4-col  +  4-col  (trio)
+                   row C: 12-col full-width panoramic */
+                const PATTERN = [
+                  { span: 8,  ratio: '16/9'  },   // A1 — wide hero
+                  { span: 4,  ratio: '3/4'   },   // A2 — tall portrait
+                  { span: 4,  ratio: '4/3'   },   // B1 — square-ish
+                  { span: 4,  ratio: '4/3'   },   // B2
+                  { span: 4,  ratio: '4/3'   },   // B3
+                  { span: 12, ratio: '21/6'  },   // C  — full-width panoramic
+                ]
+                const tile = PATTERN[i % PATTERN.length]
+                return (
+                  <li key={p.slug} className={`cat-col-plate cat-span-${tile.span}`}>
+                    <Link to={`/catalogue/${p.slug}`} className="cat-col-card">
+                      <Slab
+                        tone={p.tone}
+                        label={p.name.toUpperCase()}
+                        meta={p.material}
+                        ratio={tile.ratio}
+                        img={productImg(p.slug)}
+                        alt={p.name}
+                      />
+                      <div className="cat-col-meta">
+                        <span className="meta">{p.category}</span>
+                        <span className="meta dim2">{p.idx} · MOQ {p.moq}</span>
+                      </div>
+                    </Link>
+                  </li>
+                )
+              })}
+            </ol>
           ) : (
             <CatalogueIndex items={items} />
           )}
@@ -90,7 +111,7 @@ export default function CataloguePage() {
           <DragRail label="Recently added" hint="Drag · fling">
             {railItems().map((p) => (
               <Link key={p.slug} to={`/catalogue/${p.slug}`} className="rail-card">
-                <Slab tone={p.tone} label={p.name.toUpperCase()} meta={p.lead} bead
+                <Slab tone={p.tone} label={p.name.toUpperCase()} meta={p.lead}
                   img={productImg(p.slug)} alt={p.name} />
                 <div className="rail-card-meta meta"><span>{p.category}</span><span>{p.idx}</span></div>
               </Link>

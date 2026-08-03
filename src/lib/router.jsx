@@ -63,21 +63,22 @@ const resolve = (v, params) => (typeof v === 'function' ? v(params) : v)
    Landscape: 20 vertical columns · Portrait: 10 horizontal rows            */
 
 const LANDSCAPE_COUNT = 20
-const PORTRAIT_COUNT  = 10
+const PORTRAIT_COUNT = 10
 
 
 
 export function Router({ routes, notFound, after = null }) {
-  const [path, setPath]   = useState(window.location.pathname)
+  const [path, setPath] = useState(window.location.pathname)
   /* teardown() runs from a timer and would otherwise close over a stale
      `path`; this ref always reports what is actually mounted */
-  const pathRef           = useRef(path)
-  const busy              = useRef(false)
-  const stripsRef         = useRef(null)
+  const pathRef = useRef(path)
+  const busy = useRef(false)
+  const stripsRef = useRef(null)
+  const slideRef = useRef(null)
 
   const matched = matchRoutes(routes, path)
-  const route   = matched ? matched.route : notFound
-  const params  = matched ? matched.params : {}
+  const route = matched ? matched.route : notFound
+  const params = matched ? matched.params : {}
 
   useEffect(() => {
     /* `ok` lets a route say its params did not resolve to anything real —
@@ -112,7 +113,7 @@ export function Router({ routes, notFound, after = null }) {
     }
     if (push) window.history.pushState({}, '', to)
 
-    if (reduced() || !stripsRef.current) {
+    if (reduced() || !stripsRef.current || !slideRef.current) {
       settle(to)
       requestAnimationFrame(() => ScrollTrigger.refresh())
       document.getElementById('main')?.focus({ preventScroll: true })
@@ -122,11 +123,54 @@ export function Router({ routes, notFound, after = null }) {
     busy.current = true
     getLenis()?.stop()
 
+    const destMatched = matchRoutes(routes, to)
+    const destRoute = destMatched ? destMatched.route : notFound
+    const isSlide = destRoute.transition === 'slide'
+
+    if (isSlide) {
+      const slide = slideRef.current
+      slide.classList.add('is-active')
+      gsap.set(slide, { xPercent: -100, x: 0 })
+
+      const safetySlide = setTimeout(teardownSlide, 2000)
+      function teardownSlide() {
+        clearTimeout(safetySlide)
+        slide.classList.remove('is-active')
+        gsap.set(slide, { clearProps: 'all' })
+        busy.current = false
+        try { getLenis()?.start() } catch (_) { }
+        document.getElementById('main')?.focus({ preventScroll: true })
+        if (pathRef.current !== to) { settle(to); return }
+        if (window.location.pathname !== to) go(window.location.pathname, false)
+      }
+
+      gsap.to(slide, {
+        xPercent: 0,
+        x: 0,
+        duration: 0.25,
+        ease: 'power3.inOut',
+        onComplete() {
+          settle(to)
+          try { ScrollTrigger.refresh() } catch (_) { }
+          requestAnimationFrame(() => requestAnimationFrame(() => {
+            gsap.to(slide, {
+              xPercent: 100,
+              x: 0,
+              duration: 0.25,
+              ease: 'power3.inOut',
+              onComplete: teardownSlide,
+            })
+          }))
+        }
+      })
+      return
+    }
+
     const veil = stripsRef.current
 
     /* pick which set of lines is currently active based on orientation */
-    const isPortrait  = window.matchMedia('(orientation: portrait)').matches
-    const linesWrap   = isPortrait
+    const isPortrait = window.matchMedia('(orientation: portrait)').matches
+    const linesWrap = isPortrait
       ? veil.querySelector('.strips__portrait')
       : veil.querySelector('.strips__landscape')
     const lines = Array.from(linesWrap.querySelectorAll('.strips__line'))
@@ -141,7 +185,7 @@ export function Router({ routes, notFound, after = null }) {
       gsap.set(lines, { scaleY: 0, scaleX: 1.03, transformOrigin: '50% 100%' })
     }
 
-    const safety = setTimeout(teardown, 3500)
+    const safety = setTimeout(teardown, 2000)
 
     function teardown() {
       clearTimeout(safety)
@@ -149,7 +193,7 @@ export function Router({ routes, notFound, after = null }) {
       /* clear every GSAP inline style so strips are clean while hidden */
       gsap.set(lines, { clearProps: 'all' })
       busy.current = false
-      try { getLenis()?.start() } catch (_) {}
+      try { getLenis()?.start() } catch (_) { }
       document.getElementById('main')?.focus({ preventScroll: true })
 
       /* The page swap lives in PHASE 1's onComplete, which is driven by
@@ -166,11 +210,11 @@ export function Router({ routes, notFound, after = null }) {
       if (window.location.pathname !== to) go(window.location.pathname, false)
     }
 
-    const STAGGER   = 0.035   /* seconds between each strip */
-    const IN_DUR    = 0.55    /* duration each strip takes to rise */
-    const OUT_DUR   = 0.45    /* duration each strip takes to fall */
-    const EASE_IN   = 'power3.inOut'
-    const EASE_OUT  = 'power3.inOut'
+    const STAGGER = 0.035    /* seconds between each strip */
+    const IN_DUR = 0.35    /* duration each strip takes to rise */
+    const OUT_DUR = 0.3     /* duration each strip takes to fall */
+    const EASE_IN = 'power3.inOut'
+    const EASE_OUT = 'power3.inOut'
 
     const prop = isPortrait ? 'scaleX' : 'scaleY'
 
@@ -184,7 +228,7 @@ export function Router({ routes, notFound, after = null }) {
       onComplete() {
         /* PHASE 2 — swap the page while fully covered */
         settle(to)
-        try { ScrollTrigger.refresh() } catch (_) {}
+        try { ScrollTrigger.refresh() } catch (_) { }
 
         requestAnimationFrame(() => requestAnimationFrame(() => {
           /* PHASE 3 — curtain falls; origin flips to the opposite edge */
@@ -226,6 +270,9 @@ export function Router({ routes, notFound, after = null }) {
         </main>
         {after}
       </div>
+
+      {/* Premium Slide Overlay */}
+      <div className="slide-overlay" ref={slideRef} aria-hidden="true" />
 
       {/* SteviaPlease-style curtain overlay */}
       <div className="strips" ref={stripsRef} aria-hidden="true">

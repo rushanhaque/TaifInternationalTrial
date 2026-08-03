@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef, useCallback } from 'react'
 import { gsap, ScrollTrigger, reduced, coarse } from '../lib/gsap'
 import { Link, navigate } from '../lib/router'
 import { CATALOGUE, CATEGORIES } from '../data/catalogue'
@@ -102,6 +102,115 @@ const FAMILY_NOTE = {
   Furniture: 'Side tables, consoles, benches. Kiln-dried timber, flush-set inlay.',
   Bespoke: 'The sixth family. Described in a drawing you send, not a page you browse.',
 }
+
+/* ── PlateCard — bead travels TL→TR→BR then morphs into the Add button ───── */
+function PlateCard({ p, add, has, setOpen }) {
+  const liRef   = useRef(null)
+  const beadRef = useRef(null)
+  const addRef  = useRef(null)
+  const tlRef   = useRef(null)   // keep reference so we can kill on re-enter
+
+  const handleEnter = useCallback(() => {
+    if (reduced() || !beadRef.current || !liRef.current) return
+
+    /* kill any in-progress animation so re-hovering always starts cleanly */
+    if (tlRef.current) tlRef.current.kill()
+
+    const li   = liRef.current
+    const bead = beadRef.current
+    const btn  = addRef.current
+
+    /* travel distances — bead is 12 px, starts 14 px from each edge */
+    const w = li.offsetWidth  - 26   /* to the right edge  */
+    const h = li.offsetHeight - 26   /* to the bottom edge */
+
+    /* always start from top-left */
+    gsap.set(bead, { x: 0, y: 0, scale: 1, opacity: 1 })
+    gsap.set(btn,  { opacity: 0, scale: 0.8 })
+
+    const tl = gsap.timeline()
+
+    /* phase 1 — slide along the top edge to the top-right corner */
+    tl.to(bead, { x: w, duration: 0.28, ease: 'power2.inOut' })
+
+    /* phase 2 — drop down the right edge to the bottom-right corner */
+    tl.to(bead, { y: h, duration: 0.22, ease: 'power2.inOut' })
+
+    /* phase 3 — bead blooms out and vanishes while the Add button pops in */
+    tl.to(bead, { scale: 2.6, opacity: 0, duration: 0.22, ease: 'power2.out' }, '-=0.02')
+    tl.to(btn,  { opacity: 1, scale: 1,   duration: 0.22, ease: 'back.out(1.4)' }, '<0.05')
+
+    tlRef.current = tl
+  }, [])
+
+  const handleLeave = useCallback(() => {
+    if (tlRef.current) tlRef.current.kill()
+    if (!beadRef.current || !addRef.current) return
+
+    /* snap everything back — no animation on leave so the next enter is crisp */
+    gsap.set(addRef.current,  { opacity: 0, scale: 0.8 })
+    gsap.set(beadRef.current, { x: 0, y: 0, scale: 1, opacity: 0 })
+  }, [])
+
+  return (
+    <li
+      className="pl-plate"
+      ref={liRef}
+      onMouseEnter={handleEnter}
+      onMouseLeave={handleLeave}
+    >
+      {/* bead lives on the li so it isn't clipped by the card's overflow:hidden */}
+      <span ref={beadRef} className="bead pl-bead" aria-hidden="true" />
+
+      <Link
+        to={`/catalogue/${p.slug}`}
+        className="pl-card"
+        data-cursor="VIEW"
+      >
+        <span className="pl-frame" aria-hidden="true" />
+
+        <span className="pl-shot">
+          <img
+            className="pl-img"
+            src={productPlate(p.slug)}
+            alt={p.name}
+            loading="lazy"
+            decoding="async"
+          />
+          <span className={`pl-wash tone-${p.tone}`} aria-hidden="true" />
+        </span>
+
+        <span className="pl-no meta" aria-hidden="true">{p.idx}</span>
+
+        <span className="pl-rail" aria-hidden="true">
+          <b>{p.dims}</b>
+          <b>{p.weight}</b>
+          <b>MOQ {p.moq}</b>
+          <b>{p.lead}</b>
+        </span>
+
+        <span className="pl-say">
+          <span className="pl-name">{p.name}</span>
+          <span className="pl-mat meta">{p.material}</span>
+        </span>
+      </Link>
+
+      <button
+        ref={addRef}
+        type="button"
+        className={`pl-add ${has(p.slug) ? 'is-in' : ''}`}
+        onClick={() => { add(p); setOpen(true) }}
+        aria-label={has(p.slug)
+          ? `${p.name} is in your enquiry`
+          : `Add ${p.name} to your enquiry`}
+      >
+        <i aria-hidden="true" />
+        <span>{has(p.slug) ? 'In enquiry' : 'Add'}</span>
+      </button>
+    </li>
+  )
+}
+
 
 export default function CollectionPage({ params = {} }) {
   const rootRef = useRef(null)
@@ -231,53 +340,8 @@ export default function CollectionPage({ params = {} }) {
             </div>
           )}
           <ol className="pl-grid">
-            {pieces.map((p, i) => (
-              <li
-                key={p.slug}
-                className={`pl-plate ${i % 4 === 0 || i % 4 === 3 ? 'is-wide' : 'is-narrow'}`}
-              >
-                <Link to={`/catalogue/${p.slug}`} className="pl-card" data-cursor="VIEW">
-                  <span className="pl-frame" aria-hidden="true" />
-
-                  <span className="pl-shot">
-                    <img
-                      className="pl-img"
-                      src={productPlate(p.slug)}
-                      alt={p.name}
-                      loading="lazy"
-                      decoding="async"
-                    />
-                    <span className={`pl-wash tone-${p.tone}`} aria-hidden="true" />
-                  </span>
-
-                  <span className="pl-no meta" aria-hidden="true">{p.idx}</span>
-
-                  {/* the numbers, held back until asked for */}
-                  <span className="pl-rail" aria-hidden="true">
-                    <b>{p.dims}</b>
-                    <b>{p.weight}</b>
-                    <b>MOQ {p.moq}</b>
-                    <b>{p.lead}</b>
-                  </span>
-
-                  <span className="pl-say">
-                    <span className="pl-name">{p.name}</span>
-                    <span className="pl-mat meta">{p.material}</span>
-                  </span>
-                </Link>
-
-                <button
-                  type="button"
-                  className={`pl-add ${has(p.slug) ? 'is-in' : ''}`}
-                  onClick={() => { add(p); setOpen(true) }}
-                  aria-label={has(p.slug)
-                    ? `${p.name} is in your enquiry`
-                    : `Add ${p.name} to your enquiry`}
-                >
-                  <i aria-hidden="true" />
-                  <span>{has(p.slug) ? 'In enquiry' : 'Add'}</span>
-                </button>
-              </li>
+            {pieces.map((p) => (
+              <PlateCard key={p.slug} p={p} add={add} has={has} setOpen={setOpen} />
             ))}
           </ol>
         </div>

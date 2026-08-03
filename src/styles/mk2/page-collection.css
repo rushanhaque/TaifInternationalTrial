@@ -111,21 +111,25 @@
 
 .pl-grid {
   display: grid;
-  gap: clamp(1.1rem, 2.4vw, 2.2rem);
+  gap: clamp(1.1rem, 2vw, 1.8rem);
+  grid-template-columns: 1fr;
 }
 
-@media (min-width: 860px) {
-  .pl-grid { grid-template-columns: repeat(12, 1fr); }
-  /* the rhythm: wide/narrow, then narrow/wide */
-  .pl-plate.is-wide { grid-column: span 7; }
-  .pl-plate.is-narrow { grid-column: span 5; }
+@media (min-width: 600px) {
+  .pl-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
-.pl-plate { position: relative; list-style: none; }
+@media (min-width: 900px) {
+  .pl-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+.pl-plate { position: relative; list-style: none; height: 100%; }
 
 .pl-card {
   position: relative;
-  display: block;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   border-radius: var(--r-lg);
   overflow: hidden;
   background: var(--chrome-2);
@@ -150,7 +154,7 @@
 
 .pl-shot {
   display: block;
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 4 / 3;
   overflow: hidden;
 }
 
@@ -231,7 +235,8 @@
   align-items: baseline;
   justify-content: space-between;
   gap: 1rem;
-  padding: 0.9rem 0.2rem 0;
+  padding: 0.9rem 0.2rem;
+  flex: 1;
 }
 
 .pl-name {
@@ -248,10 +253,20 @@
 .pl-card:hover .pl-name { color: var(--tint-deep); }
 .pl-mat { color: var(--dim); text-align: right; flex: none; }
 
-/* ---- add to enquiry ---- */
+/* ---- bead override — on li (position:relative), reaches all corners ---- */
+.pl-bead {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 5;
+  pointer-events: none;
+  /* start invisible until first hover — GSAP owns opacity from here */
+}
+
+/* ---- add to enquiry — bottom-right so the bead can morph into it ---- */
 .pl-add {
   position: absolute;
-  top: 0.8rem;
+  bottom: 0.8rem;
   right: 0.8rem;
   z-index: 4;
   display: inline-flex;
@@ -268,20 +283,15 @@
   text-transform: uppercase;
   letter-spacing: 0.1em;
   cursor: pointer;
-  /* held just out of frame; hover or keyboard focus brings it in */
+  /* GSAP takes full control of opacity + scale on mouse devices */
   opacity: 0;
-  transform: translateY(-6px) scale(0.96);
-  transition:
-    opacity 0.4s var(--ease-fluid),
-    transform 0.45s var(--ease-surge),
-    background 0.3s;
+  transform-origin: center;
+  transition: background 0.3s;
 }
 
-.pl-plate:hover .pl-add,
-.pl-plate:focus-within .pl-add,
+/* keyboard-only reveal (accessibility) */
 .pl-add:focus-visible {
   opacity: 1;
-  transform: translateY(0) scale(1);
 }
 
 .pl-add:hover { background: var(--white); }
@@ -299,7 +309,7 @@
 .pl-add.is-in { background: var(--deep); color: var(--on-deep); opacity: 1; }
 .pl-add.is-in i { transform: rotate(225deg); }
 
-/* touch: no hover, so the control is simply always present */
+/* touch: GSAP never fires, so show the button and rail always */
 @media (hover: none) {
   .pl-add { opacity: 1; transform: none; }
   .pl-rail { transform: translateY(0); }
