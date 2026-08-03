@@ -8,6 +8,7 @@ import Button from '../components/Button'
 import Ribbon from '../components/Ribbon'
 import DragRail from '../components/DragRail'
 import FinishMorph from '../components/FinishMorph'
+import CollectionsDolly from '../components/CollectionsDolly'
 import Stepper from '../components/Stepper'
 import Tension from '../components/Tension'
 import Deep from '../components/Deep'
@@ -22,9 +23,7 @@ import { familySlug } from './CollectionPage'
 import TheTurn from '../components/mk2/TheTurn'
 import TwoFloors from '../components/mk2/TwoFloors'
 import Sampler from '../components/mk2/Sampler'
-import QuoteStage from '../components/mk2/QuoteStage'
-import CaseRibbon from '../components/mk2/CaseRibbon'
-import CraftIndex from '../components/mk2/CraftIndex'
+
 import RequestCatalogue from '../components/mk2/RequestCatalogue'
 import ChapterRail from '../components/mk2/ChapterRail'
 
@@ -33,7 +32,7 @@ const CHAPTERS = [
   { id: 'top', label: 'Taif' },
   { id: 'collections', label: 'Collections' },
   { id: 'catalogue', label: 'Catalogue' },
-  { id: 'the-turn', label: 'The Turn' },
+  { id: 'the-turn', label: 'Finishes' },
   { id: 'two-floors', label: 'Two Floors' },
   { id: 'sampler', label: 'Finishes' },
   { id: 'process', label: 'Process' },
@@ -51,16 +50,21 @@ export default function Home() {
       <span id="top" />
       <HeroBrand />
 
-      {/* 0.2 · collections — slides up like a stacked card after the hero */}
-      <section className="fm-section alt home-position" id="collections">
+      {/* 0.15 · collections dolly */}
+      <span id="collections-1" />
+      <div style={{ position: 'relative', zIndex: 2, background: 'var(--bg)' }}>
+        <CollectionsDolly />
+      </div>
+
+      {/* 0.2 · materials — finish morph section */}
+      <section className="fm-section alt" id="materials">
         <div className="wrap">
-          <div className="sec-head"><span className="idx">0.1</span><span className="meta">Collections</span></div>
+          <div className="sec-head"><span className="idx">0.2</span><span className="meta">Materials</span></div>
         </div>
         <FinishMorph
           mode="scroll"
           finishes={HOME_COLLECTIONS}
-          label="COLLECTIONS"
-          hrefFor={(c) => `/collections/${familySlug(c.name)}`}
+          label="MATERIALS"
         />
         <div className="wrap fm-after">
           <Button to="/catalogue" variant="ghost">See it on the pieces</Button>
@@ -128,33 +132,21 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 1.0 · PROOF — named buyers on the record, then the case evidence */}
-      <span id="proof" />
-      <QuoteStage />
-      <CaseRibbon />
+      {/* 1.0 · REVIEWS — coming soon */}
+      <section className="section clear" id="reviews">
+        <div className="wrap">
+          <div className="sec-head"><span className="idx">1.0</span><span className="meta">Reviews</span></div>
+          <h2 className="d1" style={{ color: 'var(--ink)' }}>Reviews</h2>
+          <p className="lede" style={{ marginTop: '1rem' }}>Reviews section coming soon.</p>
+        </div>
+      </section>
 
-      {/* 1.1 · CRAFT INDEX — the vocabulary of the two floors */}
-      <span id="craft" />
-      <CraftIndex />
 
       {/* 1.2 · REQUEST THE CATALOGUE — the conversion moment */}
       <span id="request" />
       <RequestCatalogue />
 
-      {/* 1.3 · closing CTA */}
-      <Deep className="cta-deep">
-        <div className="wrap" style={{ textAlign: 'left' }}>
-          <span className="idx">1.2</span>
-          <CharCascade as="h2" className="mega cta-mega">Make it in both.</CharCascade>
-          <Dilate>
-            <p className="lede">Send a drawing, a photograph or a sample. A priced quote returns in five working days.</p>
-            <div className="hero-cta">
-              <Button to="/contact">Connect</Button>
-              <Button to="/faq" variant="ghost">Read the FAQ</Button>
-            </div>
-          </Dilate>
-        </div>
-      </Deep>
+
     </>
   )
 }

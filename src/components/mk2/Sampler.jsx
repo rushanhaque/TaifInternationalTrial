@@ -229,14 +229,14 @@ export default function Sampler({ finishes = FINISHES }) {
         <div className="smp-grid">
           {/* ─────────── the object ─────────── */}
           <div className="smp-left">
-            <div className="smp-stage" ref={stageRef}>
-              <span className="smp-corner tl" aria-hidden="true" />
-              <span className="smp-corner tr" aria-hidden="true" />
-              <span className="smp-corner bl" aria-hidden="true" />
-              <span className="smp-corner br" aria-hidden="true" />
-              <span className="smp-horizon" aria-hidden="true" />
+              <div className="smp-stage" ref={stageRef} style={{ height: 'calc(100vh - 4rem)', minHeight: '600px', position: 'sticky', top: '2rem' }}>
+                <span className="smp-corner tl" aria-hidden="true" />
+                <span className="smp-corner tr" aria-hidden="true" />
+                <span className="smp-corner bl" aria-hidden="true" />
+                <span className="smp-corner br" aria-hidden="true" />
+                <span className="smp-horizon" aria-hidden="true" />
 
-              <div className="smp-object">
+                <div className="smp-object">
                 <div className="smp-glows" aria-hidden="true">
                   {finishes.map((x, i) => (
                     <span
@@ -283,8 +283,41 @@ export default function Sampler({ finishes = FINISHES }) {
               </span>
             </div>
 
+
+          </div>
+
+          {/* ─────────── readout ─────────── */}
+          <div className="smp-info" ref={infoRef}>
+            {/* The visual stack is a cross-fade of five copies, so it is marked
+                decorative; the live region below carries the same content to
+                assistive tech in one clean, changing node. */}
+            <div className="smp-panels" aria-hidden="true">
+              {finishes.map((x, i) => (
+                <div key={x.key} className={`smp-panel${i === shown ? ' is-on' : ''}`}>
+                  <span className="idx smp-idx">
+                    {pad(i + 1)}<i />{pad(n)}
+                  </span>
+                  <p className="smp-name">{x.name}</p>
+                  <ul className="smp-subs">
+                    {x.substrates.map((s) => (
+                      <li key={s} className="chip smp-sub">{s}</li>
+                    ))}
+                  </ul>
+                  <p className="lede smp-char">{x.character}</p>
+                </div>
+              ))}
+            </div>
+
+            <p className="smp-sr" role="status">
+              {`${f.name}. Substrates: ${f.substrates.join(', ')}. ${f.character} Durability: ${f.durability} Care: ${f.care}`}
+            </p>
+
+            <div className="smp-cta">
+              <Button to="/contact" variant="ghost" small>Request the swatch box</Button>
+            </div>
+            
             {/* ─────────── swatches ─────────── */}
-            <div className="smp-swatches">
+            <div className="smp-swatches" style={{ marginTop: '2rem' }}>
               <div
                 className="smp-strip"
                 ref={stripRef}
@@ -320,47 +353,6 @@ export default function Sampler({ finishes = FINISHES }) {
                 Colour is held to a physical master swatch. A screen is a starting
                 point, not a specification.
               </p>
-            </div>
-          </div>
-
-          {/* ─────────── readout ─────────── */}
-          <div className="smp-info" ref={infoRef}>
-            {/* The visual stack is a cross-fade of five copies, so it is marked
-                decorative; the live region below carries the same content to
-                assistive tech in one clean, changing node. */}
-            <div className="smp-panels" aria-hidden="true">
-              {finishes.map((x, i) => (
-                <div key={x.key} className={`smp-panel${i === shown ? ' is-on' : ''}`}>
-                  <span className="idx smp-idx">
-                    {pad(i + 1)}<i />{pad(n)}
-                  </span>
-                  <p className="smp-name">{x.name}</p>
-                  <ul className="smp-subs">
-                    {x.substrates.map((s) => (
-                      <li key={s} className="chip smp-sub">{s}</li>
-                    ))}
-                  </ul>
-                  <p className="lede smp-char">{x.character}</p>
-                  <dl className="smp-facts">
-                    <div>
-                      <dt className="meta">Durability</dt>
-                      <dd className="body">{x.durability}</dd>
-                    </div>
-                    <div>
-                      <dt className="meta">Care</dt>
-                      <dd className="body">{x.care}</dd>
-                    </div>
-                  </dl>
-                </div>
-              ))}
-            </div>
-
-            <p className="smp-sr" role="status">
-              {`${f.name}. Substrates: ${f.substrates.join(', ')}. ${f.character} Durability: ${f.durability} Care: ${f.care}`}
-            </p>
-
-            <div className="smp-cta">
-              <Button to="/contact" variant="ghost" small>Request the swatch box</Button>
             </div>
           </div>
         </div>

@@ -102,16 +102,8 @@ export default function CollectionsDolly() {
               aria-label={`Open the ${c.name} collection`}
             >
               <span className={`cd-tag a-${c.accent}`} aria-hidden="true">{c.no}</span>
-              <Slab tone={c.tone} label={c.name.toUpperCase()} meta={c.material} ratio="16/10" bead
-                img={COLLECTION_IMGS[c.name]} alt={`${c.name} — ${c.material}`} />
-              <div className="cd-caption">
-                <span className="cd-stub">
-                  <span className="cd-stub-no">FAMILY {c.no}</span>
-                  <span className="cd-stub-name"> · {c.name}</span>
-                </span>
-                <p className="cd-pitch">{c.pitch}</p>
-                <span className="cd-open meta" aria-hidden="true">Open the family →</span>
-              </div>
+              <Slab tone={c.tone} label={c.name.toUpperCase()} ratio="16/10" bead
+                img={COLLECTION_IMGS[c.name]} alt={c.name} />
             </Link>
           </div>
         ))}
@@ -140,10 +132,8 @@ export default function CollectionsDolly() {
               to={`/collections/${familySlug(c.name)}`}
               aria-label={`Open the ${c.name} collection`}
             >
-              <Slab tone={c.tone} label={c.name.toUpperCase()} meta={c.material} ratio="16/10"
-                img={COLLECTION_IMGS[c.name]} alt={`${c.name} — ${c.material}`} />
-              <p className="cd-pitch" style={{ marginTop: '.7rem' }}>{c.pitch}</p>
-              <span className="cd-open meta">Open the family →</span>
+              <Slab tone={c.tone} label={c.name.toUpperCase()} ratio="16/10"
+                img={COLLECTION_IMGS[c.name]} alt={c.name} />
             </Link>
           ))}
         </div>

@@ -1001,25 +1001,6 @@ ol {
   color: var(--dim);
 }
 
-/* ============ blobber (E3) ============ */
-@media (pointer: fine) {
-
-  *,
-  *::before,
-  *::after {
-    cursor: none !important;
-  }
-}
-
-.blobber-arrow {
-  position: fixed;
-  left: 0;
-  top: 0;
-  z-index: 120;
-  pointer-events: none;
-  will-change: transform;
-}
-
 /* pointer wake (H8) */
 .wake {
   position: absolute;
@@ -1553,7 +1534,7 @@ ol {
 }
 
 .rail-card {
-  flex: 0 0 clamp(250px, 26vw, 370px);
+  flex: 0 0 clamp(320px, 35vw, 480px);
 }
 
 .rail-card .slab {

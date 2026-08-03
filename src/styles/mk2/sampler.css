@@ -135,7 +135,7 @@
 /* ══ THE OBJECT ═══════════════════════════════════════════════════════════ */
 .smp-object {
   position: relative;
-  width: min(100%, 440px);
+  width: min(100%, calc((100vh - 12rem) * 5/6), 380px);
   aspect-ratio: 5 / 6;
 }
 

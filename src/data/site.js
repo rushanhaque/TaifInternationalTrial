@@ -101,20 +101,20 @@ export const FINISHES = [
 
 export const HOME_COLLECTIONS = [
   {
-    key: 'decor', name: 'Decor', tone: 'brass',
-    character: 'Vessels, sculpture, wall pieces. The quiet centrepiece of a room.',
+    key: 'brass', name: 'Brass', tone: 'brass',
+    character: 'The workhorse of the metal floor. It casts cleanly and holds an antique patina evenly.',
   },
   {
-    key: 'accessories', name: 'Accessories', tone: 'antique',
-    character: 'Small, beautiful objects that finish a space.',
+    key: 'copper', name: 'Copper', tone: 'copper',
+    character: 'Soft, warm and antimicrobial. We raise it annealed and seal it with food-safe wax.',
   },
   {
-    key: 'wall-arts', name: 'Wall arts', tone: 'copper',
-    character: 'Hand-hammered and finished panels that bring warmth to empty walls.',
+    key: 'aluminium', name: 'Aluminium', tone: 'antique',
+    character: 'Lightweight and durable. Sand-cast or spun into complex, seamless forms.',
   },
   {
-    key: 'lightings', name: 'Lightings', tone: 'walnut',
-    character: 'Sconces, lanterns, pendants. Warm-white LED, hand-formed shades.',
+    key: 'wood', name: 'Wood', tone: 'walnut',
+    character: 'Sheesham, mango, and acacia. Seasoned, kiln-dried, and finished in hard-wax oil.',
   }
 ]
 

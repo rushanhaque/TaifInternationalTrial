@@ -263,31 +263,13 @@ export default function TheTurn({ frames }) {
 
   return (
     <section className="tt section" ref={root} aria-labelledby="tt-h">
-      <div className="wrap tt-intro">
-        <div className="sec-head">
-          <span className="idx">05</span>
-          <span className="meta">The Turn</span>
-        </div>
-        <div className="grid">
-          <h2 className="d1 sp-6" id="tt-h">Three hundred<br />and sixty degrees.</h2>
-          <p className="lede sp-5 st-8">
-            One vessel, raised by hand from a flat brass disc. Turned the whole
-            way round, then cut again in walnut. Two materials, one axis — the
-            seam where metal meets grain.
-          </p>
-        </div>
-        <p className="tt-caption meta">
-          Plate 05 · Vessel V-114 — hand-raised IS 319 brass, and the same form in American walnut.
-        </p>
-      </div>
-
       <div className="tt-stage" ref={stage}>
         <span className="tt-lamp" aria-hidden="true" />
         <span className="tt-floor" aria-hidden="true" />
 
         <div className="tt-hud wrap">
           <span className="tt-hud-l">
-            <span className="meta">The Turn</span>
+            <span className="meta">Finishes</span>
             <span className="tt-hud-sub">{BRAND.origin}</span>
           </span>
           <span className="tt-hud-c">

@@ -6,8 +6,7 @@ import { onPointer, pointer, startPointer } from '../../lib/usePointer'
    mk2 · Micro — three small parts that give the page a hand.
 
    (A) Magnetic    a control leans toward the cursor before it is touched
-   (B) CursorLabel the pointer is told, in one word, what the thing does
-   (C) LightLeak   the seam between a light and a dark section blooms
+   (B) LightLeak   the seam between a light and a dark section blooms
 
    All three ride the site's single shared pointer pipeline (§9.6 —
    src/lib/usePointer.js). Not one of them adds a mousemove listener; the
@@ -155,96 +154,6 @@ export default function Magnetic({
     <span className={`mag ${className}`.trim()} ref={host}>
       {children}
     </span>
-  )
-}
-
-
-/* ═══ (B) CursorLabel ══════════════════════════════════════════════════════
-   Mount ONCE near the app root. A brass pill trails the cursor and, over
-   anything carrying data-cursor="DRAG" (or TURN / PULL / VIEW / any word),
-   stamps that word out.
-
-   Text is written imperatively rather than through state: this component
-   renders once and never again, no matter how much of the page you sweep.  */
-export function CursorLabel() {
-  const host = useRef(null)
-  const pill = useRef(null)
-  const word = useRef(null)
-
-  useEffect(() => {
-    if (reduced() || coarse()) return
-    const h = host.current
-    const p = pill.current
-    const w = word.current
-    if (!h || !p || !w) return
-
-    startPointer()
-
-    /* xPercent/yPercent live in the same transform GSAP already owns, so the
-       centring survives every scale tween without a second wrapper node. */
-    gsap.set(p, { xPercent: -50, yPercent: -50, scale: 0, rotate: -8, opacity: 0 })
-    gsap.set(h, { x: pointer.x + 22, y: pointer.y + 36 })
-
-    /* Longer than the arrow cursor's own easing (E3) on purpose — the label
-       should read as being dragged along behind the hand, not worn by it. */
-    const qx = gsap.quickTo(h, 'x', { duration: 0.42, ease: 'power3' })
-    const qy = gsap.quickTo(h, 'y', { duration: 0.42, ease: 'power3' })
-    const un = onPointer((pt) => { qx(pt.x + 22); qy(pt.y + 36) })
-
-    let shown = ''
-    let tl = null
-
-    function paint(next) {
-      if (next === shown) return
-      if (tl) tl.kill()
-      tl = gsap.timeline()
-      /* A word swap changes the pill's width, and width is not ours to
-         animate (rule 4). So it stamps out and back in — which also reads
-         better: each affordance gets its own strike. */
-      if (shown) {
-        tl.to(p, { scale: 0, rotate: -8, opacity: 0, duration: 0.16, ease: 'power2.in' })
-      }
-      if (next) {
-        tl.add(() => { w.textContent = next })
-          .to(p, { scale: 1, rotate: 0, opacity: 1, duration: 0.55, ease: 'surge' })
-      }
-      shown = next
-    }
-
-    function over(e) {
-      const t = e.target && e.target.closest ? e.target.closest('[data-cursor]') : null
-      const v = t ? (t.getAttribute('data-cursor') || '').trim() : ''
-      paint(v.slice(0, 16))
-    }
-    const clear = () => paint('')
-
-    document.addEventListener('mouseover', over)
-    /* Leaving the viewport or the tab must not strand a lit pill on screen. */
-    document.documentElement.addEventListener('mouseleave', clear)
-    window.addEventListener('blur', clear)
-
-    return () => {
-      un()
-      if (tl) tl.kill()
-      gsap.killTweensOf([h, p])
-      document.removeEventListener('mouseover', over)
-      document.documentElement.removeEventListener('mouseleave', clear)
-      window.removeEventListener('blur', clear)
-    }
-  }, [])
-
-  /* No cursor, no cursor label. Touch and reduced-motion visitors get the
-     word from the element itself instead — see [data-cursor-tag] in
-     styles/mk2/micro.css. */
-  if (reduced() || coarse()) return null
-
-  return (
-    <div className="curlab" ref={host} aria-hidden="true">
-      <span className="curlab-pill meta" ref={pill}>
-        <span className="curlab-tick" />
-        <span className="curlab-word" ref={word} />
-      </span>
-    </div>
   )
 }
 

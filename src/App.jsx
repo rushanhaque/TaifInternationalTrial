@@ -8,13 +8,11 @@ import Preloader from './components/Preloader'
 import Viscosity from './components/Viscosity'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
-import Blobber from './components/Blobber'
 import SectionStack from './components/SectionStack'
 import ClickSpark from './components/ClickSpark'
 import Ambient from './components/mk2/Ambient'
 import RevealGuard from './components/mk2/RevealGuard'
 import Interactions from './components/mk2/Interactions'
-import { CursorLabel } from './components/mk2/Micro'
 import Cart from './components/mk2/Cart'
 import { CartProvider } from './lib/cart'
 
@@ -165,8 +163,6 @@ export default function App() {
       <Interactions />
       <div className="grain" aria-hidden="true" />
       <ClickSpark />
-      <CursorLabel />
-      <Blobber />
       <Cart />
       </CartProvider>
     </ErrorBoundary>
