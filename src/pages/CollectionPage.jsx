@@ -59,6 +59,25 @@ const ALIAS = {
   'wall-arts': null,   // no stock filed yet
 }
 
+/* ── one URL per family ───────────────────────────────────────────────────
+   Both naming schemes resolve, which is what makes old links keep working —
+   but only ONE of them may be the indexable address. /collections/lighting
+   and /collections/lightings served the identical three products, and each
+   was linked from a different page: the collections index linked the
+   category slug, every family page linked the family slug. Google saw two
+   competing near-duplicates, and the sitemap declared only one of them.
+
+   canonicalFamilySlug folds a catalogue category onto the family slug that
+   owns it, so every internal link and every canonical tag points at the
+   same address. */
+const CATEGORY_TO_FAMILY = Object.entries(ALIAS).reduce((m, [slug, cat]) => {
+  if (cat) m[cat] = slug
+  return m
+}, {})
+
+export const canonicalFamilySlug = (nameOrCategory) =>
+  CATEGORY_TO_FAMILY[nameOrCategory] || familySlug(nameOrCategory)
+
 /* resolve a URL slug to a real family name, checking the declared families
    first and then the raw catalogue categories, so both naming schemes work */
 export function resolveFamily(slug) {

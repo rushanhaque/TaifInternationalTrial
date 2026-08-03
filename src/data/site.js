@@ -16,6 +16,11 @@ export const BRAND = {
   origin: 'Moradabad · India',
   email: 'export@taifinternational.com',
   phone: '+91 98370 42200',
+  /* The canonical production origin, no trailing slash. Every canonical URL,
+     og:url and structured-data URL derives from this. Leave it empty and the
+     site canonicalises to whatever origin is serving it, which is what you
+     want on a preview deploy and NOT what you want in production. */
+  url: 'https://taifinternational.com',
 }
 
 export const NAV_LINKS = [

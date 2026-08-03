@@ -4,7 +4,7 @@ import Button from '../components/Button'
 import Seam from '../components/mk2/Seam'
 import { navigate } from '../lib/router'
 import { CATALOGUE, CATEGORIES } from '../data/catalogue'
-import { familySlug } from './CollectionPage'
+import { canonicalFamilySlug } from './CollectionPage'
 
 /* /collections — a single, cinematic pinned scroll: the camera pushes
    through five layered collection families and lands on the Bespoke wall.
@@ -45,7 +45,7 @@ export default function CollectionsPage() {
                   <button
                     type="button"
                     className="pl-switch-btn"
-                    onClick={() => navigate(`/collections/${familySlug(c)}`)}
+                    onClick={() => navigate(`/collections/${canonicalFamilySlug(c)}`)}
                   >
                     <span className="pl-switch-name">{c}</span>
                     <span className="pl-switch-n meta">{String(n).padStart(2, '0')} pieces</span>

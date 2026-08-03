@@ -3,6 +3,7 @@ import { ScrollTrigger } from './lib/gsap'
 import { Router } from './lib/router'
 import { BRAND } from './data/site'
 import { bySlug } from './data/catalogue'
+import { productLd, breadcrumbLd, collectionLd } from './lib/seo'
 import Preloader from './components/Preloader'
 import Viscosity from './components/Viscosity'
 import Navbar from './components/Navbar'
@@ -19,7 +20,7 @@ import { CartProvider } from './lib/cart'
 
 import Home from './pages/Home'
 import CollectionsPage from './pages/CollectionsPage'
-import CollectionPage, { resolveFamily } from './pages/CollectionPage'
+import CollectionPage, { resolveFamily, familyPieces, canonicalFamilySlug } from './pages/CollectionPage'
 import CataloguePage from './pages/CataloguePage'
 import ProductPage from './pages/ProductPage'
 import MaterialsPage from './pages/MaterialsPage'
@@ -49,14 +50,38 @@ const ROUTES = [
   { path: '/collections/:family', page: CollectionPage, idx: '0.2',
     name: (p) => familyName(p.family),
     title: (p) => t(familyName(p.family)),
-    desc: (p) => `${familyName(p.family)} — production pieces with dimensions, MOQ and lead times.` },
+    desc: (p) => `${familyName(p.family)} — production pieces with dimensions, MOQ and lead times.`,
+    /* an unrecognised family renders "No such family." — say so in the head */
+    ok: (p) => !!resolveFamily(p.family),
+    /* both naming schemes resolve, but only the family slug is indexable */
+    canonical: (p) => `/collections/${canonicalFamilySlug(resolveFamily(p.family))}`,
+    jsonLd: (p) => {
+      const fam = resolveFamily(p.family)
+      if (!fam) return null
+      return collectionLd(fam, familyPieces(fam), `/collections/${canonicalFamilySlug(fam)}`)
+    } },
   { path: '/catalogue', page: CataloguePage, idx: '0.25', name: 'Catalogue',
     title: t('Catalogue'),
     desc: '20 production pieces across tableware, barware, décor, lighting, furniture and bespoke.' },
   { path: '/catalogue/:slug', page: ProductPage, idx: '0.3',
     name: (p) => bySlug(p.slug)?.name || 'Product',
     title: (p) => t(bySlug(p.slug)?.name || 'Product'),
-    desc: (p) => bySlug(p.slug)?.story || `Handmade metal and wood pieces by ${B}.` },
+    desc: (p) => bySlug(p.slug)?.story || `Handmade metal and wood pieces by ${B}.`,
+    /* an unknown slug renders NotFoundPage — without this it shipped a 200
+       titled "Product — TAIF INTERNATIONAL", an indexable page advertising
+       a product that does not exist */
+    ok: (p) => !!bySlug(p.slug),
+    jsonLd: (p) => {
+      const piece = bySlug(p.slug)
+      if (!piece) return null
+      return [
+        productLd(piece),
+        breadcrumbLd([
+          { name: 'Catalogue', path: '/catalogue' },
+          { name: piece.name, path: `/catalogue/${piece.slug}` },
+        ]),
+      ]
+    } },
   { path: '/materials', page: MaterialsPage, idx: '0.7', name: 'Materials',
     title: t('Materials'),
     desc: 'Six materials, measured: brass, copper, aluminium, sheesham, mango wood and reclaimed teak.' },

@@ -11,14 +11,52 @@
     <meta property="og:description" content="Metal and wood handicraft manufacture and export. Hand-hammered brass, burnished copper, seasoned hardwood and flush brass inlay — made in Moradabad, shipped to 42 countries." />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="en_US" />
+    <meta property="og:site_name" content="TAIF INTERNATIONAL" />
+    <meta property="og:url" content="https://taifinternational.com/" />
+    <!-- Static canonical for the homepage and for any crawler that does not
+         run JavaScript. src/lib/seo.js rewrites this (and og:url, og:title,
+         og:description and robots) on every client-side navigation, because
+         the SPA fallback answers 200 for every path and without a canonical
+         each URL form is separately indexable. -->
+    <link rel="canonical" href="https://taifinternational.com/" />
+    <meta name="robots" content="index,follow" />
+    <!-- The share card is brand-owned geometry, not a photograph. Every
+         photograph on the site is still a placeholder from a third-party
+         host, and shipping one of those here would put a stranger's stock
+         image under the client's name on every link anyone posts. Replace
+         public/og.png with real photography when it arrives. -->
+    <meta property="og:image" content="https://taifinternational.com/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="TAIF INTERNATIONAL — a brass form resting on a walnut ground." />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="TAIF INTERNATIONAL — Where Metal Meets Grain" />
     <meta name="twitter:description" content="Metal and wood handicraft manufacture and export, Moradabad, India." />
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23faf7f2'/><path d='M14 40h36v10H14z' fill='%236b4a2e'/><circle cx='32' cy='26' r='13' fill='%23b0894f'/></svg>" />
+    <meta name="twitter:image" content="https://taifinternational.com/og.png" />
+    <!-- Real icon files, not only a data: URI. Google's favicon crawler
+         cannot fetch a data: URI, and the SPA fallback answers /favicon.ico
+         with index.html as text/html unless the file actually exists — so
+         the site showed a generic globe in search results. The filesystem
+         check runs before the rewrite on both Vercel and Netlify. -->
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- The photography is still placeholder-sourced (see src/data/images.js).
+         The hero is a CSS background, so the browser cannot discover it until
+         styles resolve — opening the connection early is the one thing that
+         can be done about that from here. DELETE THIS LINE when the real
+         photographs move into public/img/. -->
+    <link rel="preconnect" href="https://picsum.photos" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600..700&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"TAIF INTERNATIONAL","description":"Metal and wood handicraft manufacture and export — hand-hammered brass, burnished copper, seasoned hardwood and flush brass inlay.","foundingDate":"1998","email":"export@taifinternational.com","telephone":"+91 98370 42200","numberOfEmployees":{"@type":"QuantitativeValue","value":340},"address":{"@type":"PostalAddress","addressLocality":"Moradabad","addressRegion":"Uttar Pradesh","addressCountry":"IN"},"areaServed":"Worldwide","knowsAbout":["brass handicraft","copper handicraft","wood handicraft","brass inlay","contract manufacture","private label homeware"]}</script>
+    <!-- NOTE: the brand facts below are stated a second time here, outside
+         src/data/site.js, because a crawler that never runs JavaScript sees
+         only this file. Verify the phone, headcount and founding date against
+         the client's real data before launch — they ship as machine-readable
+         schema.org claims. -->
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"TAIF INTERNATIONAL","url":"https://taifinternational.com/","logo":{"@type":"ImageObject","url":"https://taifinternational.com/icon.svg"},"description":"Metal and wood handicraft manufacture and export — hand-hammered brass, burnished copper, seasoned hardwood and flush brass inlay.","foundingDate":"1998","email":"export@taifinternational.com","telephone":"+91 98370 42200","numberOfEmployees":{"@type":"QuantitativeValue","value":340},"address":{"@type":"PostalAddress","addressLocality":"Moradabad","addressRegion":"Uttar Pradesh","addressCountry":"IN"},"areaServed":"Worldwide","knowsAbout":["brass handicraft","copper handicraft","wood handicraft","brass inlay","contract manufacture","private label homeware"]}</script>
   </head>
   <body>
     <div id="root"></div>

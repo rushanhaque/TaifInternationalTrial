@@ -1,10 +1,13 @@
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { gsap, ScrollTrigger, reduced } from './gsap'
 import { getLenis } from './useLenis'
+import { applyMeta } from './seo'
 
 /* Custom pushState router + SteviaPlease-style vertical-strips curtain.
-   Routes: [{ path, page, idx, name, title, desc }] — name/title/desc may be
-   functions of the matched params (product pages). */
+   Routes: [{ path, page, idx, name, title, desc, ok?, jsonLd? }] — name,
+   title and desc may be functions of the matched params (product pages).
+   `ok(params)` reports whether those params resolved to real content, and
+   `jsonLd(params)` builds the route's structured data. */
 
 const RouteCtx = createContext({ path: '/', params: {} })
 export const useRoute = () => useContext(RouteCtx)
@@ -77,9 +80,19 @@ export function Router({ routes, notFound, after = null }) {
   const params  = matched ? matched.params : {}
 
   useEffect(() => {
-    document.title = resolve(route.title, params)
-    let meta = document.querySelector('meta[name="description"]')
-    if (meta) meta.setAttribute('content', resolve(route.desc, params))
+    /* `ok` lets a route say its params did not resolve to anything real —
+       an unknown product slug, a family that is not a family. Those render
+       the not-found body, so their metadata must say so too rather than
+       advertising a product that does not exist. */
+    const real = route.ok ? route.ok(params) : route !== notFound
+    applyMeta({
+      title: real ? resolve(route.title, params) : resolve(notFound.title, params),
+      description: real ? resolve(route.desc, params) : resolve(notFound.desc, params),
+      path,
+      canonical: real && route.canonical ? route.canonical(params) : undefined,
+      index: real,
+      jsonLd: real && route.jsonLd ? route.jsonLd(params) : null,
+    })
   }, [path]) // eslint-disable-line react-hooks/exhaustive-deps
 
   function settle(to) {
