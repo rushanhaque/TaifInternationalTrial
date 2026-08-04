@@ -31,20 +31,25 @@ export const NAV_LINKS = [
   { to: '/contact', label: 'Contact' },
 ]
 
-/* Five collection families that feed the pinned scroll-through-facades on
-   /collections. Bespoke is deliberately absent — it lives past the alley's
-   end as the CTA wall. `accent` colours the small hallmark tag. */
 export const COLLECTIONS = [
-  { no: '01', name: 'Tableware', tone: 'brass',   material: 'Brass · Copper · Sheesham',
-    accent: 'brass',   pitch: 'Bowls, platters, jugs and boards. What the room gathers around.' },
-  { no: '02', name: 'Barware',   tone: 'copper',  material: 'Copper · Brass · Rosewood',
-    accent: 'copper',  pitch: 'Ice buckets, coasters, trays. The pieces that carry the evening.' },
-  { no: '03', name: 'Décor',     tone: 'antique', material: 'Antique Brass · Mango Wood',
+  { no: '01', name: 'Wooden Products', tone: 'walnut',  material: 'Sheesham · Mango · Teak',
+    accent: 'brass',   pitch: 'Carved, turned and inlaid timber pieces built from kiln-dried hardwood.' },
+  { no: '02', name: 'Copper Products', tone: 'copper',  material: 'Copper · Brass',
+    accent: 'copper',  pitch: 'Hand-hammered copper vessels, trays and serveware with lasting patina.' },
+  { no: '03', name: 'Home Decor',      tone: 'antique', material: 'Brass · Copper · Wood',
     accent: 'antique', pitch: 'Vessels, sculpture, wall pieces. The quiet centrepiece of a room.' },
-  { no: '04', name: 'Lighting',  tone: 'walnut',  material: 'Brass · Sheesham · Copper',
-    accent: 'brass',   pitch: 'Sconces, lanterns, pendants. Warm-white LED, hand-formed shades.' },
-  { no: '05', name: 'Furniture', tone: 'wood',    material: 'Sheesham · Teak · Brass',
-    accent: 'copper',  pitch: 'Side tables, consoles, benches. Kiln-dried timber, flush-set inlay.' },
+  { no: '04', name: 'Hardware Supplies', tone: 'brass',  material: 'Brass · Iron · Steel',
+    accent: 'brass',   pitch: 'Handles, knobs, hinges and fittings — cast, forged and finished by hand.' },
+  { no: '05', name: 'Corporate Gifting', tone: 'inlay',  material: 'Brass · Wood · Copper',
+    accent: 'copper',  pitch: 'Branded keepsakes, desk sets and presentation pieces for corporate orders.' },
+  { no: '06', name: 'Religious Supplies', tone: 'brass', material: 'Brass · Copper',
+    accent: 'brass',   pitch: 'Pooja thalis, diyas, bells and temple fittings in traditional brass and copper.' },
+  { no: '07', name: 'Bathroom Accessories', tone: 'copper', material: 'Brass · Copper · Steel',
+    accent: 'copper',  pitch: 'Soap dishes, towel rings, dispensers and vanity trays for premium bathrooms.' },
+  { no: '08', name: 'Kitchenware',     tone: 'copper',  material: 'Copper · Brass · Steel',
+    accent: 'copper',  pitch: 'Serving bowls, ladles, utensil holders and cookware in hand-finished metal.' },
+  { no: '09', name: 'Barware',         tone: 'copper',  material: 'Copper · Brass · Rosewood',
+    accent: 'copper',  pitch: 'Ice buckets, coasters, shakers and trays. The pieces that carry the evening.' },
 ]
 
 export const MORE_LINKS = [

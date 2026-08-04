@@ -44,7 +44,7 @@ const ROUTES = [
     desc: 'Metal and wood handicraft manufacture and export. Hand-hammered brass, burnished copper, seasoned sheesham and flush brass inlay, made in Moradabad, India.' },
   { path: '/collections', page: CollectionsPage, idx: '0.2', name: 'Collections',
     title: t('Collections'),
-    desc: 'Five families — tableware, barware, décor, lighting and furniture — with bespoke waiting at the end.' },
+    desc: 'Nine families — wooden products, copper products, home decor, hardware, corporate gifting, religious supplies, bathroom accessories, kitchenware and barware.' },
   { path: '/collections/:family', page: CollectionPage, idx: '0.2', transition: 'slide',
     name: (p) => familyName(p.family),
     title: (p) => t(familyName(p.family)),

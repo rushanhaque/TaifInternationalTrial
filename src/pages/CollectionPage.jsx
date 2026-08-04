@@ -47,29 +47,27 @@ export const familySlug = (name) =>
    state — not a 404 — because more are being added. */
 
 export const FAMILIES = [
-  'Decor', 'Accessories', 'Wall arts', 'Lightings',
-  'Tableware', 'Barware', 'Furniture', 'Bespoke',
+  'Wooden Products', 'Copper Products', 'Home Decor', 'Hardware Supplies',
+  'Corporate Gifting', 'Religious Supplies', 'Bathroom Accessories',
+  'Kitchenware', 'Barware',
 ]
 
 /* family (by slug) → the catalogue category holding its pieces */
 const ALIAS = {
-  decor: 'Décor',
-  lightings: 'Lighting',
-  accessories: null,   // no stock filed yet
-  'wall-arts': null,   // no stock filed yet
+  'wooden-products': null,
+  'copper-products': null,
+  'home-decor': 'Décor',
+  'hardware-supplies': null,
+  'corporate-gifting': null,
+  'religious-supplies': null,
+  'bathroom-accessories': null,
+  'kitchenware': null,
+  'barware': 'Barware',
 }
 
 /* ── one URL per family ───────────────────────────────────────────────────
    Both naming schemes resolve, which is what makes old links keep working —
-   but only ONE of them may be the indexable address. /collections/lighting
-   and /collections/lightings served the identical three products, and each
-   was linked from a different page: the collections index linked the
-   category slug, every family page linked the family slug. Google saw two
-   competing near-duplicates, and the sitemap declared only one of them.
-
-   canonicalFamilySlug folds a catalogue category onto the family slug that
-   owns it, so every internal link and every canonical tag points at the
-   same address. */
+   but only ONE of them may be the indexable address. */
 const CATEGORY_TO_FAMILY = Object.entries(ALIAS).reduce((m, [slug, cat]) => {
   if (cat) m[cat] = slug
   return m
@@ -95,12 +93,15 @@ export function familyPieces(name) {
 }
 
 const FAMILY_NOTE = {
-  Tableware: 'What the room gathers around. Bowls, platters, jugs and boards.',
-  Barware: 'The pieces that carry the evening. Ice, coasters, trays.',
-  'Décor': 'The quiet centrepiece. Vessels, sculpture, wall pieces.',
-  Lighting: 'Sconces, lanterns, pendants. Warm-white LED, hand-formed shades.',
-  Furniture: 'Side tables, consoles, benches. Kiln-dried timber, flush-set inlay.',
-  Bespoke: 'The sixth family. Described in a drawing you send, not a page you browse.',
+  'Wooden Products': 'Carved, turned and inlaid timber pieces built from kiln-dried hardwood.',
+  'Copper Products': 'Hand-hammered copper vessels, trays and serveware with lasting patina.',
+  'Home Decor': 'Vessels, sculpture, wall pieces. The quiet centrepiece of a room.',
+  'Hardware Supplies': 'Handles, knobs, hinges and fittings — cast, forged and finished by hand.',
+  'Corporate Gifting': 'Branded keepsakes, desk sets and presentation pieces for corporate orders.',
+  'Religious Supplies': 'Pooja thalis, diyas, bells and temple fittings in traditional brass and copper.',
+  'Bathroom Accessories': 'Soap dishes, towel rings, dispensers and vanity trays for premium bathrooms.',
+  'Kitchenware': 'Serving bowls, ladles, utensil holders and cookware in hand-finished metal.',
+  'Barware': 'Ice buckets, coasters, shakers and trays. The pieces that carry the evening.',
 }
 
 /* ── PlateCard — bead travels TL→TR→BR then morphs into the Add button ───── */
@@ -182,12 +183,6 @@ function PlateCard({ p, add, has, setOpen }) {
 
         <span className="pl-no meta" aria-hidden="true">{p.idx}</span>
 
-        <span className="pl-rail" aria-hidden="true">
-          <b>{p.dims}</b>
-          <b>{p.weight}</b>
-          <b>MOQ {p.moq}</b>
-          <b>{p.lead}</b>
-        </span>
 
         <span className="pl-say">
           <span className="pl-name">{p.name}</span>
@@ -279,9 +274,9 @@ export default function CollectionPage({ params = {} }) {
           <p className="idx">0.2</p>
           <h1 className="d1">No such family.</h1>
           <p className="lede" style={{ margin: '1rem auto 1.6rem' }}>
-            Six families leave this workshop. That is not one of them.
+            Nine families leave this workshop. That is not one of them.
           </p>
-          <Button to="/collections">See all six</Button>
+          <Button to="/collections">See all nine</Button>
         </div>
       </section>
     )

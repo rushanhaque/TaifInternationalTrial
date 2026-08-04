@@ -45,6 +45,7 @@
 .cat-card-meta { display: flex; justify-content: space-between; margin-top: .65rem; }
 
 /* ============ product ============ */
+.prod-hero-slab { border-radius: var(--r-sm) !important; }
 .prod-info .lede { max-width: 40ch; }
 .spec-list { margin-block: 1.4rem; border-top: 3px solid var(--chrome-2); }
 .spec-row {

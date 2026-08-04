@@ -8,7 +8,8 @@ import Slab from '../components/Slab'
 import Deep from '../components/Deep'
 import Button from '../components/Button'
 import { MATERIAL_IMGS } from '../data/images'
-import MaterialRig from '../components/mk2/MaterialRig'
+
+import ParticleScroll from '../components/mk2/ParticleScroll'
 
 export default function MaterialsPage() {
   const containerRef = useRef(null)
@@ -36,7 +37,7 @@ export default function MaterialsPage() {
   }, { scope: containerRef, dependencies: [] })
 
   return (
-    <>
+    <ParticleScroll>
       <section className="page-hero wrap" style={{ paddingBottom: '2rem' }}>
         <p className="hero-kicker"><span className="idx">0.7</span> <span className="meta">Materials</span></p>
         <CharCascade as="h1" className="mega">Three metals, three woods.</CharCascade>
@@ -53,8 +54,8 @@ export default function MaterialsPage() {
         <div className="wrap">
           <div className="grid">
             {/* Sticky Left Column for Images */}
-            <div className="sp-6" style={{ position: 'sticky', top: 'calc(var(--nav-h, 72px) + 2rem)', height: 'calc(100vh - var(--nav-h, 72px) - 4rem)', display: 'flex', alignItems: 'center', zIndex: 5 }}>
-              <div style={{ position: 'relative', width: '100%', height: '100%', display: 'flex', alignItems: 'center' }}>
+            <div className="sp-5" style={{ position: 'sticky', top: 'calc(var(--nav-h, 72px) + 2rem)', height: 'calc(100vh - var(--nav-h, 72px) - 4rem)', display: 'flex', alignItems: 'center', zIndex: 5 }}>
+              <div style={{ position: 'relative', width: '100%', maxWidth: '700px', margin: '0 auto', height: '100%', display: 'flex', alignItems: 'center' }}>
                 {MATERIALS.map((m, i) => (
                   <div
                     key={`img-${m.name}`}
@@ -68,7 +69,7 @@ export default function MaterialsPage() {
                       zIndex: activeIndex === i ? 2 : 1
                     }}
                   >
-                    <Slab tone={m.tone} ratio="4/5" label={m.name.toUpperCase()} meta={m.meta} blob={i === 0}
+                    <Slab tone={m.tone} ratio="16/10" label={m.name.toUpperCase()} meta={m.meta}
                       img={MATERIAL_IMGS[m.name]} alt={m.name} />
                   </div>
                 ))}
@@ -76,13 +77,13 @@ export default function MaterialsPage() {
             </div>
 
             {/* Scrolling Right Column for Text */}
-            <div className="sp-5 st-8">
+            <div className="sp-7 st-6">
               <div style={{ paddingBottom: '20vh' }}>
                 {MATERIALS.map((m, i) => (
                   <div
                     key={`txt-${m.name}`}
                     ref={el => triggerRefs.current[i] = el}
-                    style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '4rem 0' }}
+                    style={{ minHeight: '75vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '4rem 0' }}
                   >
                     <Dilate>
                       <span className="meta dim2" style={{ 
@@ -100,7 +101,10 @@ export default function MaterialsPage() {
                       <p className="body" style={{ 
                         marginTop: '1.2rem', 
                         transition: 'opacity 0.4s', 
-                        opacity: activeIndex === i ? 1 : 0.4 
+                        opacity: activeIndex === i ? 1 : 0.4,
+                        maxWidth: 'none',
+                        width: '100%',
+                        textWrap: 'auto'
                       }}>
                         {m.copy}
                       </p>
@@ -125,8 +129,7 @@ export default function MaterialsPage() {
         </div>
       </section>
 
-      {/* the comparison rig — eighteen figures made comparable */}
-      <MaterialRig />
+
 
       <Deep>
         <div className="wrap">
@@ -155,6 +158,6 @@ export default function MaterialsPage() {
           </div>
         </div>
       </Deep>
-    </>
+    </ParticleScroll>
   )
 }

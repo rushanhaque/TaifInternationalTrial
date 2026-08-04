@@ -14,13 +14,16 @@ const pic = (seed, w = 1200, h = 900) =>
 /* hero — the full-bleed backdrop behind the TAIF wordmark */
 export const HERO_IMG = pic('taif-workshop-hero', 1920, 1200)
 
-/* collection families (/collections dolly) */
 export const COLLECTION_IMGS = {
-  Tableware: pic('taif-tableware', 1000, 700),
-  Barware: pic('taif-barware', 1000, 700),
-  'Décor': pic('taif-decor', 1000, 700),
-  Lighting: pic('taif-lighting', 1000, 700),
-  Furniture: pic('taif-furniture', 1000, 700),
+  'Wooden Products': pic('taif-wooden-products', 1000, 700),
+  'Copper Products': pic('taif-copper-products', 1000, 700),
+  'Home Decor': pic('taif-home-decor', 1000, 700),
+  'Hardware Supplies': pic('taif-hardware-supplies', 1000, 700),
+  'Corporate Gifting': pic('taif-corporate-gifting', 1000, 700),
+  'Religious Supplies': pic('taif-religious-supplies', 1000, 700),
+  'Bathroom Accessories': pic('taif-bathroom-accessories', 1000, 700),
+  'Kitchenware': pic('taif-kitchenware', 1000, 700),
+  'Barware': pic('taif-barware', 1000, 700),
 }
 
 /* materials (/materials) */

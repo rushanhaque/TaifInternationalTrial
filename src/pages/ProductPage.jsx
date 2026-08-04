@@ -4,9 +4,7 @@ import { FINISHES } from '../data/site'
 import { CharCascade, Dilate } from '../components/Reveal'
 import Slab from '../components/Slab'
 import Button from '../components/Button'
-import FinishMorph from '../components/FinishMorph'
 import DragRail from '../components/DragRail'
-import DimensionPlate from '../components/mk2/DimensionPlate'
 import SpecDock from '../components/mk2/SpecDock'
 import NotFoundPage from './NotFoundPage'
 import { productImg } from '../data/images'
@@ -21,10 +19,6 @@ export default function ProductPage({ params }) {
   const related = CATALOGUE.filter((x) => x.category === p.category && x.slug !== p.slug).slice(0, 6)
   const specs = [
     ['Material', p.material],
-    ['Dimensions', p.dims],
-    ['Weight', p.weight],
-    ['MOQ', String(p.moq) + ' pcs'],
-    ['Lead time', p.lead],
     ['Finishes', finishes.map((f) => f.name).join(' · ')],
   ]
 
@@ -35,7 +29,7 @@ export default function ProductPage({ params }) {
       <section className="page-hero wrap">
         <div className="grid" style={{ alignItems: 'center' }}>
           <div className="sp-7">
-            <Slab blob tone={p.tone} ratio="7/5" label={p.name.toUpperCase()} meta={p.material}
+            <Slab warp={false} className="prod-hero-slab" tone={p.tone} ratio="7/5" label={p.name.toUpperCase()} meta={p.material}
               img={productImg(p.slug)} alt={p.name} />
           </div>
           <div className="sp-5 prod-info">
@@ -67,34 +61,7 @@ export default function ProductPage({ params }) {
         </div>
       </section>
 
-      {finishes.length > 1 && (
-        <section className="section alt">
-          <div className="wrap">
-            <div className="sec-head"><span className="idx">0.3</span><span className="meta">Available finishes</span></div>
-            <FinishMorph mode="manual" finishes={finishes} label={p.name.toUpperCase()} />
-          </div>
-        </section>
-      )}
 
-      <section className="section">
-        <div className="wrap">
-          <div className="sec-head"><span className="idx">0.3</span><span className="meta">Dimensions</span></div>
-          <div className="grid">
-            <div className="sp-8">
-              <DimensionPlate dims={p.dims} name={p.name} />
-            </div>
-            <div className="sp-4">
-              <Dilate>
-                <p className="body dim">
-                  Dimensioned drawings are issued at quote stage. Hand-work carries a
-                  stated tolerance, wood is metered for moisture at cut and at packing,
-                  and both readings travel with the shipment on request.
-                </p>
-              </Dilate>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {related.length > 0 && (
         <section className="section alt">

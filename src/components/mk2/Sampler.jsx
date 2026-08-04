@@ -2,7 +2,6 @@ import { useCallback, useEffect, useId, useRef, useState } from 'react'
 import { gsap, ScrollTrigger, reduced, coarse } from '../../lib/gsap'
 import { FINISHES, BRAND } from '../../data/site'
 import Button from '../Button'
-
 /* ── Sampler ────────────────────────────────────────────────────────────────
    One object, five surfaces. The vessel is a clipped stack of CSS material
    recipes; switching finish cross-fades the stack (CSS, so it can never fail
@@ -193,8 +192,6 @@ export default function Sampler({ finishes = FINISHES }) {
     btns.current[next]?.focus()   // focus moves → onFocus previews it
   }
 
-  /* Safe here — every hook above ran unconditionally, so hook order is stable.
-     Only reachable if a caller passes an empty `finishes`. */
   if (!f) return null
 
   return (

@@ -8,7 +8,7 @@ import Button from '../components/Button'
 import Ribbon from '../components/Ribbon'
 import DragRail from '../components/DragRail'
 import FinishMorph from '../components/FinishMorph'
-import CollectionsDolly from '../components/CollectionsDolly'
+import { HeroParallax } from '../components/ui/HeroParallax'
 import Stepper from '../components/Stepper'
 import Tension from '../components/Tension'
 import Deep from '../components/Deep'
@@ -25,35 +25,19 @@ import TwoFloors from '../components/mk2/TwoFloors'
 import Sampler from '../components/mk2/Sampler'
 
 import RequestCatalogue from '../components/mk2/RequestCatalogue'
-import ChapterRail from '../components/mk2/ChapterRail'
-
-/* the chapter rail's map of the page — ids must match the section ids below */
-const CHAPTERS = [
-  { id: 'top', label: 'Taif' },
-  { id: 'collections', label: 'Collections' },
-  { id: 'catalogue', label: 'Catalogue' },
-  { id: 'the-turn', label: 'Finishes' },
-  { id: 'two-floors', label: 'Two Floors' },
-  { id: 'sampler', label: 'Finishes' },
-  { id: 'process', label: 'Process' },
-  { id: 'proof', label: 'Proof' },
-  { id: 'craft', label: 'Craft' },
-  { id: 'request', label: 'Request' },
-]
 
 export default function Home() {
   return (
     <>
-      <ChapterRail sections={CHAPTERS} />
 
       {/* 0.1 · hero — the brand name, and nothing else (E18) */}
       <span id="top" />
       <HeroBrand />
 
-      {/* 0.15 · collections dolly */}
+      {/* 0.15 · collections parallax */}
       <span id="collections-1" />
       <div style={{ position: 'relative', zIndex: 2, background: 'var(--bg)' }}>
-        <CollectionsDolly />
+        <HeroParallax />
       </div>
 
       {/* 0.2 · materials — finish morph section */}
@@ -81,7 +65,7 @@ export default function Home() {
           <DragRail label="Featured catalogue" hint="Drag · fling · release">
             {railItems().map((p) => (
               <Link key={p.slug} to={`/catalogue/${p.slug}`} className="rail-card">
-                <Slab tone={p.tone} label={p.name.toUpperCase()} meta={p.material} bead
+                <Slab tone={p.tone} label={p.name.toUpperCase()} meta={p.material}
                   img={productImg(p.slug)} alt={p.name} />
                 <div className="rail-card-meta meta"><span>{p.category}</span><span>{p.idx}</span></div>
               </Link>
