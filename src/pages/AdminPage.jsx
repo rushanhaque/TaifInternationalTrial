@@ -1,4 +1,5 @@
 import React, { useState, useRef, useMemo, useEffect } from "react";
+import NotFoundPage from "./NotFoundPage";
 
 /* ---------------------------------------------------------------
    Admin · Product Management — Taif International Design System
@@ -91,6 +92,16 @@ function Modal({ title, onClose, children, wide }) {
 }
 
 export default function AdminPage() {
+  const isAuthorized = typeof window !== 'undefined' && localStorage.getItem('taif_admin_device_authorized') === 'true';
+
+  if (!isAuthorized) {
+    return <NotFoundPage />;
+  }
+
+  return <AdminPageContent />;
+}
+
+function AdminPageContent() {
   const [products, setProducts] = useState([]);
   const [customCategories, setCustomCategories] = useState([]);
   const [activeCategory, setActiveCategory] = useState("All");

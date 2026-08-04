@@ -25,6 +25,20 @@ import TwoFloors from '../components/mk2/TwoFloors'
 import Sampler from '../components/mk2/Sampler'
 
 import RequestCatalogue from '../components/mk2/RequestCatalogue'
+import LogoLoop from '../components/reactbits/LogoLoop'
+import { HeroVideoDialog } from '../components/magicui/HeroVideoDialog'
+
+const countryFlags = [
+  { src: "https://flagcdn.com/w160/us.png", alt: "United States", title: "United States" },
+  { src: "https://flagcdn.com/w160/gb.png", alt: "United Kingdom", title: "United Kingdom" },
+  { src: "https://flagcdn.com/w160/au.png", alt: "Australia", title: "Australia" },
+  { src: "https://flagcdn.com/w160/de.png", alt: "Germany", title: "Germany" },
+  { src: "https://flagcdn.com/w160/fr.png", alt: "France", title: "France" },
+  { src: "https://flagcdn.com/w160/it.png", alt: "Italy", title: "Italy" },
+  { src: "https://flagcdn.com/w160/es.png", alt: "Spain", title: "Spain" },
+  { src: "https://flagcdn.com/w160/ae.png", alt: "United Arab Emirates", title: "United Arab Emirates" },
+  { src: "https://flagcdn.com/w160/ca.png", alt: "Canada", title: "Canada" },
+]
 
 export default function Home() {
   return (
@@ -111,6 +125,86 @@ export default function Home() {
                 </p>
                 <Button to="/catalogue" variant="ghost">What we can make</Button>
               </Dilate>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 0.95 · COUNTRIES SERVED */}
+      <section className="section alt" id="countries">
+        <div className="wrap">
+          <div className="sec-head"><span className="idx">0.95</span><span className="meta">Global Reach</span></div>
+          <h2 className="d1" style={{ color: 'var(--ink)' }}>Exporting to 40+ Countries</h2>
+          <p className="lede" style={{ marginTop: '1rem' }}>Trusted by brands worldwide.</p>
+        </div>
+        <div style={{ marginTop: '4rem', paddingBottom: '2rem', position: 'relative', overflow: 'hidden' }}>
+          <LogoLoop
+            logos={countryFlags}
+            speed={60}
+            direction="left"
+            logoHeight={64}
+            gap={60}
+            hoverSpeed={10}
+            scaleOnHover
+            ariaLabel="Countries served"
+          />
+        </div>
+      </section>
+
+      {/* 0.98 · INSTAGRAM */}
+      <section className="section clear" id="instagram">
+        <div className="wrap">
+          <div className="sec-head"><span className="idx">0.98</span><span className="meta">Social</span></div>
+          <h2 className="d1" style={{ color: 'var(--graphite)' }}>On the Grid</h2>
+          <p className="lede" style={{ marginTop: '1rem' }}>Latest dispatches from the workshop floor.</p>
+          <div className="grid" style={{ marginTop: '3rem' }}>
+            <div className="sp-2">
+              <HeroVideoDialog
+                animationStyle="from-center"
+                videoSrc="https://www.youtube.com/embed/qh3NGpYRG3I?si=4rb-zSdDkVK9qxxb"
+                thumbnailSrc={productImg('the-arc')}
+                thumbnailAlt="Workshop preview 1"
+              />
+            </div>
+            <div className="sp-2">
+              <HeroVideoDialog
+                animationStyle="from-center"
+                videoSrc="https://www.youtube.com/embed/qh3NGpYRG3I?si=4rb-zSdDkVK9qxxb"
+                thumbnailSrc={productImg('the-block')}
+                thumbnailAlt="Workshop preview 2"
+              />
+            </div>
+            <div className="sp-2">
+              <HeroVideoDialog
+                animationStyle="from-center"
+                videoSrc="https://www.youtube.com/embed/qh3NGpYRG3I?si=4rb-zSdDkVK9qxxb"
+                thumbnailSrc={productImg('the-sweep')}
+                thumbnailAlt="Workshop preview 3"
+              />
+            </div>
+            <div className="sp-2">
+              <HeroVideoDialog
+                animationStyle="from-center"
+                videoSrc="https://www.youtube.com/embed/qh3NGpYRG3I?si=4rb-zSdDkVK9qxxb"
+                thumbnailSrc={productImg('the-lean')}
+                thumbnailAlt="Workshop preview 4"
+              />
+            </div>
+            <div className="sp-2">
+              <HeroVideoDialog
+                animationStyle="from-center"
+                videoSrc="https://www.youtube.com/embed/qh3NGpYRG3I?si=4rb-zSdDkVK9qxxb"
+                thumbnailSrc={productImg('the-dip')}
+                thumbnailAlt="Workshop preview 5"
+              />
+            </div>
+            <div className="sp-2">
+              <HeroVideoDialog
+                animationStyle="from-center"
+                videoSrc="https://www.youtube.com/embed/qh3NGpYRG3I?si=4rb-zSdDkVK9qxxb"
+                thumbnailSrc={productImg('the-turn')}
+                thumbnailAlt="Workshop preview 6"
+              />
             </div>
           </div>
         </div>

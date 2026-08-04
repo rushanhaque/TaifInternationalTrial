@@ -15,6 +15,7 @@
   --faint:      rgba(36, 28, 20, 0.28);
   --hair:       rgba(36, 28, 20, 0.11);
   --hair-strong: rgba(36, 28, 20, 0.30);
+  --nav-bg:     rgba(250, 247, 242, 0.55);
 
   /* ═══ the one dark surface — espresso walnut ═══ */
   --deep:       #1e1710;
@@ -155,4 +156,67 @@
   --gutter: clamp(1.25rem, 4vw, 3.5rem);
   --nav-h: 68px;
   --col: 12;
+}
+
+/* ═══ DARK MODE (html.dark) ════════════════════════════════════════════
+   Inverts the base colors (ground, ink, lifts) while keeping the metals
+   and woods identical, so the product photography and material accents 
+   continue to pop against a dark espresso background. ══════════════════ */
+html.dark {
+  --white:      #120e0a;
+  --chrome:     #1e1710;
+  --chrome-2:   #2a2016;
+  --chrome-3:   #3a2c20;
+  --shadow-soft: rgba(0, 0, 0, 0.50);
+
+  --graphite:   #f3ede3;
+  --graphite-2: #d8cebc;
+  --dim:        rgba(243, 237, 227, 0.62);
+  --faint:      rgba(243, 237, 227, 0.28);
+  --hair:       rgba(243, 237, 227, 0.16);
+  --hair-strong: rgba(243, 237, 227, 0.30);
+  --nav-bg:     rgba(24, 18, 12, 0.55);
+
+  /* Deep stays deep so hardcoded light text inside .deep sections remains visible */
+  --deep:       #1e1710;
+  --on-deep:    #f3ede3;
+  --dim-on-deep: rgba(243, 237, 227, 0.62);
+  --hair-on-deep: rgba(243, 237, 227, 0.16);
+
+  --tint:       #e0bb80;
+  --tint-deep:  #e0bb80;
+  --tint-on-deep: #e0bb80;
+
+  --paper:
+    repeating-linear-gradient(0deg,
+      rgba(243, 237, 227, 0.014) 0px, rgba(243, 237, 227, 0.014) 1px,
+      transparent 1px, transparent 4px),
+    repeating-linear-gradient(90deg,
+      rgba(243, 237, 227, 0.016) 0px, rgba(243, 237, 227, 0.016) 1px,
+      transparent 1px, transparent 58px),
+    radial-gradient(120% 80% at 50% 0%, rgba(199, 165, 121, 0.05), transparent 62%);
+
+  --paper-deep:
+    repeating-linear-gradient(0deg,
+      rgba(107, 74, 46, 0.016) 0px, rgba(107, 74, 46, 0.016) 1px,
+      transparent 1px, transparent 4px),
+    repeating-linear-gradient(90deg,
+      rgba(107, 74, 46, 0.020) 0px, rgba(107, 74, 46, 0.020) 1px,
+      transparent 1px, transparent 58px);
+
+  --lift-1:
+    0 2px 6px -2px rgba(0, 0, 0, 0.50),
+    0 14px 34px -14px rgba(0, 0, 0, 0.55);
+  --lift-2:
+    0 4px 10px -4px rgba(0, 0, 0, 0.55),
+    0 30px 64px -26px rgba(0, 0, 0, 0.65);
+  --lift-3:
+    0 4px 8px -4px rgba(0, 0, 0, 0.60),
+    0 26px 56px -24px rgba(0, 0, 0, 0.80);
+  --lift-4:
+    0 6px 12px -6px rgba(0, 0, 0, 0.65),
+    0 48px 96px -40px rgba(0, 0, 0, 0.90);
+
+  --edge-lit:   inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  --edge-hair:  inset 0 0 0 1px rgba(255, 255, 255, 0.12);
 }

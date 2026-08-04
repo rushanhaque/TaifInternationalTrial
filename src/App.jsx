@@ -29,6 +29,7 @@ import ContactPage from './pages/ContactPage'
 import FaqPage from './pages/FaqPage'
 import LegalPage from './pages/LegalPage'
 import NotFoundPage from './pages/NotFoundPage'
+import AdminPage from './pages/AdminPage'
 
 const B = BRAND.name
 const t = (s) => `${s} — ${B}`
@@ -101,6 +102,9 @@ const ROUTES = [
   { path: '/legal', page: LegalPage, idx: '1.3', name: 'Legal',
     title: t('Terms & Privacy'),
     desc: 'Terms of trade and privacy policy.' },
+  { path: '/admin', page: AdminPage, idx: '1.4', name: 'Admin',
+    title: t('Admin'),
+    desc: 'Admin area' },
 ]
 
 const NOT_FOUND = {

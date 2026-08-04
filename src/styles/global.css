@@ -1,3 +1,9 @@
+/* Animated Theme Toggler View Transitions */
+::view-transition-old(root), ::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
 /* ============ reset & base ============ */
 *,
 *::before,
@@ -756,9 +762,10 @@ ol {
   gap: .8rem;
   padding: 8px 10px 8px 20px;
   border-radius: var(--r-pill);
-  background: rgba(250, 247, 242, 0.82);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background: var(--nav-bg);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   box-shadow: var(--lift-3), var(--edge-lit);
   transition: transform .5s var(--ease-fluid);
 }

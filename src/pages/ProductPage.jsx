@@ -1,14 +1,16 @@
-import { Link } from '../lib/router'
+import { Link, navigate } from '../lib/router'
 import { CATALOGUE, bySlug } from '../data/catalogue'
 import { FINISHES } from '../data/site'
 import { CharCascade, Dilate } from '../components/Reveal'
 import Slab from '../components/Slab'
 import Button from '../components/Button'
+import SpecularButton from '../components/reactbits/SpecularButton'
 import DragRail from '../components/DragRail'
 import SpecDock from '../components/mk2/SpecDock'
 import NotFoundPage from './NotFoundPage'
 import { productImg } from '../data/images'
 import { useCart } from '../lib/cart'
+import { Lens } from '../components/magicui/Lens'
 
 export default function ProductPage({ params }) {
   const p = bySlug(params.slug)
@@ -26,11 +28,13 @@ export default function ProductPage({ params }) {
     <>
       <SpecDock piece={p} />
 
-      <section className="page-hero wrap">
+      <section className="page-hero wrap" style={{ marginTop: '-50px' }}>
         <div className="grid" style={{ alignItems: 'center' }}>
           <div className="sp-7">
-            <Slab warp={false} className="prod-hero-slab" tone={p.tone} ratio="7/5" label={p.name.toUpperCase()} meta={p.material}
-              img={productImg(p.slug)} alt={p.name} />
+            <Lens zoomFactor={2} lensSize={300} isStatic={false} ariaLabel="Zoom Area">
+              <Slab warp={false} className="prod-hero-slab" tone={p.tone} ratio="7/5" label={p.name.toUpperCase()} meta={p.material}
+                img={productImg(p.slug)} alt={p.name} />
+            </Lens>
           </div>
           <div className="sp-5 prod-info">
             <p className="hero-kicker">
@@ -51,10 +55,34 @@ export default function ProductPage({ params }) {
                   enquiry docket was reachable from every grid on the site
                   except the page that actually argues for the piece */}
               <div className="hero-cta">
-                <Button onClick={() => { add(p); setOpen(true) }}>
+                <SpecularButton
+                  size="md"
+                  radius={999}
+                  tint="var(--chrome)"
+                  tintOpacity={1}
+                  textColor="var(--graphite)"
+                  lineColor="#b0894f"
+                  baseColor="var(--hair-strong)"
+                  intensity={1.2}
+                  thickness={1.5}
+                  onClick={() => { add(p); setOpen(true) }}
+                >
                   {has(p.slug) ? 'In your enquiry' : 'Add to enquiry'}
-                </Button>
-                <Button to="/contact" variant="ghost">Request a quote</Button>
+                </SpecularButton>
+                <SpecularButton
+                  size="md"
+                  radius={999}
+                  tint="transparent"
+                  tintOpacity={0}
+                  textColor="var(--graphite)"
+                  lineColor="#b4703c"
+                  baseColor="var(--hair-strong)"
+                  intensity={1}
+                  thickness={1}
+                  onClick={() => navigate('/contact')}
+                >
+                  Request a quote
+                </SpecularButton>
               </div>
             </Dilate>
           </div>

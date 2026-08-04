@@ -4,6 +4,7 @@ import { Link, useRoute } from '../lib/router'
 import { BRAND, NAV_LINKS } from '../data/site'
 import Button from './Button'
 import MobileSheet from './MobileSheet'
+import { AnimatedThemeToggler } from './magicui/AnimatedThemeToggler'
 
 /* E6 Liquid Pill — the active indicator stretches toward its new target,
    leading edge first, trailing edge ~120ms behind, like a droplet in transit.
@@ -91,7 +92,10 @@ export default function Navbar() {
             </Link>
           ))}
         </nav>
-        <Button to="/contact" small className="nav-cta">Connect</Button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <AnimatedThemeToggler />
+          <Button to="/contact" small className="nav-cta">Connect</Button>
+        </div>
         <button
           className="burger"
           aria-expanded={open}

@@ -2,10 +2,11 @@ import { LOCATIONS, BRAND } from '../data/site'
 import { CharCascade, Dilate } from '../components/Reveal'
 import WorksOrder from '../components/mk2/WorksOrder'
 import Slab from '../components/Slab'
+import GradualBlur from '../components/reactbits/GradualBlur'
 
 export default function ContactPage() {
   return (
-    <>
+    <div style={{ position: 'relative' }}>
       <section className="page-hero wrap">
         <p className="hero-kicker"><span className="idx">1.1</span> <span className="meta">Contact</span></p>
         <CharCascade as="h1" className="mega">Start the sample.</CharCascade>
@@ -50,6 +51,21 @@ export default function ContactPage() {
           </div>
         </div>
       </section>
-    </>
+
+      {/* Sticky container that sticks to the bottom of the viewport until this wrapper div ends (just before the footer) */}
+      <div style={{ position: 'sticky', bottom: 0, height: 0, zIndex: 100, pointerEvents: 'none' }}>
+        <GradualBlur
+          target="parent"
+          position="bottom"
+          height="12rem"
+          strength={2}
+          divCount={8}
+          curve="bezier"
+          exponential={true}
+          opacity={1}
+          style={{ position: 'absolute', bottom: 0, background: 'linear-gradient(to bottom, transparent, rgba(180, 112, 60, 0.15) 90%)' }}
+        />
+      </div>
+    </div>
   )
 }

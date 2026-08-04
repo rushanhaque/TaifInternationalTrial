@@ -7,9 +7,10 @@ import Counter from '../components/Counter'
 import Toggle from '../components/Toggle'
 import FlingGrid from '../components/FlingGrid'
 import GlowGrid from '../components/GlowGrid'
-import DragRail from '../components/DragRail'
+import CircularGallery from '../components/reactbits/CircularGallery'
 import CatalogueIndex from '../components/mk2/CatalogueIndex'
 import { productImg } from '../data/images'
+import { Grid } from '../components/canvasui/Grid'
 
 const OPTIONS = ['All', ...CATEGORIES]
 
@@ -19,7 +20,17 @@ export default function CataloguePage() {
      index is for buying. The filter is shared, so switching view never loses
      the buyer's place. */
   const [view, setView] = useState('gallery')
-  const items = cat === 'All' ? CATALOGUE : CATALOGUE.filter((p) => p.category === cat)
+  let items = cat === 'All' ? CATALOGUE : CATALOGUE.filter((p) => p.category === cat)
+
+  // Reduce items to one per category for the collage view
+  if (view === 'gallery') {
+    const seenCategories = new Set()
+    items = items.filter(p => {
+      if (seenCategories.has(p.category)) return false
+      seenCategories.add(p.category)
+      return true
+    })
+  }
 
   return (
     <>
@@ -82,14 +93,35 @@ export default function CataloguePage() {
                 return (
                   <li key={p.slug} className={`cat-col-plate cat-span-${tile.span}`}>
                     <Link to={`/catalogue/${p.slug}`} className="cat-col-card">
-                      <Slab
-                        tone={p.tone}
-                        label={p.name.toUpperCase()}
-                        meta={p.material}
-                        ratio={tile.ratio}
-                        img={productImg(p.slug)}
-                        alt={p.name}
-                      />
+                      <Grid
+                        tileSize={50}
+                        gap={0}
+                        cornerRadius={0}
+                        amplitude={2.5}
+                        waveSpeed={0.5}
+                        frequency={12}
+                        waveWidth={0.05}
+                        fadeTime={0.2}
+                        maxLift={1}
+                        jitter={0}
+                        liftHeight={60}
+                        perspective={1200}
+                        tilt={1}
+                        shading={0.05}
+                        tintStrength={0.15}
+                        idleRipples={0}
+                        tint={[0.9, 0.65, 0.45]}
+                        style={{ width: '100%', height: '100%', display: 'block' }}
+                      >
+                        <Slab
+                          tone={p.tone}
+                          label={p.name.toUpperCase()}
+                          meta={p.material}
+                          ratio={tile.ratio}
+                          img={productImg(p.slug)}
+                          alt={p.name}
+                        />
+                      </Grid>
                       <div className="cat-col-meta">
                         <span className="meta">{p.category}</span>
                         <span className="meta dim2">{p.idx} · MOQ {p.moq}</span>
@@ -108,15 +140,20 @@ export default function CataloguePage() {
       <section className="section">
         <div className="wrap">
           <div className="sec-head"><span className="idx">0.2</span><span className="meta">Recently added</span></div>
-          <DragRail label="Recently added" hint="Drag · fling">
-            {railItems().map((p) => (
-              <Link key={p.slug} to={`/catalogue/${p.slug}`} className="rail-card">
-                <Slab tone={p.tone} label={p.name.toUpperCase()} meta={p.lead}
-                  img={productImg(p.slug)} alt={p.name} />
-                <div className="rail-card-meta meta"><span>{p.category}</span><span>{p.idx}</span></div>
-              </Link>
-            ))}
-          </DragRail>
+          <div style={{ height: '600px', position: 'relative' }}>
+            <CircularGallery
+              items={railItems().map((p) => ({
+                image: productImg(p.slug),
+                text: p.name.toUpperCase()
+              }))}
+              bend={1.5}
+              textColor="#b0894f"
+              borderRadius={0.05}
+              scrollEase={0.02}
+              fontUrl="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600..700&display=swap"
+              font="bold 15px Archivo"
+            />
+          </div>
         </div>
       </section>
     </>
