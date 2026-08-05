@@ -15,8 +15,7 @@ const CubeCard = ({ material, isActive }) => {
             <div 
               className="cube-inner" 
               style={{ 
-                transform: isHovering ? `rotateX(-180deg)` : `rotateX(0deg)`,
-                transition: 'transform 1.4s cubic-bezier(0.4, 0, 0.2, 1)'
+                transform: 'rotateX(0deg)'
               }}
             >
               {/* Front Face — texture only */}

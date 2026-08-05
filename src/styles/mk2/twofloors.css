@@ -165,8 +165,7 @@
 }
 
 .tf-vig {
-  background:
-    radial-gradient(130% 100% at 50% 50%, transparent 42%, rgba(10, 6, 2, 0.62) 100%);
+  display: none;
 }
 
 /* ────────────────────────────────────────────────────── panel furniture ── */
@@ -662,27 +661,16 @@
     display: flex;
     justify-content: center;
     padding: clamp(1.15rem, 4.5vw, 1.7rem) var(--gutter);
-    background: linear-gradient(180deg, #120c05, #1d1610 50%, #120c05);
+    background: transparent;
   }
 
   .tf-seam::before,
   .tf-seam::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: linear-gradient(90deg,
-      rgba(227, 200, 143, 0) 0%,
-      var(--brass) 16%,
-      #f6e6c2 50%,
-      var(--brass) 84%,
-      rgba(227, 200, 143, 0) 100%);
-    box-shadow: var(--glow-brass);
+    display: none;
   }
 
   .tf-seam::before { top: 0; }
-  .tf-seam::after { bottom: 0; }
+  .tf-seam::after { display: none; }
 
   .tf-shade,
   .tf-halo,

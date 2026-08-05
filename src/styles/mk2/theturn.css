@@ -12,6 +12,8 @@
 
 .tt {
   position: relative;
+  padding-top: 0;
+  padding-bottom: 0;
   /* Diameter of the vessel. Bounded by viewport HEIGHT as well as width so
      the pinned plate — HUD, form, readout rule — always fits one screen. */
   --form: clamp(240px, min(34vw, 44svh), 460px);
@@ -42,7 +44,7 @@
 .tt .tt-caption {
   margin-top: clamp(1.4rem, 3vw, 2.2rem);
   padding-top: 0.85rem;
-  border-top: 1px solid var(--hair);
+  border-top: none;
   color: var(--dim);
   text-transform: none;
   letter-spacing: 0.01em;
@@ -58,35 +60,20 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  gap: clamp(1.2rem, 2.6vw, 2.2rem);
-  padding-block: clamp(1.8rem, 4vw, 3rem);
+  gap: clamp(0.6rem, 1.5vw, 1.2rem);
+  padding-block: clamp(0.5rem, 1.2vw, 1rem);
   color: var(--on-deep);
-  background:
-    radial-gradient(128% 88% at 50% 4%, #2c2117 0%, #241b12 34%, #1e1710 62%, #130e08 100%);
+  background: transparent;
 }
 
 /* the key light itself, spilling in from above the frame */
 .tt-lamp {
-  position: absolute;
-  inset: -14% -12% auto -12%;
-  height: 62%;
-  pointer-events: none;
-  background:
-    radial-gradient(48% 100% at 50% 0%,
-      rgba(255, 241, 214, 0.17) 0%,
-      rgba(255, 234, 197, 0.07) 40%,
-      rgba(255, 230, 188, 0) 74%);
+  display: none;
 }
 
 /* warm bounce off the floor the vessel is standing on */
 .tt-floor {
-  position: absolute;
-  inset: auto 0 0 0;
-  height: 34%;
-  pointer-events: none;
-  background:
-    radial-gradient(46% 74% at 50% 100%, rgba(176, 137, 79, 0.18) 0%, rgba(176, 137, 79, 0) 72%),
-    linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.34) 100%);
+  display: none;
 }
 
 /* ─── HUD ───────────────────────────────────────────────────────────── */
@@ -668,7 +655,7 @@
   }
 
   .tt-stage {
-    padding-block: clamp(2.2rem, 7vw, 3.4rem);
+    padding-block: clamp(0.8rem, 2vw, 1.4rem);
   }
 
   /* posed, not parked: the key light sits high-left, the surface is caught
@@ -716,9 +703,10 @@
 /* ═══ PINNED — desktop, motion allowed ═══ */
 @media (min-width: 1000px) and (prefers-reduced-motion: no-preference) {
   .tt-stage {
-    height: 100svh;
-    min-height: 620px;
-    padding-top: clamp(6.6rem, 11vh, 7.8rem);
+    height: 92svh;
+    min-height: 540px;
+    padding-top: clamp(3.8rem, 6vh, 4.8rem);
+    padding-bottom: 0.5rem;
   }
 
   .tt-notes,
@@ -765,7 +753,7 @@
 .tt-sec-head {
   position: absolute;
   top: clamp(2.2rem, 3.5vh, 3.2rem);
-  left: max(var(--gutter), calc(50vw - 640px));
+  left: clamp(2.5rem, 5vw, 4.5rem);
   z-index: 20;
 }
 @media (max-width: 999.98px) {

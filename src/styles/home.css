@@ -129,7 +129,7 @@
 .fm-sec-head {
   position: absolute;
   top: clamp(4.8rem, 9vh, 6.2rem);
-  left: max(var(--gutter), calc(50vw - 640px));
+  left: clamp(2.5rem, 5vw, 4.5rem);
   z-index: 20;
 }
 @media (max-width: 899px) {

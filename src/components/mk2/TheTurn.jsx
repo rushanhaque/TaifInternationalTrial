@@ -274,15 +274,6 @@ export default function TheTurn({ frames }) {
             <span className="meta">Finishes</span>
             <span className="tt-hud-sub">{BRAND.origin}</span>
           </span>
-          <span className="tt-hud-c">
-            <em className="meta" data-mat="brass">IS 319 Brass</em>
-            <i aria-hidden="true">→</i>
-            <em className="meta" data-mat="wood">American Walnut</em>
-          </span>
-          <span className="tt-hud-r" aria-hidden="true">
-            <span className="meta">Rotation</span>
-            <span className="tt-deg" data-deg>000°</span>
-          </span>
         </div>
 
         <div className="tt-rig">

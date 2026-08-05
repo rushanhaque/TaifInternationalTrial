@@ -58,7 +58,75 @@ export default function Navbar() {
 
   useEffect(() => {
     const isHome = path === '/'
-    
+
+    const checkDarkBg = () => {
+      if (!nav.current) return
+      const rect = nav.current.getBoundingClientRect()
+      const y = rect.top + rect.height / 2
+      const xMid = rect.left + rect.width / 2
+
+      const prevVis = nav.current.style.visibility
+      nav.current.style.visibility = 'hidden'
+
+      let isDark = false
+      const points = [
+        { x: rect.left + 50, y },
+        { x: xMid, y },
+        { x: rect.left + rect.width - 50, y }
+      ]
+
+      for (const pt of points) {
+        let el = document.elementFromPoint(pt.x, pt.y)
+        while (el && el !== document.body && el !== document.documentElement) {
+          const cls = el.className ? String(el.className) : ''
+          const tag = el.tagName ? el.tagName.toUpperCase() : ''
+          const id = el.id ? String(el.id) : ''
+
+          if (
+            cls.includes('deep') ||
+            cls.includes('dark') ||
+            cls.includes('tt') ||
+            id === 'the-turn' ||
+            id === 'two-floors' ||
+            tag === 'FOOTER' ||
+            cls.includes('footer') ||
+            el.getAttribute('data-theme') === 'dark'
+          ) {
+            isDark = true
+            break
+          }
+
+          const bg = window.getComputedStyle(el).backgroundColor
+          if (bg && bg !== 'transparent' && bg !== 'rgba(0, 0, 0, 0)') {
+            const match = bg.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/)
+            if (match) {
+              const [, r, g, b, a] = match
+              const alpha = a !== undefined ? parseFloat(a) : 1
+              if (alpha > 0.3) {
+                const lum = (parseInt(r) * 0.299 + parseInt(g) * 0.587 + parseInt(b) * 0.114)
+                if (lum < 155) {
+                  isDark = true
+                  break
+                } else {
+                  break
+                }
+              }
+            }
+          }
+          el = el.parentElement
+        }
+        if (isDark) break
+      }
+
+      nav.current.style.visibility = prevVis
+
+      if (isDark || document.documentElement.classList.contains('dark')) {
+        nav.current.classList.add('nav-dark-bg')
+      } else {
+        nav.current.classList.remove('nav-dark-bg')
+      }
+    }
+
     const onScroll = () => {
       if (!nav.current) return
       if (isHome && window.scrollY <= 10) {
@@ -66,11 +134,21 @@ export default function Navbar() {
       } else {
         nav.current.classList.remove('nav-hide-top')
       }
+      checkDarkBg()
     }
-    
+
     onScroll()
-    window.addEventListener('scroll', onScroll)
-    return () => window.removeEventListener('scroll', onScroll)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll, { passive: true })
+
+    const observer = new MutationObserver(checkDarkBg)
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] })
+
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+      observer.disconnect()
+    }
   }, [path])
 
   return (

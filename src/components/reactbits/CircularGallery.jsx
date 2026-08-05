@@ -312,6 +312,7 @@ class Media {
     this.plane.setParent(this.scene);
   }
   createTitle() {
+    if (!this.text) return;
     this.title = new Title({
       gl: this.gl,
       plane: this.plane,
@@ -476,7 +477,7 @@ class App {
   }
   onWheel(e) {
     const delta = e.deltaY || e.wheelDelta || e.detail;
-    this.scroll.target += (delta > 0 ? this.scrollSpeed : -this.scrollSpeed) * 0.2;
+    this.scroll.target += (delta > 0 ? 1 : -1) * (this.scrollSpeed * 0.05);
     this.onCheckDebounce();
   }
   onKeyDown(e) {
@@ -529,6 +530,9 @@ class App {
     }
   }
   update() {
+    if (!this.isDown) {
+      this.scroll.target += 0.015;
+    }
     this.scroll.current = lerp(this.scroll.current, this.scroll.target, this.scroll.ease);
     const direction = this.scroll.current > this.scroll.last ? 'right' : 'left';
     if (this.medias) {

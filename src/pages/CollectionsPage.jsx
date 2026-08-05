@@ -22,32 +22,10 @@ export default function CollectionsPage() {
             <span className="meta">Collections</span>
           </div>
           <CharCascade as="h1" className="mega">Five families, one bench.</CharCascade>
-          <Dilate>
-            <p className="lede" style={{ marginTop: '1.4rem' }}>
-              Scroll to walk the line: tableware, barware, décor, lighting,
-              furniture. The sixth family is bespoke — it waits at the end.
-            </p>
-          </Dilate>
         </div>
       </section>
 
       <CollectionsDolly />
-
-
-      <section className="section alt">
-        <div className="wrap">
-          <div className="sec-head"><span className="idx">0.2.6</span><span className="meta">Every piece</span></div>
-          <p className="body" style={{ maxWidth: '58ch' }}>
-            The complete catalogue lists twenty production pieces across the
-            five families above plus bespoke — each with dimensions, MOQ, lead
-            times and finish options.
-          </p>
-          <div className="hero-cta">
-            <Button to="/catalogue">View the catalogue</Button>
-            <Button to="/materials" variant="ghost">The materials, measured</Button>
-          </div>
-        </div>
-      </section>
     </>
   )
 }

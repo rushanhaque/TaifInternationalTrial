@@ -6,10 +6,9 @@ import Slab from '../components/Slab'
 import Counter from '../components/Counter'
 import Toggle from '../components/Toggle'
 import FlingGrid from '../components/FlingGrid'
-import GlowGrid from '../components/GlowGrid'
-import CircularGallery from '../components/reactbits/CircularGallery'
 import { productImg } from '../data/images'
 import { Grid } from '../components/canvasui/Grid'
+import CircularGallery from '../components/reactbits/CircularGallery'
 
 const OPTIONS = ['All', ...CATEGORIES]
 
@@ -74,23 +73,22 @@ export default function CataloguePage() {
                   <li key={p.slug} className={`cat-col-plate cat-span-${tile.span}`}>
                     <Link to={`/catalogue/${p.slug}`} className="cat-col-card">
                       <Grid
-                        tileSize={50}
+                        tileSize={36}
                         gap={0}
                         cornerRadius={0}
-                        amplitude={2.5}
+                        amplitude={1.2}
                         waveSpeed={0.5}
                         frequency={12}
                         waveWidth={0.05}
                         fadeTime={0.2}
                         maxLift={1}
                         jitter={0}
-                        liftHeight={60}
+                        liftHeight={0}
                         perspective={99999}
                         tilt={0}
-                        shading={0.05}
-                        tintStrength={0.15}
+                        shading={0}
+                        tintStrength={0}
                         idleRipples={0}
-                        tint={[0.9, 0.65, 0.45]}
                         style={{ width: '100%', height: '100%', display: 'block' }}
                       >
                         <Slab
@@ -127,7 +125,8 @@ export default function CataloguePage() {
               bend={1.5}
               textColor="#b0894f"
               borderRadius={0.05}
-              scrollEase={0.02}
+              scrollSpeed={0.3}
+              scrollEase={0.08}
               fontUrl="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600..700&display=swap"
               font="bold 15px Archivo"
             />

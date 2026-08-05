@@ -90,7 +90,7 @@ export default function CollectionsDolly() {
   }, [])
 
   return (
-    <section className="cd section" ref={rootRef}>
+    <section className="cd" style={{ padding: 0, margin: 0 }} ref={rootRef}>
       {/* pinned dolly — ≥900px, motion-ok */}
       <div className="cd-stage only-cd">
         {COLLECTIONS.map((c, i) => (

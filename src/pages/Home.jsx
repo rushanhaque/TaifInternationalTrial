@@ -24,9 +24,9 @@ import TheTurn from '../components/mk2/TheTurn'
 import TwoFloors from '../components/mk2/TwoFloors'
 import Sampler from '../components/mk2/Sampler'
 
-import RequestCatalogue from '../components/mk2/RequestCatalogue'
 import ReviewStack from '../components/ReviewStack'
 import LogoLoop from '../components/reactbits/LogoLoop'
+import CircularGallery from '../components/reactbits/CircularGallery'
 import { HeroVideoDialog } from '../components/magicui/HeroVideoDialog'
 
 const countryFlags = [
@@ -76,21 +76,19 @@ export default function Home() {
       {/* 0.5 · drag rail — the signature piece */}
       <section className="section alt fs-section" id="catalogue">
         <div className="sec-head"><span className="meta">Signature piece</span></div>
-        <div className="wrap">
-          <DragRail label="Featured catalogue" hint="Drag · fling · release">
-            {railItems().map((p) => (
-              <Link key={p.slug} to={`/catalogue/${p.slug}`} className="rail-card" transition="slide-product">
-                <Slab tone={p.tone} label={p.name.toUpperCase()} meta={p.material}
-                  img={productImg(p.slug)} alt={p.name} />
-                <div className="rail-card-meta meta"><span>{p.category}</span><span>{p.idx}</span></div>
-              </Link>
-            ))}
-            <Link to="/catalogue" className="rail-card rail-more" transition="slide-collection">
-              <Slab tone="walnut" label="VIEW ALL — 20 PIECES" />
-              <div className="rail-card-meta meta"><span>Catalogue</span><span>0.2</span></div>
+        <DragRail label="Featured catalogue" hint="">
+          {railItems().map((p) => (
+            <Link key={p.slug} to={`/catalogue/${p.slug}`} className="rail-card" transition="slide-product">
+              <Slab tone={p.tone} label={p.name.toUpperCase()} meta={p.material}
+                img={productImg(p.slug)} alt={p.name} />
+              <div className="rail-card-meta meta"><span>{p.category}</span><span>{p.idx}</span></div>
             </Link>
-          </DragRail>
-        </div>
+          ))}
+          <Link to="/catalogue" className="rail-card rail-more" transition="slide-collection">
+            <Slab tone="walnut" label="VIEW ALL — 20 PIECES" />
+            <div className="rail-card-meta meta"><span>Catalogue</span><span>0.2</span></div>
+          </Link>
+        </DragRail>
       </section>
 
       {/* 0.6 · TWO FLOORS — drag the brass seam: metal (Moradabad) vs wood
@@ -205,15 +203,19 @@ export default function Home() {
       {/* 1.0 · REVIEWS */}
       <section className="section clear fs-section" id="reviews">
         <div className="sec-head"><span className="meta">Reviews</span></div>
-        <div className="wrap" style={{ display: 'flex', justifyContent: 'center' }}>
-          <ReviewStack />
+        <ReviewStack />
+        
+        {/* Big Designer Connect Button */}
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '3.5rem', marginBottom: '2rem' }}>
+          <Link to="/contact" className="big-connect-btn">
+            <span>Connect</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12" />
+              <polyline points="12 5 19 12 12 19" />
+            </svg>
+          </Link>
         </div>
       </section>
-
-
-      {/* 1.2 · REQUEST THE CATALOGUE — the conversion moment */}
-      <div id="request" style={{ position: 'absolute', visibility: 'hidden' }} />
-      <RequestCatalogue />
 
 
     </>

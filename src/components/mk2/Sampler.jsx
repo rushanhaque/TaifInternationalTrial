@@ -205,7 +205,7 @@ export default function Sampler({ finishes = FINISHES }) {
         </defs>
       </svg>
 
-      <div className="sec-head"><span className="meta">Finishes</span></div>
+
       <div className="wrap">
 
 
@@ -247,23 +247,9 @@ export default function Sampler({ finishes = FINISHES }) {
                 </div>
               </div>
 
-              {/* A physical sample card lying on the plinth — same recipe, flat,
-                  at chip scale. This is how the finish actually gets approved. */}
-              <div className="smp-card" aria-hidden="true">
-                <span className="smp-cardface">
-                  {finishes.map((x, i) => (
-                    <span
-                      key={x.key}
-                      className={`smp-layer smp-rcp smp-rcp-${x.key}${i === shown ? ' is-on' : ''}`}
-                    />
-                  ))}
-                </span>
-                <span className="meta smp-cardlabel">Sample · 1:1</span>
-              </div>
 
-              <span className="meta smp-mark" aria-hidden="true">
-                {BRAND.mark} · {BRAND.origin}
-              </span>
+
+
             </div>
 
 
@@ -332,10 +318,7 @@ export default function Sampler({ finishes = FINISHES }) {
                   </button>
                 ))}
               </div>
-              <p className="smp-note">
-                Colour is held to a physical master swatch. A screen is a starting
-                point, not a specification.
-              </p>
+
             </div>
           </div>
         </div>

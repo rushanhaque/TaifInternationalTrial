@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import '../styles/ReviewStack.css';
 
 const REVIEWS = [
@@ -40,61 +39,39 @@ const REVIEWS = [
 ];
 
 export default function ReviewStack() {
-  const [active, setActive] = useState(0);
-  const total = REVIEWS.length;
-
-  const next = () => setActive((prev) => (prev + 1) % total);
-  const prev = () => setActive((prev) => (prev - 1 + total) % total);
-
-  // Get 3 visible reviews starting from active index
-  const visibleReviews = [
-    REVIEWS[active % total],
-    REVIEWS[(active + 1) % total],
-    REVIEWS[(active + 2) % total],
-  ];
+  // Duplicate array for seamless infinite marquee loop
+  const carouselReviews = [...REVIEWS, ...REVIEWS];
 
   return (
     <div className="review-carousel-container">
-      <div className="review-grid">
-        {visibleReviews.map((review, idx) => {
-          const initials = review.name.split(' ').map(n => n[0]).join('');
-          return (
-            <div key={`${review.id}-${idx}`} className="review-card-item">
-              <div className="review-card-top">
-                <div className="review-stars">
-                  {'★'.repeat(review.rating)}
+      <div className="review-marquee-wrapper">
+        <div className="review-marquee-track">
+          {carouselReviews.map((review, idx) => {
+            const initials = review.name.split(' ').map(n => n[0]).join('');
+            return (
+              <div key={`${review.id}-${idx}`} className="review-card-item">
+                <div className="review-card-top">
+                  <div className="review-stars">
+                    {'★'.repeat(review.rating)}
+                  </div>
+                  <div className="review-quote-icon">“</div>
                 </div>
-                <div className="review-quote-icon">“</div>
-              </div>
-              
-              <p className="review-text">"{review.text}"</p>
+                
+                <p className="review-text">"{review.text}"</p>
 
-              <div className="review-author">
-                <div className="review-avatar">
-                  {initials}
-                </div>
-                <div className="review-author-info">
-                  <strong>{review.name}</strong>
-                  <span>{review.role}</span>
+                <div className="review-author">
+                  <div className="review-avatar">
+                    {initials}
+                  </div>
+                  <div className="review-author-info">
+                    <strong>{review.name}</strong>
+                    <span>{review.role}</span>
+                  </div>
                 </div>
               </div>
-            </div>
-          );
-        })}
-      </div>
-
-      <div className="review-controls">
-        <button className="review-nav-btn" onClick={prev} aria-label="Previous review">←</button>
-        <div className="review-dots">
-          {REVIEWS.map((_, i) => (
-            <span
-              key={i}
-              className={`review-dot ${i === active ? 'is-active' : ''}`}
-              onClick={() => setActive(i)}
-            />
-          ))}
+            );
+          })}
         </div>
-        <button className="review-nav-btn" onClick={next} aria-label="Next review">→</button>
       </div>
     </div>
   );

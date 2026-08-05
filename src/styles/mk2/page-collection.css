@@ -107,7 +107,7 @@
 }
 
 /* ---- the grid ---- */
-.pl-grid-wrap { position: relative; z-index: 1; padding-bottom: clamp(3rem, 7vw, 6rem); }
+.pl-grid-wrap { position: relative; z-index: 1; padding-bottom: clamp(5rem, 11vw, 9rem); }
 
 .pl-grid {
   display: grid;
@@ -154,7 +154,7 @@
 
 .pl-shot {
   display: block;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 16 / 9;
   overflow: hidden;
 }
 

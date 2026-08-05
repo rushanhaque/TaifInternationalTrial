@@ -45,7 +45,7 @@
 .cat-card-meta { display: flex; justify-content: space-between; margin-top: .65rem; }
 
 /* ============ product ============ */
-.prod-hero-slab { border-radius: var(--r-sm) !important; }
+.prod-hero-slab { border-radius: var(--r-sm) !important; width: 100%; }
 .prod-info .lede { max-width: 40ch; }
 .spec-list { margin-block: 1.4rem; border-top: 3px solid var(--chrome-2); }
 .spec-row {
@@ -184,7 +184,16 @@
 }
 .contact-form-col { max-width: 560px; }
 .contact-form { display: flex; flex-direction: column; gap: 1rem; }
-.contact-form .btn { align-self: flex-start; margin-top: .4rem; }
+.contact-form button {
+  align-self: flex-start;
+  margin-top: .4rem;
+  color: #ffffff !important;
+  background-color: #1e1710 !important;
+  border: 1px solid #b0894f !important;
+}
+.contact-form button * {
+  color: #ffffff !important;
+}
 .sent-card {
   border: 1px solid var(--hair); border-radius: var(--r-lg);
   background: var(--white); padding: 2.2rem; max-width: 560px;
@@ -374,6 +383,18 @@
 .cd-end .lede { color: rgba(250, 247, 242, 0.75); }
 .cd-end-kicker { color: rgba(240, 220, 176, 0.85); letter-spacing: .22em; }
 .cd-end-ctas { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1rem; justify-content: center; }
+.cd-end-ctas button,
+.cd-end-ctas a {
+  color: #ffffff !important;
+}
+.cd-end-ctas .ghost {
+  color: #f0dcb0 !important;
+  border: 1px solid rgba(240, 220, 176, 0.4) !important;
+  background-color: rgba(255, 255, 255, 0.05) !important;
+}
+.cd-end-ctas .ghost * {
+  color: #f0dcb0 !important;
+}
 
 /* mobile / reduced-motion fallback — stacked cards */
 .cd-fallback {

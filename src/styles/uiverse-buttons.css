@@ -41,10 +41,9 @@
 
 .uv-btn-1 .text-container {
   display: block;
-  mix-blend-mode: difference;
   overflow: hidden;
   position: relative;
-  color: #ffffff; /* difference with black bg = white, diff with white bg = black */
+  color: #ffffff;
 }
 
 .uv-btn-1.ghost .text-container {

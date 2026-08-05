@@ -10,7 +10,6 @@ import SpecDock from '../components/mk2/SpecDock'
 import NotFoundPage from './NotFoundPage'
 import { productImg } from '../data/images'
 import { useCart } from '../lib/cart'
-import { Lens } from '../components/magicui/Lens'
 
 export default function ProductPage({ params }) {
   const p = bySlug(params.slug)
@@ -30,13 +29,11 @@ export default function ProductPage({ params }) {
 
       <section className="page-hero wrap" style={{ marginTop: '-50px' }}>
         <div className="grid" style={{ alignItems: 'center' }}>
-          <div className="sp-7">
-            <Lens zoomFactor={2} lensSize={300} isStatic={false} ariaLabel="Zoom Area">
-              <Slab warp={false} className="prod-hero-slab" tone={p.tone} ratio="7/5" label={p.name.toUpperCase()} meta={p.material}
-                img={productImg(p.slug)} alt={p.name} />
-            </Lens>
+          <div className="sp-6">
+            <Slab warp={false} className="prod-hero-slab" tone={p.tone} ratio="7/5" label={p.name.toUpperCase()} meta={p.material}
+              img={productImg(p.slug)} alt={p.name} />
           </div>
-          <div className="sp-5 prod-info">
+          <div className="sp-6 prod-info">
             <p className="hero-kicker">
               <span className="idx">0.3</span> <span className="meta">{p.category} · {p.idx}</span>
             </p>

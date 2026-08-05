@@ -52,8 +52,8 @@ export default function Footer() {
               </svg>
               <span className="hallmark-core"><span>T</span></span>
             </div>
-            <p className="d3">{BRAND.line}</p>
-            <p className="body" style={{ marginTop: '.6rem', color: 'var(--graphite-2)' }}>
+            <p className="d3" style={{ color: '#ffffff' }}>{BRAND.line}</p>
+            <p className="body" style={{ marginTop: '.6rem', color: 'rgba(255, 255, 255, 0.88)' }}>
               {BRAND.descriptor}. Est. {BRAND.est}, {BRAND.origin}.
             </p>
           </div>
@@ -73,7 +73,7 @@ export default function Footer() {
             <h3 className="meta">Contact</h3>
             <div><a href={`mailto:${BRAND.email}`}>{BRAND.email}</a></div>
             <div><a href={`tel:${BRAND.phone.replace(/\s/g, '')}`}>{BRAND.phone}</a></div>
-            <p style={{ marginTop: '.6rem', color: 'var(--dim)', fontSize: '.9rem' }}>
+            <p style={{ marginTop: '.6rem', color: 'rgba(255, 255, 255, 0.78)', fontSize: '.9rem' }}>
               Mon–Sat, 09:00–18:00 IST
             </p>
             <div style={{ display: 'flex', gap: '1.2rem', marginTop: '1.5rem' }}>
