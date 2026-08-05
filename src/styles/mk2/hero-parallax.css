@@ -2,7 +2,7 @@
 
 .hp-container {
   /* enough scroll space for the 3D tilt to resolve + rows to center */
-  height: 200vh;
+  height: 100vh;
   position: relative;
   overflow: hidden;
   background-color: var(--chrome);

@@ -247,7 +247,8 @@ void main () {
   col = mix(col, uTint, t);
   float aOut = alpha * mask;
   outColor = vec4(col * aOut, aOut);
-}`;
+}
+`;
 
 export function supportsHtmlInCanvas() {
   if (typeof document === "undefined") return false;
@@ -255,8 +256,8 @@ export function supportsHtmlInCanvas() {
   const ctx = probe.getContext("2d");
   return Boolean(
     ctx &&
-    typeof ctx['drawElementImage'] === "function" &&
-    typeof probe['requestPaint'] === "function",
+    typeof ctx.drawElementImage === "function" &&
+    typeof probe.requestPaint === "function",
   );
 }
 
@@ -280,18 +281,18 @@ export function createGrid(
   const paintable = source;
   const htmlInCanvas = Boolean(
     sourceCtx &&
-    typeof sourceCtx['drawElementImage'] === "function" &&
-    typeof paintable['requestPaint'] === "function",
+    typeof sourceCtx.drawElementImage === "function" &&
+    typeof paintable.requestPaint === "function",
   );
 
   let contentDirty = false;
   let wake = () => {};
 
   if (htmlInCanvas) {
-    paintable['onpaint'] = () => {
+    paintable.onpaint = () => {
       try {
         sourceCtx.reset();
-        sourceCtx['drawElementImage'](content, 0, 0);
+        sourceCtx.drawElementImage(content, 0, 0);
         contentDirty = true;
         wake();
       } catch {}
@@ -442,7 +443,7 @@ export function createGrid(
         source.width = cssWidth * scale;
         source.height = cssHeight * scale;
       }
-      paintable['requestPaint']();
+      paintable.requestPaint();
     }
   }
 
@@ -739,7 +740,7 @@ export function createGrid(
         gl.deleteShader(pass.fragmentShader);
       }
       gl.deleteBuffer(quad);
-      if (htmlInCanvas) paintable['onpaint'] = null;
+      if (htmlInCanvas) paintable.onpaint = null;
     },
   };
 }
@@ -800,7 +801,7 @@ export function Grid({ children, className, style, ...options }) {
               position: "relative",
               width: "100%",
               height: "100%",
-              overflow: "hidden", /* FIXED SCROLLBAR ISSUE HERE */
+              overflow: "auto",
             }}
           >
             {children}
@@ -814,7 +815,7 @@ export function Grid({ children, className, style, ...options }) {
             position: "relative",
             width: "100%",
             height: "100%",
-            overflow: "hidden", /* FIXED SCROLLBAR ISSUE HERE */
+            overflow: "auto",
           }}
         >
           {children}

@@ -105,6 +105,7 @@ function CollectionCard({ collection }) {
         to={`/collections/${familySlug(collection.name)}`}
         className="hp-card-link"
         data-cursor="OPEN"
+        transition="slide-collection"
       >
         <div className="hp-card-overlay" />
         {img ? (

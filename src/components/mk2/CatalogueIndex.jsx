@@ -86,7 +86,7 @@ export default function CatalogueIndex({ items }) {
             {rows.map((p) => (
               <tr className="cx-row" key={p.slug}>
                 <td className="cx-td cx-name">
-                  <Link to={`/catalogue/${p.slug}`} className="cx-link">
+                  <Link to={`/catalogue/${p.slug}`} className="cx-link" transition="slide-product">
                     <span className={`cx-chip tone-${p.tone}`} aria-hidden="true" />
                     <span>{p.name}</span>
                   </Link>
@@ -101,7 +101,7 @@ export default function CatalogueIndex({ items }) {
                   <button
                     type="button"
                     className={`cx-add ${has(p.slug) ? 'is-in' : ''}`}
-                    onClick={() => { add(p); setOpen(true) }}
+                    onClick={() => add(p)}
                     aria-label={has(p.slug)
                       ? `${p.name} is in your enquiry`
                       : `Add ${p.name} to your enquiry`}

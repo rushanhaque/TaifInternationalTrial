@@ -166,7 +166,8 @@ export default function TwoFloors() {
   }, [])
 
   return (
-    <section className="tf" ref={root} aria-labelledby="tf-title">
+    <section className="tf section" ref={root} aria-labelledby="tf-title">
+      <div className="sec-head"><span className="meta">Signature piece</span></div>
       <h2 id="tf-title" className="tf-vh">Two floors, one object</h2>
 
       {/* ── FLOOR 01 · METAL ─────────────────────────────────────────── */}
@@ -252,7 +253,7 @@ export default function TwoFloors() {
         </div>
 
         <p className="tf-plaque">
-          <span className="tf-plaque-i"><b>340</b> artisans</span>
+          <span className="tf-plaque-i"><b>10-15</b> artisans</span>
           <span className="tf-slash" aria-hidden="true">/</span>
           <span className="tf-plaque-i">Two floors</span>
           <span className="tf-slash" aria-hidden="true">/</span>

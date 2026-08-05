@@ -51,51 +51,48 @@ export default function Home() {
       {/* 0.15 · collections parallax */}
       <span id="collections-1" />
       <div style={{ position: 'relative', zIndex: 2, background: 'var(--bg)' }}>
+        <div className="sec-head"><span className="meta">Our collections</span></div>
         <HeroParallax />
       </div>
 
       {/* 0.2 · materials — finish morph section */}
       <section className="fm-section alt" id="materials">
+        <div className="sec-head"><span className="meta">Materials we work in</span></div>
         <div className="wrap">
-          <div className="sec-head"><span className="idx">0.2</span><span className="meta">Materials</span></div>
-        </div>
         <FinishMorph
           mode="scroll"
           finishes={HOME_COLLECTIONS}
           label="MATERIALS"
         />
-        <div className="wrap fm-after">
-          <Button to="/catalogue" variant="ghost">See it on the pieces</Button>
         </div>
       </section>
 
       {/* 0.3 · wave ribbon */}
       <Ribbon terms={RIBBON_TERMS} />
 
-      {/* 0.4 · drag rail — the signature interaction */}
-      <section className="section alt" id="catalogue">
+      {/* 0.4 · THE TURN (From us to you) */}
+      <span id="the-turn" />
+      <TheTurn />
+
+      {/* 0.5 · drag rail — the signature piece */}
+      <section className="section alt fs-section" id="catalogue">
+        <div className="sec-head"><span className="meta">Signature piece</span></div>
         <div className="wrap">
-          <div className="sec-head"><span className="idx">0.2</span><span className="meta">Catalogue</span></div>
           <DragRail label="Featured catalogue" hint="Drag · fling · release">
             {railItems().map((p) => (
-              <Link key={p.slug} to={`/catalogue/${p.slug}`} className="rail-card">
+              <Link key={p.slug} to={`/catalogue/${p.slug}`} className="rail-card" transition="slide-product">
                 <Slab tone={p.tone} label={p.name.toUpperCase()} meta={p.material}
                   img={productImg(p.slug)} alt={p.name} />
                 <div className="rail-card-meta meta"><span>{p.category}</span><span>{p.idx}</span></div>
               </Link>
             ))}
-            <Link to="/catalogue" className="rail-card rail-more">
+            <Link to="/catalogue" className="rail-card rail-more" transition="slide-collection">
               <Slab tone="walnut" label="VIEW ALL — 20 PIECES" />
               <div className="rail-card-meta meta"><span>Catalogue</span><span>0.2</span></div>
             </Link>
           </DragRail>
         </div>
       </section>
-
-      {/* 0.5 · THE TURN — the signature. A hand-raised brass vessel turns a
-          full 360° under raking light, then dissolves into its walnut twin. */}
-      <span id="the-turn" />
-      <TheTurn />
 
       {/* 0.6 · TWO FLOORS — drag the brass seam: metal (Moradabad) vs wood
           (Saharanpur). The brand line made literal and operable. */}
@@ -110,9 +107,9 @@ export default function Home() {
       <Tension from="white" />
 
       {/* 0.9 · process teaser — transparent ground, sits on the page colour */}
-      <section className="section clear" id="process">
+      <section className="section clear fs-section" id="process">
+        <div className="sec-head"><span className="meta">Process</span></div>
         <div className="wrap">
-          <div className="sec-head"><span className="idx">0.3</span><span className="meta">Process</span></div>
           <div className="grid">
             <div className="sp-8">
               <Stepper stages={PROCESS_STAGES} teaser />
@@ -131,13 +128,11 @@ export default function Home() {
       </section>
 
       {/* 0.95 · COUNTRIES SERVED */}
-      <section className="section alt" id="countries">
-        <div className="wrap">
-          <div className="sec-head"><span className="idx">0.95</span><span className="meta">Global Reach</span></div>
-          <h2 className="d1" style={{ color: 'var(--ink)' }}>Exporting to 40+ Countries</h2>
-          <p className="lede" style={{ marginTop: '1rem' }}>Trusted by brands worldwide.</p>
-        </div>
-        <div style={{ marginTop: '4rem', paddingBottom: '2rem', position: 'relative', overflow: 'hidden' }}>
+      <div className="wrap" style={{ marginBlock: '4rem' }}>
+        <div className="countries-card" id="countries">
+          <div style={{ position: 'absolute', top: '3rem', left: 0, width: '100%', textAlign: 'center' }}>
+            <span className="meta" style={{ display: 'inline-block', transform: 'scale(1.5)' }}>Countries served</span>
+          </div>
           <LogoLoop
             logos={countryFlags}
             speed={60}
@@ -149,15 +144,13 @@ export default function Home() {
             ariaLabel="Countries served"
           />
         </div>
-      </section>
+      </div>
 
       {/* 0.98 · INSTAGRAM */}
-      <section className="section clear" id="instagram">
+      <section className="section clear fs-section" id="instagram">
+        <div className="sec-head"><span className="meta">Blogs and socials</span></div>
         <div className="wrap">
-          <div className="sec-head"><span className="idx">0.98</span><span className="meta">Social</span></div>
-          <h2 className="d1" style={{ color: 'var(--graphite)' }}>On the Grid</h2>
-          <p className="lede" style={{ marginTop: '1rem' }}>Latest dispatches from the workshop floor.</p>
-          <div className="grid" style={{ marginTop: '3rem' }}>
+          <div className="grid">
             <div className="sp-2">
               <HeroVideoDialog
                 animationStyle="from-center"
@@ -211,11 +204,9 @@ export default function Home() {
       </section>
 
       {/* 1.0 · REVIEWS — coming soon */}
-      <section className="section clear" id="reviews">
+      <section className="section clear fs-section" id="reviews">
+        <div className="sec-head"><span className="meta">Reviews</span></div>
         <div className="wrap">
-          <div className="sec-head"><span className="idx">1.0</span><span className="meta">Reviews</span></div>
-          <h2 className="d1" style={{ color: 'var(--ink)' }}>Reviews</h2>
-          <p className="lede" style={{ marginTop: '1rem' }}>Reviews section coming soon.</p>
         </div>
       </section>
 

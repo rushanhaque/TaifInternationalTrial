@@ -96,7 +96,7 @@ export default function SpecDock({ piece }) {
         <button
           type="button"
           className={`sd-add ${inCart ? 'is-in' : ''}`}
-          onClick={() => { add(piece); setOpen(true) }}
+          onClick={() => add(piece)}
           /* the dock is off-screen when retired; keep it out of the tab order
              so focus never lands on a control nobody can see */
           tabIndex={shown ? 0 : -1}

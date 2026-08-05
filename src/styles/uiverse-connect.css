@@ -1,0 +1,237 @@
+/* From Uiverse.io by marcelodolza */ 
+.uv-button {
+  --primary: #111111;
+  cursor: pointer;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 99px;
+  box-shadow: none;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: all 0.3s ease;
+  min-width: 120px;
+  padding: 0 10px;
+  height: 38px;
+  font-family: var(--font-body), "Galano Grotesque", Poppins, Montserrat, sans-serif;
+  font-style: normal;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--graphite);
+}
+.uv-button:hover {
+  transform: scale(1.02);
+}
+.uv-button:active {
+  transform: scale(1);
+}
+
+.uv-state p {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+}
+.uv-state .uv-icon {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  transform: scale(1.25);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.uv-state .uv-icon svg {
+  overflow: visible;
+}
+
+/* Outline - Removed */
+.uv-outline {
+  display: none;
+}
+
+/* Letters */
+.uv-state p span {
+  display: block;
+  opacity: 0;
+  animation: slideDown 0.8s ease forwards calc(var(--i) * 0.03s);
+}
+.uv-button:hover p span {
+  opacity: 1;
+  animation: wave 0.5s ease forwards calc(var(--i) * 0.02s);
+}
+.uv-button:focus p span {
+  opacity: 1;
+  animation: disapear 0.6s ease forwards calc(var(--i) * 0.03s);
+}
+@keyframes wave {
+  30% {
+    opacity: 1;
+    transform: translateY(3px);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-2px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes slideDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-15px) translateX(3px) rotate(-45deg);
+    filter: blur(3px);
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(3px);
+    filter: blur(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-2px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes disapear {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    transform: translateX(3px) translateY(15px);
+    filter: blur(3px);
+  }
+}
+
+/* Plane */
+.uv-state--default .uv-icon svg {
+  animation: land 0.6s ease forwards;
+}
+.uv-button:hover .uv-state--default .uv-icon {
+  transform: rotate(45deg) scale(1.25);
+}
+.uv-button:focus .uv-state--default svg {
+  animation: takeOff 0.8s linear forwards;
+}
+.uv-button:focus .uv-state--default .uv-icon {
+  transform: rotate(0) scale(1.25);
+}
+@keyframes takeOff {
+  0% {
+    opacity: 1;
+  }
+  60% {
+    opacity: 1;
+    transform: translateX(50px) rotate(45deg) scale(2);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(120px) rotate(45deg) scale(0);
+  }
+}
+@keyframes land {
+  0% {
+    transform: translateX(-40px) translateY(20px) rotate(-50deg) scale(2);
+    opacity: 0;
+    filter: blur(2px);
+  }
+  100% {
+    transform: translateX(0) translateY(0) rotate(0);
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+/* Contrail */
+.uv-state--default .uv-icon:before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  height: 2px;
+  width: 0;
+  left: -5px;
+  background: linear-gradient(to right, transparent, rgba(0, 0, 0, 0.5));
+}
+.uv-button:focus .uv-state--default .uv-icon:before {
+  animation: contrail 0.8s linear forwards;
+}
+@keyframes contrail {
+  0% {
+    width: 0;
+    opacity: 1;
+  }
+  8% {
+    width: 15px;
+  }
+  60% {
+    opacity: 0.7;
+    width: 60px;
+  }
+  100% {
+    opacity: 0;
+    width: 120px;
+  }
+}
+
+/* States */
+.uv-state {
+  padding-left: 24px;
+  z-index: 2;
+  display: flex;
+  position: relative;
+}
+.uv-state--default {
+  /* removed nth-child(4) margin-right that caused a gap in 'Connect' */
+}
+.uv-state--sent {
+  display: none;
+}
+.uv-state--sent svg {
+  transform: scale(1.25);
+  margin-right: 8px;
+}
+.uv-button:focus .uv-state--default {
+  position: absolute;
+}
+.uv-button:focus .uv-state--sent {
+  display: flex;
+}
+.uv-button:focus .uv-state--sent span {
+  opacity: 0;
+  animation: slideDown 0.8s ease forwards calc(var(--i) * 0.2s);
+}
+.uv-button:focus .uv-state--sent .uv-icon svg {
+  opacity: 0;
+  animation: appear 1.2s ease forwards 0.8s;
+}
+@keyframes appear {
+  0% {
+    opacity: 0;
+    transform: scale(4) rotate(-40deg);
+    filter: blur(4px);
+  }
+  30% {
+    opacity: 1;
+    transform: scale(0.6);
+    filter: blur(1px);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+    filter: blur(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

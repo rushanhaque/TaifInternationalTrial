@@ -60,9 +60,9 @@ export const MORE_LINKS = [
 ]
 
 export const FIGURES = [
-  { value: '340', unit: 'artisans', label: 'Hands on the metal and wood floors' },
-  { value: '8–10', unit: '% MC', label: 'Moisture held in every wood part before it is cut' },
-  { value: '42', unit: 'countries', label: 'Export markets shipped from Moradabad' },
+  { value: '10–15', unit: 'artisans', label: 'People working in the workshop' },
+  { value: '600+', unit: 'orders', label: 'Estimated orders fulfilled per year' },
+  { value: '16', unit: 'countries', label: 'Export markets shipped worldwide' },
   { value: '99.1', unit: '% on time', label: 'Container dispatch record, trailing twelve months' },
 ]
 
@@ -218,7 +218,7 @@ export const TIMELINE = [
   { year: '2013', copy: 'Seasoning yard and kiln commissioned. Wood is dried to 8–10% before it is cut, not after.' },
   { year: '2019', copy: 'Lacquer and powder-coat lines brought in-house. Colour becomes a process instead of a subcontract.' },
   { year: '2024', copy: 'Rooftop solar carries the finishing lines; metal offcuts go back to the smelter, wood offcuts to the boiler.' },
-  { year: '2026', copy: 'Today: 340 artisans, 42 export markets, and two materials that leave as one object.' },
+  { year: '2026', copy: 'Today: 10-15 artisans, 16 export markets, and six materials.' },
 ]
 
 export const PRINCIPLES = [

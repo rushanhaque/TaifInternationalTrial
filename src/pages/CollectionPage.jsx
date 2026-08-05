@@ -54,14 +54,14 @@ export const FAMILIES = [
 
 /* family (by slug) → the catalogue category holding its pieces */
 const ALIAS = {
-  'wooden-products': null,
-  'copper-products': null,
-  'home-decor': 'Décor',
-  'hardware-supplies': null,
-  'corporate-gifting': null,
-  'religious-supplies': null,
-  'bathroom-accessories': null,
-  'kitchenware': null,
+  'wooden-products': 'Wooden Products',
+  'copper-products': 'Copper Products',
+  'home-decor': 'Home Decor',
+  'hardware-supplies': 'Hardware Supplies',
+  'corporate-gifting': 'Corporate Gifting',
+  'religious-supplies': 'Religious Supplies',
+  'bathroom-accessories': 'Bathroom Accessories',
+  'kitchenware': 'Kitchenware',
   'barware': 'Barware',
 }
 
@@ -167,6 +167,7 @@ function PlateCard({ p, add, has, setOpen }) {
         to={`/catalogue/${p.slug}`}
         className="pl-card"
         data-cursor="VIEW"
+        transition="slide-product"
       >
         <span className="pl-frame" aria-hidden="true" />
 
@@ -183,7 +184,13 @@ function PlateCard({ p, add, has, setOpen }) {
 
         <span className="pl-no meta" aria-hidden="true">{p.idx}</span>
 
-
+        {/* the numbers, held back until asked for */}
+        <span className="pl-rail" aria-hidden="true">
+          <b>{p.dims}</b>
+          <b>{p.weight}</b>
+          <b>MOQ {p.moq}</b>
+          <b>{p.lead}</b>
+        </span>
         <span className="pl-say">
           <span className="pl-name">{p.name}</span>
           <span className="pl-mat meta">{p.material}</span>
@@ -194,7 +201,7 @@ function PlateCard({ p, add, has, setOpen }) {
         ref={addRef}
         type="button"
         className={`pl-add ${has(p.slug) ? 'is-in' : ''}`}
-        onClick={() => { add(p); setOpen(true) }}
+        onClick={() => add(p)}
         aria-label={has(p.slug)
           ? `${p.name} is in your enquiry`
           : `Add ${p.name} to your enquiry`}

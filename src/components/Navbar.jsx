@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 import { gsap, ScrollTrigger, reduced } from '../lib/gsap'
-import { Link, useRoute } from '../lib/router'
+import { Link, NavLink, useRoute } from '../lib/router'
 import { BRAND, NAV_LINKS } from '../data/site'
 import Button from './Button'
+import UiverseConnectButton from './UiverseConnectButton'
 import MobileSheet from './MobileSheet'
 import { AnimatedThemeToggler } from './magicui/AnimatedThemeToggler'
 
@@ -56,16 +57,21 @@ export default function Navbar() {
   }, [path]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    const st = ScrollTrigger.create({
-      start: 0,
-      end: 'max',
-      onUpdate(self) {
-        if (window.scrollY > 420 && self.direction === 1) nav.current.classList.add('hid')
-        else nav.current.classList.remove('hid')
-      },
-    })
-    return () => st.kill()
-  }, [])
+    const isHome = path === '/'
+    
+    const onScroll = () => {
+      if (!nav.current) return
+      if (isHome && window.scrollY <= 10) {
+        nav.current.classList.add('nav-hide-top')
+      } else {
+        nav.current.classList.remove('nav-hide-top')
+      }
+    }
+    
+    onScroll()
+    window.addEventListener('scroll', onScroll)
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [path])
 
   return (
     <>
@@ -78,7 +84,7 @@ export default function Navbar() {
           <span className="nav-pill" ref={pillEl} aria-hidden="true" />
           {/* Contact is served by the CTA on desktop; keep the rail tight */}
           {NAV_LINKS.filter((l) => l.to !== '/contact').map((l) => (
-            <Link
+            <NavLink
               key={l.to}
               to={l.to}
               className={isActive(l.to) ? 'on' : ''}
@@ -89,12 +95,12 @@ export default function Navbar() {
                 <span className="nl-up">{l.label}</span>
                 <span className="nl-in" aria-hidden="true">{l.label}</span>
               </span>
-            </Link>
+            </NavLink>
           ))}
         </nav>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <UiverseConnectButton className="nav-cta" />
           <AnimatedThemeToggler />
-          <Button to="/contact" small className="nav-cta">Connect</Button>
         </div>
         <button
           className="burger"

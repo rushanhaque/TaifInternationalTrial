@@ -48,14 +48,11 @@ export default function RequestCatalogue() {
     .toUpperCase()
 
   return (
-    <section className="rq" aria-labelledby="rq-title">
+    <section className="rq deep section" aria-labelledby="rq-title">
+      <div className="sec-head"><span className="meta">Connect</span></div>
       <div className="wrap rq-inner">
         <div className="rq-say">
-          <span className="meta rq-kicker">Request</span>
-          <h2 className="rq-title" id="rq-title">Ask for the catalogue.</h2>
-          <p className="rq-lede">
-            It ships as a real object, not a PDF. Tell us where to send it.
-          </p>
+
           <ul className="rq-ships">
             {SHIPS.map(([n, what]) => (
               <li key={what}><b>{n}</b><span>{what}</span></li>

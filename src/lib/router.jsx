@@ -3,19 +3,20 @@ import { gsap, ScrollTrigger, reduced } from './gsap'
 import { getLenis } from './useLenis'
 import { applyMeta } from './seo'
 
-/* Custom pushState router + SteviaPlease-style vertical-strips curtain.
-   Routes: [{ path, page, idx, name, title, desc, ok?, jsonLd? }] — name,
-   title and desc may be functions of the matched params (product pages).
-   `ok(params)` reports whether those params resolved to real content, and
-   `jsonLd(params)` builds the route's structured data. */
+/* Custom pushState router with TWO transition modes:
+   1. Strip curtain  — vertical-strips wipe, used for navbar navigation
+   2. Iris reveal    — a circular/diamond mask that opens from the click point,
+                        used for in-page links (collections, catalogue, etc.)
+   Routes: [{ path, page, idx, name, title, desc, ok?, jsonLd? }] */
 
 const RouteCtx = createContext({ path: '/', params: {} })
 export const useRoute = () => useContext(RouteCtx)
 
+/* transition hint: 'strips' (navbar) or 'iris' (default for in-page links) */
 let navigateFn = (to) => { window.location.href = to }
-export const navigate = (to) => navigateFn(to)
+export const navigate = (to, opts = {}) => navigateFn(to, opts)
 
-export function Link({ to, children, onClick, ...rest }) {
+export function Link({ to, children, onClick, transition, ...rest }) {
   return (
     <a
       href={to}
@@ -24,7 +25,25 @@ export function Link({ to, children, onClick, ...rest }) {
         if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.defaultPrevented) return
         e.preventDefault()
         if (onClick) onClick(e)
-        navigate(to)
+        navigate(to, { transition })
+      }}
+    >
+      {children}
+    </a>
+  )
+}
+
+/* NavLink is identical to Link but forces the strip curtain transition */
+export function NavLink({ to, children, onClick, ...rest }) {
+  return (
+    <a
+      href={to}
+      {...rest}
+      onClick={(e) => {
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.defaultPrevented) return
+        e.preventDefault()
+        if (onClick) onClick(e)
+        navigate(to, { transition: 'strips' })
       }}
     >
       {children}
@@ -55,7 +74,7 @@ export function matchRoutes(routes, path) {
 const resolve = (v, params) => (typeof v === 'function' ? v(params) : v)
 
 /* ─────────────────────────────────────────────────────────────────────────
-   SteviaPlease vertical-strips curtain transition
+   TRANSITION 1 · Strip curtain (navbar only)
    ─────────────────────────────────────────────────────────────────────────
    Phase 1 – strips rise bottom-up (scaleY 0→1), staggered left-to-right
    Phase 2 – page is swapped while the curtain is opaque
@@ -65,26 +84,30 @@ const resolve = (v, params) => (typeof v === 'function' ? v(params) : v)
 const LANDSCAPE_COUNT = 20
 const PORTRAIT_COUNT = 10
 
+/* ─────────────────────────────────────────────────────────────────────────
+   TRANSITION 2 · Iris reveal (in-page links)
+   ─────────────────────────────────────────────────────────────────────────
+   A warm brass-tinted overlay sweeps across the viewport as a soft diagonal
+   wipe: the leading edge enters from the bottom-left, crosses to the
+   top-right, covers the page, swaps the content, then the trailing edge
+   continues off-screen in the same direction. The motion is continuous —
+   not a separate in/out — which makes it feel like a single confident
+   gesture rather than an open-then-close.                                   */
+
 
 
 export function Router({ routes, notFound, after = null }) {
   const [path, setPath] = useState(window.location.pathname)
-  /* teardown() runs from a timer and would otherwise close over a stale
-     `path`; this ref always reports what is actually mounted */
   const pathRef = useRef(path)
   const busy = useRef(false)
   const stripsRef = useRef(null)
-  const slideRef = useRef(null)
+  const irisRef = useRef(null)
 
   const matched = matchRoutes(routes, path)
   const route = matched ? matched.route : notFound
   const params = matched ? matched.params : {}
 
   useEffect(() => {
-    /* `ok` lets a route say its params did not resolve to anything real —
-       an unknown product slug, a family that is not a family. Those render
-       the not-found body, so their metadata must say so too rather than
-       advertising a product that does not exist. */
     const real = route.ok ? route.ok(params) : route !== notFound
     applyMeta({
       title: real ? resolve(route.title, params) : resolve(notFound.title, params),
@@ -104,7 +127,7 @@ export function Router({ routes, notFound, after = null }) {
     window.scrollTo(0, 0)
   }
 
-  function go(to, push = true) {
+  function go(to, push = true, opts = {}) {
     if (busy.current) return
     if (to === window.location.pathname && push) {
       const l = getLenis()
@@ -113,7 +136,7 @@ export function Router({ routes, notFound, after = null }) {
     }
     if (push) window.history.pushState({}, '', to)
 
-    if (reduced() || !stripsRef.current || !slideRef.current) {
+    if (reduced() || (!stripsRef.current && !irisRef.current)) {
       settle(to)
       requestAnimationFrame(() => ScrollTrigger.refresh())
       document.getElementById('main')?.focus({ preventScroll: true })
@@ -123,52 +146,24 @@ export function Router({ routes, notFound, after = null }) {
     busy.current = true
     getLenis()?.stop()
 
-    const destMatched = matchRoutes(routes, to)
-    const destRoute = destMatched ? destMatched.route : notFound
-    const isSlide = destRoute.transition === 'slide'
+    const mode = opts.transition || 'strips'
 
-    if (isSlide) {
-      const slide = slideRef.current
-      slide.classList.add('is-active')
-      gsap.set(slide, { xPercent: -100, x: 0 })
-
-      const safetySlide = setTimeout(teardownSlide, 2000)
-      function teardownSlide() {
-        clearTimeout(safetySlide)
-        slide.classList.remove('is-active')
-        gsap.set(slide, { clearProps: 'all' })
-        busy.current = false
-        try { getLenis()?.start() } catch (_) { }
-        document.getElementById('main')?.focus({ preventScroll: true })
-        if (pathRef.current !== to) { settle(to); return }
-        if (window.location.pathname !== to) go(window.location.pathname, false)
-      }
-
-      gsap.to(slide, {
-        xPercent: 0,
-        x: 0,
-        duration: 0.25,
-        ease: 'power3.inOut',
-        onComplete() {
-          settle(to)
-          try { ScrollTrigger.refresh() } catch (_) { }
-          requestAnimationFrame(() => requestAnimationFrame(() => {
-            gsap.to(slide, {
-              xPercent: 100,
-              x: 0,
-              duration: 0.25,
-              ease: 'power3.inOut',
-              onComplete: teardownSlide,
-            })
-          }))
-        }
-      })
-      return
+    if (mode === 'strips') {
+      playStrips(to)
+    } else if (mode === 'slide-product') {
+      playSlide(to, 'right')
+    } else if (mode === 'slide-collection') {
+      playSlide(to, 'bottom')
+    } else {
+      playIris(to)
     }
+  }
 
+  /* ── STRIPS CURTAIN ─────────────────────────────────────────────────── */
+  function playStrips(to) {
     const veil = stripsRef.current
+    if (!veil) { playIris(to); return }
 
-    /* pick which set of lines is currently active based on orientation */
     const isPortrait = window.matchMedia('(orientation: portrait)').matches
     const linesWrap = isPortrait
       ? veil.querySelector('.strips__portrait')
@@ -177,8 +172,6 @@ export function Router({ routes, notFound, after = null }) {
 
     veil.classList.add('is-active')
 
-    /* reset all lines to collapsed before animating in, 
-       with a 1.03 scale on the orthogonal axis to cover sub-pixel gaps */
     if (isPortrait) {
       gsap.set(lines, { scaleX: 0, scaleY: 1.03, transformOrigin: '100% 50%' })
     } else {
@@ -190,35 +183,22 @@ export function Router({ routes, notFound, after = null }) {
     function teardown() {
       clearTimeout(safety)
       veil.classList.remove('is-active')
-      /* clear every GSAP inline style so strips are clean while hidden */
       gsap.set(lines, { clearProps: 'all' })
       busy.current = false
       try { getLenis()?.start() } catch (_) { }
       document.getElementById('main')?.focus({ preventScroll: true })
-
-      /* The page swap lives in PHASE 1's onComplete, which is driven by
-         GSAP's ticker — i.e. by rAF. A tab that is backgrounded or badly
-         starved mid-navigation never advances that tween, so the safety
-         timer fires with the URL already changed and the OLD page still
-         mounted. Re-running go() from here would start the whole curtain
-         again on the same starved clock and simply repeat every 3.5s.
-         Swap directly instead: the transition is decoration, arriving is not.
-
-         Measured with frames frozen: the URL updated and the page never
-         changed until this landed. */
       if (pathRef.current !== to) { settle(to); return }
       if (window.location.pathname !== to) go(window.location.pathname, false)
     }
 
-    const STAGGER = 0.035    /* seconds between each strip */
-    const IN_DUR = 0.35    /* duration each strip takes to rise */
-    const OUT_DUR = 0.3     /* duration each strip takes to fall */
+    const STAGGER = 0.035
+    const IN_DUR = 0.35
+    const OUT_DUR = 0.3
     const EASE_IN = 'power3.inOut'
     const EASE_OUT = 'power3.inOut'
 
     const prop = isPortrait ? 'scaleX' : 'scaleY'
 
-    /* PHASE 1 — curtain rises */
     gsap.to(lines, {
       [prop]: 1,
       duration: IN_DUR,
@@ -226,12 +206,10 @@ export function Router({ routes, notFound, after = null }) {
       stagger: STAGGER,
       transformOrigin: isPortrait ? '100% 50%' : '50% 100%',
       onComplete() {
-        /* PHASE 2 — swap the page while fully covered */
         settle(to)
         try { ScrollTrigger.refresh() } catch (_) { }
 
         requestAnimationFrame(() => requestAnimationFrame(() => {
-          /* PHASE 3 — curtain falls; origin flips to the opposite edge */
           gsap.to(lines, {
             [prop]: 0,
             duration: OUT_DUR,
@@ -245,7 +223,110 @@ export function Router({ routes, notFound, after = null }) {
     })
   }
 
-  navigateFn = go
+  /* ── IRIS REVEAL ────────────────────────────────────────────────────── */
+  function playIris(to) {
+    const iris = irisRef.current
+    if (!iris) { settle(to); busy.current = false; try { getLenis()?.start() } catch(_){} return }
+
+    iris.classList.add('is-active')
+
+    /* The overlay enters from bottom-left (translate 0%,100%) and exits
+       toward top-right (translate 100%,-100%). The page swap happens at
+       the midpoint when the overlay fully covers the viewport. Using a
+       skewX gives the leading edge a diagonal angle for a premium feel. */
+
+    gsap.set(iris, { xPercent: 0, yPercent: 110, skewY: -4, opacity: 1 })
+
+    const safety = setTimeout(teardown, 2200)
+
+    function teardown() {
+      clearTimeout(safety)
+      iris.classList.remove('is-active')
+      gsap.set(iris, { clearProps: 'all' })
+      busy.current = false
+      try { getLenis()?.start() } catch (_) { }
+      document.getElementById('main')?.focus({ preventScroll: true })
+      if (pathRef.current !== to) { settle(to); return }
+      if (window.location.pathname !== to) go(window.location.pathname, false)
+    }
+
+    /* Phase 1 — sweep in from bottom */
+    gsap.to(iris, {
+      xPercent: 0,
+      yPercent: 0,
+      skewY: 0,
+      duration: 0.45,
+      ease: 'power4.inOut',
+      onComplete() {
+        settle(to)
+        try { ScrollTrigger.refresh() } catch (_) { }
+
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          /* Phase 2 — sweep out to top */
+          gsap.to(iris, {
+            xPercent: 0,
+            yPercent: -110,
+            skewY: 4,
+            duration: 0.45,
+            ease: 'power4.inOut',
+            onComplete: teardown,
+          })
+        }))
+      },
+    })
+  }
+
+  /* ── SLIDE REVEAL ────────────────────────────────────────────────────── */
+  function playSlide(to, dir) {
+    const iris = irisRef.current
+    if (!iris) { settle(to); busy.current = false; try { getLenis()?.start() } catch(_){} return }
+
+    iris.classList.add('is-active')
+
+    const isRight = dir === 'right'
+    const startX = isRight ? 100 : 0
+    const startY = isRight ? 0 : 100
+    const endX = isRight ? -100 : 0
+    const endY = isRight ? 0 : -100
+
+    gsap.set(iris, { xPercent: startX, yPercent: startY, skewY: 0, opacity: 1 })
+
+    const safety = setTimeout(teardown, 2200)
+
+    function teardown() {
+      clearTimeout(safety)
+      iris.classList.remove('is-active')
+      gsap.set(iris, { clearProps: 'all' })
+      busy.current = false
+      try { getLenis()?.start() } catch (_) { }
+      document.getElementById('main')?.focus({ preventScroll: true })
+      if (pathRef.current !== to) { settle(to); return }
+      if (window.location.pathname !== to) go(window.location.pathname, false)
+    }
+
+    gsap.to(iris, {
+      xPercent: 0,
+      yPercent: 0,
+      duration: 0.45,
+      ease: 'power4.inOut',
+      onComplete() {
+        settle(to)
+        try { ScrollTrigger.refresh() } catch (_) { }
+
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          gsap.to(iris, {
+            xPercent: endX,
+            yPercent: endY,
+            duration: 0.45,
+            ease: 'power4.inOut',
+            onComplete: teardown,
+          })
+        }))
+      },
+    })
+  }
+
+  navigateFn = (to, opts = {}) => go(to, true, opts)
 
   useEffect(() => {
     const onPop = () => go(window.location.pathname, false)
@@ -253,7 +334,6 @@ export function Router({ routes, notFound, after = null }) {
     return () => window.removeEventListener('popstate', onPop)
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  /* Build the strip elements — one static render is fine; GSAP drives them */
   const landscapeLines = Array.from({ length: LANDSCAPE_COUNT }, (_, i) => (
     <div key={i} className="strips__line" />
   ))
@@ -271,16 +351,14 @@ export function Router({ routes, notFound, after = null }) {
         {after}
       </div>
 
-      {/* Premium Slide Overlay */}
-      <div className="slide-overlay" ref={slideRef} aria-hidden="true" />
+      {/* Iris reveal overlay — diagonal sweep for in-page links */}
+      <div className="iris-overlay" ref={irisRef} aria-hidden="true" />
 
-      {/* SteviaPlease-style curtain overlay */}
+      {/* SteviaPlease-style curtain overlay — navbar only */}
       <div className="strips" ref={stripsRef} aria-hidden="true">
-        {/* Landscape: 20 vertical columns */}
         <div className="strips__landscape">
           {landscapeLines}
         </div>
-        {/* Portrait: 10 horizontal rows */}
         <div className="strips__portrait">
           {portraitLines}
         </div>

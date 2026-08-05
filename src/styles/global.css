@@ -31,7 +31,7 @@ body {
   font-size: 1.0625rem;
   line-height: 1.62;
   color: var(--graphite);
-  background-color: var(--chrome);
+  background-color: var(--white);
   background-image: var(--paper);
   -webkit-font-smoothing: antialiased;
   /* `clip`, not `hidden` — `hidden` makes body a scroll container and
@@ -312,13 +312,14 @@ ol {
    simply show the body colour — but with the hero pinned behind the page,
    anything transparent lets the backdrop read through it. */
 .section {
-  padding-block: clamp(5rem, 10vw, 9rem);
-  background-color: var(--chrome);
+  position: relative;
+  padding-block: clamp(2rem, 4vw, 3rem);
+  background-color: var(--white);
   background-image: var(--paper);
 }
 
 .section.tight {
-  padding-block: clamp(3rem, 6vw, 5rem);
+  padding-block: clamp(2.5rem, 5vw, 4rem);
 }
 
 .section.alt {
@@ -352,15 +353,22 @@ ol {
 }
 
 .sec-head {
+  position: absolute;
+  top: clamp(2rem, 4vw, 4rem);
+  left: max(var(--gutter), calc(50vw - 640px));
+  z-index: 20;
   display: flex;
   align-items: center;
   gap: .9rem;
-  margin-bottom: clamp(1.8rem, 3.4vw, 3rem);
+  width: auto;
 }
 
 .sec-head .meta {
   color: var(--dim);
   white-space: nowrap;
+  font-size: 1.15rem;
+  letter-spacing: 0.04em;
+  font-weight: 500;
 }
 
 .deep .sec-head .meta {
@@ -381,10 +389,20 @@ ol {
 
 .sec-head::after {
   content: '';
-  flex: 1;
+  width: 40px;
   height: 3px;
   border-radius: var(--r-pill);
   background: var(--chrome-3);
+}
+
+.section-title {
+  font-size: clamp(3rem, 6vw, 4.5rem);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--graphite);
+  margin-bottom: 2rem;
+  text-align: left;
 }
 
 .deep .sec-head::after {
@@ -585,64 +603,15 @@ ol {
 .btn {
   position: relative;
   display: inline-flex;
-  align-items: center;
-  justify-content: center;
   gap: .6rem;
-  padding: .95rem 1.9rem;
-  border: 1px solid transparent;
-  border-radius: var(--r-pill);
   font-family: var(--font-body);
   font-weight: 600;
-  font-size: .95rem;
-  cursor: pointer;
-  overflow: hidden;
   transition: color .3s;
-}
-
-.btn .btn-label {
-  position: relative;
-  z-index: 1;
-  transition: color .3s;
-}
-
-.btn-fill {
-  position: absolute;
-  left: var(--fx, 50%);
-  top: var(--fy, 50%);
-  width: 0;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  transition: width .5s var(--ease-fluid);
-}
-
-.btn:hover .btn-fill,
-.btn:focus-visible .btn-fill {
-  width: 300%;
-}
-
-.btn.primary {
-  background: var(--graphite);
-  color: var(--white);
-}
-
-.btn.primary .btn-fill {
-  background: linear-gradient(100deg, #8a5423, #c58f4c 20%, #f0dcb0 40%, #c9a05a 60%, #a66334 80%, #e7ce9b);
 }
 
 .btn.primary:hover .btn-label,
 .btn.primary:focus-visible .btn-label {
   color: var(--graphite);
-}
-
-.btn.ghost {
-  background: var(--white);
-  border-color: var(--hair);
-  color: var(--graphite);
-}
-
-.btn.ghost .btn-fill {
-  background: linear-gradient(100deg, rgba(180, 112, 60, .26), rgba(201, 160, 90, .30), rgba(227, 200, 143, .34));
 }
 
 .btn.small {
@@ -763,15 +732,18 @@ ol {
   padding: 8px 10px 8px 20px;
   border-radius: var(--r-pill);
   background: var(--nav-bg);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: var(--lift-3), var(--edge-lit);
+  backdrop-filter: blur(64px) saturate(240%);
+  -webkit-backdrop-filter: blur(64px) saturate(240%);
+  border: 1px solid var(--hair);
+  box-shadow: 
+    0 8px 32px 0 rgba(0, 0, 0, 0.08),
+    inset 0 1px 1px rgba(255, 255, 255, 0.12);
   transition: transform .5s var(--ease-fluid);
 }
 
-.nav.hid {
+.nav.nav-hide-top {
   transform: translate(-50%, -140%);
+  pointer-events: none;
 }
 
 /* Brand lockup — the short mark carries the weight; the legal suffix sits
@@ -842,9 +814,9 @@ ol {
   z-index: 1;
   padding: .5rem .95rem;
   border-radius: var(--r-pill);
-  font-weight: 500;
+  font-weight: 600;
   font-size: .9rem;
-  color: var(--graphite-2);
+  color: var(--graphite);
   transition: color .3s;
 }
 
@@ -1841,7 +1813,7 @@ ol {
 }
 
 .t-chrome path {
-  fill: var(--chrome);
+  fill: var(--white);
 }
 
 /* the wave is drawn in the OUTGOING colour over the INCOMING ground, so each
@@ -2110,6 +2082,11 @@ ol {
 }
 
 /* ============ reduced motion ============ */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 @media (prefers-reduced-motion: reduce) {
 
   *,

@@ -205,23 +205,9 @@ export default function Sampler({ finishes = FINISHES }) {
         </defs>
       </svg>
 
+      <div className="sec-head"><span className="meta">Finishes</span></div>
       <div className="wrap">
-        <div className="sec-head">
-          <span className="meta">Finish sampler · {pad(n)} surfaces</span>
-        </div>
 
-        <div className="smp-top">
-          <h2 className="d1 smp-head" id={headId}>
-            Every surface we ship,<br />on one object.
-          </h2>
-          <p className="lede smp-lede">
-            Five recipes off the same finishing line, drawn on a single form so the
-            only thing changing is the skin.{' '}
-            {touch
-              ? 'Tap a swatch to hold it.'
-              : 'Hover a swatch to move the light across it; click to hold it.'}
-          </p>
-        </div>
 
         <div className="smp-grid">
           {/* ─────────── the object ─────────── */}

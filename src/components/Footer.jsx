@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { gsap, ScrollTrigger, reduced } from '../lib/gsap'
 import { Link } from '../lib/router'
 import { scrollTop } from '../lib/useLenis'
@@ -12,6 +12,7 @@ export default function Footer() {
   const root = useRef(null)
   const mark = useRef(null)
   const rule = useRef(null)
+  const [showColophon, setShowColophon] = useState(false)
 
   useEffect(() => {
     if (reduced()) return
@@ -89,7 +90,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mark-stencil" ref={mark} role="img" aria-label={BRAND.mark}>
+        <div className="mark-stencil" ref={mark} role="img" aria-label={BRAND.mark} style={{ position: 'relative' }}>
           {BRAND.mark.split('').map((ch, i) => (
             <span key={i} className="mark-ch" data-ch={ch} aria-hidden="true">
               <span className="mark-ch-fill">{ch}</span>
@@ -97,20 +98,26 @@ export default function Footer() {
               <span className="mark-ch-rule" aria-hidden="true" />
             </span>
           ))}
-        </div>
 
-        {/* export credentials — the trade facts a buyer checks first */}
-        <div className="foot-trade meta" aria-label="Export credentials">
-          <span>42 export markets</span>
-          <span>FOB Nhava Sheva · Mundra</span>
-          <span>HS 7419 · 4420 · 9403</span>
-          <span>SEDEX · BSCI audited</span>
-          <span>EPCH member</span>
-        </div>
-
-        <div className="foot-meta">
-          <span className="meta">© 2026 {BRAND.name} · {BRAND.origin} · All rights reserved</span>
-          <button className="to-top" onClick={() => scrollTop(false)}>Colophon ↑</button>
+          <div style={{ position: 'absolute', bottom: 'clamp(0.8rem, 1.5vw, 1.2rem)', right: 0 }}>
+            <button className="to-top" onClick={() => setShowColophon(!showColophon)}>Colophon ↑</button>
+            {showColophon && (
+              <div style={{
+                position: 'absolute', bottom: '100%', right: 0, 
+                marginBottom: '1rem', padding: '1rem',
+                background: 'var(--nav-bg)', color: 'var(--graphite)',
+                backdropFilter: 'blur(24px) saturate(200%)',
+                WebkitBackdropFilter: 'blur(24px) saturate(200%)',
+                borderRadius: 'var(--r-md)', boxShadow: 'var(--lift-3)',
+                border: '1px solid var(--hair-strong)',
+                width: 'max-content', zIndex: 10,
+                fontSize: '0.9rem',
+                animation: 'fadeUp 0.3s var(--ease-fluid)'
+              }}>
+                Revealing soon
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </footer>

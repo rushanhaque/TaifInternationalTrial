@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { gsap, reduced } from '../lib/gsap'
 import { getLenis } from '../lib/useLenis'
-import { Link, useRoute } from '../lib/router'
+import { Link, NavLink, useRoute } from '../lib/router'
 import { BRAND, NAV_LINKS, MORE_LINKS } from '../data/site'
 
 /* Mobile menu — the burger swells into a full-screen blob that squares off
@@ -45,11 +45,11 @@ export default function MobileSheet({ open, onClose }) {
   return (
     <div className="sheet" id="sheet" ref={ref} role="dialog" aria-modal="true" aria-label="Menu">
       {NAV_LINKS.map((l) => (
-        <Link key={l.to} to={l.to} className="sheet-link">{l.label}</Link>
+        <NavLink key={l.to} to={l.to} className="sheet-link">{l.label}</NavLink>
       ))}
       <div className="sheet-more">
         {MORE_LINKS.map((l) => (
-          <Link key={l.to} to={l.to} className="chip">{l.label}</Link>
+          <NavLink key={l.to} to={l.to} className="chip">{l.label}</NavLink>
         ))}
       </div>
       <p className="sheet-contact meta">

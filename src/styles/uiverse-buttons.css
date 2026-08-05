@@ -1,0 +1,320 @@
+/* =========================================
+   STYLE 1: btn-17 (Wipe & Blend Mode)
+   ========================================= */
+.uv-btn-1 {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-appearance: button;
+  background-color: #111111;
+  background-image: none;
+  color: #ffffff;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.5;
+  margin: 0;
+  -webkit-mask-image: -webkit-radial-gradient(#000, #fff);
+  padding: 0.7rem 1.6rem;
+  border-radius: 99rem;
+  border: 2px solid #111111;
+  z-index: 1;
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: transform 0.2s;
+}
+
+.uv-btn-1.small {
+  padding: 0.5rem 1.25rem;
+  font-size: 0.8rem;
+}
+
+.uv-btn-1.ghost {
+  background-color: transparent;
+  color: #111111;
+  border-color: #111111;
+}
+
+.uv-btn-1 .text-container {
+  display: block;
+  mix-blend-mode: difference;
+  overflow: hidden;
+  position: relative;
+  color: #ffffff; /* difference with black bg = white, diff with white bg = black */
+}
+
+.uv-btn-1.ghost .text-container {
+  color: #111111;
+}
+
+.uv-btn-1 .text {
+  display: block;
+  position: relative;
+}
+
+.uv-btn-1:hover .text {
+  -webkit-animation: move-up-alternate 0.3s forwards;
+  animation: move-up-alternate 0.3s forwards;
+}
+
+@keyframes move-up-alternate {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(80%); }
+  51% { transform: translateY(-80%); }
+  to { transform: translateY(0); }
+}
+
+.uv-btn-1:after,
+.uv-btn-1:before {
+  --skew: 0.2;
+  background: #ffffff;
+  content: "";
+  display: block;
+  height: 102%;
+  left: calc(-50% - 50% * var(--skew));
+  pointer-events: none;
+  position: absolute;
+  top: -104%;
+  transform: skew(calc(150deg * var(--skew))) translateY(var(--progress, 0));
+  transition: transform 0.2s ease;
+  width: 100%;
+}
+
+.uv-btn-1.ghost:after,
+.uv-btn-1.ghost:before {
+  background: #111111;
+}
+
+.uv-btn-1:after {
+  --progress: 0%;
+  left: calc(50% + 50% * var(--skew));
+  top: 102%;
+  z-index: -1;
+}
+
+.uv-btn-1:hover:before { --progress: 100%; }
+.uv-btn-1:hover:after { --progress: -102%; }
+
+
+/* =========================================
+   STYLE 2: uiverse (Lava Lamp Bubbles)
+   ========================================= */
+.uv-btn-2 {
+  --duration: 7s;
+  --easing: linear;
+  --c-color-1: rgba(176, 137, 79, 0.7); /* brass */
+  --c-color-2: #8f5a3b;                 /* copper */
+  --c-color-3: #523b2c;                 /* espresso */
+  --c-color-4: rgba(230, 200, 150, 0.7);
+  --c-shadow: rgba(176, 137, 79, 0.3);
+  --c-shadow-inset-top: rgba(176, 137, 79, 0.5);
+  --c-shadow-inset-bottom: rgba(250, 247, 242, 0.4);
+  --c-radial-inner: #fdfdfd;
+  --c-radial-outer: #f5f5f5;
+  --c-color: #111111;
+  
+  -webkit-tap-highlight-color: transparent;
+  -webkit-appearance: none;
+  outline: none;
+  position: relative;
+  cursor: pointer;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 99rem;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--c-color);
+  background: radial-gradient(circle, var(--c-radial-inner), var(--c-radial-outer) 80%);
+  box-shadow: 0 0 14px var(--c-shadow);
+  z-index: 1;
+}
+
+.uv-btn-2.ghost {
+  --c-radial-inner: transparent;
+  --c-radial-outer: transparent;
+  --c-shadow: transparent;
+  --c-shadow-inset-top: rgba(0,0,0,0.1);
+  --c-shadow-inset-bottom: rgba(255,255,255,0.2);
+  border: 1px solid #111111;
+}
+
+.uv-btn-2:before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  border-radius: 99rem;
+  box-shadow: inset 0 3px 12px var(--c-shadow-inset-top), inset 0 -3px 4px var(--c-shadow-inset-bottom);
+}
+
+.uv-btn-2 .wrapper {
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
+  overflow: hidden;
+  border-radius: 99rem;
+  min-width: 140px;
+  padding: 0.7rem 1.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.uv-btn-2.small .wrapper {
+  padding: 0.5rem 1.25rem;
+  min-width: 100px;
+}
+
+.uv-btn-2 .wrapper span {
+  display: inline-block;
+  position: relative;
+  z-index: 4;
+}
+
+.uv-btn-2:hover {
+  --duration: 1400ms;
+}
+
+.uv-btn-2 .wrapper .circle {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  filter: blur(var(--blur, 8px));
+  background: var(--background, transparent);
+  transform: translate(var(--x, 0), var(--y, 0)) translateZ(0);
+  animation: var(--animation, none) var(--duration) var(--easing) infinite;
+  z-index: 1;
+}
+
+.uv-btn-2 .wrapper .circle.circle-1,
+.uv-btn-2 .wrapper .circle.circle-9,
+.uv-btn-2 .wrapper .circle.circle-10 { --background: var(--c-color-4); }
+.uv-btn-2 .wrapper .circle.circle-3,
+.uv-btn-2 .wrapper .circle.circle-4 { --background: var(--c-color-2); --blur: 14px; }
+.uv-btn-2 .wrapper .circle.circle-5,
+.uv-btn-2 .wrapper .circle.circle-6 { --background: var(--c-color-3); --blur: 16px; }
+.uv-btn-2 .wrapper .circle.circle-2,
+.uv-btn-2 .wrapper .circle.circle-7,
+.uv-btn-2 .wrapper .circle.circle-8,
+.uv-btn-2 .wrapper .circle.circle-11,
+.uv-btn-2 .wrapper .circle.circle-12 { --background: var(--c-color-1); --blur: 12px; }
+
+.uv-btn-2 .wrapper .circle.circle-1 { --x: 0; --y: -40px; --animation: circle-1; }
+.uv-btn-2 .wrapper .circle.circle-2 { --x: 92px; --y: 8px; --animation: circle-2; }
+.uv-btn-2 .wrapper .circle.circle-3 { --x: -12px; --y: -12px; --animation: circle-3; }
+.uv-btn-2 .wrapper .circle.circle-4 { --x: 80px; --y: -12px; --animation: circle-4; }
+.uv-btn-2 .wrapper .circle.circle-5 { --x: 12px; --y: -4px; --animation: circle-5; }
+.uv-btn-2 .wrapper .circle.circle-6 { --x: 56px; --y: 16px; --animation: circle-6; }
+.uv-btn-2 .wrapper .circle.circle-7 { --x: 8px; --y: 28px; --animation: circle-7; }
+.uv-btn-2 .wrapper .circle.circle-8 { --x: 28px; --y: -4px; --animation: circle-8; }
+.uv-btn-2 .wrapper .circle.circle-9 { --x: 20px; --y: -12px; --animation: circle-9; }
+.uv-btn-2 .wrapper .circle.circle-10 { --x: 64px; --y: 16px; --animation: circle-10; }
+.uv-btn-2 .wrapper .circle.circle-11 { --x: 4px; --y: 4px; --animation: circle-11; }
+.uv-btn-2 .wrapper .circle.circle-12 { --blur: 14px; --x: 52px; --y: 4px; --animation: circle-12; }
+
+@keyframes circle-1 { 33% { transform: translate(0px, 16px) translateZ(0); } 66% { transform: translate(12px, 64px) translateZ(0); } }
+@keyframes circle-2 { 33% { transform: translate(80px, -10px) translateZ(0); } 66% { transform: translate(72px, -48px) translateZ(0); } }
+@keyframes circle-3 { 33% { transform: translate(20px, 12px) translateZ(0); } 66% { transform: translate(12px, 4px) translateZ(0); } }
+@keyframes circle-4 { 33% { transform: translate(76px, -12px) translateZ(0); } 66% { transform: translate(112px, -8px) translateZ(0); } }
+@keyframes circle-5 { 33% { transform: translate(84px, 28px) translateZ(0); } 66% { transform: translate(40px, -32px) translateZ(0); } }
+@keyframes circle-6 { 33% { transform: translate(28px, -16px) translateZ(0); } 66% { transform: translate(76px, -56px) translateZ(0); } }
+@keyframes circle-7 { 33% { transform: translate(8px, 28px) translateZ(0); } 66% { transform: translate(20px, -60px) translateZ(0); } }
+@keyframes circle-8 { 33% { transform: translate(32px, -4px) translateZ(0); } 66% { transform: translate(56px, -20px) translateZ(0); } }
+@keyframes circle-9 { 33% { transform: translate(20px, -12px) translateZ(0); } 66% { transform: translate(80px, -8px) translateZ(0); } }
+@keyframes circle-10 { 33% { transform: translate(68px, 20px) translateZ(0); } 66% { transform: translate(100px, 28px) translateZ(0); } }
+@keyframes circle-11 { 33% { transform: translate(4px, 4px) translateZ(0); } 66% { transform: translate(68px, 20px) translateZ(0); } }
+@keyframes circle-12 { 33% { transform: translate(56px, 0px) translateZ(0); } 66% { transform: translate(60px, -32px) translateZ(0); } }
+
+
+/* =========================================
+   STYLE 3: cssbuttons-io (Expanding Circle)
+   ========================================= */
+.uv-btn-3 {
+  --color: #111111;
+  font-family: inherit;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.7rem 1.6rem;
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+  border: 1px solid var(--color);
+  transition: color 0.5s;
+  z-index: 1;
+  font-size: 0.9rem;
+  border-radius: 99rem;
+  font-weight: 600;
+  color: var(--color);
+  background: transparent;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.uv-btn-3.small {
+  padding: 0.5rem 1.25rem;
+  font-size: 0.8rem;
+}
+
+.uv-btn-3.primary {
+  color: #ffffff;
+}
+
+.uv-btn-3.ghost {
+  color: var(--color);
+}
+
+.uv-btn-3:before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  background: var(--color);
+  height: 250px;
+  width: 250px;
+  border-radius: 50%;
+  top: 100%;
+  left: 100%;
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.uv-btn-3.primary:before {
+  top: -50px;
+  left: -50px;
+}
+
+.uv-btn-3:hover {
+  color: #ffffff;
+}
+
+.uv-btn-3.primary:hover {
+  color: var(--color);
+}
+
+.uv-btn-3:hover:before {
+  top: -50px;
+  left: -50px;
+}
+
+.uv-btn-3.primary:hover:before {
+  top: 100%;
+  left: 100%;
+}
+
+.uv-btn-3:active:before {
+  transition: background 0s;
+}

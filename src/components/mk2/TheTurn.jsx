@@ -262,7 +262,8 @@ export default function TheTurn({ frames }) {
   }, [hasFrames])
 
   return (
-    <section className="tt section" ref={root} aria-labelledby="tt-h">
+    <section className="tt section deep" ref={root} aria-labelledby="tt-h">
+      <div className="sec-head"><span className="meta">From us to you</span></div>
       <div className="tt-stage" ref={stage}>
         <span className="tt-lamp" aria-hidden="true" />
         <span className="tt-floor" aria-hidden="true" />

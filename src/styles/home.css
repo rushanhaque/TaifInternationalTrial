@@ -21,6 +21,14 @@
     transparent 0%, transparent 72%, rgba(250, 247, 242, 0.55) 90%, var(--chrome) 100%);
 }
 .hb-stage { position: relative; text-align: center; }
+
+.fs-section {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 /* ── THE SEAM ──────────────────────────────────────────────────────────────
    Each glyph carries two fills — polished brass above, walnut grain below —
    blended into one another by a pair of soft gradient masks meeting at
@@ -115,7 +123,7 @@
 
 /* ============ finish morph (E11) ============ */
 /* .fm-section is not a .section, so it needs its own opaque ground */
-.fm-section { padding-block: clamp(5rem, 10vw, 9rem) 0; background-color: var(--chrome); background-image: var(--paper); }
+.fm-section { position: relative; padding-block: clamp(3.5rem, 7vw, 6rem) 0; background-color: var(--white); background-image: var(--paper); }
 .fm-section.alt { background-color: var(--white); background-image: var(--paper); }
 .fm-section .sec-head { margin-bottom: 0; }
 .fm-after { padding-block: clamp(2rem, 4vw, 3.5rem); }
@@ -238,3 +246,16 @@
 @media (prefers-reduced-motion: reduce) {
   .fm-link .fm-go { transition: none; }
 }
+
+/* ============ countries card ============ */
+.countries-card {
+  margin-top: 4rem;
+  padding: 8rem 0 5rem;
+  background: var(--white);
+  border-radius: var(--r-lg);
+  box-shadow: var(--lift-2), 0 24px 48px -12px rgba(0,0,0,0.06);
+  border: 1px solid var(--hair);
+  position: relative;
+  overflow: hidden;
+}
+

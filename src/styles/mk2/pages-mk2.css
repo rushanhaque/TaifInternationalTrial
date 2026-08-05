@@ -322,7 +322,7 @@
    ───────────────────────────────────────────────────────────────────────── */
 
 .section + .section.alt,
-.section.alt + .section { padding-top: clamp(3.5rem, 7vw, 6rem); }
+.section.alt + .section { padding-top: 0; }
 
 @media (prefers-reduced-motion: reduce) {
   .cat-card, .loc-card, .principle-card, .team-card, .year-card, .care-panel,

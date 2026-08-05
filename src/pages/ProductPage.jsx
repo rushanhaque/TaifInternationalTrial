@@ -65,7 +65,7 @@ export default function ProductPage({ params }) {
                   baseColor="var(--hair-strong)"
                   intensity={1.2}
                   thickness={1.5}
-                  onClick={() => { add(p); setOpen(true) }}
+                  onClick={() => add(p)}
                 >
                   {has(p.slug) ? 'In your enquiry' : 'Add to enquiry'}
                 </SpecularButton>
