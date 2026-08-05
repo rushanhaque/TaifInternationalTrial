@@ -126,6 +126,21 @@
 .fm-section { position: relative; padding-block: clamp(3.5rem, 7vw, 6rem) 0; background-color: var(--white); background-image: var(--paper); }
 .fm-section.alt { background-color: var(--white); background-image: var(--paper); }
 .fm-section .sec-head { margin-bottom: 0; }
+.fm-sec-head {
+  position: absolute;
+  top: clamp(4.8rem, 9vh, 6.2rem);
+  left: max(var(--gutter), calc(50vw - 640px));
+  z-index: 20;
+}
+@media (max-width: 899px) {
+  .fm-sec-head {
+    position: relative;
+    top: 0;
+    left: 0;
+    margin-bottom: 1.5rem;
+    padding-inline: var(--gutter);
+  }
+}
 .fm-after { padding-block: clamp(2rem, 4vw, 3.5rem); }
 
 .fm-pinned { display: none; }

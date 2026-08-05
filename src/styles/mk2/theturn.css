@@ -718,6 +718,7 @@
   .tt-stage {
     height: 100svh;
     min-height: 620px;
+    padding-top: clamp(6.6rem, 11vh, 7.8rem);
   }
 
   .tt-notes,
@@ -758,5 +759,21 @@
   .tt-note-line {
     width: clamp(28px, 3.4vw, 52px);
     margin-inline: 0.5rem;
+  }
+}
+
+.tt-sec-head {
+  position: absolute;
+  top: clamp(2.2rem, 3.5vh, 3.2rem);
+  left: max(var(--gutter), calc(50vw - 640px));
+  z-index: 20;
+}
+@media (max-width: 999.98px) {
+  .tt-sec-head {
+    position: relative;
+    top: 0;
+    left: 0;
+    margin-bottom: 1rem;
+    padding-inline: var(--gutter);
   }
 }

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Play, XIcon } from "lucide-react";
 import "./HeroVideoDialog.css";
@@ -26,6 +26,15 @@ export function HeroVideoDialog({
   };
 
   const selectedAnimation = animationVariants[animationStyle] || animationVariants["from-center"];
+
+  useEffect(() => {
+    if (!isVideoOpen) return;
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") setIsVideoOpen(false);
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isVideoOpen]);
 
   return (
     <div className={`hero-video-wrapper ${className}`}>
@@ -60,11 +69,11 @@ export function HeroVideoDialog({
               onClick={(e) => e.stopPropagation()}
             >
               <button
-                className="hero-video-close-btn"
+                className="hero-video-small-close-btn"
                 onClick={() => setIsVideoOpen(false)}
                 aria-label="Close video"
               >
-                <XIcon size={24} />
+                <XIcon size={16} />
               </button>
               <div className="hero-video-iframe-container">
                 <iframe

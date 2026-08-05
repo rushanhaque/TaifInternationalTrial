@@ -99,8 +99,14 @@ export default function FinishMorph({
       const n = finishes.length
       const nameChars = names.map((el) => splitChars(el))
 
-      gsap.set(layers, { opacity: 0 })
-      gsap.set(layers[0], { opacity: 1 })
+      layers.forEach((l, idx) => {
+        gsap.set(l, {
+          opacity: idx === 0 ? 1 : 0,
+          display: idx === 0 ? 'block' : 'none',
+          clipPath: idx === 0 ? 'inset(0% 0 0 0)' : 'inset(100% 0 0 0)',
+          y: 0,
+        })
+      })
       names.forEach((el, i) => gsap.set(el, { opacity: i === 0 ? 1 : 0 }))
       copies.forEach((el, i) => gsap.set(el, { opacity: i === 0 ? 1 : 0 }))
       sws.forEach((el, i) => gsap.set(el, { scaleX: i === 0 ? 1 : 0 }))
@@ -109,11 +115,6 @@ export default function FinishMorph({
       const amps = finishes.map((f) => (EDGES[f.key] || [0.012, 0.55])[0])
       const spds = finishes.map((f) => (EDGES[f.key] || [0.012, 0.55])[1])
 
-      /* Drive the meniscus phase directly from scroll progress. While
-         scrolling, onUpdate fires many times per second → phase advances
-         → shape visibly morphs. When the user stops scrolling, onUpdate
-         stops firing → phase frozen → shape holds its exact pose. Exactly
-         "spin while switching, still between." */
       slabRef.current?.setEdge(amps[0], spds[0])
       slabRef.current?.setPhase(0)
 
@@ -133,27 +134,34 @@ export default function FinishMorph({
             const amp = amps[i] + (amps[i + 1] - amps[i]) * f
             const spd = spds[i] + (spds[i + 1] - spds[i]) * f
             slabRef.current?.setEdge(amp, spd)
-            /* PHASE advances proportional to progress. Multiply by a big
-               number so each finish-to-finish move produces a visible
-               ~1.5 rotation of the wobble phase — the shape clearly
-               re-forms across each switch. */
             slabRef.current?.setPhase(self.progress * (n - 1) * 9.4)
           },
         },
       })
       for (let i = 1; i < n; i++) {
-        tl.to(layers[i], { opacity: 1, duration: 0.6 }, i)
-          .to(names[i - 1], { opacity: 0, y: -12, duration: 0.22 }, i - 0.05)
-          .set(names[i], { opacity: 1 }, i + 0.03)
+        // Step 1: Outgoing image completes its exit animation completely (opacity: 0, clip out)
+        tl.to(layers[i - 1], { opacity: 0, y: -24, clipPath: 'inset(0% 0 100% 0)', duration: 0.28, ease: 'power2.in' }, i - 0.28)
+          // Step 2: Remove outgoing image from visibility before incoming image starts
+          .set(layers[i - 1], { display: 'none' }, i)
+          // Step 3: Reveal incoming image ONLY AFTER outgoing image has fully exited to opacity 0
+          .set(layers[i], { display: 'block' }, i + 0.02)
+          .fromTo(
+            layers[i],
+            { opacity: 0, y: 24, clipPath: 'inset(100% 0 0 0)' },
+            { opacity: 1, y: 0, clipPath: 'inset(0% 0 0 0)', duration: 0.35, ease: 'power3.out' },
+            i + 0.02
+          )
+          .to(names[i - 1], { opacity: 0, y: -12, duration: 0.2 }, i - 0.1)
+          .set(names[i], { opacity: 1 }, i + 0.02)
           .fromTo(
             nameChars[i],
             { y: 14, scaleY: 1.5, opacity: 0, transformOrigin: '50% 100%' },
             { y: 0, scaleY: 1, opacity: 1, stagger: { each: 0.012, from: 'center' }, duration: 0.3, ease: 'surge' },
-            i + 0.05
+            i + 0.04
           )
-          .to(copies[i - 1], { opacity: 0, duration: 0.2 }, i - 0.05)
-          .to(copies[i], { opacity: 1, duration: 0.3 }, i + 0.1)
-          .fromTo(sws[i], { scaleX: 0 }, { scaleX: 1, duration: 0.5 }, i - 0.35)
+          .to(copies[i - 1], { opacity: 0, duration: 0.2 }, i - 0.1)
+          .to(copies[i], { opacity: 1, duration: 0.3 }, i + 0.04)
+          .fromTo(sws[i], { scaleX: 0 }, { scaleX: 1, duration: 0.4 }, i - 0.1)
       }
       return () => { tl.scrollTrigger?.kill(); tl.kill() }
     })

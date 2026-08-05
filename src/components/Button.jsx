@@ -16,7 +16,7 @@ function getText(node) {
   return 'button';
 }
 
-export default function Button({ to, variant = 'primary', small = false, chip, className = '', type = 'button', onClick, children }) {
+export default function Button({ to, variant = 'primary', small = false, chip, styleType: propStyleType, className = '', type = 'button', onClick, children }) {
   const showChip = chip ?? (!small && variant === 'primary')
   const textStr = getText(children);
 
@@ -44,10 +44,11 @@ export default function Button({ to, variant = 'primary', small = false, chip, c
     }
   };
 
-  // Pick one of 3 button styles deterministically based on text
+  // Pick one of 3 button styles deterministically based on text or explicit propStyleType
   const styleType = useMemo(() => {
+    if (propStyleType != null) return propStyleType;
     return (hashStr(textStr) % 3) + 1;
-  }, [textStr]);
+  }, [textStr, propStyleType]);
 
   const cls = `uv-btn-${styleType} ${variant} ${small ? 'small' : ''} ${className}`;
 

@@ -296,7 +296,7 @@ export default function Sampler({ finishes = FINISHES }) {
             </p>
 
             <div className="smp-cta">
-              <Button to="/contact" variant="ghost" small>Request the swatch box</Button>
+              <Button to="/contact">Request the swatch box</Button>
             </div>
             
             {/* ─────────── swatches ─────────── */}

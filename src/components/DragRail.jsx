@@ -19,10 +19,18 @@ export default function DragRail({ children, label = 'Gallery', hint = 'Drag · 
     let lastX = 0
     let lastT = performance.now()
 
-    const getBounds = () => ({
-      minX: Math.min(0, wrap.current.clientWidth - trackEl.scrollWidth),
-      maxX: 0, minY: 0, maxY: 0,
-    })
+    const getBounds = () => {
+      const wrapEl = wrap.current
+      if (!wrapEl || !trackEl) return { minX: 0, maxX: 0, minY: 0, maxY: 0 }
+      const style = window.getComputedStyle(wrapEl)
+      const padL = parseFloat(style.paddingLeft) || 0
+      const padR = parseFloat(style.paddingRight) || 0
+      const contentWidth = wrapEl.clientWidth - padL - padR
+      return {
+        minX: Math.min(0, contentWidth - trackEl.scrollWidth),
+        maxX: 0, minY: 0, maxY: 0,
+      }
+    }
     const d = makeDraggable(trackEl, {
       axis: 'x',
       getBounds,
@@ -51,7 +59,7 @@ export default function DragRail({ children, label = 'Gallery', hint = 'Drag · 
         prev = self.progress
         if (d.isDragging()) return
         const b = getBounds()
-        d.setPos(gsap.utils.clamp(b.minX, 0, d.pos.x - delta * Math.abs(b.minX) * 0.9))
+        d.setPos(gsap.utils.clamp(b.minX, 0, d.pos.x - delta * Math.abs(b.minX)))
       },
     })
 

@@ -189,7 +189,8 @@ export default function TheTurn({ frames }) {
           start: 'top top',
           end: '+=2600',
           pin: true,
-          scrub: 1,
+          pinSpacing: true,
+          scrub: 0.6,
           anticipatePin: 1,
           invalidateOnRefresh: true,
           onUpdate(self) {
@@ -263,8 +264,8 @@ export default function TheTurn({ frames }) {
 
   return (
     <section className="tt section deep" ref={root} aria-labelledby="tt-h">
-      <div className="sec-head"><span className="meta">From us to you</span></div>
       <div className="tt-stage" ref={stage}>
+        <div className="sec-head tt-sec-head"><span className="meta">From us to you</span></div>
         <span className="tt-lamp" aria-hidden="true" />
         <span className="tt-floor" aria-hidden="true" />
 

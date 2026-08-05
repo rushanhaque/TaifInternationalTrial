@@ -1,4 +1,4 @@
-import MorphSlider from './reactbits/MorphSlider';
+import { useState } from 'react';
 import '../styles/ReviewStack.css';
 
 const REVIEWS = [
@@ -22,11 +22,6 @@ const REVIEWS = [
     role: 'Art Director',
     text: 'Absolutely stunning work. The fusion of traditional Moradabad metalwork with Saharanpur wood carving creates something entirely new.',
     rating: 5,
-    sliderItems: [
-      { image: 'https://images.unsplash.com/photo-1782977389500-dd7adad33ebe?q=80&w=1600&auto=format&fit=crop', caption: 'Bespoke Chair' },
-      { image: 'https://images.unsplash.com/photo-1781499455083-6ccc3beb20cd?q=80&w=1600&auto=format&fit=crop', caption: 'Brass Detailing' },
-      { image: 'https://images.unsplash.com/photo-1776394254711-4a0d7345269a?q=80&w=1600&auto=format&fit=crop', caption: 'Walnut Finish' }
-    ]
   },
   {
     id: 4,
@@ -45,45 +40,40 @@ const REVIEWS = [
 ];
 
 export default function ReviewStack() {
-  return (
-    <div className="review-stack-container">
-      <div className="review-stack">
-        {REVIEWS.map((review, index) => {
-          // Index 0: Left Far
-          // Index 1: Left Near
-          // Index 2: Center (Front)
-          // Index 3: Right Near
-          // Index 4: Right Far
-          
-          let positionClass = '';
-          if (index === 0) positionClass = 'pos-left-far';
-          else if (index === 1) positionClass = 'pos-left-near';
-          else if (index === 2) positionClass = 'pos-center';
-          else if (index === 3) positionClass = 'pos-right-near';
-          else if (index === 4) positionClass = 'pos-right-far';
+  const [active, setActive] = useState(0);
+  const total = REVIEWS.length;
 
+  const next = () => setActive((prev) => (prev + 1) % total);
+  const prev = () => setActive((prev) => (prev - 1 + total) % total);
+
+  // Get 3 visible reviews starting from active index
+  const visibleReviews = [
+    REVIEWS[active % total],
+    REVIEWS[(active + 1) % total],
+    REVIEWS[(active + 2) % total],
+  ];
+
+  return (
+    <div className="review-carousel-container">
+      <div className="review-grid">
+        {visibleReviews.map((review, idx) => {
+          const initials = review.name.split(' ').map(n => n[0]).join('');
           return (
-            <div key={review.id} className={`review-card ${positionClass}`}>
-              {index === 2 && review.sliderItems ? (
-                <div className="review-card-media">
-                  <MorphSlider 
-                    items={review.sliderItems} 
-                    transition="melt"
-                    intensity={0.55}
-                    aberration={0.35}
-                    drift={0.4}
-                    autoplay={true}
-                    radius={12}
-                  />
-                </div>
-              ) : null}
-              
-              <div className="review-card-content">
+            <div key={`${review.id}-${idx}`} className="review-card-item">
+              <div className="review-card-top">
                 <div className="review-stars">
                   {'★'.repeat(review.rating)}
                 </div>
-                <p className="review-text">"{review.text}"</p>
-                <div className="review-author">
+                <div className="review-quote-icon">“</div>
+              </div>
+              
+              <p className="review-text">"{review.text}"</p>
+
+              <div className="review-author">
+                <div className="review-avatar">
+                  {initials}
+                </div>
+                <div className="review-author-info">
                   <strong>{review.name}</strong>
                   <span>{review.role}</span>
                 </div>
@@ -91,6 +81,20 @@ export default function ReviewStack() {
             </div>
           );
         })}
+      </div>
+
+      <div className="review-controls">
+        <button className="review-nav-btn" onClick={prev} aria-label="Previous review">←</button>
+        <div className="review-dots">
+          {REVIEWS.map((_, i) => (
+            <span
+              key={i}
+              className={`review-dot ${i === active ? 'is-active' : ''}`}
+              onClick={() => setActive(i)}
+            />
+          ))}
+        </div>
+        <button className="review-nav-btn" onClick={next} aria-label="Next review">→</button>
       </div>
     </div>
   );

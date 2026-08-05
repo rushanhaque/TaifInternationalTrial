@@ -52,13 +52,11 @@ export default function Home() {
       {/* 0.15 · collections parallax */}
       <div id="collections-1" />
       <div style={{ position: 'relative', zIndex: 2, background: 'var(--bg)' }}>
-        <div className="sec-head"><span className="meta">Our collections</span></div>
         <HeroParallax />
       </div>
 
       {/* 0.2 · materials — finish morph section */}
       <section className="fm-section alt" id="materials">
-        <div className="sec-head"><span className="meta">Materials we work in</span></div>
         <div className="wrap">
         <FinishMorph
           mode="scroll"
@@ -121,7 +119,7 @@ export default function Home() {
                   Three of eight stages. The full line runs from certified stock and a
                   seasoning yard through to a packed carton — every hand-off recorded.
                 </p>
-                <Button to="/catalogue" variant="ghost">What we can make</Button>
+                <Button to="/catalogue">What we can make</Button>
               </Dilate>
             </div>
           </div>
