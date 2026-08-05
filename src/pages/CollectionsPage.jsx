@@ -33,30 +33,6 @@ export default function CollectionsPage() {
 
       <CollectionsDolly />
 
-      {/* the index — each family opens its own plate room */}
-      <section className="section">
-        <div className="wrap">
-          <div className="sec-head"><span className="idx">0.2.5</span><span className="meta">Open a family</span></div>
-          <ul className="pl-switch-list">
-            {CATEGORIES.map((c) => {
-              const n = CATALOGUE.filter((p) => p.category === c).length
-              return (
-                <li key={c} className="pl-switch-row">
-                  <button
-                    type="button"
-                    className="pl-switch-btn"
-                    onClick={() => navigate(`/collections/${familySlug(c)}`)}
-                  >
-                    <span className="pl-switch-name">{c}</span>
-                    <span className="pl-switch-n meta">{String(n).padStart(2, '0')} pieces</span>
-                    <span className="pl-switch-go" aria-hidden="true">→</span>
-                  </button>
-                </li>
-              )
-            })}
-          </ul>
-        </div>
-      </section>
 
       <section className="section alt">
         <div className="wrap">

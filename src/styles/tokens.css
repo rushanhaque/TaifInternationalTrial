@@ -15,7 +15,7 @@
   --faint:      rgba(36, 28, 20, 0.28);
   --hair:       rgba(36, 28, 20, 0.11);
   --hair-strong: rgba(36, 28, 20, 0.30);
-  --nav-bg:     rgba(250, 247, 242, 0.25);
+  --nav-bg:     rgba(250, 247, 242, 0.1);
 
   /* ═══ the one dark surface — espresso walnut ═══ */
   --deep:       #1e1710;
@@ -175,7 +175,7 @@ html.dark {
   --faint:      rgba(243, 237, 227, 0.28);
   --hair:       rgba(243, 237, 227, 0.16);
   --hair-strong: rgba(243, 237, 227, 0.30);
-  --nav-bg:     rgba(24, 18, 12, 0.25);
+  --nav-bg:     rgba(24, 18, 12, 0.1);
 
   /* Deep stays deep so hardcoded light text inside .deep sections remains visible */
   --deep:       #1e1710;

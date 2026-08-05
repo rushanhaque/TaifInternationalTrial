@@ -732,12 +732,13 @@ ol {
   padding: 8px 10px 8px 20px;
   border-radius: var(--r-pill);
   background: var(--nav-bg);
-  backdrop-filter: blur(64px) saturate(240%);
-  -webkit-backdrop-filter: blur(64px) saturate(240%);
-  border: 1px solid var(--hair);
+  backdrop-filter: blur(24px) saturate(200%);
+  -webkit-backdrop-filter: blur(24px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow: 
-    0 8px 32px 0 rgba(0, 0, 0, 0.08),
-    inset 0 1px 1px rgba(255, 255, 255, 0.12);
+    0 8px 32px 0 rgba(36, 28, 20, 0.12),
+    inset 0 1px 1px rgba(255, 255, 255, 0.5),
+    inset 0 -1px 1px rgba(0, 0, 0, 0.05);
   transition: transform .5s var(--ease-fluid);
 }
 
@@ -814,9 +815,10 @@ ol {
   z-index: 1;
   padding: .5rem .95rem;
   border-radius: var(--r-pill);
-  font-weight: 600;
-  font-size: .9rem;
+  font-weight: 700;
+  font-size: .95rem;
   color: var(--graphite);
+  text-shadow: 0 1px 2px rgba(255,255,255,0.5);
   transition: color .3s;
 }
 
@@ -1520,6 +1522,8 @@ ol {
 .rail-wrap {
   overflow: hidden;
   touch-action: pan-y;
+  margin-inline: calc(var(--gap) * -1);
+  padding-inline: var(--gap);
 }
 
 .rail-track {
@@ -1837,7 +1841,8 @@ ol {
 
 /* ============ footer (E17 · Aeris-style stencil wordmark) ============ */
 .footer {
-  background: var(--chrome);
+  background: var(--deep);
+  color: var(--on-deep);
   padding-top: clamp(4rem, 8vw, 7rem);
   position: relative;
   overflow: hidden;

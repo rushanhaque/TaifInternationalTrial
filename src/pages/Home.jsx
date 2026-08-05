@@ -25,6 +25,7 @@ import TwoFloors from '../components/mk2/TwoFloors'
 import Sampler from '../components/mk2/Sampler'
 
 import RequestCatalogue from '../components/mk2/RequestCatalogue'
+import ReviewStack from '../components/ReviewStack'
 import LogoLoop from '../components/reactbits/LogoLoop'
 import { HeroVideoDialog } from '../components/magicui/HeroVideoDialog'
 
@@ -45,11 +46,11 @@ export default function Home() {
     <>
 
       {/* 0.1 · hero — the brand name, and nothing else (E18) */}
-      <span id="top" />
+      <div id="top" />
       <HeroBrand />
 
       {/* 0.15 · collections parallax */}
-      <span id="collections-1" />
+      <div id="collections-1" />
       <div style={{ position: 'relative', zIndex: 2, background: 'var(--bg)' }}>
         <div className="sec-head"><span className="meta">Our collections</span></div>
         <HeroParallax />
@@ -71,7 +72,7 @@ export default function Home() {
       <Ribbon terms={RIBBON_TERMS} />
 
       {/* 0.4 · THE TURN (From us to you) */}
-      <span id="the-turn" />
+      <div id="the-turn" style={{ position: 'absolute', visibility: 'hidden' }} />
       <TheTurn />
 
       {/* 0.5 · drag rail — the signature piece */}
@@ -96,11 +97,11 @@ export default function Home() {
 
       {/* 0.6 · TWO FLOORS — drag the brass seam: metal (Moradabad) vs wood
           (Saharanpur). The brand line made literal and operable. */}
-      <span id="two-floors" />
+      <div id="two-floors" style={{ position: 'absolute', visibility: 'hidden' }} />
       <TwoFloors />
 
       {/* 0.7 · SAMPLER — five finishes morphing live on one object */}
-      <span id="sampler" />
+      <div id="sampler" style={{ position: 'absolute', visibility: 'hidden' }} />
       <Sampler />
 
       {/* 0.8 · surface tension into the deep section */}
@@ -203,16 +204,17 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 1.0 · REVIEWS — coming soon */}
+      {/* 1.0 · REVIEWS */}
       <section className="section clear fs-section" id="reviews">
         <div className="sec-head"><span className="meta">Reviews</span></div>
-        <div className="wrap">
+        <div className="wrap" style={{ display: 'flex', justifyContent: 'center' }}>
+          <ReviewStack />
         </div>
       </section>
 
 
       {/* 1.2 · REQUEST THE CATALOGUE — the conversion moment */}
-      <span id="request" />
+      <div id="request" style={{ position: 'absolute', visibility: 'hidden' }} />
       <RequestCatalogue />
 
 
