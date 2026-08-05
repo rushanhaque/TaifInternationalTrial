@@ -2118,3 +2118,41 @@ ol {
     height: 2px !important;
   }
 }
+
+/* ============ Page Transitions ============ */
+.iris-overlay {
+  position: fixed;
+  inset: -20vh -10vw;
+  z-index: 9999;
+  background-color: var(--graphite);
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+}
+.iris-overlay.is-active {
+  visibility: visible;
+}
+
+.strips {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+}
+.strips.is-active {
+  pointer-events: all;
+}
+.strips__landscape,
+.strips__portrait {
+  display: none;
+  width: 100%;
+  height: 100%;
+}
+@media (orientation: landscape) {
+  .strips__landscape { display: flex; flex-direction: row; }
+  .strips__line { flex: 1; background-color: var(--graphite); height: 100%; }
+}
+@media (orientation: portrait) {
+  .strips__portrait { display: flex; flex-direction: column; }
+  .strips__line { flex: 1; background-color: var(--graphite); width: 100%; }
+}

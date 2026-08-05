@@ -303,7 +303,7 @@
   pointer-events: none;
 }
 .cd-facade {
-  width: min(540px, 78vw);
+  width: min(720px, 85vw);
   position: relative;
   display: flex; flex-direction: column; gap: 1rem;
   /* the layer above sets pointer-events:none so exited layers cannot swallow

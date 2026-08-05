@@ -8,7 +8,6 @@ import Toggle from '../components/Toggle'
 import FlingGrid from '../components/FlingGrid'
 import GlowGrid from '../components/GlowGrid'
 import CircularGallery from '../components/reactbits/CircularGallery'
-import CatalogueIndex from '../components/mk2/CatalogueIndex'
 import { productImg } from '../data/images'
 import { Grid } from '../components/canvasui/Grid'
 
@@ -16,14 +15,10 @@ const OPTIONS = ['All', ...CATEGORIES]
 
 export default function CataloguePage() {
   const [cat, setCat] = useState('All')
-  /* two ways to read the same twenty pieces: the gallery is for looking, the
-     index is for buying. The filter is shared, so switching view never loses
-     the buyer's place. */
-  const [view, setView] = useState('gallery')
   let items = cat === 'All' ? CATALOGUE : CATALOGUE.filter((p) => p.category === cat)
 
-  // Reduce items to one per category for the collage view
-  if (view === 'gallery') {
+  // Reduce items to one per category for the collage view when showing All
+  if (cat === 'All') {
     const seenCategories = new Set()
     items = items.filter(p => {
       if (seenCategories.has(p.category)) return false
@@ -60,22 +55,7 @@ export default function CataloguePage() {
             </div>
           </div>
 
-          <div className="cv-bar">
-            <div className="cv-switch" role="group" aria-label="Catalogue view">
-              <button type="button" className="cv-btn" aria-pressed={view === 'gallery'}
-                onClick={() => setView('gallery')}>Gallery</button>
-              <button type="button" className="cv-btn" aria-pressed={view === 'index'}
-                onClick={() => setView('index')}>Index</button>
-            </div>
-            <p className="meta dim2">
-              {view === 'gallery'
-                ? 'Photographs and finishes'
-                : 'Dimensions, weight, MOQ and lead — sortable'}
-            </p>
-          </div>
-
-          {view === 'gallery' ? (
-            <ol className="cat-collage">
+          <ol className="cat-collage">
               {items.map((p, i) => {
                 /* 6-item repeating collage rhythm:
                    row A: 8-col hero  +  4-col portrait
@@ -105,8 +85,8 @@ export default function CataloguePage() {
                         maxLift={1}
                         jitter={0}
                         liftHeight={60}
-                        perspective={1200}
-                        tilt={1}
+                        perspective={99999}
+                        tilt={0}
                         shading={0.05}
                         tintStrength={0.15}
                         idleRipples={0}
@@ -120,6 +100,7 @@ export default function CataloguePage() {
                           ratio={tile.ratio}
                           img={productImg(p.slug)}
                           alt={p.name}
+                          warp={false}
                         />
                       </Grid>
                       <div className="cat-col-meta">
@@ -131,9 +112,6 @@ export default function CataloguePage() {
                 )
               })}
             </ol>
-          ) : (
-            <CatalogueIndex items={items} />
-          )}
         </div>
       </section>
 
