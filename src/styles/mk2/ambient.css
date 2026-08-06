@@ -32,8 +32,8 @@
   transform: translateX(-50%);
   background: radial-gradient(
     50% 50% at 50% 50%,
-    rgba(176, 137, 79, 0.10),
-    rgba(180, 112, 60, 0.045) 45%,
+    rgba(184, 115, 51, 0.10),
+    rgba(184, 115, 51, 0.045) 45%,
     transparent 72%);
   animation: amb-breathe 19s ease-in-out infinite alternate;
 }
@@ -59,7 +59,7 @@
   bottom: -22vh;
   right: -14vw;
   background: radial-gradient(50% 50% at 50% 50%,
-    rgba(180, 112, 60, 0.10), transparent 68%);
+    rgba(184, 115, 51, 0.10), transparent 68%);
   /* a different period from A, so the two never fall into step */
   animation: amb-drift-b 47s ease-in-out infinite alternate;
 }
@@ -76,7 +76,7 @@
   opacity: 0;                  /* JS fades it in on first pointer move */
   background: radial-gradient(
     50% 50% at 50% 50%,
-    rgba(240, 220, 176, 0.16),
+    rgba(218, 165, 32, 0.16),
     rgba(199, 165, 121, 0.07) 38%,
     transparent 68%);
   will-change: transform, opacity;

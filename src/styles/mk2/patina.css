@@ -14,7 +14,7 @@
 .pat-title {
   font-family: var(--font-display);
   font-stretch: 125%;
-  font-weight: 700;
+  font-weight: 500;
   font-size: clamp(2rem, 5vw, 4rem);
   line-height: 0.98;
   letter-spacing: -0.035em;
@@ -60,8 +60,8 @@
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  background: radial-gradient(circle at 36% 32%, #fffaf0, #f0dcb0 34%, var(--brass) 68%, var(--brass-dk));
-  box-shadow: var(--lift-2), inset 0 0 0 1px rgba(58, 42, 26, 0.25);
+  background: radial-gradient(circle at 36% 32%, #fffaf0, #daa520 34%, var(--brass) 68%, var(--brass-dk));
+  box-shadow: var(--lift-2), inset 0 0 0 1px rgba(28, 28, 26, 0.25);
   cursor: grab;
   transition: transform var(--t-base) var(--ease-surge);
 }
@@ -73,7 +73,7 @@
   height: 30px;
   border: 0;
   border-radius: 50%;
-  background: radial-gradient(circle at 36% 32%, #fffaf0, #f0dcb0 34%, var(--brass) 68%, var(--brass-dk));
+  background: radial-gradient(circle at 36% 32%, #fffaf0, #daa520 34%, var(--brass) 68%, var(--brass-dk));
   box-shadow: var(--lift-2);
   cursor: grab;
 }
@@ -90,7 +90,7 @@
 .pat-out b {
   font-family: var(--font-display);
   font-stretch: 125%;
-  font-weight: 700;
+  font-weight: 500;
   font-size: clamp(1.8rem, 3.4vw, 2.6rem);
   line-height: 1;
   letter-spacing: -0.04em;

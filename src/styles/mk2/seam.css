@@ -101,8 +101,8 @@
 
 .seam-hot {
   fill: #fff6e6;
-  filter: drop-shadow(0 0 5px rgba(227, 200, 143, 0.85))
-    drop-shadow(0 0 14px rgba(176, 137, 79, 0.55));
+  filter: drop-shadow(0 0 5px rgba(218, 165, 32, 0.85))
+    drop-shadow(0 0 14px rgba(184, 115, 51, 0.55));
 }
 
 @keyframes seam-breathe {

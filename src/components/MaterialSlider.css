@@ -33,7 +33,7 @@
 
 .slider-hint__icon {
   font-size: 1rem;
-  color: var(--on-deep, #f3ede3);
+  color: var(--on-deep, #fcfbf8);
   animation: hintBob 2s ease-in-out infinite;
 }
 
@@ -41,7 +41,7 @@
   font-size: 0.58rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--on-deep, #f3ede3);
+  color: var(--on-deep, #fcfbf8);
   writing-mode: vertical-lr;
   transform: rotate(180deg);
 }

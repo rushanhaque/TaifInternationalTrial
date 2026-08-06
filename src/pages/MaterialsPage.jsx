@@ -143,7 +143,7 @@ export default function MaterialsPage() {
         {/* Consultation CTA */}
         <section className="section clear" style={{ paddingBlock: '6rem 5rem', textAlign: 'center' }}>
           <div className="wrap" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2rem' }}>
-            <CharCascade as="h2" className="d1" style={{ maxWidth: '750px' }}>
+            <CharCascade as="h2" className="d1" style={{ maxWidth: '920px', width: '100%', textWrap: 'balance' }}>
               Not sure which material to use? Schedule a discussion
             </CharCascade>
             <Link to="/contact" className="big-connect-btn">

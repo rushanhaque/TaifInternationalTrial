@@ -13,7 +13,7 @@
   transform: translateX(-50%);
   font-family: var(--font-display);
   font-stretch: 125%;
-  font-weight: 700;
+  font-weight: 500;
   font-size: clamp(7rem, 26vw, 26rem);
   line-height: 0.8;
   letter-spacing: -0.05em;
@@ -22,7 +22,7 @@
   user-select: none;
   /* barely there — it is the paper, not the print */
   color: transparent;
-  background-image: linear-gradient(180deg, rgba(107, 74, 46, 0.11), rgba(107, 74, 46, 0.02));
+  background-image: linear-gradient(180deg, rgba(28, 28, 26, 0.11), rgba(28, 28, 26, 0.02));
   -webkit-background-clip: text;
   background-clip: text;
 }
@@ -53,14 +53,14 @@
 .pl-title {
   font-family: var(--font-display);
   font-stretch: 125%;
-  font-weight: 700;
+  font-weight: 500;
   font-size: clamp(3rem, 11vw, 9.5rem);
   line-height: 0.86;
   letter-spacing: -0.05em;
   color: transparent;
   /* the family name carries the house metal, like the hero wordmark */
   background-image: linear-gradient(100deg,
-      #8a5423 0%, #c58f4c 20%, #f0dcb0 38%, #c9a05a 54%, #a66334 72%, #e7ce9b 88%, #90672e 100%);
+      #a0522d 0%, #b87333 20%, #daa520 38%, #cd853f 54%, #b87333 72%, #daa520 88%, #a0522d 100%);
   -webkit-background-clip: text;
   background-clip: text;
 }
@@ -99,7 +99,7 @@
 .pl-figs dd {
   font-family: var(--font-display);
   font-stretch: 125%;
-  font-weight: 700;
+  font-weight: 500;
   font-size: clamp(1.3rem, 2.4vw, 1.9rem);
   letter-spacing: -0.03em;
   font-variant-numeric: tabular-nums;
@@ -149,7 +149,7 @@
 
 .pl-card:hover .pl-frame,
 .pl-card:focus-visible .pl-frame {
-  box-shadow: inset 0 0 0 1.5px rgba(176, 137, 79, 0.85);
+  box-shadow: inset 0 0 0 1.5px rgba(184, 115, 51, 0.85);
 }
 
 .pl-shot {
@@ -179,7 +179,7 @@
   z-index: 1;
   pointer-events: none;
   background:
-    linear-gradient(180deg, rgba(36, 28, 20, 0.04) 30%, rgba(36, 28, 20, 0.55)),
+    linear-gradient(180deg, rgba(28, 28, 26, 0.04) 30%, rgba(28, 28, 26, 0.55)),
     var(--tone-bg, transparent);
   mix-blend-mode: multiply;
   opacity: 0.62;
@@ -209,7 +209,7 @@
   flex-wrap: wrap;
   gap: 0.4rem 1.2rem;
   padding: 0.8rem 1.15rem;
-  background: linear-gradient(0deg, rgba(30, 23, 16, 0.94), rgba(30, 23, 16, 0.62));
+  background: linear-gradient(0deg, rgba(28, 28, 26, 0.94), rgba(28, 28, 26, 0.62));
   /* resting state is translated, never hidden — a stalled transition can
      never cost the user the figures */
   transform: translateY(101%);
@@ -242,7 +242,7 @@
 .pl-name {
   font-family: var(--font-display);
   font-stretch: 125%;
-  font-weight: 700;
+  font-weight: 500;
   font-size: clamp(1.05rem, 1.9vw, 1.5rem);
   letter-spacing: -0.025em;
   line-height: 1.1;
@@ -275,7 +275,7 @@
   padding: 0.55rem 0.9rem;
   border: 0;
   border-radius: var(--r-pill);
-  background: rgba(250, 247, 242, 0.94);
+  background: rgba(252, 251, 248, 0.94);
   color: var(--graphite);
   font-family: var(--font-body);
   font-weight: 600;
@@ -360,7 +360,7 @@
 .pl-switch-name {
   font-family: var(--font-display);
   font-stretch: 125%;
-  font-weight: 700;
+  font-weight: 500;
   font-size: clamp(1.5rem, 4vw, 3rem);
   letter-spacing: -0.035em;
   line-height: 1;
@@ -420,7 +420,7 @@
 .pl-empty-title {
   font-family: var(--font-display);
   font-stretch: 125%;
-  font-weight: 700;
+  font-weight: 500;
   font-size: clamp(1.8rem, 4vw, 3rem);
   letter-spacing: -0.035em;
   line-height: 1;

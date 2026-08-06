@@ -25,9 +25,9 @@
   pointer-events: none;
   background: linear-gradient(90deg,
     transparent,
-    rgba(176, 137, 79, .45) 18%,
-    rgba(227, 200, 143, .8) 50%,
-    rgba(176, 137, 79, .45) 82%,
+    rgba(184, 115, 51, .45) 18%,
+    rgba(218, 165, 32, .8) 50%,
+    rgba(184, 115, 51, .45) 82%,
     transparent);
 }
 
@@ -48,7 +48,7 @@
   pointer-events: none;
   background-image:
     repeating-linear-gradient(112deg,
-      rgba(243, 237, 227, .022) 0 1px, transparent 1px 5px),
+      rgba(252, 251, 248, .022) 0 1px, transparent 1px 5px),
     radial-gradient(125% 85% at 50% 46%, transparent 38%, rgba(0, 0, 0, .42) 100%);
 }
 
@@ -59,7 +59,7 @@
   z-index: 0;
   pointer-events: none;
   background: radial-gradient(52% 44% at 40% 46%,
-    rgba(176, 137, 79, .22),
+    rgba(184, 115, 51, .22),
     rgba(138, 103, 51, .085) 44%,
     transparent 72%);
 }
@@ -132,14 +132,14 @@
   left: -.7rem;
   font-family: var(--font-display);
   font-stretch: 125%;
-  font-weight: 700;
+  font-weight: 500;
   font-size: clamp(9rem, 26vw, 20rem);
   line-height: .74;
   pointer-events: none;
   user-select: none;
   background-image: linear-gradient(158deg,
-    rgba(227, 200, 143, .30),
-    rgba(176, 137, 79, .17) 46%,
+    rgba(218, 165, 32, .30),
+    rgba(184, 115, 51, .17) 46%,
     rgba(138, 103, 51, .05));
   -webkit-background-clip: text;
   background-clip: text;
@@ -155,7 +155,7 @@
 .qs-text {
   font-family: var(--font-display);
   font-stretch: 125%;
-  font-weight: 700;
+  font-weight: 500;
   /* the loaded Archivo carries no italic cut — the synthetic slant is the
      effect we want here, tracked back a hair so the wide face doesn't crowd */
   font-style: italic;
@@ -276,7 +276,7 @@
 
 .qs-tick:hover .qs-track,
 .qs-tick:focus-visible .qs-track {
-  background: rgba(243, 237, 227, .34);
+  background: rgba(252, 251, 248, .34);
 }
 
 /* the tick that elongates into a bar. In the pin, --fill is written every
@@ -308,7 +308,7 @@
 }
 
 .qs-count-now { color: var(--tint-on-deep); }
-.qs-count-sep { color: rgba(243, 237, 227, .3); }
+.qs-count-sep { color: rgba(252, 251, 248, .3); }
 
 /* ============================================================
    .is-stage — desktop only, added from JS. Collapses the deck into

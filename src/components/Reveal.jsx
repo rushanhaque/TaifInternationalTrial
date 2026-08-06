@@ -6,6 +6,7 @@ export function Dilate({ as = 'div', className = '', delay = 0, children, style,
   const ref = useRef(null)
   useEffect(() => {
     if (reduced()) return
+    if (!ref.current) return
     const tw = gsap.from(ref.current, {
       scale: 0.94, opacity: 0, borderRadius: 34,
       transformOrigin: '50% 50%',
@@ -18,22 +19,58 @@ export function Dilate({ as = 'div', className = '', delay = 0, children, style,
   return createElement(as, { ref, className, style, ...rest }, children)
 }
 
-/* E8 Char Cascade — characters squash-and-settle, staggered from the centre. */
-export function CharCascade({ as = 'h2', className = '', delay = 0, children, id }) {
+/* E8 Char Cascade — character squash-and-settle reveal, staggered from center.
+   Triggered on scroll as elements enter viewport. Used for headings & key text. */
+export function CharCascade({ as = 'h2', className = '', delay = 0, children, id, style, ...rest }) {
   const ref = useRef(null)
   useEffect(() => {
     if (reduced()) return
+    if (!ref.current) return
     const chars = splitChars(ref.current)
-    const tw = gsap.from(chars, {
-      y: 18, scaleY: 1.6, opacity: 0,
-      transformOrigin: '50% 100%',
-      stagger: { each: 0.014, from: 'center' },
-      duration: 0.7, delay, ease: 'surge',
-      scrollTrigger: { trigger: ref.current, start: 'top 88%', once: true },
+    if (!chars || !chars.length) return
+
+    gsap.set(chars, { opacity: 0, y: 22, scaleY: 1.6, transformOrigin: '50% 100%' })
+
+    const tw = gsap.to(chars, {
+      y: 0, scaleY: 1, opacity: 1,
+      stagger: { each: 0.02, from: 'center' },
+      duration: 0.75, delay, ease: 'surge',
+      scrollTrigger: {
+        trigger: ref.current,
+        start: 'top 92%',
+        toggleActions: 'play none none none',
+        once: true
+      },
+    })
+    return () => { tw.scrollTrigger?.kill(); tw.kill() }
+  }, [delay, children])
+
+  return createElement(as, { ref, className, id, style, ...rest }, children)
+}
+
+/* Minimal & smooth scroll-triggered reveal for body copy & secondary homepage texts */
+export function SmoothReveal({ as = 'div', className = '', delay = 0, children, style, ...rest }) {
+  const ref = useRef(null)
+  useEffect(() => {
+    if (reduced()) return
+    if (!ref.current) return
+
+    gsap.set(ref.current, { opacity: 0, y: 20 })
+
+    const tw = gsap.to(ref.current, {
+      y: 0, opacity: 1,
+      duration: 0.85, delay, ease: 'atelys',
+      scrollTrigger: {
+        trigger: ref.current,
+        start: 'top 92%',
+        toggleActions: 'play none none none',
+        once: true
+      },
     })
     return () => { tw.scrollTrigger?.kill(); tw.kill() }
   }, [delay])
-  return createElement(as, { ref, className, id }, children)
+
+  return createElement(as, { ref, className, style, ...rest }, children)
 }
 
 /* E14 Grid Snap — children snap onto the grid from slight misalignment while

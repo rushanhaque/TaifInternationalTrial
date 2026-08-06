@@ -18,10 +18,10 @@
   background-color: var(--chrome);
   background-image:
     repeating-linear-gradient(0deg,
-      rgba(107, 74, 46, 0.016) 0px, rgba(107, 74, 46, 0.016) 1px,
+      rgba(28, 28, 26, 0.016) 0px, rgba(28, 28, 26, 0.016) 1px,
       transparent 1px, transparent 4px),
     repeating-linear-gradient(90deg,
-      rgba(107, 74, 46, 0.020) 0px, rgba(107, 74, 46, 0.020) 1px,
+      rgba(28, 28, 26, 0.020) 0px, rgba(28, 28, 26, 0.020) 1px,
       transparent 1px, transparent 58px);
   /* Column layout: tag at top, heading + body vertically centered */
   display: flex;
@@ -151,10 +151,10 @@
   background-color: var(--deep);
   background-image:
     repeating-linear-gradient(0deg,
-      rgba(243, 237, 227, 0.014) 0px, rgba(243, 237, 227, 0.014) 1px,
+      rgba(252, 251, 248, 0.014) 0px, rgba(252, 251, 248, 0.014) 1px,
       transparent 1px, transparent 4px),
     repeating-linear-gradient(90deg,
-      rgba(243, 237, 227, 0.016) 0px, rgba(243, 237, 227, 0.016) 1px,
+      rgba(252, 251, 248, 0.016) 0px, rgba(252, 251, 248, 0.016) 1px,
       transparent 1px, transparent 58px);
   display: flex;
   flex-direction: column;
@@ -230,7 +230,7 @@
 .mp__material-name {
   font-family: var(--font-display);
   font-size: clamp(1.6rem, 4.5vw, 3.5rem);
-  font-weight: 800;
+  font-weight: 600;
   letter-spacing: -0.03em;
   color: var(--on-deep);
   line-height: 1;
@@ -259,7 +259,7 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  border: 1px solid rgba(243, 237, 227, 0.35);
+  border: 1px solid rgba(252, 251, 248, 0.35);
   background: transparent;
   cursor: pointer;
   transition: all 0.3s var(--ease-fluid);
@@ -275,8 +275,8 @@
 }
 
 .mp__dot:hover:not(.mp__dot--active) {
-  background: rgba(243, 237, 227, 0.25);
-  border-color: rgba(243, 237, 227, 0.5);
+  background: rgba(252, 251, 248, 0.25);
+  border-color: rgba(252, 251, 248, 0.5);
 }
 
 /* ── Material Showcase (Redesigned Details Section) ── */
@@ -376,7 +376,7 @@
   transform: translateX(-50%);
   font-family: var(--font-display);
   font-size: 1.5rem;
-  font-weight: 700;
+  font-weight: 500;
   color: var(--chrome);
   writing-mode: vertical-rl;
   text-orientation: mixed;
@@ -404,7 +404,7 @@
 .mp__showcase-title {
   font-family: var(--font-display);
   font-size: clamp(2rem, 3.5vw, 3.5rem);
-  font-weight: 800;
+  font-weight: 600;
   line-height: 1.1;
   margin-bottom: 1.5rem;
   letter-spacing: -0.02em;
@@ -415,7 +415,7 @@
   font-size: clamp(0.95rem, 1vw, 1.1rem);
   line-height: 1.7;
   max-width: 600px;
-  color: rgba(243, 237, 227, 0.85); /* var(--chrome) with opacity */
+  color: rgba(252, 251, 248, 0.85); /* var(--chrome) with opacity */
   margin-bottom: 2.5rem;
 }
 
@@ -434,7 +434,7 @@
 .mp__showcase-fig-v {
   font-family: var(--font-display);
   font-size: 1.8rem;
-  font-weight: 700;
+  font-weight: 500;
   color: var(--chrome);
   line-height: 1;
 }
@@ -443,7 +443,7 @@
   font-family: var(--font-body);
   font-size: 0.75rem;
   letter-spacing: 0.08em;
-  color: rgba(243, 237, 227, 0.5);
+  color: rgba(252, 251, 248, 0.5);
   text-transform: uppercase;
 }
 

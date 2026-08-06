@@ -12,7 +12,7 @@
 .tl-title {
   font-family: var(--font-display);
   font-stretch: 125%;
-  font-weight: 700;
+  font-weight: 500;
   font-size: clamp(2rem, 5vw, 4rem);
   line-height: 0.98;
   letter-spacing: -0.035em;
@@ -57,7 +57,7 @@
   height: 13px;
   margin: -6.5px 0 0 -6.5px;
   border-radius: 50%;
-  background: radial-gradient(circle at 38% 34%, #fff6e0, #f0dcb0 38%, var(--brass) 70%, var(--brass-dk));
+  background: radial-gradient(circle at 38% 34%, #fff6e0, #daa520 38%, var(--brass) 70%, var(--brass-dk));
   box-shadow: var(--glow-brass-hot);
 }
 
@@ -110,7 +110,7 @@
 .tl-year {
   font-family: var(--font-display);
   font-stretch: 125%;
-  font-weight: 700;
+  font-weight: 500;
   font-size: clamp(1.5rem, 3.4vw, 2.6rem);
   line-height: 1;
   letter-spacing: -0.035em;

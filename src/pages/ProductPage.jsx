@@ -58,7 +58,7 @@ export default function ProductPage({ params }) {
                   tint="var(--chrome)"
                   tintOpacity={1}
                   textColor="var(--graphite)"
-                  lineColor="#b0894f"
+                  lineColor="#c5973f"
                   baseColor="var(--hair-strong)"
                   intensity={1.2}
                   thickness={1.5}
@@ -72,7 +72,7 @@ export default function ProductPage({ params }) {
                   tint="transparent"
                   tintOpacity={0}
                   textColor="var(--graphite)"
-                  lineColor="#b4703c"
+                  lineColor="#b87333"
                   baseColor="var(--hair-strong)"
                   intensity={1}
                   thickness={1}

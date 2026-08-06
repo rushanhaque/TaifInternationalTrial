@@ -123,12 +123,12 @@ export default function CataloguePage() {
                 text: p.name.toUpperCase()
               }))}
               bend={1.5}
-              textColor="#b0894f"
+              textColor="#c5973f"
               borderRadius={0.05}
               scrollSpeed={0.3}
               scrollEase={0.08}
-              fontUrl="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600..700&display=swap"
-              font="bold 15px Archivo"
+              fontUrl="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap"
+              font="bold 15px Cinzel"
             />
           </div>
         </div>

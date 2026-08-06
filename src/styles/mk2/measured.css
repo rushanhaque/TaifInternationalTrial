@@ -29,8 +29,8 @@
   z-index: -1;
   pointer-events: none;
   background:
-    radial-gradient(76% 54% at 20% -4%, rgba(176, 137, 79, 0.11), transparent 68%),
-    radial-gradient(54% 46% at 98% 104%, rgba(180, 112, 60, 0.08), transparent 70%);
+    radial-gradient(76% 54% at 20% -4%, rgba(184, 115, 51, 0.11), transparent 68%),
+    radial-gradient(54% 46% at 98% 104%, rgba(184, 115, 51, 0.08), transparent 70%);
 }
 
 .mk-ms-h {
@@ -72,8 +72,8 @@
   background: linear-gradient(
     90deg,
     rgba(138, 90, 32, 0.62) 0,
-    rgba(36, 28, 20, 0.18) 34%,
-    rgba(36, 28, 20, 0.13) 100%
+    rgba(28, 28, 26, 0.18) 34%,
+    rgba(28, 28, 26, 0.13) 100%
   );
 }
 
@@ -91,8 +91,8 @@
   background: linear-gradient(
     180deg,
     var(--brass) 0,
-    rgba(176, 137, 79, 0.5) 32%,
-    rgba(176, 137, 79, 0) 92%
+    rgba(184, 115, 51, 0.5) 32%,
+    rgba(184, 115, 51, 0) 92%
   );
   transition: opacity 0.4s var(--ease-fluid);
 }
@@ -127,7 +127,7 @@
   flex-wrap: nowrap;
   font-family: var(--font-display);
   font-stretch: 125%;
-  font-weight: 700;
+  font-weight: 500;
   font-size: clamp(3.5rem, 8vw, 7rem);
   font-variant-numeric: tabular-nums;  /* load-bearing: the masks are fixed
                                           width, so the ghosts and the answer
@@ -163,7 +163,7 @@
 /* the passing digits sit back in shadow so the answer lands as the darkest
    thing on the wheel */
 .mk-ms-gh {
-  color: rgba(36, 28, 20, 0.34);
+  color: rgba(28, 28, 26, 0.34);
 }
 
 .mk-ms-sep {
@@ -212,7 +212,7 @@
   height: 13px;
   border-block-start: 1px solid var(--hair-strong);
   background-image:
-    repeating-linear-gradient(90deg, rgba(176, 137, 79, 0.62) 0 1px, transparent 1px 14px),
+    repeating-linear-gradient(90deg, rgba(184, 115, 51, 0.62) 0 1px, transparent 1px 14px),
     repeating-linear-gradient(90deg, rgba(138, 90, 32, 0.85) 0 1px, transparent 1px 70px);
   background-size: 100% 6px, 100% 12px;
   background-position: 0 0, 0 0;

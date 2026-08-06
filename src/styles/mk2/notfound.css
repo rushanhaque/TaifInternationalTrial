@@ -66,7 +66,7 @@
   opacity: 0.85;
   font-family: var(--font-display);
   font-stretch: 125%;
-  font-weight: 700;
+  font-weight: 500;
   font-size: clamp(0.82rem, 1.8vw, 1.05rem);
   line-height: 1;
   letter-spacing: 0.14em;

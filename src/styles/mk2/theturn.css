@@ -141,7 +141,7 @@
 .tt-deg {
   font-family: var(--font-display);
   font-stretch: 125%;
-  font-weight: 700;
+  font-weight: 500;
   font-size: clamp(1.4rem, 2.2vw, 2.1rem);
   line-height: 0.9;
   letter-spacing: -0.03em;
@@ -228,7 +228,7 @@
 .tt-skin.is-brass .tt-base {
   background:
     radial-gradient(142% 120% at 30% 13%,
-      #fff4da 0%, #f1d9a8 8%, #d7b073 20%, #b0894f 38%,
+      #fff4da 0%, #f1d9a8 8%, #d7b073 20%, #c5973f 38%,
       #94703a 54%, #6b4e26 72%, #3f2d12 90%, #241804 100%);
 }
 
@@ -485,7 +485,7 @@
   display: block;
   max-width: clamp(148px, 15vw, 238px);
   padding-top: 0.5rem;
-  border-top: 1px solid rgba(243, 237, 227, 0.16);
+  border-top: 1px solid rgba(252, 251, 248, 0.16);
 }
 
 .tt .tt-note-tag {
@@ -511,7 +511,7 @@
   height: 1px;
   margin-inline: 0.7rem;
   background: linear-gradient(90deg,
-    rgba(227, 200, 143, 0.15), rgba(227, 200, 143, 0.85));
+    rgba(218, 165, 32, 0.15), rgba(218, 165, 32, 0.85));
 }
 
 .tt-note.side-l .tt-note-line {
@@ -521,7 +521,7 @@
 .tt-note.side-r .tt-note-line {
   transform-origin: left center;
   background: linear-gradient(270deg,
-    rgba(227, 200, 143, 0.15), rgba(227, 200, 143, 0.85));
+    rgba(218, 165, 32, 0.15), rgba(218, 165, 32, 0.85));
 }
 
 .tt-note-dot {
@@ -531,8 +531,8 @@
   border-radius: 50%;
   background: var(--brass-lt);
   box-shadow:
-    0 0 0 1px rgba(227, 200, 143, 0.3),
-    0 0 12px 2px rgba(227, 200, 143, 0.38);
+    0 0 0 1px rgba(218, 165, 32, 0.3),
+    0 0 12px 2px rgba(218, 165, 32, 0.38);
 }
 
 /* Each row's horizontal offset is cos-derived from its height on the circle
@@ -556,7 +556,7 @@
   margin-inline: var(--gutter);
   border-radius: var(--r-pill);
   overflow: hidden;
-  background: rgba(243, 237, 227, 0.1);
+  background: rgba(252, 251, 248, 0.1);
 }
 
 .tt-bar > i {
@@ -588,7 +588,7 @@
   padding-bottom: 0.75rem;
   border-bottom: 1px solid var(--hair);
   font-family: var(--font-body);
-  font-weight: 700;
+  font-weight: 500;
   font-size: 0.95rem;
   letter-spacing: -0.01em;
   color: var(--graphite);

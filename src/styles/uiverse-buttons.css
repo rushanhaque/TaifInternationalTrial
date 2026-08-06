@@ -4,19 +4,18 @@
 .uv-btn-1 {
   -webkit-tap-highlight-color: transparent;
   -webkit-appearance: button;
-  background-color: #111111;
+  background-color: #1c1c1a;
   background-image: none;
   color: #ffffff;
   cursor: pointer;
-  font-family: inherit;
-  font-size: 0.9rem;
-  font-weight: 600;
+  font-family: var(--font-heading);
+  font-weight: 500;
   line-height: 1.5;
   margin: 0;
   -webkit-mask-image: -webkit-radial-gradient(#000, #fff);
   padding: 0.7rem 1.6rem;
   border-radius: 99rem;
-  border: 2px solid #111111;
+  border: 2px solid #1c1c1a;
   z-index: 1;
   position: relative;
   overflow: hidden;
@@ -35,8 +34,8 @@
 
 .uv-btn-1.ghost {
   background-color: transparent;
-  color: #111111;
-  border-color: #111111;
+  color: #1c1c1a;
+  border-color: #1c1c1a;
 }
 
 .uv-btn-1 .text-container {
@@ -47,7 +46,7 @@
 }
 
 .uv-btn-1.ghost .text-container {
-  color: #111111;
+  color: #1c1c1a;
 }
 
 .uv-btn-1 .text {
@@ -85,7 +84,7 @@
 
 .uv-btn-1.ghost:after,
 .uv-btn-1.ghost:before {
-  background: #111111;
+  background: #1c1c1a;
 }
 
 .uv-btn-1:after {
@@ -105,16 +104,16 @@
 .uv-btn-2 {
   --duration: 7s;
   --easing: linear;
-  --c-color-1: rgba(176, 137, 79, 0.7); /* brass */
-  --c-color-2: #8f5a3b;                 /* copper */
-  --c-color-3: #523b2c;                 /* espresso */
-  --c-color-4: rgba(230, 200, 150, 0.7);
-  --c-shadow: rgba(176, 137, 79, 0.3);
-  --c-shadow-inset-top: rgba(176, 137, 79, 0.5);
-  --c-shadow-inset-bottom: rgba(250, 247, 242, 0.4);
+  --c-color-1: rgba(184, 115, 51, 0.7); /* copper */
+  --c-color-2: #a0522d;                 /* sienna */
+  --c-color-3: #4a4a48;                 /* carbon */
+  --c-color-4: rgba(218, 165, 32, 0.7);
+  --c-shadow: rgba(184, 115, 51, 0.3);
+  --c-shadow-inset-top: rgba(184, 115, 51, 0.5);
+  --c-shadow-inset-bottom: rgba(252, 251, 248, 0.4);
   --c-radial-inner: #fdfdfd;
   --c-radial-outer: #f5f5f5;
-  --c-color: #111111;
+  --c-color: #1c1c1a;
   
   -webkit-tap-highlight-color: transparent;
   -webkit-appearance: none;
@@ -129,8 +128,8 @@
   padding: 0;
   margin: 0;
   text-align: center;
-  font-family: inherit;
-  font-weight: 600;
+  font-family: var(--font-heading);
+  font-weight: 500;
   font-size: 0.9rem;
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -146,7 +145,7 @@
   --c-shadow: transparent;
   --c-shadow-inset-top: rgba(0,0,0,0.1);
   --c-shadow-inset-bottom: rgba(255,255,255,0.2);
-  border: 1px solid #111111;
+  border: 1px solid #1c1c1a;
 }
 
 .uv-btn-2:before {
@@ -244,8 +243,8 @@
    STYLE 3: cssbuttons-io (Expanding Circle)
    ========================================= */
 .uv-btn-3 {
-  --color: #111111;
-  font-family: inherit;
+  --color: #1c1c1a;
+  font-family: var(--font-heading);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -258,7 +257,7 @@
   z-index: 1;
   font-size: 0.9rem;
   border-radius: 99rem;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--color);
   background: transparent;
   letter-spacing: 0.05em;
@@ -323,12 +322,12 @@
 .uv-btn-1:hover *,
 .uv-btn-3.primary:hover,
 .uv-btn-3.primary:hover * {
-  color: #111111 !important;
+  color: #1c1c1a !important;
 }
 
 .uv-btn-1:hover .btn-chip svg path,
 .uv-btn-3.primary:hover .btn-chip svg path {
-  stroke: #111111 !important;
+  stroke: #1c1c1a !important;
 }
 
 .uv-btn-1.ghost:hover,

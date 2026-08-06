@@ -101,8 +101,8 @@
   display: flex; flex-direction: column; gap: .7rem;
 }
 .year-num {
-  font-family: var(--font-display); font-stretch: 125%; font-weight: 700;
-  font-size: clamp(2rem, 3.4vw, 3rem); letter-spacing: -0.03em;
+  font-family: var(--font-heading); font-weight: 500;
+  font-size: clamp(2rem, 3.4vw, 3rem); letter-spacing: -0.02em;
   color: var(--graphite); font-variant-numeric: tabular-nums;
 }
 .principle-card {
@@ -145,7 +145,7 @@
   width: 40px; height: 40px; border-radius: 50%;
   background: var(--white); color: var(--graphite);
   display: grid; place-items: center; font-size: 1rem;
-  box-shadow: 0 6px 18px -6px rgba(58, 42, 26, 0.32);
+  box-shadow: 0 6px 18px -6px rgba(28, 28, 26, 0.32);
 }
 .cmp input[type="range"] {
   position: absolute; inset: 0; width: 100%; height: 100%;
@@ -231,13 +231,13 @@
 .faq-q {
   width: 100%; display: flex; justify-content: space-between; align-items: center;
   gap: 1rem; padding: 1.05rem 1.5rem; background: none; border: 0;
-  font-weight: 600; font-size: 1.02rem; color: var(--graphite);
+  font-family: var(--font-heading); font-weight: 500; font-size: 1rem; color: var(--graphite);
   cursor: pointer; text-align: left; border-radius: inherit;
 }
 .faq-bead {
   flex-shrink: 0; width: 11px; height: 11px; border-radius: 50%;
-  background: linear-gradient(140deg, #fff8ea, #be9455);
-  box-shadow: inset 0 0 0 1px var(--hair), 0 1px 4px rgba(58,42,26,.22);
+  background: linear-gradient(140deg, #daa520, #b87333);
+  box-shadow: inset 0 0 0 1px var(--hair), 0 1px 4px rgba(28, 28, 26,.22);
   will-change: transform;
 }
 /* The disclosure opens on grid-template-rows rather than height: the row
@@ -302,8 +302,8 @@
 .cd { position: relative; }
 .cd-stage {
   position: relative; height: 100vh; overflow: hidden;
-  background: linear-gradient(180deg, #1e1710 0%, #241c14 55%, #1e1710 100%);
-  border-block: 1px solid rgba(176, 137, 79, 0.18);
+  background: linear-gradient(180deg, #1c1c1a 0%, #1c1c1a 55%, #1c1c1a 100%);
+  border-block: 1px solid rgba(184, 115, 51, 0.18);
 }
 .cd-layer {
   position: absolute; inset: 0;
@@ -342,33 +342,34 @@
   display: inline-flex; align-items: center; justify-content: center;
   width: 46px; height: 46px; border-radius: 50%;
   background: var(--white);
-  font-family: var(--font-display); font-weight: 700; font-size: .95rem;
+  font-family: var(--font-heading); font-weight: 500; font-size: .95rem;
   color: var(--graphite);
-  box-shadow: 0 8px 24px -8px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(176, 137, 79, 0.3);
+  box-shadow: 0 8px 24px -8px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(184, 115, 51, 0.3);
 }
-.cd-tag.a-brass   { background: linear-gradient(135deg, #f0dcb0, #b0894f); color: #241c14; }
-.cd-tag.a-copper  { background: linear-gradient(135deg, #e7ce9b, #a66334); color: #241c14; }
-.cd-tag.a-antique { background: linear-gradient(135deg, #c9a05a, #6b4a2e); color: #faf7f2; }
+.cd-tag.a-brass   { background: linear-gradient(135deg, #daa520, #b87333); color: #1c1c1a; }
+.cd-tag.a-copper  { background: linear-gradient(135deg, #cd853f, #a0522d); color: #1c1c1a; }
+.cd-tag.a-antique { background: linear-gradient(135deg, #c5973f, #6b4a2e); color: #fcfbf8; }
 
 .cd-caption {
   display: flex; flex-direction: column; gap: .5rem;
-  color: rgba(250, 247, 242, 0.92);
+  color: rgba(252, 251, 248, 0.92);
 }
 .cd-stub {
-  font-family: var(--font-body); font-weight: 700; font-size: .75rem;
+  font-family: var(--font-accent); font-weight: 500; font-size: .75rem;
   letter-spacing: .22em; text-transform: uppercase;
-  color: rgba(240, 220, 176, 0.9);
+  color: rgba(218, 165, 32, 0.9);
 }
-.cd-stub-name { color: rgba(250, 247, 242, 0.85); font-weight: 500; letter-spacing: .12em; }
+.cd-stub-name { color: rgba(252, 251, 248, 0.85); font-weight: 500; letter-spacing: .12em; }
 .cd-pitch {
-  color: rgba(250, 247, 242, 0.72); font-size: .95rem; max-width: 34ch; line-height: 1.55;
+  font-family: var(--font-body); font-weight: 350;
+  color: rgba(252, 251, 248, 0.72); font-size: .95rem; max-width: 34ch; line-height: 1.55;
 }
 
 .cd-haze {
   position: absolute; inset: -5%;
   background:
-    radial-gradient(80% 70% at 50% 55%, transparent 30%, rgba(30, 23, 16, 0.86) 100%),
-    radial-gradient(60% 50% at 30% 40%, rgba(176, 137, 79, 0.10), transparent 60%);
+    radial-gradient(80% 70% at 50% 55%, transparent 30%, rgba(28, 28, 26, 0.86) 100%),
+    radial-gradient(60% 50% at 30% 40%, rgba(184, 115, 51, 0.10), transparent 60%);
   pointer-events: none;
   will-change: opacity;
 }
@@ -377,23 +378,23 @@
   position: absolute; inset: 0;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   gap: 1.2rem; text-align: center; padding: 0 var(--gutter);
-  color: rgba(250, 247, 242, 0.95);
+  color: rgba(252, 251, 248, 0.95);
 }
-.cd-end .d1 { color: rgba(250, 247, 242, 0.98); }
-.cd-end .lede { color: rgba(250, 247, 242, 0.75); }
-.cd-end-kicker { color: rgba(240, 220, 176, 0.85); letter-spacing: .22em; }
+.cd-end .d1 { color: rgba(252, 251, 248, 0.98); }
+.cd-end .lede { color: rgba(252, 251, 248, 0.75); }
+.cd-end-kicker { color: rgba(218, 165, 32, 0.85); letter-spacing: .22em; }
 .cd-end-ctas { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1rem; justify-content: center; }
 .cd-end-ctas button,
 .cd-end-ctas a {
   color: #ffffff !important;
 }
 .cd-end-ctas .ghost {
-  color: #f0dcb0 !important;
-  border: 1px solid rgba(240, 220, 176, 0.4) !important;
+  color: #daa520 !important;
+  border: 1px solid rgba(218, 165, 32, 0.4) !important;
   background-color: rgba(255, 255, 255, 0.05) !important;
 }
 .cd-end-ctas .ghost * {
-  color: #f0dcb0 !important;
+  color: #daa520 !important;
 }
 
 /* mobile / reduced-motion fallback — stacked cards */

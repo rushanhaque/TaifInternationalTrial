@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { gsap, reduced } from '../../lib/gsap'
+import { CharCascade, SmoothReveal } from '../Reveal'
 
 /* MK2 · Two Floors — the metal floor (Moradabad) and the wood floor
    (Saharanpur), split by a draggable brass seam.
@@ -184,12 +185,14 @@ export default function TwoFloors() {
             <p className="tf-eyebrow">
               <span className="tf-tick" aria-hidden="true" />Floor 01 — Moradabad
             </p>
-            <h3 className="tf-head">Struck, spun, raised.</h3>
-            <p className="tf-copy">
-              Sand-cast, or spun down onto a lathe chuck, then raised over a stake
-              by hand. Chasing tightens the line from the front; repoussé pushes it
-              out from the back. Nothing on this floor is pressed.
-            </p>
+            <CharCascade as="h3" className="tf-head">Struck, spun, raised.</CharCascade>
+            <SmoothReveal>
+              <p className="tf-copy">
+                Sand-cast, or spun down onto a lathe chuck, then raised over a stake
+                by hand. Chasing tightens the line from the front; repoussé pushes it
+                out from the back. Nothing on this floor is pressed.
+              </p>
+            </SmoothReveal>
             <p className="tf-stat">
               <span className="tf-stat-n">11</span>
               <span className="tf-stat-l">processes<br />under one roof</span>
@@ -213,12 +216,14 @@ export default function TwoFloors() {
             <p className="tf-eyebrow">
               <span className="tf-tick" aria-hidden="true" />Floor 02 — Saharanpur
             </p>
-            <h3 className="tf-head">Seasoned, then cut.</h3>
-            <p className="tf-copy">
-              Sheesham and mango go into the kiln green and come out at eight to ten
-              percent. Then they rest four weeks in the air the benches breathe.
-              Only after that does a blade touch them.
-            </p>
+            <CharCascade as="h3" className="tf-head">Seasoned, then cut.</CharCascade>
+            <SmoothReveal>
+              <p className="tf-copy">
+                Sheesham and mango go into the kiln green and come out at eight to ten
+                percent. Then they rest four weeks in the air the benches breathe.
+                Only after that does a blade touch them.
+              </p>
+            </SmoothReveal>
             <p className="tf-stat">
               <span className="tf-stat-n">8–10%</span>
               <span className="tf-stat-l">moisture<br />at the bench</span>

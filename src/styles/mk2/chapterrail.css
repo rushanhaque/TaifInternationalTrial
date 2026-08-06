@@ -241,7 +241,7 @@
   position: absolute;
   inset: -6px -12px -5px;
   border-radius: var(--r-pill);
-  background: rgba(250, 247, 242, 0.74);
+  background: rgba(252, 251, 248, 0.74);
   border: 1px solid var(--hair);
   box-shadow: var(--lift-2);
   backdrop-filter: blur(14px) saturate(1.15);
@@ -293,7 +293,7 @@
 
 /* ═══ over the espresso sections ═══════════════════════════════════════════
    .is-inverse is toggled by a ScrollTrigger watching every .deep panel. A
-   warm-ink rail is invisible on #1e1710; this is a contrast fix, not styling. */
+   warm-ink rail is invisible on #1c1c1a; this is a contrast fix, not styling. */
 .crail.is-inverse .crail-spine,
 .crail.is-inverse .crail-line {
   background: var(--on-deep);
@@ -333,8 +333,8 @@
 }
 
 .crail.is-inverse .crail-label { color: var(--dim-on-deep); }
-.crail.is-inverse .crail-num   { color: rgba(243, 237, 227, 0.4); }
-.crail.is-inverse .crail-cap   { color: rgba(243, 237, 227, 0.42); }
+.crail.is-inverse .crail-num   { color: rgba(252, 251, 248, 0.4); }
+.crail.is-inverse .crail-cap   { color: rgba(252, 251, 248, 0.42); }
 .crail.is-inverse .crail-cap::after { background: var(--tint-on-deep); }
 
 .crail.is-inverse .crail-tick:hover .crail-label { color: var(--on-deep); }

@@ -86,7 +86,7 @@
 /* ── metal ground: espresso raked into brass ── */
 .tf-metal .tf-ground {
   background:
-    radial-gradient(120% 85% at 8% 6%, rgba(227, 200, 143, 0.20), transparent 62%),
+    radial-gradient(120% 85% at 8% 6%, rgba(218, 165, 32, 0.20), transparent 62%),
     radial-gradient(90% 70% at 96% 96%, rgba(138, 78, 36, 0.34), transparent 66%),
     linear-gradient(148deg,
       #17110a 0%,
@@ -181,7 +181,7 @@
   font-size: 0.66rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: rgba(243, 237, 227, 0.5);
+  color: rgba(252, 251, 248, 0.5);
   border-bottom: 1px solid var(--hair-on-deep);
 }
 
@@ -196,11 +196,11 @@
   z-index: 1;
   font-family: var(--font-display);
   font-stretch: 125%;
-  font-weight: 700;
+  font-weight: 500;
   font-size: clamp(7rem, 15vw, 15rem);
   line-height: 0.76;
   letter-spacing: -0.05em;
-  color: rgba(227, 200, 143, 0.085);
+  color: rgba(218, 165, 32, 0.085);
   pointer-events: none;
 }
 
@@ -278,7 +278,7 @@
   margin: 0;
   font-family: var(--font-display);
   font-stretch: 125%;
-  font-weight: 700;
+  font-weight: 500;
   font-size: clamp(2rem, 3.6vw, 3.4rem);
   line-height: 0.95;
   letter-spacing: -0.04em;
@@ -292,7 +292,7 @@
   font-family: var(--font-body);
   font-size: clamp(0.95rem, 1.05vw, 1.0625rem);
   line-height: 1.62;
-  color: rgba(243, 237, 227, 0.7);
+  color: rgba(252, 251, 248, 0.7);
 }
 
 .tf-stat {
@@ -310,7 +310,7 @@
 .tf-stat-n {
   font-family: var(--font-display);
   font-stretch: 125%;
-  font-weight: 700;
+  font-weight: 500;
   font-size: clamp(1.9rem, 2.9vw, 2.75rem);
   line-height: 0.9;
   letter-spacing: -0.035em;
@@ -326,13 +326,13 @@
   line-height: 1.4;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: rgba(243, 237, 227, 0.52);
+  color: rgba(252, 251, 248, 0.52);
 }
 
 .tf-spec {
   margin: 0;
   padding: 0.5rem 1rem 0.55rem;
-  border: 1px solid rgba(227, 200, 143, 0.3);
+  border: 1px solid rgba(218, 165, 32, 0.3);
   border-radius: var(--r-pill);
   background: rgba(20, 13, 6, 0.42);
   backdrop-filter: blur(6px);
@@ -342,7 +342,7 @@
   letter-spacing: 0.12em;
   text-transform: uppercase;
   font-variant-numeric: tabular-nums;
-  color: rgba(243, 237, 227, 0.82);
+  color: rgba(252, 251, 248, 0.82);
 }
 
 /* ─────────────────────────────────────────────────────────────── seam ── */
@@ -386,7 +386,7 @@
   width: 260px;
   margin-left: -130px;
   background: radial-gradient(closest-side ellipse at 50% 50%,
-    rgba(227, 200, 143, 0.26), rgba(227, 200, 143, 0.06) 55%, transparent 78%);
+    rgba(218, 165, 32, 0.26), rgba(218, 165, 32, 0.06) 55%, transparent 78%);
   filter: blur(6px);
   opacity: 0.72;
   transition: opacity 0.4s var(--ease-fluid);
@@ -406,16 +406,16 @@
   margin-left: -1px;
   transform-origin: 50% 0;
   background: linear-gradient(180deg,
-    rgba(227, 200, 143, 0) 0%,
+    rgba(218, 165, 32, 0) 0%,
     var(--brass-dk) 5%,
     var(--brass) 22%,
     #f6e6c2 50%,
     var(--brass) 78%,
     var(--brass-dk) 95%,
-    rgba(227, 200, 143, 0) 100%);
+    rgba(218, 165, 32, 0) 100%);
   box-shadow:
-    0 0 14px rgba(227, 200, 143, 0.55),
-    0 0 44px rgba(176, 137, 79, 0.3);
+    0 0 14px rgba(218, 165, 32, 0.55),
+    0 0 44px rgba(184, 115, 51, 0.3);
 }
 
 /* Hit strip — full height so the seam is grabbable anywhere along it. */
@@ -448,9 +448,9 @@
     #6d4f24 0%,
     #c9a15c 14%,
     #f7ecd2 34%,
-    #b0894f 56%,
-    #8a6733 74%,
-    #e3c88f 100%);
+    #c5973f 56%,
+    #a0522d 74%,
+    #daa520 100%);
   box-shadow:
     0 14px 34px rgba(0, 0, 0, 0.52),
     0 2px 6px rgba(0, 0, 0, 0.38),
@@ -483,7 +483,7 @@
   transform: scaleX(1.2) scaleY(0.95);
   box-shadow:
     0 18px 44px rgba(0, 0, 0, 0.6),
-    0 0 26px rgba(227, 200, 143, 0.45),
+    0 0 26px rgba(218, 165, 32, 0.45),
     inset 0 1px 0 rgba(255, 252, 240, 0.8),
     inset 0 -1px 0 rgba(50, 32, 14, 0.55);
 }
@@ -508,12 +508,12 @@
 
 .tf-arrow-l {
   right: calc(50% + 30px);
-  border-right: 7px solid rgba(227, 200, 143, 0.75);
+  border-right: 7px solid rgba(218, 165, 32, 0.75);
 }
 
 .tf-arrow-r {
   left: calc(50% + 30px);
-  border-left: 7px solid rgba(227, 200, 143, 0.75);
+  border-left: 7px solid rgba(218, 165, 32, 0.75);
 }
 
 .tf-hit:hover .tf-arrow-l { transform: translateX(-4px); }
@@ -533,7 +533,7 @@
   gap: 0.85rem;
   white-space: nowrap;
   padding: 0.62rem 1.15rem 0.68rem;
-  border: 1px solid rgba(227, 200, 143, 0.32);
+  border: 1px solid rgba(218, 165, 32, 0.32);
   border-radius: var(--r-pill);
   background: rgba(16, 10, 4, 0.62);
   backdrop-filter: blur(12px);
@@ -544,19 +544,19 @@
   letter-spacing: 0.13em;
   text-transform: uppercase;
   font-variant-numeric: tabular-nums;
-  color: rgba(243, 237, 227, 0.86);
+  color: rgba(252, 251, 248, 0.86);
 }
 
 /* Each phrase stays whole when the plaque wraps in the stacked layout. */
 .tf-plaque-i { white-space: nowrap; }
 
 .tf-plaque b {
-  font-weight: 700;
+  font-weight: 500;
   color: var(--tint-on-deep);
 }
 
 .tf-slash {
-  color: rgba(227, 200, 143, 0.42);
+  color: rgba(218, 165, 32, 0.42);
   font-weight: 400;
 }
 
@@ -572,7 +572,7 @@
   font-size: 0.6rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: rgba(243, 237, 227, 0.42);
+  color: rgba(252, 251, 248, 0.42);
   transition: opacity 0.35s var(--ease-fluid);
 }
 
@@ -724,7 +724,7 @@
 
   .tf-hit:hover .tf-grip {
     box-shadow:
-      0 0 0 2px rgba(227, 200, 143, 0.6),
+      0 0 0 2px rgba(218, 165, 32, 0.6),
       0 14px 34px rgba(0, 0, 0, 0.52),
       inset 0 1px 0 rgba(255, 252, 240, 0.72);
   }

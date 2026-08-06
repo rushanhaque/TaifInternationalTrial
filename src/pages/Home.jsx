@@ -1,7 +1,7 @@
 import { Link } from '../lib/router'
 import { PROCESS_STAGES, RIBBON_TERMS, HOME_COLLECTIONS } from '../data/site'
 import { railItems } from '../data/catalogue'
-import { CharCascade, Dilate } from '../components/Reveal'
+import { CharCascade, SmoothReveal, Dilate } from '../components/Reveal'
 import HeroBrand from '../components/HeroBrand'
 import Slab from '../components/Slab'
 import Button from '../components/Button'
@@ -75,7 +75,9 @@ export default function Home() {
 
       {/* 0.5 · drag rail — the signature piece */}
       <section className="section alt fs-section" id="catalogue">
-        <div className="sec-head"><span className="meta">Signature piece</span></div>
+        <div className="sec-head">
+          <CharCascade as="span" className="meta">Signature piece</CharCascade>
+        </div>
         <DragRail label="Featured catalogue" hint="">
           {railItems().map((p) => (
             <Link key={p.slug} to={`/catalogue/${p.slug}`} className="rail-card" transition="slide-product">
@@ -105,20 +107,22 @@ export default function Home() {
 
       {/* 0.9 · process teaser — transparent ground, sits on the page colour */}
       <section className="section clear fs-section" id="process">
-        <div className="sec-head"><span className="meta">Process</span></div>
+        <div className="sec-head">
+          <CharCascade as="span" className="meta">Process</CharCascade>
+        </div>
         <div className="wrap">
           <div className="grid">
             <div className="sp-8">
               <Stepper stages={PROCESS_STAGES} teaser />
             </div>
             <div className="sp-4 proc-aside">
-              <Dilate>
+              <SmoothReveal>
                 <p className="body dim">
                   Three of eight stages. The full line runs from certified stock and a
                   seasoning yard through to a packed carton — every hand-off recorded.
                 </p>
                 <Button to="/catalogue">What we can make</Button>
-              </Dilate>
+              </SmoothReveal>
             </div>
           </div>
         </div>
@@ -128,7 +132,9 @@ export default function Home() {
       <div className="wrap" style={{ marginBlock: '4rem' }}>
         <div className="countries-card" id="countries">
           <div style={{ position: 'absolute', top: '3rem', left: 0, width: '100%', textAlign: 'center' }}>
-            <span className="meta" style={{ display: 'inline-block', transform: 'scale(1.5)' }}>Countries served</span>
+            <CharCascade as="span" className="meta" style={{ display: 'inline-block', transform: 'scale(1.5)' }}>
+              Countries served
+            </CharCascade>
           </div>
           <LogoLoop
             logos={countryFlags}
@@ -145,7 +151,9 @@ export default function Home() {
 
       {/* 0.98 · INSTAGRAM */}
       <section className="section clear fs-section" id="instagram">
-        <div className="sec-head"><span className="meta">Blogs and socials</span></div>
+        <div className="sec-head">
+          <CharCascade as="span" className="meta">Blogs and socials</CharCascade>
+        </div>
         <div className="wrap">
           <div className="grid">
             <div className="sp-2">
@@ -202,11 +210,13 @@ export default function Home() {
 
       {/* 1.0 · REVIEWS */}
       <section className="section clear fs-section" id="reviews">
-        <div className="sec-head"><span className="meta">Reviews</span></div>
+        <div className="sec-head">
+          <CharCascade as="span" className="meta">Reviews</CharCascade>
+        </div>
         <ReviewStack />
         
         {/* Big Designer Connect Button */}
-        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '3.5rem', marginBottom: '2rem' }}>
+        <SmoothReveal style={{ display: 'flex', justifyContent: 'center', marginTop: '3.5rem', marginBottom: '2rem' }}>
           <Link to="/contact" className="big-connect-btn">
             <span>Connect</span>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
@@ -214,7 +224,7 @@ export default function Home() {
               <polyline points="12 5 19 12 12 19" />
             </svg>
           </Link>
-        </div>
+        </SmoothReveal>
       </section>
 
 

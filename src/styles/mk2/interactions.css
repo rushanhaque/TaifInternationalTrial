@@ -74,8 +74,8 @@
   mix-blend-mode: screen;
   background: radial-gradient(
     20rem 20rem at var(--mx, 50%) var(--my, 50%),
-    rgba(240, 220, 176, 0.26) 0%,
-    rgba(176, 137, 79, 0.10) 40%,
+    rgba(218, 165, 32, 0.26) 0%,
+    rgba(184, 115, 51, 0.10) 40%,
     transparent 70%
   );
 }

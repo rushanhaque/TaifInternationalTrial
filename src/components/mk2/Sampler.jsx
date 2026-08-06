@@ -2,6 +2,7 @@ import { useCallback, useEffect, useId, useRef, useState } from 'react'
 import { gsap, ScrollTrigger, reduced, coarse } from '../../lib/gsap'
 import { FINISHES, BRAND } from '../../data/site'
 import Button from '../Button'
+import { CharCascade, SmoothReveal } from '../Reveal'
 /* ── Sampler ────────────────────────────────────────────────────────────────
    One object, five surfaces. The vessel is a clipped stack of CSS material
    recipes; switching finish cross-fades the stack (CSS, so it can never fail
@@ -266,13 +267,13 @@ export default function Sampler({ finishes = FINISHES }) {
                   <span className="idx smp-idx">
                     {pad(i + 1)}<i />{pad(n)}
                   </span>
-                  <p className="smp-name">{x.name}</p>
+                  <CharCascade as="p" className="smp-name">{x.name}</CharCascade>
                   <ul className="smp-subs">
                     {x.substrates.map((s) => (
                       <li key={s} className="chip smp-sub">{s}</li>
                     ))}
                   </ul>
-                  <p className="lede smp-char">{x.character}</p>
+                  <SmoothReveal><p className="lede smp-char">{x.character}</p></SmoothReveal>
                 </div>
               ))}
             </div>

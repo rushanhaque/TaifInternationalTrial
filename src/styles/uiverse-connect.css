@@ -1,14 +1,14 @@
 /* Connect Button — Header CTA */ 
 .cssbuttons-io {
   position: relative;
-  font-family: inherit;
-  font-weight: 700;
+  font-family: var(--font-heading);
+  font-weight: 500;
   font-size: 0.9rem;
   letter-spacing: 0.02em;
   border-radius: var(--r-pill, 999px);
   cursor: pointer;
-  border: 1px solid var(--hair, rgba(36, 28, 20, 0.15));
-  background: linear-gradient(135deg, #6b4a2e, #422d1b); /* Brown fill revealed on hover */
+  border: 1px solid var(--copper, #b87333);
+  background: linear-gradient(135deg, #b87333, #1c1c1a); /* Copper to Carbon fill on hover */
   color: var(--graphite);
   overflow: hidden;
   height: 32px; /* Reduced container height */

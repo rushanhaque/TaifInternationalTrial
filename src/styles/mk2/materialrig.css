@@ -11,7 +11,7 @@
 .rig-title {
   font-family: var(--font-display);
   font-stretch: 125%;
-  font-weight: 700;
+  font-weight: 500;
   font-size: clamp(2rem, 5vw, 4rem);
   line-height: 0.98;
   letter-spacing: -0.035em;
@@ -45,13 +45,13 @@
   border-radius: 1.5px;
   transform: rotate(45deg);
   background: linear-gradient(135deg, var(--brass-lt), var(--brass) 60%, var(--brass-dk));
-  box-shadow: 0 1px 2px rgba(107, 74, 46, 0.35);
+  box-shadow: 0 1px 2px rgba(28, 28, 26, 0.35);
 }
 
 .rig-floor-name {
   font-family: var(--font-display);
   font-stretch: 125%;
-  font-weight: 700;
+  font-weight: 500;
   font-size: clamp(1.1rem, 1.9vw, 1.5rem);
   letter-spacing: -0.02em;
   color: var(--graphite);
@@ -85,13 +85,13 @@
   border-radius: 4px;
   align-self: center;
   background: var(--tone-bg, var(--brass));
-  box-shadow: var(--edge-hair), 0 1px 2px rgba(58, 42, 26, 0.28);
+  box-shadow: var(--edge-hair), 0 1px 2px rgba(28, 28, 26, 0.28);
 }
 
 .rig-name {
   font-family: var(--font-display);
   font-stretch: 125%;
-  font-weight: 700;
+  font-weight: 500;
   font-size: clamp(1rem, 1.6vw, 1.24rem);
   letter-spacing: -0.02em;
   color: var(--graphite);
@@ -132,7 +132,7 @@
 /* the lit row's bars gain the specular sweep */
 .rig-row.is-lit .rig-fill {
   background: linear-gradient(90deg,
-    #8a5423 0%, #c58f4c 22%, #f0dcb0 44%, #c9a05a 62%, #a66334 82%, #e7ce9b 100%);
+    #a0522d 0%, #b87333 22%, #daa520 44%, #cd853f 62%, #b87333 82%, #daa520 100%);
   box-shadow: var(--glow-brass);
 }
 
@@ -155,7 +155,7 @@
 .rig-val b {
   font-family: var(--font-display);
   font-stretch: 125%;
-  font-weight: 700;
+  font-weight: 500;
   font-size: clamp(0.95rem, 1.5vw, 1.15rem);
   letter-spacing: -0.02em;
   color: var(--graphite);

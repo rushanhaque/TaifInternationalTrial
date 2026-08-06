@@ -1,85 +1,80 @@
 :root {
-  /* ═══ ground — warm white. The site is white first; everything else is trim.
-     --white is the true white surface; --chrome is a barely-there alabaster
-     that lets white panels read as *lifted* rather than flat. ═══ */
-  --white:      #faf7f2;   /* warm alabaster light section background */
-  --bg:         #faf7f2;
-  --chrome:     #faf7f2;   /* page ground — warm alabaster */
-  --chrome-2:   #f1ebe1;   /* sand — inset wells, tracks, segmented controls */
-  --chrome-3:   #e3d9c9;   /* light oak wash — rules, hints, dividers */
-  --shadow-soft: rgba(58, 42, 26, 0.09);   /* shadows are warm, never grey */
+  /* ═══ ground — the two whites. Pure White is the body ground;
+     Porcelain is the barely-warm elevated surface (cards, nav, inputs).
+     Together they create subtle depth without any colour. ═══ */
+  --white:      #ffffff;   /* pure white — body, main section backgrounds */
+  --bg:         #ffffff;
+  --chrome:     #ffffff;   /* pure solid white ground for homepage and sections */
+  --chrome-2:   #e7e2da;   /* soft linen — inset wells, toggle tracks, segmented controls */
+  --chrome-3:   #d4cec4;   /* darker linen — dividers, rules, hints */
+  --shadow-soft: rgba(28, 28, 26, 0.09);   /* shadows are carbon-tinted, never grey */
 
-  /* ═══ ink — warm walnut-black, never pure black ═══ */
-  --graphite:   #241c14;
-  --graphite-2: #5a4632;
-  --dim:        rgba(36, 28, 20, 0.62);
-  --faint:      rgba(36, 28, 20, 0.28);
-  --hair:       rgba(36, 28, 20, 0.11);
-  --hair-strong: rgba(36, 28, 20, 0.30);
-  --nav-bg:     linear-gradient(135deg, rgba(255, 255, 255, 0.72) 0%, rgba(245, 238, 227, 0.48) 50%, rgba(255, 255, 255, 0.62) 100%);
+  /* ═══ ink — carbon black, never pure black ═══ */
+  --graphite:   #1c1c1a;
+  --graphite-2: #4a4a48;
+  --dim:        rgba(28, 28, 26, 0.62);
+  --faint:      rgba(28, 28, 26, 0.28);
+  --hair:       rgba(28, 28, 26, 0.11);
+  --hair-strong: rgba(28, 28, 26, 0.30);
+  --nav-bg:     linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0.70) 50%, rgba(255, 255, 255, 0.85) 100%);
 
-  /* ═══ the one dark surface — espresso walnut ═══ */
-  --deep:       #1e1710;
-  --on-deep:    #f3ede3;
-  --dim-on-deep: rgba(243, 237, 227, 0.62);
-  --hair-on-deep: rgba(243, 237, 227, 0.16);
+  /* ═══ the one dark surface — carbon black ═══ */
+  --deep:       #1c1c1a;
+  --on-deep:    #ffffff;
+  --dim-on-deep: rgba(255, 255, 255, 0.68);
+  --hair-on-deep: rgba(255, 255, 255, 0.16);
 
-  /* ═══ the metals — the house palette ═══ */
-  --brass:      #b0894f;
-  --brass-lt:   #e3c88f;
-  --brass-dk:   #8a6733;
-  --copper:     #b4703c;
-  --copper-lt:  #e0a275;
-  --copper-dk:  #8a4e24;
+  /* ═══ the metals — copper-brass, the house accent ═══ */
+  --brass:      #c5973f;
+  --brass-lt:   #daa520;
+  --brass-dk:   #a0522d;
+  --copper:     #b87333;
+  --copper-lt:  #cd853f;
+  --copper-dk:  #8b4513;
 
-  /* ═══ the woods ═══ */
+  /* ═══ the woods — kept as subtle tonal reference ═══ */
   --walnut:     #6b4a2e;
   --walnut-dk:  #3a2718;
   --oak:        #c7a579;
-  --oak-lt:     #e8d7bd;
+  --oak-lt:     #e7e2da;
 
-  /* ═══ accent — polished metal, only ever in motion.
-     Alternating dark/light bands read as specular reflection off a turned
-     surface: copper into brass into a raw gold highlight and back. ═══ */
+  /* ═══ accent — rich copper-featured metallic sweep. ═══ */
   --metal: linear-gradient(100deg,
-    #8a5423 0%, #c58f4c 16%, #f0dcb0 32%, #c9a05a 48%,
-    #a66334 64%, #e7ce9b 80%, #90672e 100%);
+    #b87333 0%, #a0522d 20%, #cd853f 40%, #b87333 60%, #daa520 80%, #b87333 100%);
   --metal-soft: linear-gradient(100deg,
-    rgba(180, 112, 60, .20), rgba(176, 137, 79, .20), rgba(227, 200, 143, .24));
+    rgba(184, 115, 51, .24), rgba(160, 82, 45, .20), rgba(205, 133, 63, .24));
 
   /* solid accents — used wherever type or a focus ring needs real contrast
      (§10: --metal never carries small text) */
-  --tint:       #a9762f;   /* focus rings, active borders */
-  --tint-deep:  #8a5a20;   /* accent type on light — 5.9:1 on white */
-  --tint-on-deep: #e0bb80; /* accent type on espresso — 9.8:1 */
+  --tint:       #b87333;   /* focus rings, active borders */
+  --tint-deep:  #b87333;   /* vibrant copper accent type on light */
+  --tint-on-deep: #cd853f; /* copper accent type on dark carbon */
 
   /* alert — terracotta, so even the errors belong to the palette */
   --alert:      #9e3324;
   --alert-soft: rgba(158, 51, 36, 0.25);
 
-  /* ═══ laid paper — the ground has a tooth ═══
-     Handmade rag paper, which is what a catalogue of this kind is actually
-     printed on: fine laid lines every 4px with wider chain lines every 58px,
-     plus one very soft warm bloom so a full-bleed panel is never dead flat.
-     Alpha is deliberately near the threshold of visibility — you should feel
-     it, not see it. Two repeating gradients, no image request, no filter. */
+  /* ═══ laid paper — clean ground ═══ */
   --paper: none;
 
-  /* the same tooth for the espresso surface, lifted rather than darkened */
+  /* clean grid tooth for the carbon surface */
   --paper-deep:
     repeating-linear-gradient(0deg,
-      rgba(243, 237, 227, 0.014) 0px, rgba(243, 237, 227, 0.014) 1px,
+      rgba(255, 255, 255, 0.014) 0px, rgba(255, 255, 255, 0.014) 1px,
       transparent 1px, transparent 4px),
     repeating-linear-gradient(90deg,
-      rgba(243, 237, 227, 0.016) 0px, rgba(243, 237, 227, 0.016) 1px,
+      rgba(255, 255, 255, 0.016) 0px, rgba(255, 255, 255, 0.016) 1px,
       transparent 1px, transparent 58px);
 
-  /* ═══ metal sheen for placeholder frames — brass under raking light ═══ */
+  /* ═══ neutral clean placeholder frames for future product images ═══ */
   --sheen: linear-gradient(160deg,
-    #fff9ee 0%, #e0c696 20%, #fbf1dc 38%, #be9455 60%, #f2e2c2 78%, #a87f42 100%);
+    #ffffff 0%, #f7f6f4 50%, #eeebe6 100%);
 
-  --font-display: 'Archivo Expanded', 'Archivo', system-ui, sans-serif;
-  --font-body:    'Inter Tight', system-ui, sans-serif;
+  --font-display: 'Cinzel', serif;
+  --font-section: 'Cormorant Garamond', 'Cinzel', serif;
+  --font-heading: 'Montserrat', 'Tenor Sans', sans-serif;
+  --font-body:    'Plus Jakarta Sans', 'Jost', sans-serif;
+  --font-accent:  'Tenor Sans', 'Montserrat', sans-serif;
 
   /* ═══ THE LIGHT ═══════════════════════════════════════════════════════
      One light source for the whole site: high and slightly left, which is
@@ -88,31 +83,26 @@
      travels the same way. Inconsistent light is the most visible tell that
      a page was assembled rather than designed.
 
-     THE DEPTH RAMP. Five tiers, warm walnut, never grey. Each is TWO
+     THE DEPTH RAMP. Five tiers, carbon-tinted, never grey. Each is TWO
      shadows: a tight contact shadow that keeps the object anchored, and a
      broad ambient one that grows softer and lighter as the object lifts.
      That pairing is what real depth looks like — a single blurred shadow
-     always reads as a sticker.
-
-     Audit note: this replaced 45 ad-hoc box-shadow values. If you need a
-     depth that is not here, the right move is almost always to pick the
-     nearer tier, not to invent a 46th. ═══════════════════════════════════ */
+     always reads as a sticker. ═══════════════════════════════════════════ */
 
   --lift-1:                                   /* rest — sits on the page */
-    0 1px 2px -1px rgba(58, 42, 26, 0.10),
-    0 4px 12px -6px rgba(58, 42, 26, 0.10);
+    0 1px 2px -1px rgba(28, 28, 26, 0.10),
+    0 4px 12px -6px rgba(28, 28, 26, 0.10);
   --lift-2:                                   /* raised — hover */
-    0 2px 4px -2px rgba(58, 42, 26, 0.12),
-    0 12px 28px -12px rgba(58, 42, 26, 0.16);
+    0 2px 4px -2px rgba(28, 28, 26, 0.12),
+    0 12px 28px -12px rgba(28, 28, 26, 0.16);
   --lift-3:                                   /* floating — cards, panels */
-    0 4px 8px -4px rgba(58, 42, 26, 0.14),
-    0 26px 56px -24px rgba(58, 42, 26, 0.22);
+    0 4px 8px -4px rgba(28, 28, 26, 0.14),
+    0 26px 56px -24px rgba(28, 28, 26, 0.22);
   --lift-4:                                   /* lifted far — modals, pane */
-    0 6px 12px -6px rgba(58, 42, 26, 0.16),
-    0 48px 96px -40px rgba(58, 42, 26, 0.30);
+    0 6px 12px -6px rgba(28, 28, 26, 0.16),
+    0 48px 96px -40px rgba(28, 28, 26, 0.30);
 
-  /* the same ramp on the espresso surface — darker and tighter, because a
-     soft shadow on a dark ground just reads as smudge */
+  /* the same ramp on the carbon surface */
   --lift-deep-1:
     0 2px 6px -2px rgba(0, 0, 0, 0.50),
     0 14px 34px -14px rgba(0, 0, 0, 0.55);
@@ -121,27 +111,26 @@
     0 30px 64px -26px rgba(0, 0, 0, 0.65);
 
   /* brass is the only thing on this site that emits rather than reflects */
-  --glow-brass:  0 0 14px rgba(227, 200, 143, 0.45);
-  --glow-brass-hot: 0 0 22px rgba(240, 220, 176, 0.70);
+  --glow-brass:  0 0 14px rgba(218, 165, 32, 0.45);
+  --glow-brass-hot: 0 0 22px rgba(218, 165, 32, 0.70);
 
   /* the inner highlight along a lit top edge — pairs with --lift-* */
-  --edge-lit:   inset 0 1px 0 rgba(255, 252, 245, 0.72);
+  --edge-lit:   inset 0 1px 0 rgba(255, 255, 255, 0.72);
   --edge-hair:  inset 0 0 0 1px var(--hair);
 
   /* ═══ TIME ═══════════════════════════════════════════════════════════
-     Four durations with fixed intent. Reaching for a fifth is a sign the
-     interaction is doing two things at once. ═══════════════════════════ */
+     Four durations with fixed intent. ═══════════════════════════════════ */
   --t-quick: 0.18s;   /* state flips — colour, opacity, a tick appearing */
   --t-base:  0.35s;   /* the default hover */
   --t-slow:  0.60s;   /* movement — travel, lifts, drawers */
   --t-cine:  1.00s;   /* entrances and anything scroll-linked */
 
-  /* easings — elastic and viscous; distinct curves from siblings */
+  /* easings */
   --ease-fluid:   cubic-bezier(0.65, 0, 0.35, 1);
-  --ease-surge:   cubic-bezier(0.16, 1.1, 0.3, 1);   /* slight overshoot */
-  --ease-viscous: cubic-bezier(0.5, 0, 0.1, 1);      /* slow start, long settle */
+  --ease-surge:   cubic-bezier(0.16, 1.1, 0.3, 1);
+  --ease-viscous: cubic-bezier(0.5, 0, 0.1, 1);
 
-  /* radii — fully rounded is this site's signature */
+  /* radii */
   --r-sm: 10px;
   --r-md: 22px;
   --r-lg: 34px;
@@ -154,32 +143,32 @@
 
 /* ═══ DARK MODE (html.dark) ════════════════════════════════════════════
    Inverts the base colors (ground, ink, lifts) while keeping the metals
-   and woods identical, so the product photography and material accents 
-   continue to pop against a dark espresso background. ══════════════════ */
+   identical, so the copper-brass accent continues to pop against a
+   carbon background. ══════════════════════════════════════════════════ */
 html.dark {
-  --white:      #120e0a;
-  --chrome:     #1e1710;
-  --chrome-2:   #2a2016;
-  --chrome-3:   #3a2c20;
+  --white:      #111110;
+  --chrome:     #1c1c1a;
+  --chrome-2:   #2a2927;
+  --chrome-3:   #3a3936;
   --shadow-soft: rgba(0, 0, 0, 0.50);
 
-  --graphite:   #f3ede3;
-  --graphite-2: #d8cebc;
-  --dim:        rgba(243, 237, 227, 0.62);
-  --faint:      rgba(243, 237, 227, 0.28);
-  --hair:       rgba(243, 237, 227, 0.16);
-  --hair-strong: rgba(243, 237, 227, 0.30);
-  --nav-bg:     linear-gradient(135deg, rgba(30, 23, 16, 0.78) 0%, rgba(20, 15, 10, 0.68) 100%);
+  --graphite:   #fcfbf8;
+  --graphite-2: #d8d6d2;
+  --dim:        rgba(252, 251, 248, 0.62);
+  --faint:      rgba(252, 251, 248, 0.28);
+  --hair:       rgba(252, 251, 248, 0.16);
+  --hair-strong: rgba(252, 251, 248, 0.30);
+  --nav-bg:     linear-gradient(135deg, rgba(28, 28, 26, 0.78) 0%, rgba(17, 17, 16, 0.68) 100%);
 
   /* Deep stays deep so hardcoded light text inside .deep sections remains visible */
-  --deep:       #1e1710;
-  --on-deep:    #f3ede3;
-  --dim-on-deep: rgba(243, 237, 227, 0.62);
-  --hair-on-deep: rgba(243, 237, 227, 0.16);
+  --deep:       #1c1c1a;
+  --on-deep:    #fcfbf8;
+  --dim-on-deep: rgba(252, 251, 248, 0.62);
+  --hair-on-deep: rgba(252, 251, 248, 0.16);
 
-  --tint:       #e0bb80;
-  --tint-deep:  #e0bb80;
-  --tint-on-deep: #e0bb80;
+  --tint:       #daa520;
+  --tint-deep:  #daa520;
+  --tint-on-deep: #daa520;
 
   --paper: none;
 

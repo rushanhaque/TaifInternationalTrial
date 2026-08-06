@@ -24,12 +24,12 @@ function BoxIcon() {
     <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
       <path
         d="M20 5 L34 12 V28 L20 35 L6 28 V12 Z"
-        stroke="var(--brass, #b0894f)"
+        stroke="var(--brass, #c5973f)"
         strokeWidth="1.3"
         strokeLinejoin="round"
       />
-      <path d="M6 12 L20 19 L34 12" stroke="var(--brass, #b0894f)" strokeWidth="1.3" strokeLinejoin="round" />
-      <path d="M20 19 V35" stroke="var(--brass, #b0894f)" strokeWidth="1.3" />
+      <path d="M6 12 L20 19 L34 12" stroke="var(--brass, #c5973f)" strokeWidth="1.3" strokeLinejoin="round" />
+      <path d="M20 19 V35" stroke="var(--brass, #c5973f)" strokeWidth="1.3" />
     </svg>
   );
 }
@@ -37,9 +37,9 @@ function BoxIcon() {
 function UploadIcon() {
   return (
     <svg width="24" height="24" viewBox="0 0 22 22" fill="none">
-      <path d="M11 14V3" stroke="var(--brass, #b0894f)" strokeWidth="1.4" strokeLinecap="round" />
-      <path d="M6.5 7.5 11 3l4.5 4.5" stroke="var(--brass, #b0894f)" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M4 15v2.2c0 1 .8 1.8 1.8 1.8h10.4c1 0 1.8-.8 1.8-1.8V15" stroke="var(--brass, #b0894f)" strokeWidth="1.4" strokeLinecap="round" />
+      <path d="M11 14V3" stroke="var(--brass, #c5973f)" strokeWidth="1.4" strokeLinecap="round" />
+      <path d="M6.5 7.5 11 3l4.5 4.5" stroke="var(--brass, #c5973f)" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M4 15v2.2c0 1 .8 1.8 1.8 1.8h10.4c1 0 1.8-.8 1.8-1.8V15" stroke="var(--brass, #c5973f)" strokeWidth="1.4" strokeLinecap="round" />
     </svg>
   );
 }
@@ -66,7 +66,7 @@ function TrashIcon() {
 
 function CheckIcon() {
   return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--brass, #b0894f)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--brass, #c5973f)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
       <polyline points="20 6 9 17 4 12" />
     </svg>
   );
@@ -545,16 +545,16 @@ function AdminPageContent() {
 
 const CSS = `
 :root {
-  --pm-bg: var(--chrome, #faf7f2);
+  --pm-bg: var(--chrome, #fcfbf8);
   --pm-card: var(--white, #ffffff);
-  --pm-brass: var(--brass, #b0894f);
-  --pm-brass-dark: var(--brass-dk, #8a6733);
+  --pm-brass: var(--brass, #c5973f);
+  --pm-brass-dark: var(--brass-dk, #a0522d);
   --pm-brass-tint: rgba(176, 137, 79, 0.12);
-  --pm-border: var(--chrome-3, #e3d9c9);
+  --pm-border: var(--chrome-3, #d4cec4);
   --pm-border-hair: var(--hair, rgba(36, 28, 20, 0.11));
-  --pm-text: var(--graphite, #241c14);
-  --pm-text-secondary: var(--graphite-2, #5a4632);
-  --pm-tint-deep: var(--tint-deep, #8a5a20);
+  --pm-text: var(--graphite, #1c1c1a);
+  --pm-text-secondary: var(--graphite-2, #4a4a48);
+  --pm-tint-deep: var(--tint-deep, #a0522d);
 }
 
 .pm-root {
@@ -633,7 +633,7 @@ const CSS = `
   font-variant-numeric: tabular-nums;
   font-size: 12px;
   font-weight: 600;
-  background: var(--chrome-2, #f1ebe1);
+  background: var(--chrome-2, #e7e2da);
   color: var(--pm-text-secondary);
   padding: 2px 10px;
   border-radius: 999px;
@@ -696,7 +696,7 @@ const CSS = `
   border: 1px solid var(--pm-border-hair);
 }
 .pm-btn--ghost:hover {
-  background: var(--chrome-2, #f1ebe1);
+  background: var(--chrome-2, #e7e2da);
   color: var(--pm-text);
 }
 
@@ -844,7 +844,7 @@ const CSS = `
 .pm-card-image {
   width: 100%;
   aspect-ratio: 1 / 1;
-  background: var(--chrome-2, #f1ebe1);
+  background: var(--chrome-2, #e7e2da);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -939,7 +939,7 @@ const CSS = `
   font-family: var(--font-body, 'Inter Tight', sans-serif);
   font-size: 11px;
   color: var(--pm-text-secondary);
-  background: var(--chrome-2, #f1ebe1);
+  background: var(--chrome-2, #e7e2da);
   border: 1px solid var(--pm-border-hair);
   padding: 3px 8px;
   border-radius: 999px;
@@ -1025,7 +1025,7 @@ const CSS = `
   border-radius: 8px;
   transition: background 0.15s ease, color 0.15s ease;
 }
-.pm-icon-btn:hover { background: var(--chrome-2, #f1ebe1); color: var(--pm-text); }
+.pm-icon-btn:hover { background: var(--chrome-2, #e7e2da); color: var(--pm-text); }
 
 /* Form Fields & Textboxes */
 .pm-form {

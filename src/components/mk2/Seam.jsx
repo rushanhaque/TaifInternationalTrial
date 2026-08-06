@@ -204,16 +204,16 @@ export default function Seam() {
               presentation attributes. These are --brass-lt / --brass /
               --brass-dk by value. */}
           <linearGradient id={gradId} gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="100">
-            <stop offset="0" stopColor="#e3c88f" />
-            <stop offset="0.26" stopColor="#b0894f" />
-            <stop offset="0.5" stopColor="#8a6733" />
-            <stop offset="0.74" stopColor="#b0894f" />
-            <stop offset="1" stopColor="#e3c88f" />
+            <stop offset="0" stopColor="#daa520" />
+            <stop offset="0.26" stopColor="#c5973f" />
+            <stop offset="0.5" stopColor="#a0522d" />
+            <stop offset="0.74" stopColor="#c5973f" />
+            <stop offset="1" stopColor="#daa520" />
           </linearGradient>
           <radialGradient id={bloomId}>
-            <stop offset="0" stopColor="#e3c88f" stopOpacity="0.34" />
-            <stop offset="0.42" stopColor="#b0894f" stopOpacity="0.13" />
-            <stop offset="1" stopColor="#b0894f" stopOpacity="0" />
+            <stop offset="0" stopColor="#daa520" stopOpacity="0.34" />
+            <stop offset="0.42" stopColor="#c5973f" stopOpacity="0.13" />
+            <stop offset="1" stopColor="#c5973f" stopOpacity="0" />
           </radialGradient>
         </defs>
 
