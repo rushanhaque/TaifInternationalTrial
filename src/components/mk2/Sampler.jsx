@@ -2,7 +2,7 @@ import { useCallback, useEffect, useId, useRef, useState } from 'react'
 import { gsap, ScrollTrigger, reduced, coarse } from '../../lib/gsap'
 import { FINISHES, BRAND } from '../../data/site'
 import Button from '../Button'
-import { CharCascade, SmoothReveal } from '../Reveal'
+import { CharCascade, SmoothReveal, EditorialReveal } from '../Reveal'
 /* ── Sampler ────────────────────────────────────────────────────────────────
    One object, five surfaces. The vessel is a clipped stack of CSS material
    recipes; switching finish cross-fades the stack (CSS, so it can never fail
@@ -126,6 +126,119 @@ export default function Sampler({ finishes = FINISHES }) {
     return () => call.kill()
   }, [committed, locked, inView, n])
 
+  const [displayedIdx, setDisplayedIdx] = useState(shown)
+  const panelRefs = useRef([])
+  const textTlRef = useRef(null)
+  const isFirstRender = useRef(true)
+  const displayedIdxRef = useRef(shown)
+  displayedIdxRef.current = displayedIdx
+
+  const getPanelElements = (panelEl) => {
+    if (!panelEl) return { catEl: null, titleEl: null, bodyEl: null, specEls: [], ctaEl: null }
+    const catEl = panelEl.querySelector('.ed-category')
+    const titleEl = panelEl.querySelector('.ed-title')
+    const bodyEl = panelEl.querySelector('.ed-body')
+    const specEls = Array.from(panelEl.querySelectorAll('.ed-spec-item') || [])
+    const ctaEl = panelEl.querySelector('.ed-cta')
+    return { catEl, titleEl, bodyEl, specEls, ctaEl }
+  }
+
+  const animateEntry = useCallback((idx) => {
+    const activePanelEl = panelRefs.current[idx]
+    if (!activePanelEl) return
+    const { catEl, titleEl, bodyEl, specEls, ctaEl } = getPanelElements(activePanelEl)
+    const targets = [catEl, titleEl, bodyEl, ...specEls, ctaEl].filter(Boolean)
+    if (targets.length === 0) return
+
+    gsap.set(targets, {
+      opacity: 0,
+      y: 24,
+      willChange: 'transform, opacity',
+      backfaceVisibility: 'hidden',
+      force3D: true
+    })
+
+    const entryTl = gsap.timeline({
+      onComplete: () => {
+        gsap.set(targets, { clearProps: 'transform,willChange,backfaceVisibility' })
+      }
+    })
+
+    if (catEl) entryTl.to(catEl, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' })
+    if (titleEl) entryTl.to(titleEl, { opacity: 1, y: 0, duration: 0.85, ease: 'power3.out' }, catEl ? '-=0.62' : 0)
+    if (bodyEl) entryTl.to(bodyEl, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, titleEl ? '-=0.68' : 0)
+    if (specEls.length > 0) entryTl.to(specEls, { opacity: 1, y: 0, duration: 0.75, stagger: 0.1, ease: 'power3.out' }, '-=0.62')
+    if (ctaEl) entryTl.to(ctaEl, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, '-=0.55')
+  }, [])
+
+  /* ── GSAP Material Text Sequence (Exit previous -> Switch panel -> Entry new) ── */
+  useEffect(() => {
+    if (reduced()) {
+      setDisplayedIdx(shown)
+      displayedIdxRef.current = shown
+      return
+    }
+
+    if (isFirstRender.current) {
+      isFirstRender.current = false
+      return
+    }
+
+    const fromIdx = displayedIdxRef.current
+    if (fromIdx === shown) return
+
+    if (textTlRef.current) {
+      textTlRef.current.kill()
+    }
+
+    const getTargets = (panelEl) => {
+      const { catEl, titleEl, bodyEl, specEls, ctaEl } = getPanelElements(panelEl)
+      return [catEl, titleEl, bodyEl, ...specEls, ctaEl].filter(Boolean)
+    }
+
+    // Instantly hide non-active non-target panels to prevent rapid hover overlap
+    panelRefs.current.forEach((panel, i) => {
+      if (i !== fromIdx && i !== shown && panel) {
+        const targets = getTargets(panel)
+        if (targets.length) gsap.set(targets, { opacity: 0, y: 24 })
+      }
+    })
+
+    const fromPanelEl = panelRefs.current[fromIdx]
+    const oldTargets = getTargets(fromPanelEl)
+
+    const tl = gsap.timeline()
+    textTlRef.current = tl
+
+    // 1. Exit animation for previous finish text (opacity: 1 -> 0, y: 0 -> -20)
+    if (oldTargets.length > 0) {
+      tl.to(oldTargets, {
+        opacity: 0,
+        y: -20,
+        duration: 0.3,
+        ease: 'power3.in',
+        stagger: 0.02,
+        onComplete: () => {
+          setDisplayedIdx(shown)
+          displayedIdxRef.current = shown
+        }
+      })
+    } else {
+      setDisplayedIdx(shown)
+      displayedIdxRef.current = shown
+    }
+
+    return () => {
+      tl.kill()
+    }
+  }, [shown])
+
+  // Trigger entry animation when displayedIdx updates to new shown finish
+  useEffect(() => {
+    if (reduced()) return
+    animateEntry(displayedIdx)
+  }, [displayedIdx, animateEntry])
+
   /* ── keep the committed swatch in view on the mobile swipe rail ─────────── */
   useEffect(() => {
     const strip = stripRef.current
@@ -168,8 +281,6 @@ export default function Sampler({ finishes = FINISHES }) {
   const engage = useCallback(() => setLocked(true), [])
 
   const enter = (i, e) => {
-    /* Touch fires pointerenter on tap; hover preview is a mouse affordance
-       only, otherwise a tap would preview and commit in the same gesture. */
     if (e.pointerType && e.pointerType !== 'mouse') return
     engage()
     setPreview(i)
@@ -190,7 +301,7 @@ export default function Sampler({ finishes = FINISHES }) {
     if (next === null) return
     e.preventDefault()
     engage()
-    btns.current[next]?.focus()   // focus moves → onFocus previews it
+    btns.current[next]?.focus()
   }
 
   if (!f) return null
@@ -237,10 +348,12 @@ export default function Sampler({ finishes = FINISHES }) {
                   style={{ clipPath: `url(#${clipId})` }}
                 >
                   {finishes.map((x, i) => (
-                    <span
-                      key={x.key}
-                      className={`smp-layer smp-rcp smp-rcp-${x.key}${i === shown ? ' is-on' : ''}`}
-                    />
+                    i === shown ? (
+                      <span
+                        key={x.key}
+                        className={`smp-layer smp-rcp smp-rcp-${x.key} is-on`}
+                      />
+                    ) : null
                   ))}
                   <span className="smp-form" />
                   <span className="smp-rim" />
@@ -248,6 +361,21 @@ export default function Sampler({ finishes = FINISHES }) {
                 </div>
               </div>
 
+              {/* A physical sample card lying on the plinth — same recipe, flat,
+                  at chip scale. This is how the finish actually gets approved. */}
+              <div className="smp-card" aria-hidden="true">
+                <span className="smp-cardface">
+                  {finishes.map((x, i) => (
+                    i === shown ? (
+                      <span
+                        key={x.key}
+                        className={`smp-layer smp-rcp smp-rcp-${x.key} is-on`}
+                      />
+                    ) : null
+                  ))}
+                </span>
+                <span className="meta smp-cardlabel">Sample · 1:1</span>
+              </div>
 
 
 
@@ -263,28 +391,30 @@ export default function Sampler({ finishes = FINISHES }) {
                 assistive tech in one clean, changing node. */}
             <div className="smp-panels" aria-hidden="true">
               {finishes.map((x, i) => (
-                <div key={x.key} className={`smp-panel${i === shown ? ' is-on' : ''}`}>
-                  <span className="idx smp-idx">
-                    {pad(i + 1)}<i />{pad(n)}
-                  </span>
-                  <CharCascade as="p" className="smp-name">{x.name}</CharCascade>
-                  <ul className="smp-subs">
-                    {x.substrates.map((s) => (
-                      <li key={s} className="chip smp-sub">{s}</li>
-                    ))}
-                  </ul>
-                  <SmoothReveal><p className="lede smp-char">{x.character}</p></SmoothReveal>
+                <div
+                  key={x.key}
+                  ref={(el) => (panelRefs.current[i] = el)}
+                  className={`smp-panel${i === displayedIdx ? ' is-on' : ''}`}
+                >
+                  <EditorialReveal
+                    category={`FINISH ${pad(i + 1)} / ${pad(n)} · MATERIAL SPECIFICATION`}
+                    title={x.name}
+                    body={x.character}
+                    specs={x.substrates.map((s) => ({ label: 'Substrate', value: s }))}
+                    staggerMs={100}
+                    disabled={true}
+                  >
+                    <div className="ed-cta" style={{ marginTop: '1.75rem' }}>
+                      <Button to="/contact">Request the swatch box</Button>
+                    </div>
+                  </EditorialReveal>
                 </div>
               ))}
             </div>
 
             <p className="smp-sr" role="status">
-              {`${f.name}. Substrates: ${f.substrates.join(', ')}. ${f.character} Durability: ${f.durability} Care: ${f.care}`}
+              {`${f.name}. Substrates: ${f.substrates.join(', ')}. ${f.character}`}
             </p>
-
-            <div className="smp-cta">
-              <Button to="/contact">Request the swatch box</Button>
-            </div>
             
             {/* ─────────── swatches ─────────── */}
             <div className="smp-swatches" style={{ marginTop: '2rem' }}>

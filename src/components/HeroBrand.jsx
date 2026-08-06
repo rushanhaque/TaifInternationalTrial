@@ -39,14 +39,14 @@ export default function HeroBrand() {
 
     /* each letter seats itself like an inlay piece tapped into its channel */
     tl.fromTo(chars,
-      { y: '24%', opacity: 0, scaleY: 1.16, transformOrigin: '50% 100%' },
-      { y: 0, opacity: 1, scaleY: 1, duration: 0.85, ease: 'surge', stagger: 0.08 })
+      { y: 24, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.85, ease: 'power3.out', stagger: 0.08 })
       .fromTo(intl.current,
-        { opacity: 0, letterSpacing: '0.2em' },
-        { opacity: 1, letterSpacing: '0.58em', duration: 0.9, ease: 'fluid' }, '-=0.45')
+        { opacity: 0, y: 15, letterSpacing: '0.2em' },
+        { opacity: 1, y: 0, letterSpacing: '0.58em', duration: 0.9, ease: 'power3.out' }, '-=0.45')
       .fromTo(foot.current,
-        { opacity: 0, y: 14 },
-        { opacity: 1, y: 0, duration: 0.6 }, '-=0.55')
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.75, ease: 'power3.out' }, '-=0.55')
 
     return () => tl.kill()
   }, []) // eslint-disable-line react-hooks/exhaustive-deps

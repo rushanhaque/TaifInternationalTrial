@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { gsap } from '../../lib/gsap'
 import { BRAND } from '../../data/site'
-import { CharCascade, SmoothReveal } from '../Reveal'
+import { CharCascade, SmoothReveal, EditorialReveal } from '../Reveal'
 
 /* mk2 · THE TURN — the homepage's signature moment.
  *
@@ -322,15 +322,15 @@ export default function TheTurn({ frames }) {
         <div className="tt-spec-grid">
           {COLS.map((c) => (
             <div className={`tt-spec-col is-${c.mat}`} key={c.mat}>
-              <CharCascade as="h3" className="tt-spec-h">{c.head}</CharCascade>
-              <ul className="tt-spec-list">
-                {NOTES.filter((n) => n.mat === c.mat).map((n) => (
-                  <li key={n.id}>
-                    <span className="tt-spec-tag meta">{n.tag}</span>
-                    <SmoothReveal><p className="tt-spec-text">{n.text}</p></SmoothReveal>
-                  </li>
-                ))}
-              </ul>
+              <EditorialReveal
+                category={`${c.mat.toUpperCase()} SPECIFICATION`}
+                title={c.head}
+                specs={NOTES.filter((n) => n.mat === c.mat).map((n) => ({
+                  label: n.tag,
+                  value: n.text
+                }))}
+                staggerMs={100}
+              />
             </div>
           ))}
         </div>

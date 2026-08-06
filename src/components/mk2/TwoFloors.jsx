@@ -182,9 +182,11 @@ export default function TwoFloors() {
         <span className="tf-numeral" aria-hidden="true">01</span>
         <div className="tf-content">
           <div className="tf-stack">
-            <p className="tf-eyebrow">
-              <span className="tf-tick" aria-hidden="true" />Floor 01 — Moradabad
-            </p>
+            <SmoothReveal>
+              <p className="tf-eyebrow">
+                <span className="tf-tick" aria-hidden="true" />Floor 01 — Moradabad
+              </p>
+            </SmoothReveal>
             <CharCascade as="h3" className="tf-head">Struck, spun, raised.</CharCascade>
             <SmoothReveal>
               <p className="tf-copy">
@@ -193,11 +195,15 @@ export default function TwoFloors() {
                 out from the back. Nothing on this floor is pressed.
               </p>
             </SmoothReveal>
-            <p className="tf-stat">
-              <span className="tf-stat-n">11</span>
-              <span className="tf-stat-l">processes<br />under one roof</span>
-            </p>
-            <p className="tf-spec">Raised up to 900 mm across</p>
+            <SmoothReveal>
+              <p className="tf-stat">
+                <span className="tf-stat-n">11</span>
+                <span className="tf-stat-l">processes<br />under one roof</span>
+              </p>
+            </SmoothReveal>
+            <SmoothReveal>
+              <p className="tf-spec">Raised up to 900 mm across</p>
+            </SmoothReveal>
           </div>
         </div>
       </div>
@@ -213,9 +219,11 @@ export default function TwoFloors() {
         <span className="tf-numeral" aria-hidden="true">02</span>
         <div className="tf-content">
           <div className="tf-stack">
-            <p className="tf-eyebrow">
-              <span className="tf-tick" aria-hidden="true" />Floor 02 — Saharanpur
-            </p>
+            <SmoothReveal>
+              <p className="tf-eyebrow">
+                <span className="tf-tick" aria-hidden="true" />Floor 02 — Saharanpur
+              </p>
+            </SmoothReveal>
             <CharCascade as="h3" className="tf-head">Seasoned, then cut.</CharCascade>
             <SmoothReveal>
               <p className="tf-copy">
@@ -224,11 +232,15 @@ export default function TwoFloors() {
                 Only after that does a blade touch them.
               </p>
             </SmoothReveal>
-            <p className="tf-stat">
-              <span className="tf-stat-n">8–10%</span>
-              <span className="tf-stat-l">moisture<br />at the bench</span>
-            </p>
-            <p className="tf-spec">Four weeks resting. Then one cut.</p>
+            <SmoothReveal>
+              <p className="tf-stat">
+                <span className="tf-stat-n">8–10%</span>
+                <span className="tf-stat-l">moisture<br />at the bench</span>
+              </p>
+            </SmoothReveal>
+            <SmoothReveal>
+              <p className="tf-spec">Four weeks resting. Then one cut.</p>
+            </SmoothReveal>
           </div>
         </div>
       </div>

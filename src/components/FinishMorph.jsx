@@ -65,8 +65,8 @@ export default function FinishMorph({
         if (!reduced()) {
           const chars = splitChars(n)
           gsap.from(chars, {
-            y: 14, scaleY: 1.5, opacity: 0, transformOrigin: '50% 100%',
-            stagger: { each: 0.014, from: 'center' }, duration: 0.45, ease: 'surge',
+            y: 16, opacity: 0,
+            stagger: { each: 0.014, from: 'center' }, duration: 0.4, ease: 'power3.out',
           })
         }
       } else gsap.set(n, { opacity: 0 })
@@ -155,8 +155,8 @@ export default function FinishMorph({
           .set(names[i], { opacity: 1 }, i + 0.02)
           .fromTo(
             nameChars[i],
-            { y: 14, scaleY: 1.5, opacity: 0, transformOrigin: '50% 100%' },
-            { y: 0, scaleY: 1, opacity: 1, stagger: { each: 0.012, from: 'center' }, duration: 0.3, ease: 'surge' },
+            { y: 16, opacity: 0 },
+            { y: 0, opacity: 1, stagger: { each: 0.012, from: 'center' }, duration: 0.35, ease: 'power3.out' },
             i + 0.04
           )
           .to(copies[i - 1], { opacity: 0, duration: 0.2 }, i - 0.1)

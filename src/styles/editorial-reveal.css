@@ -1,0 +1,154 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   LUXURY EDITORIAL REVEAL — DESIGN SYSTEM & STYLING
+   Inspired by high-end furniture, material archives & architectural showcases.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.ed-container {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  box-sizing: border-box;
+}
+
+/* Category Label / Eyebrow */
+.ed-category {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-sans, system-ui, -apple-system, sans-serif);
+  font-size: clamp(0.7rem, 0.9vw, 0.8rem);
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--brass, #c5973f);
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  backface-visibility: hidden;
+  will-change: transform, opacity;
+}
+
+.ed-category::before {
+  content: "";
+  display: inline-block;
+  width: 18px;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.7;
+}
+
+/* Title / Main Product Name */
+.ed-title {
+  font-family: var(--font-serif, "Cinzel", "Bodoni MT", "Didot", serif, system-ui);
+  font-size: clamp(2.2rem, 4.8vw, 4rem);
+  font-weight: 300;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  color: var(--graphite, #1c1c1a);
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  backface-visibility: hidden;
+  will-change: transform, opacity;
+}
+
+/* Body Text / Lede */
+.ed-body {
+  font-family: var(--font-sans, system-ui, -apple-system, sans-serif);
+  font-size: clamp(0.98rem, 1.3vw, 1.15rem);
+  font-weight: 400;
+  line-height: 1.7;
+  letter-spacing: 0.015em;
+  color: var(--dim, rgba(28, 28, 26, 0.68));
+  max-width: 52ch;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  backface-visibility: hidden;
+  will-change: transform, opacity;
+}
+
+/* Specification Values Grid / Row */
+.ed-specs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+  margin-top: 0.5rem;
+  padding: 0;
+  list-style: none;
+}
+
+/* Specification Item Card / Chip */
+.ed-spec-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.25rem;
+  padding: 0.75rem 1.25rem;
+  background: var(--chrome-2, rgba(28, 28, 26, 0.03));
+  border: 1px solid var(--hair, rgba(28, 28, 26, 0.12));
+  border-radius: 8px;
+  backdrop-filter: blur(8px);
+  min-width: 130px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  backface-visibility: hidden;
+  will-change: transform, opacity;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.ed-spec-item:hover {
+  border-color: var(--brass, #c5973f);
+  background: var(--chrome, #ffffff);
+}
+
+.ed-spec-label {
+  font-family: var(--font-sans, system-ui, -apple-system, sans-serif);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--faint, rgba(28, 28, 26, 0.42));
+  line-height: 1;
+}
+
+.ed-spec-value {
+  font-family: var(--font-mono, monospace, system-ui);
+  font-size: 0.88rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--graphite, #1c1c1a);
+  line-height: 1.2;
+}
+
+/* Dark Mode Overrides */
+html.dark .ed-title {
+  color: var(--graphite, #fcfbf8);
+}
+
+html.dark .ed-body {
+  color: var(--dim, rgba(252, 251, 248, 0.7));
+}
+
+html.dark .ed-spec-item {
+  background: rgba(255, 255, 255, 0.035);
+  border-color: var(--hair, rgba(252, 251, 248, 0.15));
+}
+
+html.dark .ed-spec-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--brass, #daa520);
+}
+
+html.dark .ed-spec-label {
+  color: var(--faint, rgba(252, 251, 248, 0.45));
+}
+
+html.dark .ed-spec-value {
+  color: var(--graphite, #fcfbf8);
+}

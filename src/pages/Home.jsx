@@ -121,7 +121,11 @@ export default function Home() {
                   Three of eight stages. The full line runs from certified stock and a
                   seasoning yard through to a packed carton — every hand-off recorded.
                 </p>
-                <Button to="/catalogue">What we can make</Button>
+              </SmoothReveal>
+              <SmoothReveal delay={0.15}>
+                <div style={{ marginTop: '1.25rem' }}>
+                  <Button to="/catalogue">What we can make</Button>
+                </div>
               </SmoothReveal>
             </div>
           </div>
@@ -132,7 +136,7 @@ export default function Home() {
       <div className="wrap" style={{ marginBlock: '4rem' }}>
         <div className="countries-card" id="countries">
           <div style={{ position: 'absolute', top: '3rem', left: 0, width: '100%', textAlign: 'center' }}>
-            <CharCascade as="span" className="meta" style={{ display: 'inline-block', transform: 'scale(1.5)' }}>
+            <CharCascade as="span" className="meta" style={{ display: 'inline-block', fontSize: '1.25rem' }}>
               Countries served
             </CharCascade>
           </div>

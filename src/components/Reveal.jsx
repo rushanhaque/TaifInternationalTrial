@@ -1,47 +1,66 @@
 import { createElement, useEffect, useRef } from 'react'
 import { gsap, reduced, splitChars } from '../lib/gsap'
+export { EditorialReveal } from './EditorialReveal'
 
-/* E7 Dilate — the default reveal: swell from a centre point with a radius morph. */
+/* E7 Dilate — smooth luxury upward reveal without bounce or scale */
 export function Dilate({ as = 'div', className = '', delay = 0, children, style, ...rest }) {
   const ref = useRef(null)
   useEffect(() => {
     if (reduced()) return
     if (!ref.current) return
-    const tw = gsap.from(ref.current, {
-      scale: 0.94, opacity: 0, borderRadius: 34,
-      transformOrigin: '50% 50%',
-      duration: 0.9, delay, ease: 'surge',
-      clearProps: 'borderRadius,scale',
-      scrollTrigger: { trigger: ref.current, start: 'top 88%', once: true },
+
+    gsap.set(ref.current, { opacity: 0, y: 22 })
+
+    const tw = gsap.to(ref.current, {
+      y: 0, opacity: 1,
+      duration: 0.85, delay, ease: 'power3.out',
+      scrollTrigger: {
+        trigger: ref.current,
+        start: 'top 95%',
+        toggleActions: 'play none none none',
+        once: true
+      },
+      onComplete: () => {
+        gsap.set(ref.current, { clearProps: 'transform' })
+      }
     })
+
+    if (tw.scrollTrigger && tw.scrollTrigger.progress > 0) {
+      tw.play()
+    }
+
     return () => { tw.scrollTrigger?.kill(); tw.kill() }
   }, [delay])
   return createElement(as, { ref, className, style, ...rest }, children)
 }
 
-/* E8 Char Cascade — character squash-and-settle reveal, staggered from center.
-   Triggered on scroll as elements enter viewport. Used for headings & key text. */
+/* Premium Luxury Text Cascade — smooth subtle upward fade without bounce or scale */
 export function CharCascade({ as = 'h2', className = '', delay = 0, children, id, style, ...rest }) {
   const ref = useRef(null)
   useEffect(() => {
     if (reduced()) return
     if (!ref.current) return
-    const chars = splitChars(ref.current)
-    if (!chars || !chars.length) return
 
-    gsap.set(chars, { opacity: 0, y: 22, scaleY: 1.6, transformOrigin: '50% 100%' })
+    gsap.set(ref.current, { opacity: 0, y: 22 })
 
-    const tw = gsap.to(chars, {
-      y: 0, scaleY: 1, opacity: 1,
-      stagger: { each: 0.02, from: 'center' },
-      duration: 0.75, delay, ease: 'surge',
+    const tw = gsap.to(ref.current, {
+      y: 0, opacity: 1,
+      duration: 0.85, delay, ease: 'power3.out',
       scrollTrigger: {
         trigger: ref.current,
-        start: 'top 92%',
+        start: 'top 95%',
         toggleActions: 'play none none none',
         once: true
       },
+      onComplete: () => {
+        gsap.set(ref.current, { clearProps: 'transform' })
+      }
     })
+
+    if (tw.scrollTrigger && tw.scrollTrigger.progress > 0) {
+      tw.play()
+    }
+
     return () => { tw.scrollTrigger?.kill(); tw.kill() }
   }, [delay, children])
 
@@ -59,14 +78,22 @@ export function SmoothReveal({ as = 'div', className = '', delay = 0, children, 
 
     const tw = gsap.to(ref.current, {
       y: 0, opacity: 1,
-      duration: 0.85, delay, ease: 'atelys',
+      duration: 0.8, delay, ease: 'power3.out',
       scrollTrigger: {
         trigger: ref.current,
-        start: 'top 92%',
+        start: 'top 95%',
         toggleActions: 'play none none none',
         once: true
       },
+      onComplete: () => {
+        gsap.set(ref.current, { clearProps: 'transform' })
+      }
     })
+
+    if (tw.scrollTrigger && tw.scrollTrigger.progress > 0) {
+      tw.play()
+    }
+
     return () => { tw.scrollTrigger?.kill(); tw.kill() }
   }, [delay])
 

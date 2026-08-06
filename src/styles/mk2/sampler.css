@@ -192,14 +192,13 @@
   inset: 0;
   opacity: 0;
   visibility: hidden;
-  /* visibility flips only after the fade so inactive recipes stop painting */
-  transition: opacity 0.66s var(--ease-fluid), visibility 0s linear 0.66s;
+  display: none;
 }
 
 .smp-layer.is-on {
   opacity: 1;
   visibility: visible;
-  transition: opacity 0.66s var(--ease-fluid), visibility 0s;
+  display: block;
 }
 
 /* ── form shading — shared by every recipe, so the silhouette stays solid
@@ -581,23 +580,13 @@
   grid-area: 1 / 1;
   opacity: 0;
   visibility: hidden;
-  transform: translate3d(0, 15px, 0);
   pointer-events: none;
-  transition:
-    opacity 0.4s var(--ease-fluid),
-    transform 0.62s var(--ease-surge),
-    visibility 0s linear 0.62s;
 }
 
 .smp-panel.is-on {
   opacity: 1;
   visibility: visible;
-  transform: none;
   pointer-events: auto;
-  transition:
-    opacity 0.5s var(--ease-fluid) 0.09s,
-    transform 0.7s var(--ease-surge),
-    visibility 0s;
 }
 
 .smp-panel .smp-idx {
