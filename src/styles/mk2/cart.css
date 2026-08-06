@@ -305,3 +305,35 @@
   .ct-btn::before,
   .ct-close { transition-duration: 0.01ms; }
 }
+
+/* ============ Mobile Responsiveness Overrides ============ */
+@media (max-width: 500px) {
+  .ct-tab {
+    right: 1rem;
+    bottom: 1rem;
+    padding: 0.75rem 1rem;
+  }
+  .ct-pane {
+    width: 100vw;
+  }
+  .ct-head {
+    padding: 1.25rem 1rem 0.75rem;
+  }
+  .ct-close {
+    width: 42px;
+    height: 42px;
+  }
+  .ct-note {
+    padding: 0 1rem 0.85rem;
+  }
+  .ct-list {
+    padding: 0.4rem 1rem;
+  }
+  .ct-foot {
+    padding: 1rem 1rem calc(1rem + env(safe-area-inset-bottom));
+  }
+  .ct-btn {
+    padding: 1.05rem 1.25rem;
+  }
+}
+

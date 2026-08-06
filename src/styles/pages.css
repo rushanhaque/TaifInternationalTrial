@@ -412,3 +412,66 @@
   .only-cd { display: none; }
   .only-fallback { display: block; }
 }
+
+/* ============ Mobile Responsiveness Overrides for Inner Pages ============ */
+@media (max-width: 768px) {
+  .page-hero {
+    padding-top: calc(var(--nav-h) + 1.8rem);
+    padding-bottom: 2rem;
+  }
+
+  .spec-row {
+    grid-template-columns: 1fr;
+    gap: 0.3rem;
+    padding: 0.7rem 0;
+  }
+
+  .spec-row dt {
+    font-weight: 600;
+  }
+
+  .swatch-wall {
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 0.5rem;
+  }
+
+  .swatch {
+    height: 54px;
+    font-size: 0.85rem;
+  }
+
+  .contact-split {
+    gap: 2rem;
+  }
+
+  .contact-form-col,
+  .sent-card {
+    max-width: 100%;
+  }
+
+  .sent-card {
+    padding: 1.5rem;
+  }
+
+  .faq-q {
+    padding: 0.85rem 1rem;
+    font-size: 0.95rem;
+    min-height: 48px;
+  }
+
+  .faq-a-inner .body {
+    padding: 0 1rem 1rem;
+  }
+
+  .moq-row {
+    grid-template-columns: 1.5fr 1fr 1fr;
+    font-size: 0.88rem;
+    gap: 0.5rem;
+  }
+
+  .cd-fallback {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+}
+

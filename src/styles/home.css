@@ -10,15 +10,7 @@
   padding: calc(var(--nav-h) + 2rem) var(--gutter) 5rem;
 }
 .hb-bg {
-  position: absolute; inset: 0;
-  background: var(--hero-image, none) center / cover no-repeat;
-}
-/* only a whisper of warmth at the very bottom so the section meets the page
-   cleanly — the photograph itself stays clear */
-.hb-bg::after {
-  content: ''; position: absolute; inset: 0;
-  background: linear-gradient(180deg,
-    transparent 0%, transparent 72%, rgba(250, 247, 242, 0.55) 90%, var(--chrome) 100%);
+  display: none !important;
 }
 .hb-stage { position: relative; text-align: center; }
 
@@ -273,4 +265,55 @@
   position: relative;
   overflow: hidden;
 }
+
+/* ============ Mobile Responsiveness Overrides ============ */
+@media (max-width: 768px) {
+  .hero-brand {
+    padding: calc(var(--nav-h) + 1.5rem) 1rem 3rem;
+  }
+
+  .hb-mark {
+    font-size: clamp(3.2rem, 18vw, 6.5rem);
+    letter-spacing: -0.035em;
+  }
+
+  .hb-intl {
+    letter-spacing: 0.3em;
+    padding-left: 0.3em;
+    font-size: 0.72rem;
+  }
+
+  .hb-tag {
+    letter-spacing: 0.18em;
+    padding-left: 0.18em;
+    font-size: 0.72rem;
+  }
+
+  .hb-foot {
+    display: flex;
+    justify-content: center;
+    padding-bottom: 1.2rem;
+  }
+
+  .countries-card {
+    margin-top: 2rem;
+    padding: 2.5rem 1rem 2rem;
+  }
+
+  .fm-fallback {
+    grid-template-columns: 1fr !important;
+    padding: 1.25rem 1rem;
+    gap: 1.25rem;
+  }
+
+  .fm-swatches {
+    gap: 0.5rem;
+  }
+
+  .fm-swi {
+    width: 60px;
+    height: 20px;
+  }
+}
+
 
