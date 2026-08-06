@@ -2,9 +2,7 @@ import React, { useState, useRef, useMemo, useEffect } from "react";
 import NotFoundPage from "./NotFoundPage";
 
 /* ---------------------------------------------------------------
-   Admin · Product Management — Taif International Design System
-   Fonts: var(--font-display) 'Archivo Expanded' · var(--font-body) 'Inter Tight'
-   Palette: var(--chrome) · var(--graphite) · var(--brass) · var(--hair)
+   Admin Dashboard — Taif International Design System
 --------------------------------------------------------------- */
 
 const EMPTY_PRODUCT = {
@@ -17,17 +15,29 @@ const EMPTY_PRODUCT = {
   sku: "",
   material: "",
   finish: "",
+  slug: "",
+};
+
+const EMPTY_REVIEW = {
+  id: null,
+  name: "",
+  role: "",
+  text: "",
+  rating: 5,
+};
+
+const EMPTY_SOCIAL = {
+  id: null,
+  type: "video",
+  videoSrc: "",
+  thumbnailSrc: "",
+  thumbnailAlt: "",
 };
 
 function BoxIcon() {
   return (
     <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-      <path
-        d="M20 5 L34 12 V28 L20 35 L6 28 V12 Z"
-        stroke="var(--brass, #c5973f)"
-        strokeWidth="1.3"
-        strokeLinejoin="round"
-      />
+      <path d="M20 5 L34 12 V28 L20 35 L6 28 V12 Z" stroke="var(--brass, #c5973f)" strokeWidth="1.3" strokeLinejoin="round" />
       <path d="M6 12 L20 19 L34 12" stroke="var(--brass, #c5973f)" strokeWidth="1.3" strokeLinejoin="round" />
       <path d="M20 19 V35" stroke="var(--brass, #c5973f)" strokeWidth="1.3" />
     </svg>
@@ -75,15 +85,10 @@ function CheckIcon() {
 function Modal({ title, onClose, children, wide }) {
   return (
     <div className="pm-overlay" onMouseDown={onClose}>
-      <div
-        className={`pm-modal ${wide ? "pm-modal--wide" : ""}`}
-        onMouseDown={(e) => e.stopPropagation()}
-      >
+      <div className={`pm-modal ${wide ? "pm-modal--wide" : ""}`} onMouseDown={(e) => e.stopPropagation()}>
         <div className="pm-modal-head">
           <h2>{title}</h2>
-          <button className="pm-icon-btn" onClick={onClose} aria-label="Close">
-            ×
-          </button>
+          <button className="pm-icon-btn" onClick={onClose} aria-label="Close">×</button>
         </div>
         {children}
       </div>
@@ -92,158 +97,25 @@ function Modal({ title, onClose, children, wide }) {
 }
 
 export default function AdminPage() {
-  const isAuthorized = typeof window !== 'undefined' && localStorage.getItem('taif_admin_device_authorized') === 'true';
-
-  if (!isAuthorized) {
-    return <NotFoundPage />;
-  }
-
   return <AdminPageContent />;
 }
 
 function AdminPageContent() {
-  const [products, setProducts] = useState([]);
-  const [customCategories, setCustomCategories] = useState([]);
-  const [activeCategory, setActiveCategory] = useState("All");
-
-  const [showAddProduct, setShowAddProduct] = useState(false);
-  const [showAddSub, setShowAddSub] = useState(false);
-
-  const [productForm, setProductForm] = useState(EMPTY_PRODUCT);
-  const [imagePreview, setImagePreview] = useState(null);
-  const fileInputRef = useRef(null);
-
-  const [subForm, setSubForm] = useState({ category: "", subcategory: "" });
-
-  // Toast notifications state
+  const { catalogue, setCatalogue, reviews, setReviews, socials, setSocials, blogs, setBlogs } = useData();
+  const [activeTab, setActiveTab] = useState("catalogue");
+  
+  // Toast
   const [toast, setToast] = useState(null);
-
-  const triggerToast = (msg) => {
-    setToast(msg);
-  };
-
+  const triggerToast = (msg) => setToast(msg);
   useEffect(() => {
     if (!toast) return;
     const timer = setTimeout(() => setToast(null), 3000);
     return () => clearTimeout(timer);
   }, [toast]);
 
-  // Dynamically derived list of categories added by user
-  const availableCategories = useMemo(() => {
-    const set = new Set(customCategories);
-    products.forEach((p) => {
-      if (p.category && p.category.trim()) {
-        set.add(p.category.trim());
-      }
-    });
-    return Array.from(set);
-  }, [customCategories, products]);
-
-  // Category filter chips starting with only "All"
-  const categoryChips = useMemo(() => {
-    return ["All", ...availableCategories];
-  }, [availableCategories]);
-
-  // Category counts
-  const categoryCounts = useMemo(() => {
-    const counts = { All: products.length };
-    products.forEach((p) => {
-      if (p.category) {
-        counts[p.category] = (counts[p.category] || 0) + 1;
-      }
-    });
-    return counts;
-  }, [products]);
-
-  const filteredProducts = useMemo(() => {
-    return products.filter((p) => {
-      return activeCategory === "All" || p.category === activeCategory;
-    });
-  }, [products, activeCategory]);
-
-  const resetProductForm = () => {
-    setProductForm(EMPTY_PRODUCT);
-    setImagePreview(null);
-    if (fileInputRef.current) fileInputRef.current.value = "";
-  };
-
-  const handleImageChange = (e) => {
-    const file = e.target.files && e.target.files[0];
-    if (!file) return;
-    setProductForm((f) => ({ ...f, image: file }));
-    const reader = new FileReader();
-    reader.onload = (ev) => setImagePreview(ev.target.result);
-    reader.readAsDataURL(file);
-  };
-
-  const handleSaveProduct = (e) => {
-    e.preventDefault();
-    if (!productForm.name.trim()) return;
-
-    const trimmedCategory = productForm.category.trim();
-    if (trimmedCategory && !customCategories.includes(trimmedCategory)) {
-      setCustomCategories((prev) => [...prev, trimmedCategory]);
-    }
-
-    if (productForm.id) {
-      // Edit existing product
-      setProducts((prev) =>
-        prev.map((p) =>
-          p.id === productForm.id
-            ? { ...productForm, category: trimmedCategory, imagePreview }
-            : p
-        )
-      );
-      triggerToast(`Updated "${productForm.name}" successfully`);
-    } else {
-      // Create new product
-      const newProd = {
-        ...productForm,
-        category: trimmedCategory,
-        id: Date.now(),
-        imagePreview,
-      };
-      setProducts((prev) => [newProd, ...prev]);
-      triggerToast(`Added "${newProd.name}" to products`);
-    }
-
-    resetProductForm();
-    setShowAddProduct(false);
-  };
-
-  const handleEditProduct = (prod) => {
-    setProductForm(prod);
-    setImagePreview(prod.imagePreview || null);
-    setShowAddProduct(true);
-  };
-
-  const handleDeleteProduct = (id, name) => {
-    if (window.confirm(`Are you sure you want to delete "${name}"?`)) {
-      setProducts((prev) => prev.filter((p) => p.id !== id));
-      triggerToast(`Deleted "${name}"`);
-    }
-  };
-
-  const handleCreateSub = (e) => {
-    e.preventDefault();
-    const trimmedCat = subForm.category.trim();
-    const trimmedSub = subForm.subcategory.trim();
-    if (!trimmedCat || !trimmedSub) return;
-
-    if (!customCategories.includes(trimmedCat)) {
-      setCustomCategories((prev) => [...prev, trimmedCat]);
-    }
-
-    setSubForm({ category: "", subcategory: "" });
-    setShowAddSub(false);
-    triggerToast(`Created subcategory "${trimmedSub}" under ${trimmedCat}`);
-  };
-
   return (
     <div className="pm-root">
       <style>{CSS}</style>
-
-      {/* Toast Notification */}
       {toast && (
         <div className="pm-toast">
           <CheckIcon />
@@ -252,143 +124,137 @@ function AdminPageContent() {
       )}
 
       <div className="pm-container">
-        {/* Fixed Top Section */}
         <div className="pm-top-section">
           <header className="pm-header">
-            <h1 className="pm-title">Product Management</h1>
+            <h1 className="pm-title">Admin Dashboard</h1>
             <p className="lede" style={{ marginTop: ".4rem", fontSize: "1rem" }}>
-              Add, edit, sub-categorize, and organize product items across the catalogue.
+              Manage your catalogue, reviews, socials, and blogs.
             </p>
           </header>
 
-          {/* Category chips bar */}
           <div className="pm-chips-bar">
             <div className="pm-chips">
-              {categoryChips.map((cat) => {
-                const count = categoryCounts[cat] || 0;
-                return (
-                  <button
-                    key={cat}
-                    className={`pm-chip ${activeCategory === cat ? "pm-chip--active" : ""}`}
-                    onClick={() => setActiveCategory(cat)}
-                  >
-                    <span>{cat}</span>
-                    {count > 0 && <span className="pm-chip-count">{count}</span>}
-                  </button>
-                );
-              })}
+              <button className={`pm-chip ${activeTab === 'catalogue' ? 'pm-chip--active' : ''}`} onClick={() => setActiveTab('catalogue')}>Catalogue</button>
+              <button className={`pm-chip ${activeTab === 'reviews' ? 'pm-chip--active' : ''}`} onClick={() => setActiveTab('reviews')}>Reviews</button>
+              <button className={`pm-chip ${activeTab === 'socials' ? 'pm-chip--active' : ''}`} onClick={() => setActiveTab('socials')}>Socials</button>
             </div>
           </div>
         </div>
 
-        {/* Datalist for existing categories in forms */}
-        <datalist id="pm-category-list">
-          {availableCategories.map((cat) => (
-            <option key={cat} value={cat} />
-          ))}
-        </datalist>
-
-        {/* Scrollable Products Content Area */}
         <div className="pm-scrollable-content">
-          {filteredProducts.length === 0 ? (
-            <div className="pm-empty">
-              <div className="pm-empty-icon">
-                <BoxIcon />
-              </div>
-              <h3>No products found</h3>
-              <p>
-                {activeCategory === "All"
-                  ? "Start by adding your first product using the button below."
-                  : `No products in "${activeCategory}" category yet.`}
-              </p>
-            </div>
-          ) : (
-            <div className="pm-grid">
-              {filteredProducts.map((p) => (
-                <div className="pm-card" key={p.id}>
-                  <div className="pm-card-image">
-                    {p.imagePreview ? (
-                      <img src={p.imagePreview} alt={p.name} />
-                    ) : (
-                      <div className="pm-card-placeholder">
-                        <BoxIcon />
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="pm-card-body">
-                    <div className="pm-card-top">
-                      <h4>{p.name}</h4>
-                      {p.sku && <span className="pm-sku">SKU: {p.sku}</span>}
-                    </div>
-
-                    <p className="pm-card-meta">
-                      {p.category}
-                      {p.subcategory ? ` · ${p.subcategory}` : ""}
-                    </p>
-
-                    {(p.material || p.finish) && (
-                      <div className="pm-card-tags">
-                        {p.material && <span className="pm-tag">{p.material}</span>}
-                        {p.finish && <span className="pm-tag">{p.finish}</span>}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Card Actions */}
-                  <div className="pm-card-actions">
-                    <button
-                      className="pm-card-btn pm-card-btn--edit"
-                      onClick={() => handleEditProduct(p)}
-                      title="Edit Product"
-                      aria-label="Edit product"
-                    >
-                      <EditIcon />
-                    </button>
-                    <button
-                      className="pm-card-btn pm-card-btn--delete"
-                      onClick={() => handleDeleteProduct(p.id, p.name)}
-                      title="Delete Product"
-                      aria-label="Delete product"
-                    >
-                      <TrashIcon />
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Fixed Bottom Action Bar */}
-        <div className="pm-bottom-bar">
-          <div className="pm-bottom-actions">
-            <button
-              className="pm-btn pm-btn--primary"
-              onClick={() => {
-                resetProductForm();
-                setShowAddProduct(true);
-              }}
-            >
-              <span className="pm-plus">+</span> Add Product
-            </button>
-            <button className="pm-btn pm-btn--outline" onClick={() => setShowAddSub(true)}>
-              <span className="pm-plus">+</span> Add Subcategory
-            </button>
-          </div>
+          {activeTab === 'catalogue' && <CatalogueManager catalogue={catalogue} setCatalogue={setCatalogue} triggerToast={triggerToast} />}
+          {activeTab === 'reviews' && <ReviewsManager reviews={reviews} setReviews={setReviews} triggerToast={triggerToast} />}
+          {activeTab === 'socials' && <SocialsManager socials={socials} setSocials={setSocials} triggerToast={triggerToast} />}
         </div>
       </div>
+    </div>
+  );
+}
 
-      {/* Add / Edit Product Modal */}
+function CatalogueManager({ catalogue, setCatalogue, triggerToast }) {
+  const [showAddProduct, setShowAddProduct] = useState(false);
+  const [productForm, setProductForm] = useState(EMPTY_PRODUCT);
+  const [imagePreview, setImagePreview] = useState(null);
+  const fileInputRef = useRef(null);
+  const [customCategories, setCustomCategories] = useState([]);
+  const [activeCategory, setActiveCategory] = useState("All");
+
+  const availableCategories = useMemo(() => {
+    const set = new Set(customCategories);
+    catalogue.forEach((p) => { if (p.category && p.category.trim()) set.add(p.category.trim()); });
+    return Array.from(set);
+  }, [customCategories, catalogue]);
+
+  const filteredProducts = useMemo(() => catalogue.filter((p) => activeCategory === "All" || p.category === activeCategory), [catalogue, activeCategory]);
+
+  const resetForm = () => {
+    setProductForm(EMPTY_PRODUCT);
+    setImagePreview(null);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => setImagePreview(ev.target.result);
+    reader.readAsDataURL(file);
+  };
+
+  const handleSaveProduct = (e) => {
+    e.preventDefault();
+    if (!productForm.name.trim()) return;
+    const trimmedCategory = productForm.category.trim();
+    if (trimmedCategory && !customCategories.includes(trimmedCategory)) setCustomCategories(p => [...p, trimmedCategory]);
+
+    const slug = productForm.slug || productForm.name.toLowerCase().replace(/\s+/g, '-');
+    const prodData = { ...productForm, slug, category: trimmedCategory, imagePreview, finishes: productForm.finishes || [] };
+
+    if (productForm.id) {
+      setCatalogue(prev => prev.map(p => p.id === productForm.id ? prodData : p));
+      triggerToast(`Updated "${prodData.name}"`);
+    } else {
+      prodData.id = Date.now();
+      setCatalogue(prev => [prodData, ...prev]);
+      triggerToast(`Added "${prodData.name}"`);
+    }
+    resetForm();
+    setShowAddProduct(false);
+  };
+
+  const handleDelete = (id, name) => {
+    if (window.confirm(`Delete "${name}"?`)) {
+      setCatalogue(prev => prev.filter(p => p.id !== id));
+      triggerToast(`Deleted "${name}"`);
+    }
+  };
+
+  return (
+    <>
+      <div className="pm-chips-bar" style={{borderTop:'none', padding:'0 0 12px 0'}}>
+        <div className="pm-chips">
+          {["All", ...availableCategories].map(cat => (
+            <button key={cat} className={`pm-chip ${activeCategory === cat ? 'pm-chip--active' : ''}`} onClick={() => setActiveCategory(cat)}>{cat}</button>
+          ))}
+        </div>
+      </div>
+      <datalist id="pm-category-list">
+        {availableCategories.map(c => <option key={c} value={c} />)}
+      </datalist>
+
+      {filteredProducts.length === 0 ? (
+        <div className="pm-empty">
+          <div className="pm-empty-icon"><BoxIcon /></div>
+          <h3>No products found</h3>
+        </div>
+      ) : (
+        <div className="pm-grid">
+          {filteredProducts.map(p => (
+            <div className="pm-card" key={p.slug || p.id}>
+              <div className="pm-card-image">
+                {p.imagePreview ? <img src={p.imagePreview} alt={p.name} /> : <div className="pm-card-placeholder"><BoxIcon /></div>}
+              </div>
+              <div className="pm-card-body">
+                <div className="pm-card-top"><h4>{p.name}</h4></div>
+                <p className="pm-card-meta">{p.category}</p>
+              </div>
+              <div className="pm-card-actions">
+                <button className="pm-card-btn pm-card-btn--edit" onClick={() => { setProductForm(p); setImagePreview(p.imagePreview); setShowAddProduct(true); }}><EditIcon /></button>
+                <button className="pm-card-btn pm-card-btn--delete" onClick={() => handleDelete(p.id, p.name)}><TrashIcon /></button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <div className="pm-bottom-bar">
+        <button className="pm-btn pm-btn--primary" onClick={() => { resetForm(); setShowAddProduct(true); }}>
+          <span className="pm-plus">+</span> Add Product
+        </button>
+      </div>
+
       {showAddProduct && (
-        <Modal
-          title={productForm.id ? "Edit Product" : "Add Product"}
-          onClose={() => {
-            setShowAddProduct(false);
-            resetProductForm();
-          }}
-          wide
-        >
+        <Modal title={productForm.id ? "Edit Product" : "Add Product"} onClose={() => { setShowAddProduct(false); resetForm(); }} wide>
           <form className="pm-form" onSubmit={handleSaveProduct}>
             <label className="pm-upload" htmlFor="pm-file-input">
               {imagePreview ? (
@@ -397,149 +263,170 @@ function AdminPageContent() {
                   <span className="pm-upload-change">Change Image</span>
                 </div>
               ) : (
-                <>
-                  <UploadIcon />
-                  <span>Upload Product Image</span>
-                  <small className="pm-upload-hint">PNG, JPG up to 10MB</small>
-                </>
+                <><UploadIcon /><span>Upload Image</span><small className="pm-upload-hint">PNG, JPG up to 10MB</small></>
               )}
             </label>
-            <input
-              id="pm-file-input"
-              ref={fileInputRef}
-              type="file"
-              accept="image/*"
-              onChange={handleImageChange}
-              hidden
-            />
+            <input id="pm-file-input" ref={fileInputRef} type="file" accept="image/*" onChange={handleImageChange} hidden />
 
             <div className="pm-field">
-              <label>PRODUCT NAME *</label>
-              <input
-                type="text"
-                value={productForm.name}
-                onChange={(e) => setProductForm((f) => ({ ...f, name: e.target.value }))}
-                placeholder="e.g. Brass Memorial Urn"
-                required
-              />
+              <label>NAME *</label>
+              <input type="text" value={productForm.name} onChange={e => setProductForm(f => ({...f, name: e.target.value}))} required />
             </div>
-
-            <div className="pm-field-row">
-              <div className="pm-field">
-                <label>CATEGORY *</label>
-                <input
-                  type="text"
-                  list="pm-category-list"
-                  value={productForm.category}
-                  onChange={(e) => setProductForm((f) => ({ ...f, category: e.target.value }))}
-                  placeholder="e.g. Lighting"
-                  required
-                />
-              </div>
-              <div className="pm-field">
-                <label>SUBCATEGORY</label>
-                <input
-                  type="text"
-                  value={productForm.subcategory}
-                  onChange={(e) => setProductForm((f) => ({ ...f, subcategory: e.target.value }))}
-                  placeholder="e.g. Pendant Lights"
-                />
-              </div>
-            </div>
-
-            <div className="pm-field-row">
-              <div className="pm-field">
-                <label>SKU</label>
-                <input
-                  type="text"
-                  value={productForm.sku}
-                  onChange={(e) => setProductForm((f) => ({ ...f, sku: e.target.value }))}
-                  placeholder="e.g. FN-0182"
-                />
-              </div>
-              <div className="pm-field">
-                <label>MATERIAL</label>
-                <input
-                  type="text"
-                  value={productForm.material}
-                  onChange={(e) => setProductForm((f) => ({ ...f, material: e.target.value }))}
-                  placeholder="e.g. Brass"
-                />
-              </div>
-            </div>
-
             <div className="pm-field">
-              <label>FINISH</label>
-              <input
-                type="text"
-                value={productForm.finish}
-                onChange={(e) => setProductForm((f) => ({ ...f, finish: e.target.value }))}
-                placeholder="e.g. Matte, Polished"
-              />
+              <label>CATEGORY *</label>
+              <input type="text" list="pm-category-list" value={productForm.category} onChange={e => setProductForm(f => ({...f, category: e.target.value}))} required />
             </div>
-
             <div className="pm-modal-actions">
-              <button
-                type="button"
-                className="pm-btn pm-btn--ghost"
-                onClick={() => {
-                  setShowAddProduct(false);
-                  resetProductForm();
-                }}
-              >
-                Cancel
-              </button>
-              <button type="submit" className="pm-btn pm-btn--primary">
-                {productForm.id ? "Update Product" : "Save Product"}
-              </button>
+              <button type="button" className="pm-btn pm-btn--ghost" onClick={() => { setShowAddProduct(false); resetForm(); }}>Cancel</button>
+              <button type="submit" className="pm-btn pm-btn--primary">Save</button>
             </div>
           </form>
         </Modal>
       )}
+    </>
+  );
+}
 
-      {/* Add Subcategory Modal */}
-      {showAddSub && (
-        <Modal title="Add Subcategory" onClose={() => setShowAddSub(false)}>
-          <form className="pm-form" onSubmit={handleCreateSub}>
-            <div className="pm-field">
-              <label>CATEGORY NAME *</label>
-              <input
-                type="text"
-                list="pm-category-list"
-                value={subForm.category}
-                onChange={(e) => setSubForm((f) => ({ ...f, category: e.target.value }))}
-                placeholder="e.g. Lighting"
-                required
-              />
+function ReviewsManager({ reviews, setReviews, triggerToast }) {
+  const [showForm, setShowForm] = useState(false);
+  const [form, setForm] = useState(EMPTY_REVIEW);
+
+  const handleSave = (e) => {
+    e.preventDefault();
+    if (form.id) {
+      setReviews(prev => prev.map(r => r.id === form.id ? form : r));
+      triggerToast("Review updated");
+    } else {
+      setReviews(prev => [{...form, id: Date.now()}, ...prev]);
+      triggerToast("Review added");
+    }
+    setShowForm(false);
+  };
+
+  const handleDelete = (id) => {
+    if (window.confirm("Delete this review?")) {
+      setReviews(prev => prev.filter(r => r.id !== id));
+      triggerToast("Review deleted");
+    }
+  };
+
+  return (
+    <>
+      <div className="pm-grid">
+        {reviews.map(r => (
+          <div className="pm-card" style={{padding: '20px'}} key={r.id}>
+            <h4>{r.name} - {r.rating}★</h4>
+            <p style={{fontSize: '14px', color: 'gray'}}>{r.role}</p>
+            <p style={{marginTop: '10px'}}>{r.text}</p>
+            <div className="pm-card-actions" style={{marginTop: '15px'}}>
+              <button className="pm-card-btn pm-card-btn--edit" onClick={() => { setForm(r); setShowForm(true); }}><EditIcon /></button>
+              <button className="pm-card-btn pm-card-btn--delete" onClick={() => handleDelete(r.id)}><TrashIcon /></button>
             </div>
+          </div>
+        ))}
+      </div>
+      <div className="pm-bottom-bar">
+        <button className="pm-btn pm-btn--primary" onClick={() => { setForm(EMPTY_REVIEW); setShowForm(true); }}>
+          <span className="pm-plus">+</span> Add Review
+        </button>
+      </div>
 
+      {showForm && (
+        <Modal title={form.id ? "Edit Review" : "Add Review"} onClose={() => setShowForm(false)}>
+          <form className="pm-form" onSubmit={handleSave}>
             <div className="pm-field">
-              <label>SUBCATEGORY NAME *</label>
-              <input
-                type="text"
-                value={subForm.subcategory}
-                onChange={(e) => setSubForm((f) => ({ ...f, subcategory: e.target.value }))}
-                placeholder="e.g. Pendant Lights"
-                required
-              />
+              <label>NAME</label>
+              <input type="text" value={form.name} onChange={e => setForm(f => ({...f, name: e.target.value}))} required />
             </div>
-
+            <div className="pm-field">
+              <label>ROLE</label>
+              <input type="text" value={form.role} onChange={e => setForm(f => ({...f, role: e.target.value}))} required />
+            </div>
+            <div className="pm-field">
+              <label>TEXT</label>
+              <textarea value={form.text} onChange={e => setForm(f => ({...f, text: e.target.value}))} required style={{padding:'12px', borderRadius:'12px', border:'1px solid var(--pm-border)', minHeight:'100px'}} />
+            </div>
+            <div className="pm-field">
+              <label>RATING (1-5)</label>
+              <input type="number" min="1" max="5" value={form.rating} onChange={e => setForm(f => ({...f, rating: Number(e.target.value)}))} required />
+            </div>
             <div className="pm-modal-actions">
-              <button
-                type="button"
-                className="pm-btn pm-btn--ghost"
-                onClick={() => setShowAddSub(false)}
-              >
-                Cancel
-              </button>
-              <button type="submit" className="pm-btn pm-btn--primary">
-                Create Subcategory
-              </button>
+              <button type="button" className="pm-btn pm-btn--ghost" onClick={() => setShowForm(false)}>Cancel</button>
+              <button type="submit" className="pm-btn pm-btn--primary">Save</button>
             </div>
           </form>
         </Modal>
       )}
-    </div>
+    </>
+  );
+}
+
+function SocialsManager({ socials, setSocials, triggerToast }) {
+  const [showForm, setShowForm] = useState(false);
+  const [form, setForm] = useState(EMPTY_SOCIAL);
+
+  const handleSave = (e) => {
+    e.preventDefault();
+    if (form.id) {
+      setSocials(prev => prev.map(s => s.id === form.id ? form : s));
+      triggerToast("Social updated");
+    } else {
+      setSocials(prev => [{...form, id: Date.now()}, ...prev]);
+      triggerToast("Social added");
+    }
+    setShowForm(false);
+  };
+
+  const handleDelete = (id) => {
+    if (window.confirm("Delete this social link?")) {
+      setSocials(prev => prev.filter(s => s.id !== id));
+      triggerToast("Social deleted");
+    }
+  };
+
+  return (
+    <>
+      <div className="pm-grid">
+        {socials.map(s => (
+          <div className="pm-card" style={{padding: '20px'}} key={s.id}>
+            <h4>Video Embed</h4>
+            <p style={{fontSize: '12px', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap', marginTop:'10px'}}>{s.videoSrc}</p>
+            <div className="pm-card-actions" style={{marginTop: '15px'}}>
+              <button className="pm-card-btn pm-card-btn--edit" onClick={() => { setForm(s); setShowForm(true); }}><EditIcon /></button>
+              <button className="pm-card-btn pm-card-btn--delete" onClick={() => handleDelete(s.id)}><TrashIcon /></button>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="pm-bottom-bar">
+        <button className="pm-btn pm-btn--primary" onClick={() => { setForm(EMPTY_SOCIAL); setShowForm(true); }}>
+          <span className="pm-plus">+</span> Add Video
+        </button>
+      </div>
+
+      {showForm && (
+        <Modal title={form.id ? "Edit Video" : "Add Video"} onClose={() => setShowForm(false)}>
+          <form className="pm-form" onSubmit={handleSave}>
+            <div className="pm-field">
+              <label>YOUTUBE EMBED URL</label>
+              <input type="url" value={form.videoSrc} onChange={e => setForm(f => ({...f, videoSrc: e.target.value}))} placeholder="https://www.youtube.com/embed/..." required />
+            </div>
+            <div className="pm-field">
+              <label>THUMBNAIL IMAGE URL</label>
+              <input type="text" value={form.thumbnailSrc} onChange={e => setForm(f => ({...f, thumbnailSrc: e.target.value}))} placeholder="https://..." required />
+            </div>
+            <div className="pm-field">
+              <label>THUMBNAIL ALT TEXT</label>
+              <input type="text" value={form.thumbnailAlt} onChange={e => setForm(f => ({...f, thumbnailAlt: e.target.value}))} required />
+            </div>
+            <div className="pm-modal-actions">
+              <button type="button" className="pm-btn pm-btn--ghost" onClick={() => setShowForm(false)}>Cancel</button>
+              <button type="submit" className="pm-btn pm-btn--primary">Save</button>
+            </div>
+          </form>
+        </Modal>
+      )}
+    </>
   );
 }
 
