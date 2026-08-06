@@ -136,32 +136,6 @@ export function Router({ routes, notFound, after = null }) {
     }
     if (push) window.history.pushState({}, '', to)
 
-    const isProductOrCollection = 
-      to.startsWith('/collections') || 
-      (to.startsWith('/catalogue/') && to !== '/catalogue') ||
-      opts.transition === 'slide-product' ||
-      opts.transition === 'slide-collection'
-
-    if (isProductOrCollection && document.startViewTransition && !reduced()) {
-      busy.current = true
-      try { getLenis()?.stop() } catch (_) {}
-
-      document.documentElement.classList.add('vt-casa-transition')
-
-      const transition = document.startViewTransition(() => {
-        settle(to)
-      })
-
-      transition.finished.finally(() => {
-        document.documentElement.classList.remove('vt-casa-transition')
-        busy.current = false
-        try { getLenis()?.start() } catch (_) {}
-        requestAnimationFrame(() => ScrollTrigger.refresh())
-        document.getElementById('main')?.focus({ preventScroll: true })
-      })
-      return
-    }
-
     if (reduced() || (!stripsRef.current && !irisRef.current)) {
       settle(to)
       requestAnimationFrame(() => ScrollTrigger.refresh())

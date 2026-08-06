@@ -52,8 +52,11 @@ export default function Footer() {
               </svg>
               <span className="hallmark-core"><span>T</span></span>
             </div>
-            <p className="d3" style={{ color: '#ffffff' }}>{BRAND.line}</p>
-            <p className="body" style={{ marginTop: '.6rem', color: 'rgba(255, 255, 255, 0.88)' }}>
+            <h2 className="d2" style={{ color: '#ffffff', marginBottom: '0.4rem', fontWeight: 700, letterSpacing: '-0.02em' }}>
+              {BRAND.name}
+            </h2>
+            <p className="d3" style={{ color: 'rgba(255, 255, 255, 0.92)' }}>{BRAND.line}</p>
+            <p className="body" style={{ marginTop: '.6rem', color: 'rgba(255, 255, 255, 0.78)' }}>
               {BRAND.descriptor}. Est. {BRAND.est}, {BRAND.origin}.
             </p>
           </div>
@@ -90,14 +93,29 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mark-stencil" ref={mark} role="img" aria-label={BRAND.mark} style={{ position: 'relative' }}>
-          {BRAND.mark.split('').map((ch, i) => (
-            <span key={i} className="mark-ch" data-ch={ch} aria-hidden="true">
-              <span className="mark-ch-fill">{ch}</span>
-              <span className="mark-ch-stroke" aria-hidden="true">{ch}</span>
-              <span className="mark-ch-rule" aria-hidden="true" />
-            </span>
-          ))}
+        <div className="mark-stencil-wrap" style={{ position: 'relative', marginTop: '2rem' }}>
+          <div className="mark-stencil" ref={mark} role="img" aria-label={BRAND.name}>
+            {BRAND.mark.split('').map((ch, i) => (
+              <span key={i} className="mark-ch" data-ch={ch} aria-hidden="true">
+                <span className="mark-ch-fill">{ch}</span>
+                <span className="mark-ch-stroke" aria-hidden="true">{ch}</span>
+                <span className="mark-ch-rule" aria-hidden="true" />
+              </span>
+            ))}
+          </div>
+
+          <div className="mark-suffix meta" style={{
+            letterSpacing: '0.65em',
+            color: 'rgba(227, 200, 143, 0.85)',
+            fontSize: 'clamp(0.75rem, 1.6vw, 1.25rem)',
+            marginTop: '-0.4rem',
+            paddingBottom: '1.2rem',
+            textTransform: 'uppercase',
+            fontWeight: 600,
+            textAlign: 'center'
+          }}>
+            {BRAND.suffix}
+          </div>
 
           <div style={{ position: 'absolute', bottom: 'clamp(0.8rem, 1.5vw, 1.2rem)', right: 0 }}>
             <button className="to-top" onClick={() => setShowColophon(!showColophon)}>Colophon ↑</button>

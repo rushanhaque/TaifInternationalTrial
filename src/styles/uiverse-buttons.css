@@ -318,18 +318,30 @@
   transition: background 0s;
 }
 
-/* Force text and arrow icon to convert to white on hover across all button styles & variants */
+/* Controlled hover text and arrow icon colors based on hover background fill */
 .uv-btn-1:hover,
 .uv-btn-1:hover *,
-.uv-btn-2:hover,
-.uv-btn-2:hover *,
-.uv-btn-3:hover,
-.uv-btn-3:hover * {
-  color: #ffffff !important;
+.uv-btn-3.primary:hover,
+.uv-btn-3.primary:hover * {
+  color: #111111 !important;
 }
 
 .uv-btn-1:hover .btn-chip svg path,
+.uv-btn-3.primary:hover .btn-chip svg path {
+  stroke: #111111 !important;
+}
+
+.uv-btn-1.ghost:hover,
+.uv-btn-1.ghost:hover *,
+.uv-btn-2:hover,
+.uv-btn-2:hover *,
+.uv-btn-3:not(.primary):hover,
+.uv-btn-3:not(.primary):hover * {
+  color: #ffffff !important;
+}
+
+.uv-btn-1.ghost:hover .btn-chip svg path,
 .uv-btn-2:hover .btn-chip svg path,
-.uv-btn-3:hover .btn-chip svg path {
+.uv-btn-3:not(.primary):hover .btn-chip svg path {
   stroke: #ffffff !important;
 }

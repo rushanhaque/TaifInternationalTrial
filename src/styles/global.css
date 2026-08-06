@@ -555,6 +555,11 @@ ol {
   color: var(--graphite);
 }
 
+.footer .hallmark-core span,
+.deep .hallmark-core span {
+  color: #ffffff;
+}
+
 @keyframes hallmark-turn {
   to {
     transform: rotate(360deg);
