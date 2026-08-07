@@ -104,65 +104,12 @@ const FAMILY_NOTE = {
   'Barware': 'Ice buckets, coasters, shakers and trays. The pieces that carry the evening.',
 }
 
-/* ── PlateCard — bead travels TL→TR→BR then morphs into the Add button ───── */
-function PlateCard({ p, add, has, setOpen }) {
-  const liRef   = useRef(null)
-  const beadRef = useRef(null)
-  const addRef  = useRef(null)
-  const tlRef   = useRef(null)   // keep reference so we can kill on re-enter
-
-  const handleEnter = useCallback(() => {
-    if (reduced() || !beadRef.current || !liRef.current) return
-
-    /* kill any in-progress animation so re-hovering always starts cleanly */
-    if (tlRef.current) tlRef.current.kill()
-
-    const li   = liRef.current
-    const bead = beadRef.current
-    const btn  = addRef.current
-
-    /* travel distances — bead is 12 px, starts 14 px from each edge */
-    const w = li.offsetWidth  - 26   /* to the right edge  */
-    const h = li.offsetHeight - 26   /* to the bottom edge */
-
-    /* always start from top-left */
-    gsap.set(bead, { x: 0, y: 0, scale: 1, opacity: 1 })
-    gsap.set(btn,  { opacity: 0, scale: 0.8 })
-
-    const tl = gsap.timeline()
-
-    /* phase 1 — slide along the top edge to the top-right corner */
-    tl.to(bead, { x: w, duration: 0.28, ease: 'power2.inOut' })
-
-    /* phase 2 — drop down the right edge to the bottom-right corner */
-    tl.to(bead, { y: h, duration: 0.22, ease: 'power2.inOut' })
-
-    /* phase 3 — bead blooms out and vanishes while the Add button pops in */
-    tl.to(bead, { scale: 2.6, opacity: 0, duration: 0.22, ease: 'power2.out' }, '-=0.02')
-    tl.to(btn,  { opacity: 1, scale: 1,   duration: 0.22, ease: 'back.out(1.4)' }, '<0.05')
-
-    tlRef.current = tl
-  }, [])
-
-  const handleLeave = useCallback(() => {
-    if (tlRef.current) tlRef.current.kill()
-    if (!beadRef.current || !addRef.current) return
-
-    /* snap everything back — no animation on leave so the next enter is crisp */
-    gsap.set(addRef.current,  { opacity: 0, scale: 0.8 })
-    gsap.set(beadRef.current, { x: 0, y: 0, scale: 1, opacity: 0 })
-  }, [])
+/* ── PlateCard — product listing card with direct add/remove action ─────────────── */
+function PlateCard({ p, add, remove, has, setOpen }) {
+  const inCart = has(p.slug)
 
   return (
-    <li
-      className="pl-plate"
-      ref={liRef}
-      onMouseEnter={handleEnter}
-      onMouseLeave={handleLeave}
-    >
-      {/* bead lives on the li so it isn't clipped by the card's overflow:hidden */}
-      <span ref={beadRef} className="bead pl-bead" aria-hidden="true" />
-
+    <li className="pl-plate">
       <Link
         to={`/catalogue/${p.slug}`}
         className="pl-card"
@@ -198,16 +145,15 @@ function PlateCard({ p, add, has, setOpen }) {
       </Link>
 
       <button
-        ref={addRef}
         type="button"
-        className={`pl-add ${has(p.slug) ? 'is-in' : ''}`}
-        onClick={() => add(p)}
-        aria-label={has(p.slug)
-          ? `${p.name} is in your enquiry`
+        className={`pl-add ${inCart ? 'is-in' : ''}`}
+        onClick={() => (inCart ? remove(p.slug) : add(p))}
+        aria-label={inCart
+          ? `Remove ${p.name} from your enquiry`
           : `Add ${p.name} to your enquiry`}
       >
         <i aria-hidden="true" />
-        <span>{has(p.slug) ? 'In enquiry' : 'Add'}</span>
+        <span>{inCart ? 'In enquiry' : 'Add'}</span>
       </button>
     </li>
   )
@@ -216,7 +162,7 @@ function PlateCard({ p, add, has, setOpen }) {
 
 export default function CollectionPage({ params = {} }) {
   const rootRef = useRef(null)
-  const { add, has, setOpen } = useCart()
+  const { add, remove, has, setOpen } = useCart()
 
   const family = useMemo(() => resolveFamily(params.family), [params.family])
   const pieces = useMemo(() => (family ? familyPieces(family) : []), [family])
@@ -343,7 +289,7 @@ export default function CollectionPage({ params = {} }) {
           )}
           <ol className="pl-grid">
             {pieces.map((p) => (
-              <PlateCard key={p.slug} p={p} add={add} has={has} setOpen={setOpen} />
+              <PlateCard key={p.slug} p={p} add={add} remove={remove} has={has} setOpen={setOpen} />
             ))}
           </ol>
         </div>

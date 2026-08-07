@@ -146,16 +146,7 @@ export default function TwoFloors() {
       tl.fromTo(q('.tf-line'),
         { scaleY: 0, transformOrigin: '50% 0%' },
         { scaleY: 1, duration: 1.15, ease: 'viscous' }, 0)
-        .fromTo(q('.tf-strip'), { opacity: 0, y: -14 }, { opacity: 1, y: 0, stagger: 0.08 }, 0.1)
-        .fromTo(q('.tf-metal .tf-stack > *'), { opacity: 0, y: 28 },
-          { opacity: 1, y: 0, stagger: 0.06 }, 0.18)
-        .fromTo(q('.tf-wood .tf-stack > *'), { opacity: 0, y: 28 },
-          { opacity: 1, y: 0, stagger: 0.06 }, 0.3)
-        .fromTo(q('.tf-numeral'), { opacity: 0, y: 34 },
-          { opacity: 1, y: 0, duration: 1.3, stagger: 0.1 }, 0.34)
-        /* clearProps hands opacity back to CSS — .tf-hint's resting opacity and
-           its drag-fade rule both live there and must not be overridden inline. */
-        .fromTo(q('.tf-hit, .tf-plaque, .tf-hint'), { opacity: 0 },
+        .fromTo(q('.tf-hit'), { opacity: 0 },
           { opacity: 1, duration: 0.7, clearProps: 'opacity' }, 0.52)
       return () => {
         if (tl.scrollTrigger) tl.scrollTrigger.kill()
@@ -167,9 +158,8 @@ export default function TwoFloors() {
   }, [])
 
   return (
-    <section className="tf section" ref={root} aria-labelledby="tf-title">
-      <div className="sec-head"><span className="meta">Signature piece</span></div>
-      <h2 id="tf-title" className="tf-vh">Two floors, one object</h2>
+    <section className="tf section" ref={root} aria-label="Two floors slider">
+      <h2 id="tf-title" className="tf-vh">Two floors</h2>
 
       {/* ── FLOOR 01 · METAL ─────────────────────────────────────────── */}
       <div className="tf-panel tf-metal">
@@ -177,34 +167,6 @@ export default function TwoFloors() {
           <span className="tf-hammer" />
           <span className="tf-sheen" />
           <span className="tf-vig" />
-        </div>
-        <p className="tf-strip">Brass · Copper · German silver · Aluminium</p>
-        <span className="tf-numeral" aria-hidden="true">01</span>
-        <div className="tf-content">
-          <div className="tf-stack">
-            <SmoothReveal>
-              <p className="tf-eyebrow">
-                <span className="tf-tick" aria-hidden="true" />Floor 01 — Moradabad
-              </p>
-            </SmoothReveal>
-            <CharCascade as="h3" className="tf-head">Struck, spun, raised.</CharCascade>
-            <SmoothReveal>
-              <p className="tf-copy">
-                Sand-cast, or spun down onto a lathe chuck, then raised over a stake
-                by hand. Chasing tightens the line from the front; repoussé pushes it
-                out from the back. Nothing on this floor is pressed.
-              </p>
-            </SmoothReveal>
-            <SmoothReveal>
-              <p className="tf-stat">
-                <span className="tf-stat-n">11</span>
-                <span className="tf-stat-l">processes<br />under one roof</span>
-              </p>
-            </SmoothReveal>
-            <SmoothReveal>
-              <p className="tf-spec">Raised up to 900 mm across</p>
-            </SmoothReveal>
-          </div>
         </div>
       </div>
 
@@ -214,34 +176,6 @@ export default function TwoFloors() {
           <span className="tf-grain" />
           <span className="tf-knot" />
           <span className="tf-vig" />
-        </div>
-        <p className="tf-strip">Sheesham · Mango · Acacia · Reclaimed teak</p>
-        <span className="tf-numeral" aria-hidden="true">02</span>
-        <div className="tf-content">
-          <div className="tf-stack">
-            <SmoothReveal>
-              <p className="tf-eyebrow">
-                <span className="tf-tick" aria-hidden="true" />Floor 02 — Saharanpur
-              </p>
-            </SmoothReveal>
-            <CharCascade as="h3" className="tf-head">Seasoned, then cut.</CharCascade>
-            <SmoothReveal>
-              <p className="tf-copy">
-                Sheesham and mango go into the kiln green and come out at eight to ten
-                percent. Then they rest four weeks in the air the benches breathe.
-                Only after that does a blade touch them.
-              </p>
-            </SmoothReveal>
-            <SmoothReveal>
-              <p className="tf-stat">
-                <span className="tf-stat-n">8–10%</span>
-                <span className="tf-stat-l">moisture<br />at the bench</span>
-              </p>
-            </SmoothReveal>
-            <SmoothReveal>
-              <p className="tf-spec">Four weeks resting. Then one cut.</p>
-            </SmoothReveal>
-          </div>
         </div>
       </div>
 
@@ -268,16 +202,6 @@ export default function TwoFloors() {
           <span className="tf-grip" aria-hidden="true" />
           <span className="tf-arrow tf-arrow-r" aria-hidden="true" />
         </div>
-
-        <p className="tf-plaque">
-          <span className="tf-plaque-i"><b>10-15</b> artisans</span>
-          <span className="tf-slash" aria-hidden="true">/</span>
-          <span className="tf-plaque-i">Two floors</span>
-          <span className="tf-slash" aria-hidden="true">/</span>
-          <span className="tf-plaque-i">One object</span>
-        </p>
-
-        <p className="tf-hint" aria-hidden="true">Drag the seam · or arrow keys</p>
       </div>
     </section>
   )

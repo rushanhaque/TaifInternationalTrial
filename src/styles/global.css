@@ -765,7 +765,7 @@ h4, h5, h6 {
 }
 
 /* ============ navbar (E6 · H1 · H3) ============ */
-/* ============ navbar (E6 · Liquid Gas Glassmorphism) ============ */
+/* ============ navbar (E6 · Liquid Glassmorphism) ============ */
 .nav {
   position: fixed;
   top: 14px;
@@ -776,18 +776,26 @@ h4, h5, h6 {
   display: flex;
   align-items: center;
   gap: .8rem;
-  padding: 8px 10px 8px 20px;
+  padding: 8px 12px 8px 22px;
   border-radius: var(--r-pill);
-  background: rgba(255, 253, 248, 0.65);
-  backdrop-filter: blur(36px) saturate(220%) contrast(106%);
-  -webkit-backdrop-filter: blur(36px) saturate(220%) contrast(106%);
-  border: 1px solid rgba(255, 255, 255, 0.75);
+  /* Liquid glass — slightly transparent */
+  background: rgba(255, 253, 248, 0.35);
+  backdrop-filter: blur(32px) saturate(210%) contrast(106%);
+  -webkit-backdrop-filter: blur(32px) saturate(210%) contrast(106%);
+  border: 1px solid rgba(255, 255, 255, 0.55);
   box-shadow: 
-    0 20px 48px -12px rgba(28, 28, 26, 0.14),
-    0 4px 16px -2px rgba(28, 28, 26, 0.06),
-    inset 0 1.5px 2px 0 rgba(255, 255, 255, 0.95),
-    inset 0 -1.5px 2px 0 rgba(28, 28, 26, 0.06);
-  transition: transform .5s var(--ease-fluid), backdrop-filter .35s ease, -webkit-backdrop-filter .35s ease, background .35s ease, border-color .35s ease, box-shadow .35s ease;
+    0 16px 40px -8px rgba(28, 28, 26, 0.08),
+    0 4px 14px -2px rgba(28, 28, 26, 0.03),
+    inset 0 1.5px 2px 0 rgba(255, 255, 255, 0.7),
+    inset 0 -1.5px 2px 0 rgba(28, 28, 26, 0.04);
+  transition: 
+    transform .5s var(--ease-fluid), 
+    backdrop-filter .35s ease, 
+    -webkit-backdrop-filter .35s ease, 
+    background .35s ease, 
+    border-color .35s ease, 
+    box-shadow .35s ease,
+    color .35s ease;
 }
 
 .nav::before {
@@ -795,34 +803,86 @@ h4, h5, h6 {
   position: absolute;
   inset: 0;
   border-radius: var(--r-pill);
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0.05) 45%, rgba(255, 255, 255, 0.25) 100%);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.05) 50%, rgba(255, 255, 255, 0.2) 100%);
   pointer-events: none;
-  opacity: 0.6;
+  opacity: 0.5;
+  transition: opacity 0.35s ease;
 }
 
-/* ============ nav liquid gas on dark background sections ============ */
+/* ============ nav liquid glass on dark background sections ============ */
 .nav.nav-dark-bg {
-  background: rgba(252, 251, 248, 0.88) !important;
-  backdrop-filter: blur(32px) saturate(230%) !important;
-  -webkit-backdrop-filter: blur(32px) saturate(230%) !important;
-  border-color: rgba(255, 255, 255, 0.7) !important;
+  background: rgba(18, 18, 16, 0.35) !important;
+  backdrop-filter: blur(32px) saturate(210%) contrast(106%) !important;
+  -webkit-backdrop-filter: blur(32px) saturate(210%) contrast(106%) !important;
+  border-color: rgba(255, 255, 255, 0.18) !important;
   box-shadow: 
-    0 16px 44px 0 rgba(28, 28, 26, 0.18),
-    inset 0 1.5px 2px 0 rgba(255, 255, 255, 0.9) !important;
+    0 20px 48px -8px rgba(0, 0, 0, 0.5),
+    0 4px 16px -2px rgba(0, 0, 0, 0.3),
+    inset 0 1.5px 2px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -1.5px 2px 0 rgba(0, 0, 0, 0.3) !important;
 }
 
 html.dark .nav {
-  background: rgba(18, 18, 16, 0.65);
+  background: rgba(18, 18, 16, 0.35);
   border-color: rgba(255, 255, 255, 0.18);
   box-shadow: 
     0 20px 48px -12px rgba(0, 0, 0, 0.5),
-    inset 0 1.5px 2px 0 rgba(255, 255, 255, 0.15),
+    inset 0 1.5px 2px 0 rgba(255, 255, 255, 0.18),
     inset 0 -1.5px 2px 0 rgba(0, 0, 0, 0.3);
 }
 
 html.dark .nav.nav-dark-bg {
-  background: rgba(24, 24, 22, 0.88) !important;
-  border-color: rgba(255, 255, 255, 0.25) !important;
+  background: rgba(18, 18, 16, 0.45) !important;
+  border-color: rgba(255, 255, 255, 0.22) !important;
+}
+
+/* Dark section text & icon contrast adjustments for maximum visibility */
+.nav.nav-dark-bg .brand-mark,
+html.dark .nav .brand-mark {
+  color: #ffffff !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
+}
+
+.nav.nav-dark-bg .brand-suffix,
+html.dark .nav .brand-suffix {
+  color: rgba(227, 200, 143, 0.95) !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.nav.nav-dark-bg .nav-links a,
+html.dark .nav .nav-links a {
+  color: rgba(255, 255, 255, 0.92) !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
+}
+
+.nav.nav-dark-bg .nav-links a.on,
+.nav.nav-dark-bg .nav-links a:hover,
+html.dark .nav .nav-links a.on,
+html.dark .nav .nav-links a:hover {
+  color: #ffd700 !important;
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+}
+
+.nav.nav-dark-bg .nav-pill,
+html.dark .nav .nav-pill {
+  background: rgba(255, 255, 255, 0.18) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+  box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.4) !important;
+}
+
+.nav.nav-dark-bg .burger,
+html.dark .nav .burger {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.nav.nav-dark-bg .burger i,
+.nav.nav-dark-bg .burger i::before,
+.nav.nav-dark-bg .burger i::after,
+html.dark .nav .burger i,
+html.dark .nav .burger i::before,
+html.dark .nav .burger i::after {
+  background-color: #ffffff !important;
 }
 
 .nav.nav-hide-top {
@@ -899,8 +959,8 @@ html.dark .nav.nav-dark-bg {
   padding: .5rem .95rem;
   border-radius: var(--r-pill);
   font-family: var(--font-heading);
-  font-weight: 500;
-  font-size: .92rem;
+  font-weight: 550;
+  font-size: .93rem;
   color: var(--graphite);
   text-shadow: 0 1px 2px rgba(255,255,255,0.5);
   transition: color .3s;
@@ -1957,15 +2017,15 @@ html.dark .nav-pill {
 .mark-stencil {
   display: flex;
   justify-content: center;
-  gap: clamp(1rem, 3vw, 4rem);
+  gap: clamp(2.5rem, 6.5vw, 8rem);
   align-items: flex-end;
   padding-block: clamp(1.6rem, 3vw, 2.4rem) clamp(0.8rem, 1.5vw, 1.2rem);
   font-family: var(--font-display);
   font-stretch: 125%;
   font-weight: 600;
-  font-size: clamp(3rem, 14vw, 13rem);
+  font-size: clamp(3rem, 12vw, 11rem);
   line-height: 0.86;
-  letter-spacing: -0.04em;
+  letter-spacing: 0.05em;
   user-select: none;
 }
 
@@ -2493,6 +2553,7 @@ html.dark .nav-pill {
 
   .mark-stencil {
     font-size: clamp(2.2rem, 13vw, 5rem);
+    gap: clamp(1.2rem, 5vw, 3rem);
     padding-block: 1rem 0.6rem;
   }
 

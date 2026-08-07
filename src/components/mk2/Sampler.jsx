@@ -319,7 +319,9 @@ export default function Sampler({ finishes = FINISHES }) {
 
 
       <div className="wrap">
-
+        <div className="sec-head" style={{ position: 'relative', top: 0, left: 0, marginBottom: 'clamp(1.5rem, 3vw, 2.5rem)', paddingTop: 'clamp(1rem, 2vw, 2rem)' }}>
+          <CharCascade as="span" className="meta">Signature Piece</CharCascade>
+        </div>
 
         <div className="smp-grid">
           {/* ─────────── the object ─────────── */}
@@ -361,21 +363,7 @@ export default function Sampler({ finishes = FINISHES }) {
                 </div>
               </div>
 
-              {/* A physical sample card lying on the plinth — same recipe, flat,
-                  at chip scale. This is how the finish actually gets approved. */}
-              <div className="smp-card" aria-hidden="true">
-                <span className="smp-cardface">
-                  {finishes.map((x, i) => (
-                    i === shown ? (
-                      <span
-                        key={x.key}
-                        className={`smp-layer smp-rcp smp-rcp-${x.key} is-on`}
-                      />
-                    ) : null
-                  ))}
-                </span>
-                <span className="meta smp-cardlabel">Sample · 1:1</span>
-              </div>
+
 
 
 
@@ -386,34 +374,24 @@ export default function Sampler({ finishes = FINISHES }) {
 
           {/* ─────────── readout ─────────── */}
           <div className="smp-info" ref={infoRef}>
-            {/* The visual stack is a cross-fade of five copies, so it is marked
-                decorative; the live region below carries the same content to
-                assistive tech in one clean, changing node. */}
-            <div className="smp-panels" aria-hidden="true">
-              {finishes.map((x, i) => (
-                <div
-                  key={x.key}
-                  ref={(el) => (panelRefs.current[i] = el)}
-                  className={`smp-panel${i === displayedIdx ? ' is-on' : ''}`}
+            <div className="smp-panels">
+              <div className="smp-panel is-on">
+                <EditorialReveal
+                  category="SIGNATURE PIECE · FEATURED SPECIFICATION"
+                  title="Lotus Wall Sconce"
+                  body="Ten thousand marks, struck one at a time. Light breaks across the surface instead of sliding off it."
+                  staggerMs={100}
+                  disabled={true}
                 >
-                  <EditorialReveal
-                    category={`FINISH ${pad(i + 1)} / ${pad(n)} · MATERIAL SPECIFICATION`}
-                    title={x.name}
-                    body={x.character}
-                    specs={x.substrates.map((s) => ({ label: 'Substrate', value: s }))}
-                    staggerMs={100}
-                    disabled={true}
-                  >
-                    <div className="ed-cta" style={{ marginTop: '1.75rem' }}>
-                      <Button to="/contact">Request the swatch box</Button>
-                    </div>
-                  </EditorialReveal>
-                </div>
-              ))}
+                  <div className="ed-cta" style={{ marginTop: '1.75rem' }}>
+                    <Button to="/contact">Request the swatch box</Button>
+                  </div>
+                </EditorialReveal>
+              </div>
             </div>
 
             <p className="smp-sr" role="status">
-              {`${f.name}. Substrates: ${f.substrates.join(', ')}. ${f.character}`}
+              Lotus Wall Sconce. Ten thousand marks, struck one at a time. Light breaks across the surface instead of sliding off it.
             </p>
             
             {/* ─────────── swatches ─────────── */}

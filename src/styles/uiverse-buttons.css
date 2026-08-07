@@ -66,36 +66,30 @@
   to { transform: translateY(0); }
 }
 
-.uv-btn-1:after,
 .uv-btn-1:before {
-  --skew: 0.2;
-  background: #ffffff;
   content: "";
-  display: block;
-  height: 102%;
-  left: calc(-50% - 50% * var(--skew));
-  pointer-events: none;
   position: absolute;
-  top: -104%;
-  transform: skew(calc(150deg * var(--skew))) translateY(var(--progress, 0));
-  transition: transform 0.2s ease;
-  width: 100%;
+  inset: -1px;
+  border-radius: 99rem;
+  background: #ffffff;
+  transform: scaleY(0);
+  transform-origin: bottom center;
+  transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+  z-index: 0;
+  pointer-events: none;
 }
 
-.uv-btn-1.ghost:after,
 .uv-btn-1.ghost:before {
   background: #1c1c1a;
 }
 
 .uv-btn-1:after {
-  --progress: 0%;
-  left: calc(50% + 50% * var(--skew));
-  top: 102%;
-  z-index: -1;
+  display: none;
 }
 
-.uv-btn-1:hover:before { --progress: 100%; }
-.uv-btn-1:hover:after { --progress: -102%; }
+.uv-btn-1:hover:before {
+  transform: scaleY(1);
+}
 
 
 /* =========================================

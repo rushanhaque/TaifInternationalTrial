@@ -2,9 +2,10 @@ import { useRef, useState } from 'react'
 import { Link } from '../lib/router'
 import { useGSAP } from '@gsap/react'
 import { ScrollTrigger } from '../lib/gsap'
-import { MATERIALS } from '../data/site'
+import { MATERIALS, HOME_COLLECTIONS } from '../data/site'
 import { CharCascade, Dilate } from '../components/Reveal'
 import MaterialSlider from '../components/MaterialSlider'
+import FinishMorph from '../components/FinishMorph'
 import '../styles/mk2/page-materials.css'
 
 const cubeMaterials = [
@@ -101,42 +102,16 @@ export default function MaterialsPage() {
         </section>
 
         {/* ── Finishes Section ── */}
-        <section className="mp__showcase-section">
-          <div className="mp__showcase-header">
-            <CharCascade as="h2" className="d1" style={{ color: 'var(--chrome)', marginBottom: '1rem' }}>
-              Finishes
-            </CharCascade>
+        <section className="fm-section alt" id="finishes" style={{ paddingBlock: '4rem 2rem' }}>
+          <div className="sec-head" style={{ position: 'relative', top: 0, left: 0, paddingInline: 'clamp(2.5rem, 5vw, 4.5rem)', marginBottom: '1rem' }}>
+            <CharCascade as="span" className="meta">Finishes we offer</CharCascade>
           </div>
-          
-          <div className="mp__showcase-grid">
-            {MATERIALS.map((m, i) => (
-              <div key={`showcase-${m.name}`} className="mp__showcase-card" tabIndex="0">
-                <img 
-                  src={cubeMaterials[i % cubeMaterials.length].image} 
-                  alt={m.name} 
-                  className="mp__showcase-img" 
-                  loading="lazy"
-                />
-                
-                <div className="mp__showcase-label">
-                  {m.name}
-                </div>
-                
-                <div className="mp__showcase-content">
-                  <span className="mp__showcase-meta">{m.kind} · {m.meta}</span>
-                  <h3 className="mp__showcase-title">{m.name}</h3>
-                  <p className="mp__showcase-copy">{m.copy}</p>
-                  <div className="mp__showcase-figs">
-                    {m.figs.map((f) => (
-                      <div key={`${m.name}-${f.u}`} className="mp__showcase-fig">
-                        <span className="mp__showcase-fig-v">{f.v}</span>
-                        <span className="mp__showcase-fig-u">{f.u}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            ))}
+          <div className="wrap">
+            <FinishMorph
+              mode="scroll"
+              finishes={HOME_COLLECTIONS}
+              label="FINISHES WE OFFER"
+            />
           </div>
         </section>
 

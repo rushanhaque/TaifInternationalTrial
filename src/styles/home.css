@@ -257,8 +257,8 @@
 
 /* ============ countries card ============ */
 .countries-card {
-  margin-top: 4rem;
-  padding: 8rem 0 5rem;
+  margin-top: 3rem;
+  padding: 4.5rem 0 2.5rem;
   background: var(--white);
   border-radius: var(--r-lg);
   box-shadow: var(--lift-2), 0 24px 48px -12px rgba(0,0,0,0.06);
@@ -318,3 +318,146 @@
 }
 
 
+/* ============ Best Sellers Section ============ */
+.bestsellers-section {
+  min-height: 105vh;
+  padding-top: clamp(5rem, 10vh, 8rem);
+  padding-bottom: clamp(2rem, 4vh, 4rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* ============ Heritage — big video placeholder card ============ */
+#heritage {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-block: clamp(5rem, 10vh, 8rem);
+}
+
+#heritage .wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.heritage-video-card {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+  max-width: calc(100vw - 2 * var(--gutter));
+  aspect-ratio: 16 / 8.4;
+  min-height: 365px;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  background:
+    linear-gradient(145deg,
+      #1c1c1a 0%,
+      #2a2927 30%,
+      #1c1c1a 60%,
+      #2a2927 100%);
+  box-shadow:
+    0 24px 64px -16px rgba(28, 28, 26, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  cursor: pointer;
+}
+
+.heritage-video-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1px solid rgba(184, 115, 51, 0.2);
+  pointer-events: none;
+  transition: border-color 0.5s var(--ease-fluid);
+}
+
+.heritage-video-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 45%, rgba(184, 115, 51, 0.06) 0%, transparent 70%),
+    repeating-linear-gradient(0deg,
+      rgba(255, 255, 255, 0.008) 0px, rgba(255, 255, 255, 0.008) 1px,
+      transparent 1px, transparent 4px);
+  pointer-events: none;
+}
+
+.heritage-video-card:hover::before {
+  border-color: rgba(218, 165, 32, 0.45);
+}
+
+.heritage-video-inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  width: 100%;
+  height: 100%;
+  min-height: inherit;
+}
+
+.heritage-play {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  color: rgba(218, 165, 32, 0.75);
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(184, 115, 51, 0.2);
+  transition:
+    color 0.4s var(--ease-fluid),
+    background 0.4s var(--ease-fluid),
+    border-color 0.4s var(--ease-fluid),
+    box-shadow 0.4s var(--ease-fluid);
+}
+
+.heritage-video-card:hover .heritage-play {
+  color: #daa520;
+  background: rgba(218, 165, 32, 0.12);
+  border-color: rgba(218, 165, 32, 0.5);
+  box-shadow: 0 0 32px rgba(218, 165, 32, 0.25);
+}
+
+.heritage-label {
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.18em;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  transition: color 0.35s;
+}
+
+.heritage-video-card:hover .heritage-label {
+  color: rgba(218, 165, 32, 0.75);
+}
+
+@media (max-width: 768px) {
+  .heritage-video-card {
+    width: 100%;
+    margin-left: 0;
+    aspect-ratio: 16 / 13;
+    min-height: 364px;
+  }
+
+  .heritage-play {
+    width: 68px;
+    height: 68px;
+  }
+
+  .heritage-play svg {
+    width: 36px;
+    height: 36px;
+  }
+}

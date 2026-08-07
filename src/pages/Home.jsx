@@ -1,7 +1,8 @@
 import { Link } from '../lib/router'
-import { PROCESS_STAGES, RIBBON_TERMS, HOME_COLLECTIONS } from '../data/site'
+import { PROCESS_STAGES, RIBBON_TERMS, HOME_COLLECTIONS, MATERIALS } from '../data/site'
 import { railItems } from '../data/catalogue'
 import { CharCascade, SmoothReveal, Dilate } from '../components/Reveal'
+import '../styles/mk2/page-materials.css'
 import HeroBrand from '../components/HeroBrand'
 import Slab from '../components/Slab'
 import Button from '../components/Button'
@@ -10,7 +11,7 @@ import DragRail from '../components/DragRail'
 import FinishMorph from '../components/FinishMorph'
 import { HeroParallax } from '../components/ui/HeroParallax'
 import Stepper from '../components/Stepper'
-import Tension from '../components/Tension'
+
 import Deep from '../components/Deep'
 import { productImg } from '../data/images'
 
@@ -41,28 +42,62 @@ const countryFlags = [
   { src: "https://flagcdn.com/w160/ca.png", alt: "Canada", title: "Canada" },
 ]
 
+const cubeMaterials = [
+  { id: 1, name: 'Brass', image: '/assets/materials/brass.png' },
+  { id: 2, name: 'Copper', image: '/assets/materials/copper.png' },
+  { id: 3, name: 'Aluminium', image: '/assets/materials/aluminium.png' },
+  { id: 4, name: 'Sheesham', image: '/assets/materials/sheesham.png' },
+  { id: 5, name: 'Mango Wood', image: '/assets/materials/mango.png' },
+  { id: 6, name: 'Reclaimed Teak', image: '/assets/materials/teak.png' }
+]
+
 export default function Home() {
   return (
-    <>
-
-      {/* 0.1 · hero — the brand name, and nothing else (E18) */}
-      <div id="top" />
+    <div className="hp">
+      {/* 0.1 · HERO BRAND — the title sequence */}
       <HeroBrand />
 
-      {/* 0.15 · collections parallax */}
-      <div id="collections-1" />
-      <div style={{ position: 'relative', zIndex: 2, background: 'var(--bg)' }}>
+      {/* 0.15 · HERO PARALLAX PRODUCTS GRID */}
+      <div style={{ marginBlock: '2rem 4rem' }}>
         <HeroParallax />
       </div>
 
-      {/* 0.2 · materials — finish morph section */}
-      <section className="fm-section alt" id="materials">
+      {/* 0.2 · materials — showcase grid section */}
+      <section className="fm-section alt" id="materials" style={{ paddingBlock: '3rem 4rem' }}>
+        <div className="sec-head" style={{ position: 'relative', top: 0, left: 0, paddingInline: 'clamp(2.5rem, 5vw, 4.5rem)', marginBottom: '2.5rem' }}>
+          <CharCascade as="span" className="meta">Materials we use</CharCascade>
+        </div>
         <div className="wrap">
-        <FinishMorph
-          mode="scroll"
-          finishes={HOME_COLLECTIONS}
-          label="MATERIALS"
-        />
+          <div className="mp__showcase-grid">
+            {MATERIALS.map((m, i) => (
+              <div key={`showcase-${m.name}`} className="mp__showcase-card" tabIndex="0">
+                <img 
+                  src={cubeMaterials[i % cubeMaterials.length].image} 
+                  alt={m.name} 
+                  className="mp__showcase-img" 
+                  loading="lazy"
+                />
+                
+                <div className="mp__showcase-label">
+                  {m.name}
+                </div>
+                
+                <div className="mp__showcase-content">
+                  <span className="mp__showcase-meta">{m.kind} · {m.meta}</span>
+                  <h3 className="mp__showcase-title">{m.name}</h3>
+                  <p className="mp__showcase-copy">{m.copy}</p>
+                  <div className="mp__showcase-figs">
+                    {m.figs.map((f) => (
+                      <div key={`${m.name}-${f.u}`} className="mp__showcase-fig">
+                        <span className="mp__showcase-fig-v">{f.v}</span>
+                        <span className="mp__showcase-fig-u">{f.u}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -73,12 +108,12 @@ export default function Home() {
       <div id="the-turn" style={{ position: 'absolute', visibility: 'hidden' }} />
       <TheTurn />
 
-      {/* 0.5 · drag rail — the signature piece */}
-      <section className="section alt fs-section" id="catalogue">
+      {/* 0.5 · drag rail — best sellers */}
+      <section className="section alt fs-section bestsellers-section" id="catalogue">
         <div className="sec-head">
-          <CharCascade as="span" className="meta">Signature piece</CharCascade>
+          <CharCascade as="span" className="meta">Best sellers</CharCascade>
         </div>
-        <DragRail label="Featured catalogue" hint="">
+        <DragRail label="Featured catalogue" hint="" showNav={false}>
           {railItems().map((p) => (
             <Link key={p.slug} to={`/catalogue/${p.slug}`} className="rail-card" transition="slide-product">
               <Slab tone={p.tone} label={p.name.toUpperCase()} meta={p.material}
@@ -102,40 +137,34 @@ export default function Home() {
       <div id="sampler" style={{ position: 'absolute', visibility: 'hidden' }} />
       <Sampler />
 
-      {/* 0.8 · surface tension into the deep section */}
-      <Tension from="white" />
 
-      {/* 0.9 · process teaser — transparent ground, sits on the page colour */}
-      <section className="section clear fs-section" id="process">
+
+      {/* 0.9 · heritage — big video card placeholder */}
+      <section className="section deep fs-section" id="heritage">
         <div className="sec-head">
-          <CharCascade as="span" className="meta">Process</CharCascade>
+          <CharCascade as="span" className="meta">Heritage</CharCascade>
         </div>
         <div className="wrap">
-          <div className="grid">
-            <div className="sp-8">
-              <Stepper stages={PROCESS_STAGES} teaser />
+          <SmoothReveal>
+            <div className="heritage-video-card">
+              <div className="heritage-video-inner">
+                <span className="heritage-play" aria-hidden="true">
+                  <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                    <circle cx="24" cy="24" r="23" stroke="currentColor" strokeWidth="1.5" opacity="0.6" />
+                    <path d="M19 15L33 24L19 33V15Z" fill="currentColor" opacity="0.85" />
+                  </svg>
+                </span>
+                <span className="heritage-label meta">Video coming soon</span>
+              </div>
             </div>
-            <div className="sp-4 proc-aside">
-              <SmoothReveal>
-                <p className="body dim">
-                  Three of eight stages. The full line runs from certified stock and a
-                  seasoning yard through to a packed carton — every hand-off recorded.
-                </p>
-              </SmoothReveal>
-              <SmoothReveal delay={0.15}>
-                <div style={{ marginTop: '1.25rem' }}>
-                  <Button to="/catalogue">What we can make</Button>
-                </div>
-              </SmoothReveal>
-            </div>
-          </div>
+          </SmoothReveal>
         </div>
       </section>
 
       {/* 0.95 · COUNTRIES SERVED */}
-      <div className="wrap" style={{ marginBlock: '4rem' }}>
+      <div className="wrap" style={{ marginBlock: '3rem' }}>
         <div className="countries-card" id="countries">
-          <div style={{ position: 'absolute', top: '3rem', left: 0, width: '100%', textAlign: 'center' }}>
+          <div style={{ position: 'absolute', top: '1.6rem', left: 0, width: '100%', textAlign: 'center' }}>
             <CharCascade as="span" className="meta" style={{ display: 'inline-block', fontSize: '1.25rem' }}>
               Countries served
             </CharCascade>
@@ -153,7 +182,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* 0.98 · INSTAGRAM */}
+      {/* 0.98 · BLOGS AND SOCIALS */}
       <section className="section clear fs-section" id="instagram">
         <div className="sec-head">
           <CharCascade as="span" className="meta">Blogs and socials</CharCascade>
@@ -217,7 +246,9 @@ export default function Home() {
         <div className="sec-head">
           <CharCascade as="span" className="meta">Reviews</CharCascade>
         </div>
-        <ReviewStack />
+        <div style={{ marginTop: 'clamp(3.5rem, 7vw, 6rem)' }}>
+          <ReviewStack />
+        </div>
         
         {/* Big Designer Connect Button */}
         <SmoothReveal style={{ display: 'flex', justifyContent: 'center', marginTop: '3.5rem', marginBottom: '2rem' }}>
@@ -232,6 +263,6 @@ export default function Home() {
       </section>
 
 
-    </>
+    </div>
   )
 }

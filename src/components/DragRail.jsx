@@ -6,7 +6,7 @@ import { setMeniscusBoost } from './Slab'
 /* E9 Drag Rail — grab-and-fling with real momentum, rubber-band ends and a
    velocity skew; also advances on scroll. Keyboard + visible buttons per §10.
    Touch and reduced-motion fall back to a native scroll-snap rail. */
-export default function DragRail({ children, label = 'Gallery', hint = 'Drag · fling', className = '' }) {
+export default function DragRail({ children, label = 'Gallery', hint = 'Drag · fling', className = '', showNav = true }) {
   const isNative = reduced() || coarse()
   const wrap = useRef(null)
   const track = useRef(null)
@@ -47,19 +47,17 @@ export default function DragRail({ children, label = 'Gallery', hint = 'Drag · 
     })
     drag.current = d
 
-    // scroll linkage — same x source of truth (§9.11)
-    let prev = null
+    // scroll linkage — smooth scroll-triggered horizontal movement
     const st = ScrollTrigger.create({
       trigger: wrap.current,
-      start: 'top bottom',
-      end: 'bottom top',
+      start: 'top 90%',
+      end: 'bottom 10%',
       onUpdate(self) {
-        if (prev === null) { prev = self.progress; return }
-        const delta = self.progress - prev
-        prev = self.progress
         if (d.isDragging()) return
         const b = getBounds()
-        d.setPos(gsap.utils.clamp(b.minX, 0, d.pos.x - delta * Math.abs(b.minX)))
+        if (b.minX >= 0) return
+        const targetX = -self.progress * Math.abs(b.minX)
+        d.setPos(gsap.utils.clamp(b.minX, 0, targetX))
       },
     })
 
@@ -102,10 +100,12 @@ export default function DragRail({ children, label = 'Gallery', hint = 'Drag · 
     >
       <div className="rail-head">
         <span className="rail-hint meta">{hint}</span>
-        <div className="rail-nav">
-          <button className="rail-btn" aria-label="Previous" onClick={() => nudge(-1)}>←</button>
-          <button className="rail-btn" aria-label="Next" onClick={() => nudge(1)}>→</button>
-        </div>
+        {showNav && (
+          <div className="rail-nav">
+            <button className="rail-btn" aria-label="Previous" onClick={() => nudge(-1)}>←</button>
+            <button className="rail-btn" aria-label="Next" onClick={() => nudge(1)}>→</button>
+          </div>
+        )}
       </div>
       <div className="rail-wrap" ref={wrap} tabIndex={0} onKeyDown={onKey}>
         <div className="rail-track" ref={track}>{children}</div>

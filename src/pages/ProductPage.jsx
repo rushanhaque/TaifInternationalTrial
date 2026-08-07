@@ -13,7 +13,7 @@ import { useCart } from '../lib/cart'
 
 export default function ProductPage({ params }) {
   const p = bySlug(params.slug)
-  const { add, has, setOpen } = useCart()
+  const { add, remove, has, setOpen } = useCart()
   if (!p) return <NotFoundPage />
 
   const finishes = FINISHES.filter((f) => p.finishes.includes(f.key))
@@ -62,7 +62,7 @@ export default function ProductPage({ params }) {
                   baseColor="var(--hair-strong)"
                   intensity={1.2}
                   thickness={1.5}
-                  onClick={() => add(p)}
+                  onClick={() => (has(p.slug) ? remove(p.slug) : add(p))}
                 >
                   {has(p.slug) ? 'In your enquiry' : 'Add to enquiry'}
                 </SpecularButton>

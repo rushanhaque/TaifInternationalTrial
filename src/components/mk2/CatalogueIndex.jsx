@@ -36,7 +36,7 @@ const COLS = [
 
 export default function CatalogueIndex({ items }) {
   const [sort, setSort] = useState({ key: 'name', dir: 1 })
-  const { add, has, setOpen } = useCart()
+  const { add, remove, has, setOpen } = useCart()
 
   const rows = useMemo(() => {
     const col = COLS.find((c) => c.key === sort.key) || COLS[0]
@@ -101,9 +101,9 @@ export default function CatalogueIndex({ items }) {
                   <button
                     type="button"
                     className={`cx-add ${has(p.slug) ? 'is-in' : ''}`}
-                    onClick={() => add(p)}
+                    onClick={() => (has(p.slug) ? remove(p.slug) : add(p))}
                     aria-label={has(p.slug)
-                      ? `${p.name} is in your enquiry`
+                      ? `Remove ${p.name} from your enquiry`
                       : `Add ${p.name} to your enquiry`}
                   >
                     {has(p.slug) ? 'In' : 'Add'}

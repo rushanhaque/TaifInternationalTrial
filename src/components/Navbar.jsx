@@ -61,6 +61,10 @@ export default function Navbar() {
 
     const checkDarkBg = () => {
       if (!nav.current) return
+      if (isHome || path.startsWith('/collections')) {
+        nav.current.classList.remove('nav-dark-bg')
+        return
+      }
       const rect = nav.current.getBoundingClientRect()
       const y = rect.top + rect.height / 2
       const xMid = rect.left + rect.width / 2
@@ -70,9 +74,9 @@ export default function Navbar() {
 
       let isDark = false
       const points = [
-        { x: rect.left + 50, y },
+        { x: rect.left + 60, y },
         { x: xMid, y },
-        { x: rect.left + rect.width - 50, y }
+        { x: rect.left + rect.width - 60, y }
       ]
 
       for (const pt of points) {
@@ -86,10 +90,14 @@ export default function Navbar() {
             cls.includes('deep') ||
             cls.includes('dark') ||
             cls.includes('tt') ||
+            cls.includes('hero') ||
+            cls.includes('footer') ||
+            cls.includes('black') ||
+            cls.includes('obsidian') ||
             id === 'the-turn' ||
             id === 'two-floors' ||
+            id === 'sampler' ||
             tag === 'FOOTER' ||
-            cls.includes('footer') ||
             el.getAttribute('data-theme') === 'dark'
           ) {
             isDark = true
@@ -102,9 +110,9 @@ export default function Navbar() {
             if (match) {
               const [, r, g, b, a] = match
               const alpha = a !== undefined ? parseFloat(a) : 1
-              if (alpha > 0.3) {
+              if (alpha > 0.35) {
                 const lum = (parseInt(r) * 0.299 + parseInt(g) * 0.587 + parseInt(b) * 0.114)
-                if (lum < 155) {
+                if (lum < 165) {
                   isDark = true
                   break
                 } else {

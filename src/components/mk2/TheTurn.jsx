@@ -266,16 +266,11 @@ export default function TheTurn({ frames }) {
   return (
     <section className="tt section deep" ref={root} aria-labelledby="tt-h">
       <div className="tt-stage" ref={stage}>
-        <div className="sec-head tt-sec-head"><span className="meta">From us to you</span></div>
+        <div className="sec-head tt-sec-head"><span className="meta">Finishes we offer</span></div>
         <span className="tt-lamp" aria-hidden="true" />
         <span className="tt-floor" aria-hidden="true" />
 
-        <div className="tt-hud wrap">
-          <span className="tt-hud-l">
-            <span className="meta">Finishes</span>
-            <span className="tt-hud-sub">{BRAND.origin}</span>
-          </span>
-        </div>
+
 
         <div className="tt-rig">
           <div className={`tt-form${hasFrames ? ' is-frames' : ''}`} data-form aria-hidden="true">

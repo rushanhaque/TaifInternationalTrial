@@ -16,15 +16,6 @@ export default function Footer() {
 
   useEffect(() => {
     if (reduced()) return
-    const letters = mark.current.querySelectorAll('.mark-ch')
-    const fw = gsap.fromTo(letters,
-      { yPercent: 75, opacity: 0, rotate: (i) => (i % 2 ? 9 : -9) },
-      {
-        yPercent: 0, opacity: 1, rotate: 0,
-        ease: 'none',
-        stagger: { each: 0.05, from: 'center' },
-        scrollTrigger: { trigger: mark.current, start: 'top 100%', end: 'top 55%', scrub: 0.6 },
-      })
     const tw = gsap.fromTo(rule.current,
       { height: 3, scaleX: 0.15 },
       {
@@ -32,7 +23,6 @@ export default function Footer() {
         scrollTrigger: { trigger: root.current, start: 'top 80%', end: 'top 25%', scrub: 0.6 },
       })
     return () => {
-      fw.scrollTrigger?.kill(); fw.kill()
       tw.scrollTrigger?.kill(); tw.kill()
     }
   }, [])
