@@ -161,14 +161,14 @@ h4, h5, h6 {
 }
 
 .mega {
-  font-size: clamp(3.6rem, 12vw, 11rem);
+  font-size: clamp(3.1rem, 10vw, 9.5rem);
   letter-spacing: -0.03em;
   line-height: 0.88;
   font-weight: 600;
 }
 
 .d1 {
-  font-size: clamp(2.4rem, 6vw, 5rem);
+  font-size: clamp(2.1rem, 5.2vw, 4.3rem);
   letter-spacing: -0.02em;
   line-height: 0.96;
   font-weight: 600;
@@ -360,8 +360,8 @@ h4, h5, h6 {
 }
 
 .section.alt {
-  background-color: var(--white);
-  background-image: var(--paper);
+  background-color: #FFFFFF;
+  background-image: none;
 }
 
 /* opt-out for a section that should let the ground below show through */
@@ -370,9 +370,9 @@ h4, h5, h6 {
 }
 
 .deep {
-  background-color: var(--deep);
-  background-image: var(--paper-deep);
-  color: var(--on-deep);
+  background-color: #FFFFFF;
+  background-image: none;
+  color: var(--graphite, #1c1c1a);
   position: relative;
   overflow: hidden;
 }
@@ -390,57 +390,58 @@ h4, h5, h6 {
 }
 
 .sec-head {
-  position: absolute;
-  top: clamp(2rem, 4vw, 4rem);
-  left: clamp(2.5rem, 5vw, 4.5rem);
+  position: relative;
+  top: 0;
+  left: 0;
   z-index: 20;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 1rem;
-  width: auto;
+  justify-content: center;
+  width: 100%;
+  text-align: center;
+  margin-top: clamp(2.5rem, 5vh, 4rem);
+  margin-bottom: clamp(2.5rem, 5vh, 4rem);
+  padding-inline: 1rem;
 }
 
 .sec-head .meta {
-  color: var(--dim);
-  white-space: nowrap;
-  font-size: clamp(1.35rem, 2.2vw, 1.65rem);
-  letter-spacing: 0.04em;
+  color: #000000 !important;
+  opacity: 1 !important;
+  white-space: normal;
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4.5vw, 3.8rem);
+  letter-spacing: -0.02em;
   font-weight: 600;
+  line-height: 1.08;
+  text-transform: capitalize;
+  display: block;
+  margin-inline: auto;
 }
 
 .deep .sec-head .meta {
-  color: var(--dim-on-deep);
+  color: #000000 !important;
+  opacity: 1 !important;
 }
 
-/* a struck brass punch-mark opens each section — the maker's tick */
-.sec-head::before {
-  content: '';
-  width: 8px;
-  height: 8px;
-  flex: none;
-  background: linear-gradient(135deg, #daa520, #b87333 60%, #a0522d);
-  transform: rotate(45deg);
-  border-radius: 1.5px;
-  box-shadow: 0 1px 2px rgba(28, 28, 26, 0.35);
-}
-
+/* Remove diamond and dash from section headers */
+.sec-head::before,
 .sec-head::after {
-  content: '';
-  width: 44px;
-  height: 3px;
-  border-radius: var(--r-pill);
-  background: linear-gradient(90deg, #b87333 0%, #daa520 60%, transparent);
+  display: none !important;
+  content: none !important;
 }
 
 .section-title {
-  font-family: var(--font-section);
-  font-size: clamp(3rem, 6vw, 4.5rem);
-  font-weight: 500;
-  line-height: 1.1;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4.5vw, 3.8rem);
+  font-weight: 600;
+  line-height: 1.08;
   letter-spacing: -0.02em;
   color: var(--graphite);
-  margin-bottom: 2rem;
-  text-align: left;
+  margin-top: clamp(2.5rem, 5vh, 4rem);
+  margin-bottom: clamp(2.5rem, 5vh, 4rem);
+  text-align: center;
 }
 
 .deep .sec-head::after {
@@ -778,16 +779,16 @@ h4, h5, h6 {
   gap: .8rem;
   padding: 8px 12px 8px 22px;
   border-radius: var(--r-pill);
-  /* Liquid glass — slightly transparent */
-  background: rgba(255, 253, 248, 0.35);
-  backdrop-filter: blur(32px) saturate(210%) contrast(106%);
-  -webkit-backdrop-filter: blur(32px) saturate(210%) contrast(106%);
-  border: 1px solid rgba(255, 255, 255, 0.55);
+  /* Liquid glass — slightly more transparent */
+  background: rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(20px) saturate(190%) contrast(105%);
+  -webkit-backdrop-filter: blur(20px) saturate(190%) contrast(105%);
+  border: 1px solid rgba(255, 255, 255, 0.45);
   box-shadow: 
-    0 16px 40px -8px rgba(28, 28, 26, 0.08),
-    0 4px 14px -2px rgba(28, 28, 26, 0.03),
-    inset 0 1.5px 2px 0 rgba(255, 255, 255, 0.7),
-    inset 0 -1.5px 2px 0 rgba(28, 28, 26, 0.04);
+    0 16px 40px -8px rgba(28, 28, 26, 0.06),
+    0 4px 14px -2px rgba(28, 28, 26, 0.02),
+    inset 0 1.5px 2px 0 rgba(255, 255, 255, 0.75),
+    inset 0 -1.5px 2px 0 rgba(28, 28, 26, 0.03);
   transition: 
     transform .5s var(--ease-fluid), 
     backdrop-filter .35s ease, 
@@ -809,58 +810,39 @@ h4, h5, h6 {
   transition: opacity 0.35s ease;
 }
 
-/* ============ nav liquid glass on dark background sections ============ */
-.nav.nav-dark-bg {
-  background: rgba(18, 18, 16, 0.35) !important;
-  backdrop-filter: blur(32px) saturate(210%) contrast(106%) !important;
-  -webkit-backdrop-filter: blur(32px) saturate(210%) contrast(106%) !important;
-  border-color: rgba(255, 255, 255, 0.18) !important;
-  box-shadow: 
-    0 20px 48px -8px rgba(0, 0, 0, 0.5),
-    0 4px 16px -2px rgba(0, 0, 0, 0.3),
-    inset 0 1.5px 2px 0 rgba(255, 255, 255, 0.2),
-    inset 0 -1.5px 2px 0 rgba(0, 0, 0, 0.3) !important;
+/* Header Text ALWAYS Solid Jet Black (#000000) — Never transparent or glassy */
+.nav,
+.nav a,
+.nav .brand,
+.nav .brand-mark,
+.nav .brand-suffix,
+.nav .nav-links a,
+.nav .nl-up,
+.nav .nl-in,
+.nav .burger {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
 }
 
+.nav.nav-dark-bg,
 html.dark .nav {
-  background: rgba(18, 18, 16, 0.35);
-  border-color: rgba(255, 255, 255, 0.18);
-  box-shadow: 
-    0 20px 48px -12px rgba(0, 0, 0, 0.5),
-    inset 0 1.5px 2px 0 rgba(255, 255, 255, 0.18),
-    inset 0 -1.5px 2px 0 rgba(0, 0, 0, 0.3);
+  background: rgba(255, 255, 255, 0.22) !important;
+  border-color: rgba(255, 255, 255, 0.45) !important;
 }
 
-html.dark .nav.nav-dark-bg {
-  background: rgba(18, 18, 16, 0.45) !important;
-  border-color: rgba(255, 255, 255, 0.22) !important;
-}
-
-/* Dark section text & icon contrast adjustments for maximum visibility */
 .nav.nav-dark-bg .brand-mark,
-html.dark .nav .brand-mark {
-  color: #ffffff !important;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
-}
-
+html.dark .nav .brand-mark,
 .nav.nav-dark-bg .brand-suffix,
-html.dark .nav .brand-suffix {
-  color: rgba(227, 200, 143, 0.95) !important;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
-}
-
+html.dark .nav .brand-suffix,
 .nav.nav-dark-bg .nav-links a,
-html.dark .nav .nav-links a {
-  color: rgba(255, 255, 255, 0.92) !important;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
-}
-
-.nav.nav-dark-bg .nav-links a.on,
-.nav.nav-dark-bg .nav-links a:hover,
-html.dark .nav .nav-links a.on,
-html.dark .nav .nav-links a:hover {
-  color: #ffd700 !important;
-  text-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+html.dark .nav .nav-links a,
+.nav.nav-dark-bg .nl-up,
+.nav.nav-dark-bg .nl-in {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+  text-shadow: none !important;
 }
 
 .nav.nav-dark-bg .nav-pill,
@@ -890,8 +872,7 @@ html.dark .nav .burger i::after {
   pointer-events: none;
 }
 
-/* Brand lockup — the short mark carries the weight; the legal suffix sits
-   beside it in wide-tracked small caps and drops away on narrow screens. */
+/* Brand lockup — short mark & legal suffix */
 .brand {
   display: inline-flex;
   align-items: baseline;
@@ -908,16 +889,18 @@ html.dark .nav .burger i::after {
   font-weight: 700;
   font-size: 1.05rem;
   letter-spacing: -0.02em;
+  color: var(--graphite);
 }
 
 .brand-suffix {
   display: none;
-  font-family: var(--font-body);
-  font-weight: 600;
-  font-size: .56rem;
-  letter-spacing: .24em;
-  color: var(--dim);
-  transition: letter-spacing .45s var(--ease-fluid), color .3s;
+  font-family: var(--font-display);
+  font-stretch: 125%;
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: 0.04em;
+  color: var(--graphite);
+  transition: letter-spacing .45s var(--ease-fluid);
 }
 
 @media (min-width: 560px) {
@@ -926,10 +909,10 @@ html.dark .nav .burger i::after {
   }
 }
 
-/* the lockup breathes open on hover — tracking widens, suffix warms */
+/* the lockup breathes open on hover — tracking widens, text stays solid graphite */
 .brand:hover .brand-suffix {
-  letter-spacing: .34em;
-  color: var(--copper);
+  letter-spacing: .08em;
+  color: var(--graphite);
 }
 
 .brand .brand-mark {
@@ -962,13 +945,13 @@ html.dark .nav .burger i::after {
   font-weight: 550;
   font-size: .93rem;
   color: var(--graphite);
-  text-shadow: 0 1px 2px rgba(255,255,255,0.5);
-  transition: color .3s;
+  text-shadow: none;
+  transition: opacity .3s;
 }
 
 .nav-links a.on,
 .nav-links a:hover {
-  color: var(--copper);
+  color: var(--graphite);
 }
 
 .nav-pill {
@@ -1548,7 +1531,10 @@ html.dark .nav-pill {
 /* ============ wave ribbon (E12) ============ */
 .ribbon {
   overflow: hidden;
-  padding-block: clamp(1.5rem, 4vw, 3rem);
+  padding-block: clamp(0.75rem, 2vw, 1.5rem);
+  margin-top: -3.5rem;
+  position: relative;
+  z-index: 5;
   background: var(--chrome);
 }
 
@@ -1854,6 +1840,10 @@ html.dark .nav-pill {
   font-weight: 600;
 }
 
+.f-pool.bead {
+  display: none !important;
+}
+
 .f-pool {
   position: absolute;
   left: 1.3rem;
@@ -2002,11 +1992,18 @@ html.dark .nav-pill {
 
 /* ============ footer (E17 · Aeris-style stencil wordmark) ============ */
 .footer {
-  background: var(--deep);
-  color: var(--on-deep);
+  background: #1c1c1a !important;
+  color: #ffffff !important;
   padding-top: clamp(4rem, 8vw, 7rem);
   position: relative;
   overflow: hidden;
+}
+
+.footer h3,
+.footer p,
+.footer .foot-trade,
+.footer .foot-meta {
+  color: rgba(255, 255, 255, 0.85);
 }
 
 /* Stencil mark — smaller, considered.  At rest each letter reads as a
@@ -2301,6 +2298,22 @@ html.dark .nav-pill {
 }
 
 /* ============ Page Transitions ============ */
+.wipe-overlay {
+  position: fixed;
+  inset: -10vh -10vw;
+  z-index: 99999;
+  background-color: #FFFFFF;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  clip-path: polygon(-30% 0%, -30% 0%, -10% 100%, -10% 100%);
+  will-change: clip-path, opacity;
+}
+.wipe-overlay.is-active {
+  visibility: visible;
+  pointer-events: auto;
+}
+
 .iris-overlay {
   position: fixed;
   inset: -20vh -10vw;
@@ -2607,5 +2620,70 @@ html.dark .nav-pill {
 
   .hallmark-core span {
     font-size: 1.2rem;
+  }
+}
+
+/* ==========================================================================
+   MOBILE RESPONSIVENESS & ELEGANT MOBILE ANIMATIONS (<= 768px)
+   ========================================================================== */
+@media (max-width: 768px) {
+  /* Prevent horizontal scroll leakage */
+  html, body, #root {
+    overflow-x: hidden !important;
+    width: 100% !important;
+  }
+
+  /* Wrap spacing & typography adjustments */
+  .wrap {
+    padding-inline: clamp(1.2rem, 5vw, 2rem) !important;
+  }
+
+  .mega {
+    font-size: clamp(2.8rem, 11vw, 4.2rem) !important;
+    letter-spacing: -0.03em !important;
+    line-height: 1.02 !important;
+  }
+
+  .d1 {
+    font-size: clamp(2rem, 8vw, 3rem) !important;
+    line-height: 1.08 !important;
+  }
+
+  .d2 {
+    font-size: clamp(1.6rem, 6.5vw, 2.4rem) !important;
+    line-height: 1.12 !important;
+  }
+
+  .d3 {
+    font-size: clamp(1.25rem, 5vw, 1.75rem) !important;
+    line-height: 1.2 !important;
+  }
+
+  /* Section padding on mobile */
+  .section {
+    padding-block: clamp(3rem, 7vh, 4.5rem) !important;
+  }
+
+  /* Slide-in & Fade-up mobile animation utilities */
+  .mobile-slide-up {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .mobile-slide-up.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .mobile-slide-left {
+    opacity: 0;
+    transform: translateX(-24px);
+    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .mobile-slide-left.is-visible {
+    opacity: 1;
+    transform: translateX(0);
   }
 }

@@ -160,7 +160,7 @@ export default function WorksOrder() {
         {count > 0 && (
           <div className="wo-attach">
             <p className="meta wo-attach-head">
-              Attached · {count} {count === 1 ? 'piece' : 'pieces'} from your enquiry
+              Attached · {count} {count === 1 ? 'piece' : 'pieces'} from your cart
             </p>
             <ol className="wo-attach-list">
               {items.map((p, i) => (

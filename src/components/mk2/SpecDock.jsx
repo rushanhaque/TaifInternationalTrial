@@ -101,7 +101,7 @@ export default function SpecDock({ piece }) {
              so focus never lands on a control nobody can see */
           tabIndex={shown ? 0 : -1}
         >
-          {inCart ? 'In your enquiry' : 'Add to enquiry'}
+          {inCart ? 'In your cart' : 'Add to cart'}
         </button>
       </div>
     </div>

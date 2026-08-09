@@ -1,5 +1,8 @@
+import { useRef, useEffect } from 'react'
 import { Link } from '../lib/router'
-import { PROCESS_STAGES, RIBBON_TERMS, HOME_COLLECTIONS, MATERIALS } from '../data/site'
+import { gsap, ScrollTrigger, reduced } from '../lib/gsap'
+import { useCounter } from '../lib/hooks'
+import { PROCESS_STAGES, RIBBON_TERMS, HOME_COLLECTIONS, MATERIALS, FINISHES } from '../data/site'
 import { railItems } from '../data/catalogue'
 import { CharCascade, SmoothReveal, Dilate } from '../components/Reveal'
 import '../styles/mk2/page-materials.css'
@@ -22,8 +25,8 @@ import { productImg } from '../data/images'
    can be dropped back in. */
 import { familySlug } from './CollectionPage'
 import TheTurn from '../components/mk2/TheTurn'
-import TwoFloors from '../components/mk2/TwoFloors'
 import Sampler from '../components/mk2/Sampler'
+import MaskedHeading from '../components/MaskedHeading'
 
 import ReviewStack from '../components/ReviewStack'
 import LogoLoop from '../components/reactbits/LogoLoop'
@@ -42,13 +45,62 @@ const countryFlags = [
   { src: "https://flagcdn.com/w160/ca.png", alt: "Canada", title: "Canada" },
 ]
 
-const cubeMaterials = [
-  { id: 1, name: 'Brass', image: '/assets/materials/brass.png' },
-  { id: 2, name: 'Copper', image: '/assets/materials/copper.png' },
-  { id: 3, name: 'Aluminium', image: '/assets/materials/aluminium.png' },
-  { id: 4, name: 'Sheesham', image: '/assets/materials/sheesham.png' },
-  { id: 5, name: 'Mango Wood', image: '/assets/materials/mango.png' },
-  { id: 6, name: 'Reclaimed Teak', image: '/assets/materials/teak.png' }
+const REVIEW_CARDS = [
+  {
+    id: 1,
+    tone: 'walnut',
+    category: 'VERIFIED ORDER',
+    idx: '01',
+    stars: '★★★★★',
+    quote: '"They send a moisture reading with the sample. Nobody else in this category has ever done that unprompted."',
+    client: 'Meridian Living',
+    role: 'Head of Product',
+    tag: '300 PCS · 0 RETURNS'
+  },
+  {
+    id: 2,
+    tone: 'brass',
+    category: 'INLAY PROJECT',
+    idx: '02',
+    stars: '★★★★★',
+    quote: '"The brass inlay is the reason we moved. Four suppliers promised flush finish; only Taif delivered it."',
+    client: 'Atelier Kade',
+    role: 'Founding Partner',
+    tag: '36 SKUS · 0.5% DEFECTS'
+  },
+  {
+    id: 3,
+    tone: 'copper',
+    category: 'HOTEL SPEC',
+    idx: '03',
+    stars: '★★★★★',
+    quote: '"Four properties, one patina, zero visible variation. Housekeeping notices these things before we do."',
+    client: 'Halcyon Hotels',
+    role: 'Procurement Director',
+    tag: 'GLOBAL BOUTIQUE SUITES'
+  },
+  {
+    id: 4,
+    tone: 'antique',
+    category: 'ARCHITECTURAL',
+    idx: '04',
+    stars: '★★★★★',
+    quote: '"Precision hand-carved teak paired with solid unlacquered brass. Flawless craftsmanship from Moradabad."',
+    client: 'Studio Moradabad',
+    role: 'Lead Architect',
+    tag: 'KILN-DRIED HARDWOOD'
+  },
+  {
+    id: 5,
+    tone: 'inlay',
+    category: 'EXPORT LINE',
+    idx: '05',
+    stars: '★★★★★',
+    quote: '"Every container arrives with mill certificates and batch reports inside. Incredible consistency quarter after quarter."',
+    client: 'Oberoi Spaces',
+    role: 'Design Director',
+    tag: '16 EXPORT MARKETS'
+  }
 ]
 
 export default function Home() {
@@ -57,130 +109,162 @@ export default function Home() {
       {/* 0.1 · HERO BRAND — the title sequence */}
       <HeroBrand />
 
+      <div className="section-divider" />
+
       {/* 0.15 · HERO PARALLAX PRODUCTS GRID */}
       <div style={{ marginBlock: '2rem 4rem' }}>
         <HeroParallax />
       </div>
 
-      {/* 0.2 · materials — showcase grid section */}
-      <section className="fm-section alt" id="materials" style={{ paddingBlock: '3rem 4rem' }}>
-        <div className="sec-head" style={{ position: 'relative', top: 0, left: 0, paddingInline: 'clamp(2.5rem, 5vw, 4.5rem)', marginBottom: '2.5rem' }}>
-          <CharCascade as="span" className="meta">Materials we use</CharCascade>
-        </div>
-        <div className="wrap">
-          <div className="mp__showcase-grid">
-            {MATERIALS.map((m, i) => (
-              <div key={`showcase-${m.name}`} className="mp__showcase-card" tabIndex="0">
-                <img 
-                  src={cubeMaterials[i % cubeMaterials.length].image} 
-                  alt={m.name} 
-                  className="mp__showcase-img" 
-                  loading="lazy"
-                />
-                
-                <div className="mp__showcase-label">
-                  {m.name}
-                </div>
-                
-                <div className="mp__showcase-content">
-                  <span className="mp__showcase-meta">{m.kind} · {m.meta}</span>
-                  <h3 className="mp__showcase-title">{m.name}</h3>
-                  <p className="mp__showcase-copy">{m.copy}</p>
-                  <div className="mp__showcase-figs">
-                    {m.figs.map((f) => (
-                      <div key={`${m.name}-${f.u}`} className="mp__showcase-fig">
-                        <span className="mp__showcase-fig-v">{f.v}</span>
-                        <span className="mp__showcase-fig-u">{f.u}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <div className="section-divider" />
 
       {/* 0.3 · wave ribbon */}
       <Ribbon terms={RIBBON_TERMS} />
+
+      <div className="section-divider" />
 
       {/* 0.4 · THE TURN (From us to you) */}
       <div id="the-turn" style={{ position: 'absolute', visibility: 'hidden' }} />
       <TheTurn />
 
-      {/* 0.5 · drag rail — best sellers */}
-      <section className="section alt fs-section bestsellers-section" id="catalogue">
-        <div className="sec-head">
-          <CharCascade as="span" className="meta">Best sellers</CharCascade>
-        </div>
-        <DragRail label="Featured catalogue" hint="" showNav={false}>
-          {railItems().map((p) => (
-            <Link key={p.slug} to={`/catalogue/${p.slug}`} className="rail-card" transition="slide-product">
-              <Slab tone={p.tone} label={p.name.toUpperCase()} meta={p.material}
-                img={productImg(p.slug)} alt={p.name} />
-              <div className="rail-card-meta meta"><span>{p.category}</span><span>{p.idx}</span></div>
-            </Link>
-          ))}
-          <Link to="/catalogue" className="rail-card rail-more" transition="slide-collection">
-            <Slab tone="walnut" label="VIEW ALL — 20 PIECES" />
-            <div className="rail-card-meta meta"><span>Catalogue</span><span>0.2</span></div>
-          </Link>
-        </DragRail>
-      </section>
+      <div className="section-divider" />
 
-      {/* 0.6 · TWO FLOORS — drag the brass seam: metal (Moradabad) vs wood
-          (Saharanpur). The brand line made literal and operable. */}
-      <div id="two-floors" style={{ position: 'absolute', visibility: 'hidden' }} />
-      <TwoFloors />
-
-      {/* 0.7 · SAMPLER — five finishes morphing live on one object */}
+      {/* 0.5 · SAMPLER — signature piece zoom transition sampler */}
       <div id="sampler" style={{ position: 'absolute', visibility: 'hidden' }} />
       <Sampler />
 
+      <div className="section-divider" />
 
+      {/* 0.9 · THE CRAFT — Full-screen Heritage Section (ported from Barha) */}
+      <Heritage />
 
-      {/* 0.9 · heritage — big video card placeholder */}
-      <section className="section deep fs-section" id="heritage">
+      <div className="section-divider" />
+
+      {/* 0.92 · HERITAGE NARRATIVE & PROCESS SECTION */}
+      <section className="section clear fs-section craft-about-section" id="craft">
         <div className="sec-head">
           <CharCascade as="span" className="meta">Heritage</CharCascade>
         </div>
         <div className="wrap">
-          <SmoothReveal>
-            <div className="heritage-video-card">
-              <div className="heritage-video-inner">
-                <span className="heritage-play" aria-hidden="true">
-                  <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-                    <circle cx="24" cy="24" r="23" stroke="currentColor" strokeWidth="1.5" opacity="0.6" />
-                    <path d="M19 15L33 24L19 33V15Z" fill="currentColor" opacity="0.85" />
-                  </svg>
-                </span>
-                <span className="heritage-label meta">Video coming soon</span>
+          <div className="craft-container">
+            {/* Top Split: Narrative + 5-Step Process */}
+            <div className="craft-main-grid">
+              {/* Left Narrative Column */}
+              <div className="craft-intro">
+                <h3 className="craft-headline">
+                  A hundred hammers, <span className="craft-highlight">one steady hand.</span>
+                </h3>
+                <p className="craft-body">
+                  In Moradabad, metal is not manufactured — it is coaxed. Sheet becomes vessel under thousands of measured blows; colour is drawn from the surface with heat and time. Every piece passes along a line of dedicated specialists — one master cuts the disc, another raises it, others chase, patinate and burnish. Nothing is rushed; nothing is repeated exactly.
+                </p>
+                <div className="craft-cta">
+                  <Button to="/about">Inside the Atelier</Button>
+                </div>
+              </div>
+
+              {/* Right Column: 5 Process Steps */}
+              <ol className="craft-process-list">
+                <li className="craft-process-item">
+                  <span className="craft-process-num">01</span>
+                  <div className="craft-process-content">
+                    <h4 className="craft-process-title">The Disc</h4>
+                    <p className="craft-process-desc">
+                      Every piece begins as a flat disc of sheet metal and a fire. The maker chooses the gauge by the object it will become — by hand, never machine.
+                    </p>
+                  </div>
+                </li>
+                <li className="craft-process-item">
+                  <span className="craft-process-num">02</span>
+                  <div className="craft-process-content">
+                    <h4 className="craft-process-title">Raising</h4>
+                    <p className="craft-process-desc">
+                      Struck thousands of times against a stake, the flat sheet climbs into a vessel. The metal hardens as it rises and is annealed in fire to soften it again — over and over, for days.
+                    </p>
+                  </div>
+                </li>
+                <li className="craft-process-item">
+                  <span className="craft-process-num">03</span>
+                  <div className="craft-process-content">
+                    <h4 className="craft-process-title">Chasing</h4>
+                    <p className="craft-process-desc">
+                      Line and ornament are walked into the surface with hammer and punch — from the front for relief, from the back for repoussé.
+                    </p>
+                  </div>
+                </li>
+                <li className="craft-process-item">
+                  <span className="craft-process-num">04</span>
+                  <div className="craft-process-content">
+                    <h4 className="craft-process-title">Patina</h4>
+                    <p className="craft-process-desc">
+                      Colour is drawn from the metal with heat, time and a few quiet chemistries — antique, oxblood, verdigris or blackened — then arrested at the exact moment it is right.
+                    </p>
+                  </div>
+                </li>
+                <li className="craft-process-item">
+                  <span className="craft-process-num">05</span>
+                  <div className="craft-process-content">
+                    <h4 className="craft-process-title">Burnish</h4>
+                    <p className="craft-process-desc">
+                      The surface is brought to its final lustre by hand against stone and steel. A piece is finished when the maker can find nothing left to improve.
+                    </p>
+                  </div>
+                </li>
+              </ol>
+            </div>
+
+            {/* Bottom Row: 4 Atelier Stats Placards */}
+            <div className="about-stats-grid">
+              <div className="about-stat-card">
+                <div className="about-stat-number">15+</div>
+                <div className="about-stat-label">Hands in the workshop</div>
+                <div className="about-stat-sub">Specialist masters under one roof</div>
+              </div>
+              <div className="about-stat-card">
+                <div className="about-stat-number">600+</div>
+                <div className="about-stat-label">Pieces delivered per year</div>
+                <div className="about-stat-sub">Each piece finished by hand</div>
+              </div>
+              <div className="about-stat-card">
+                <div className="about-stat-number">18+</div>
+                <div className="about-stat-label">Countries served</div>
+                <div className="about-stat-sub">Global boutique export</div>
+              </div>
+              <div className="about-stat-card">
+                <div className="about-stat-number">10+</div>
+                <div className="about-stat-label">Years of excellence</div>
+                <div className="about-stat-sub">Est. Moradabad atelier</div>
               </div>
             </div>
-          </SmoothReveal>
+          </div>
         </div>
       </section>
 
+      <div className="section-divider" />
+
       {/* 0.95 · COUNTRIES SERVED */}
-      <div className="wrap" style={{ marginBlock: '3rem' }}>
-        <div className="countries-card" id="countries">
-          <div style={{ position: 'absolute', top: '1.6rem', left: 0, width: '100%', textAlign: 'center' }}>
-            <CharCascade as="span" className="meta" style={{ display: 'inline-block', fontSize: '1.25rem' }}>
-              Countries served
-            </CharCascade>
+      <section className="section clear countries-section-wrap" id="countries">
+        <div className="wrap">
+          <div className="countries-card">
+            <div style={{ position: 'absolute', top: '1.6rem', left: 0, width: '100%', textAlign: 'center' }}>
+              <CharCascade as="span" className="meta" style={{ display: 'inline-block', fontSize: '1.25rem' }}>
+                Countries served
+              </CharCascade>
+            </div>
+            <LogoLoop
+              logos={countryFlags}
+              speed={60}
+              direction="left"
+              logoHeight={64}
+              gap={60}
+              hoverSpeed={10}
+              scaleOnHover
+              ariaLabel="Countries served"
+            />
           </div>
-          <LogoLoop
-            logos={countryFlags}
-            speed={60}
-            direction="left"
-            logoHeight={64}
-            gap={60}
-            hoverSpeed={10}
-            scaleOnHover
-            ariaLabel="Countries served"
-          />
         </div>
-      </div>
+      </section>
+
+      <div className="section-divider" />
 
       {/* 0.98 · BLOGS AND SOCIALS */}
       <section className="section clear fs-section" id="instagram">
@@ -241,28 +325,70 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 1.0 · REVIEWS */}
-      <section className="section clear fs-section" id="reviews">
-        <div className="sec-head">
-          <CharCascade as="span" className="meta">Reviews</CharCascade>
-        </div>
-        <div style={{ marginTop: 'clamp(3.5rem, 7vw, 6rem)' }}>
-          <ReviewStack />
-        </div>
-        
-        {/* Big Designer Connect Button */}
-        <SmoothReveal style={{ display: 'flex', justifyContent: 'center', marginTop: '3.5rem', marginBottom: '2rem' }}>
-          <Link to="/contact" className="big-connect-btn">
-            <span>Connect</span>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="5" y1="12" x2="19" y2="12" />
-              <polyline points="12 5 19 12 12 19" />
-            </svg>
-          </Link>
-        </SmoothReveal>
-      </section>
+      <div className="section-divider" />
 
+      {/* 1.0 · REVIEWS DRAG RAIL WITH SCROLL TRIGGER ANIMATION */}
+      <ReviewsSection />
 
     </div>
+  )
+}
+
+function ReviewsSection() {
+  return (
+    <section className="section alt fs-section bestsellers-section" id="reviews" style={{ paddingBlock: '3rem 2rem' }}>
+      <div className="sec-head" style={{ marginBottom: '1rem' }}>
+        <CharCascade as="span" className="meta">Reviews</CharCascade>
+      </div>
+      <ReviewStack />
+    </section>
+  )
+}
+
+function Heritage() {
+  const bgVideo = "https://res.cloudinary.com/djszwbnxp/video/upload/v1786264932/IMG_0205_n1mn8t.mp4"
+  const posterImg = "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=1600&auto=format&fit=crop"
+
+  return (
+    <section className="section craft-card-wrapper" id="heritage">
+      <div className="wrap">
+        <div className="craft-card-container">
+          {/* Background Video */}
+          <div className="craft-card__video-wrap">
+            <video
+              className="craft-card__video-bg"
+              autoPlay
+              loop
+              muted
+              playsInline
+              poster={posterImg}
+              src={bgVideo}
+            />
+            <div className="craft-card__overlay" />
+          </div>
+
+          {/* Centered THE CRAFT Text */}
+          <div className="craft-card__content">
+            <MaskedHeading
+              text="THE CRAFT"
+              mediaType="video"
+              src={bgVideo}
+              poster={posterImg}
+              fillScale={1.35}
+              parallax={32}
+              brightness={1.05}
+              saturation={1.0}
+              reveal="wipe"
+              trigger="view"
+              textScale={0.11}
+              weight={900}
+              tracking={0.035}
+              lineHeight={1.0}
+              align="center"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
   )
 }

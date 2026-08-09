@@ -354,17 +354,9 @@ export default function PartnersPage() {
   return (
     <div ref={root}>
       <section className="page-hero wrap prt-hero">
-        <p className="hero-kicker"><span className="idx">0.9</span> <span className="meta">Partners</span></p>
         <CharCascade as="h1" className="mega prt-h1">Their name on it.</CharCascade>
 
         <div className="prt-hero-grid">
-          <Dilate className="prt-hero-lede">
-            <p className="lede">
-              Hospitality groups, retailers, studios and architects who ship our metal
-              and wood under their own brands. They stay because the second container
-              matches the first.
-            </p>
-          </Dilate>
 
           <div className="prt-hero-side">
             <p className="prt-hero-note">

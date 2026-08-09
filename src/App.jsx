@@ -19,7 +19,6 @@ import { CartProvider } from './lib/cart'
 import Home from './pages/Home'
 import CollectionsPage from './pages/CollectionsPage'
 import CollectionPage, { resolveFamily, familyPieces, canonicalFamilySlug } from './pages/CollectionPage'
-import CataloguePage from './pages/CataloguePage'
 import ProductPage from './pages/ProductPage'
 import MaterialsPage from './pages/MaterialsPage'
 import AboutPage from './pages/AboutPage'
@@ -59,9 +58,6 @@ const ROUTES = [
       if (!fam) return null
       return collectionLd(fam, familyPieces(fam), `/collections/${canonicalFamilySlug(fam)}`)
     } },
-  { path: '/catalogue', page: CataloguePage, idx: '0.25', name: 'Catalogue',
-    title: t('Catalogue'),
-    desc: '20 production pieces across tableware, barware, décor, lighting, furniture and bespoke.' },
   { path: '/catalogue/:slug', page: ProductPage, idx: '0.3', transition: 'slide',
     name: (p) => bySlug(p.slug)?.name || 'Product',
     title: (p) => t(bySlug(p.slug)?.name || 'Product'),
@@ -76,7 +72,7 @@ const ROUTES = [
       return [
         productLd(piece),
         breadcrumbLd([
-          { name: 'Catalogue', path: '/catalogue' },
+          { name: 'Collections', path: '/collections' },
           { name: piece.name, path: `/catalogue/${piece.slug}` },
         ]),
       ]

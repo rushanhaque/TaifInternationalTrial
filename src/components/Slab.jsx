@@ -51,7 +51,7 @@ function ensureTicker() {
         m.amp += (m.tAmp * boost - m.amp) * 0.18
         /* the lobes rotate with the phase — ~170° of visible spin per
            finish step, independent of how calm the finish's amp is */
-        m.path.setAttribute('d', blobD(m.localT + m.phase, m.amp, m.localT * 0.32))
+        if (m.path) m.path.setAttribute('d', blobD(m.localT + m.phase, m.amp, m.localT * 0.32))
         continue
       }
       /* auto mode: time-driven ambient wobble for standalone slabs
@@ -59,7 +59,7 @@ function ensureTicker() {
       m.localT += dt
       m.amp += (m.tAmp * boost - m.amp) * 0.06
       m.spd += (m.tSpd - m.spd) * 0.06
-      m.path.setAttribute('d', blobD(m.localT * m.spd + m.phase, m.amp))
+      if (m.path) m.path.setAttribute('d', blobD(m.localT * m.spd + m.phase, m.amp))
     }
   })
 }

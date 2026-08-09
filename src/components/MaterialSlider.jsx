@@ -6,7 +6,7 @@ import './MaterialSlider.css';
  * Pure display component — activeIndex is fully controlled by the parent.
  * Scroll logic lives in MaterialsPage so the whole section responds.
  */
-const MaterialSlider = ({ materials = [], activeIndex = 0 }) => {
+const MaterialSlider = ({ materials = [], activeIndex = 0, onSelect }) => {
 
   const getClassForIndex = (index) => {
     if (index === activeIndex) return '-current';
@@ -37,6 +37,8 @@ const MaterialSlider = ({ materials = [], activeIndex = 0 }) => {
           <li
             key={mat.id}
             className={`slider-heo__item ${getClassForIndex(index)}`}
+            onClick={() => onSelect && onSelect(index)}
+            onMouseEnter={() => onSelect && onSelect(index)}
           >
             <CubeCard material={mat} isActive={index === activeIndex} />
           </li>

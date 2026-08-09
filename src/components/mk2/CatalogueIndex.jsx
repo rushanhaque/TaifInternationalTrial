@@ -79,7 +79,7 @@ export default function CatalogueIndex({ items }) {
                   </th>
                 )
               })}
-              <th scope="col" className="cx-th cx-right"><span className="sr-only">Enquiry</span></th>
+              <th scope="col" className="cx-th cx-right"><span className="sr-only">Cart</span></th>
             </tr>
           </thead>
           <tbody>
@@ -103,8 +103,8 @@ export default function CatalogueIndex({ items }) {
                     className={`cx-add ${has(p.slug) ? 'is-in' : ''}`}
                     onClick={() => (has(p.slug) ? remove(p.slug) : add(p))}
                     aria-label={has(p.slug)
-                      ? `Remove ${p.name} from your enquiry`
-                      : `Add ${p.name} to your enquiry`}
+                      ? `Remove ${p.name} from your cart`
+                      : `Add ${p.name} to your cart`}
                   >
                     {has(p.slug) ? 'In' : 'Add'}
                   </button>

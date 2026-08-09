@@ -28,6 +28,7 @@ export default function TwoFloors() {
 
     const write = (v) => {
       state.v = v
+      if (!el) return
       el.style.setProperty('--split', v.toFixed(4))
       /* Per-side weight: how much of the frame each floor currently owns. CSS
          turns these into scale / opacity / blur, so the wider floor reads as

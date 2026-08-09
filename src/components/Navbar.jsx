@@ -3,9 +3,7 @@ import { gsap, ScrollTrigger, reduced } from '../lib/gsap'
 import { Link, NavLink, useRoute } from '../lib/router'
 import { BRAND, NAV_LINKS } from '../data/site'
 import Button from './Button'
-import UiverseConnectButton from './UiverseConnectButton'
 import MobileSheet from './MobileSheet'
-import { AnimatedThemeToggler } from './magicui/AnimatedThemeToggler'
 
 /* E6 Liquid Pill — the active indicator stretches toward its new target,
    leading edge first, trailing edge ~120ms behind, like a droplet in transit.
@@ -137,11 +135,7 @@ export default function Navbar() {
 
     const onScroll = () => {
       if (!nav.current) return
-      if (isHome && window.scrollY <= 10) {
-        nav.current.classList.add('nav-hide-top')
-      } else {
-        nav.current.classList.remove('nav-hide-top')
-      }
+      nav.current.classList.remove('nav-hide-top')
       checkDarkBg()
     }
 
@@ -168,8 +162,7 @@ export default function Navbar() {
         </Link>
         <nav className="nav-links" aria-label="Primary" ref={list}>
           <span className="nav-pill" ref={pillEl} aria-hidden="true" />
-          {/* Contact is served by the CTA on desktop; keep the rail tight */}
-          {NAV_LINKS.filter((l) => l.to !== '/contact').map((l) => (
+          {NAV_LINKS.map((l) => (
             <NavLink
               key={l.to}
               to={l.to}
@@ -184,10 +177,6 @@ export default function Navbar() {
             </NavLink>
           ))}
         </nav>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <UiverseConnectButton className="nav-cta" />
-          <AnimatedThemeToggler />
-        </div>
         <button
           className="burger"
           aria-expanded={open}

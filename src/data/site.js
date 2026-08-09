@@ -25,7 +25,6 @@ export const BRAND = {
 
 export const NAV_LINKS = [
   { to: '/collections', label: 'Collections' },
-  { to: '/catalogue', label: 'Catalogue' },
   { to: '/materials', label: 'Materials' },
   { to: '/about', label: 'About' },
   { to: '/contact', label: 'Contact' },
@@ -91,7 +90,7 @@ export const FINISHES = [
   {
     key: 'natural', name: 'Natural Wood', tone: 'wood',
     substrates: ['Sheesham', 'Mango', 'Acacia', 'Teak'],
-    character: 'Sanded to 400 grit and finished in oil. The grain is the decoration — nothing is printed, nothing is veneered.',
+    character: 'Sanded to 400 grit and finished in oil. Copper, Brass, Aluminium, Sheesham, Mango Wood, and Reclaimed Teak.',
     durability: 'Kiln-dried to 8–10% moisture before a single cut, then three coats of hard-wax oil cured over 48 hours.',
     care: 'A barely damp cloth. Re-oil once a year; it takes ten minutes.',
   },
@@ -143,36 +142,12 @@ export const CAPABILITIES = [
 ]
 
 export const MATERIALS = [
-  {
-    name: 'Brass IS 319', kind: 'Metal', tone: 'brass', meta: '78% recycled input',
-    figs: [{ v: '927', u: '°C melt' }, { v: '8.44', u: 'g/cm³' }, { v: '110', u: 'HV' }],
-    copy: 'The workhorse of the metal floor. It casts cleanly, takes a hammer without tearing and holds an antique patina evenly across a batch of two thousand.',
-  },
-  {
-    name: 'Copper C11000', kind: 'Metal', tone: 'copper', meta: '92% recycled input',
-    figs: [{ v: '1083', u: '°C melt' }, { v: '8.94', u: 'g/cm³' }, { v: '75', u: 'HV' }],
-    copy: 'Soft, warm and antimicrobial. We raise it annealed and seal it with food-safe wax when the patina is not supposed to move.',
-  },
-  {
-    name: 'Aluminium LM6', kind: 'Metal', tone: 'antique', meta: '81% recycled input',
-    figs: [{ v: '577', u: '°C melt' }, { v: '2.65', u: 'g/cm³' }, { v: '60', u: 'HB' }],
-    copy: 'A third of the weight, sand-cast and powder-coated. For large decor and lighting that has to ship by air without the freight eating the margin.',
-  },
-  {
-    name: 'Sheesham (Indian Rosewood)', kind: 'Wood', tone: 'walnut', meta: 'Plantation-grown · legal harvest',
-    figs: [{ v: '0.77', u: 'g/cm³' }, { v: '1660', u: 'lbf Janka' }, { v: '8–10', u: '% MC' }],
-    copy: 'Dense, dark and interlocked. It carves without chipping and takes a brass inlay tightly enough that the joint disappears under a fingertip.',
-  },
-  {
-    name: 'Mango Wood', kind: 'Wood', tone: 'wood', meta: 'Orchard by-product',
-    figs: [{ v: '0.64', u: 'g/cm³' }, { v: '1070', u: 'lbf Janka' }, { v: '8–10', u: '% MC' }],
-    copy: 'Cut from orchard trees past fruiting age, so the timber is a by-product rather than a felling. Pale, open-grained and beautiful under oil.',
-  },
-  {
-    name: 'Reclaimed Teak', kind: 'Wood', tone: 'inlay', meta: 'Salvaged · age-verified',
-    figs: [{ v: '0.68', u: 'g/cm³' }, { v: '1070', u: 'lbf Janka' }, { v: '60', u: 'yrs avg' }],
-    copy: 'Salvaged from old structures, de-nailed, re-sawn and re-dried. Sixty years of movement are already behind it, which is why it stays flat.',
-  },
+  { name: 'Brass', tone: 'brass' },
+  { name: 'Copper', tone: 'copper' },
+  { name: 'Aluminium', tone: 'antique' },
+  { name: 'Sheesham', tone: 'walnut' },
+  { name: 'Mango Wood', tone: 'wood' },
+  { name: 'Reclaimed Teak', tone: 'inlay' },
 ]
 
 export const PARTNERS = [

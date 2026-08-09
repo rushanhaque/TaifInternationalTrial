@@ -25,7 +25,6 @@ export default function ContactPage() {
   return (
     <>
       <section className="page-hero wrap">
-        <p className="hero-kicker"><span className="idx">1.1</span> <span className="meta">Contact</span></p>
         <CharCascade as="h1" className="mega">Get in touch.</CharCascade>
       </section>
 

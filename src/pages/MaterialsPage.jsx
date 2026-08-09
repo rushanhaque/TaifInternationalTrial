@@ -2,53 +2,22 @@ import { useRef, useState } from 'react'
 import { Link } from '../lib/router'
 import { useGSAP } from '@gsap/react'
 import { ScrollTrigger } from '../lib/gsap'
-import { MATERIALS, HOME_COLLECTIONS } from '../data/site'
-import { CharCascade, Dilate } from '../components/Reveal'
+import { CharCascade } from '../components/Reveal'
 import MaterialSlider from '../components/MaterialSlider'
-import FinishMorph from '../components/FinishMorph'
+import FinishesCabinet from '../components/FinishesCabinet'
 import '../styles/mk2/page-materials.css'
 
-const cubeMaterials = [
-  {
-    id: 1,
-    name: 'Brass',
-    image: '/assets/materials/brass.png',
-    desc: 'Classic, resonant, and golden tones.',
-  },
-  {
-    id: 2,
-    name: 'Copper',
-    image: '/assets/materials/copper.png',
-    desc: 'Conductive, rich, and industrial feel.',
-  },
-  {
-    id: 3,
-    name: 'Aluminium',
-    image: '/assets/materials/aluminium.png',
-    desc: 'Lightweight, durable, and sleek finish.',
-  },
-  {
-    id: 4,
-    name: 'Sheesham',
-    image: '/assets/materials/sheesham.png',
-    desc: '',
-  },
-  {
-    id: 5,
-    name: 'Mango Wood',
-    image: '/assets/materials/mango.png',
-    desc: 'Pale, open-grained and beautiful under oil.',
-  },
-  {
-    id: 6,
-    name: 'Reclaimed Teak',
-    image: '/assets/materials/teak.png',
-    desc: 'Salvaged from old structures, flat and seasoned.',
-  }
+const materialsList = [
+  { id: 1, name: 'Brass', image: '/assets/materials/brass.png' },
+  { id: 2, name: 'Copper', image: '/assets/materials/copper.png' },
+  { id: 3, name: 'Aluminium', image: '/assets/materials/aluminium.png' },
+  { id: 4, name: 'Sheesham', image: '/assets/materials/sheesham.png' },
+  { id: 5, name: 'Mango Wood', image: '/assets/materials/mango.png' },
+  { id: 6, name: 'Reclaimed Teak', image: '/assets/materials/teak.png' }
 ]
 
 export default function MaterialsPage() {
-  const [cubeActiveIndex, setCubeActiveIndex] = useState(0)
+  const [activeIndex, setActiveIndex] = useState(0)
   const sectionRef = useRef(null)
 
   useGSAP(() => {
@@ -57,63 +26,43 @@ export default function MaterialsPage() {
     ScrollTrigger.create({
       trigger: sectionRef.current,
       start: 'top top',
-      end: '+=3000',
+      end: '+=2200',
       pin: true,
-      scrub: 1,
+      scrub: 0.8,
       onUpdate: (self) => {
-        const numItems = cubeMaterials.length
+        const numItems = materialsList.length
         const index = Math.min(numItems - 1, Math.floor(self.progress * numItems))
-        setCubeActiveIndex((prev) => (prev !== index ? index : prev))
+        setActiveIndex((prev) => (prev !== index ? index : prev))
       }
     })
   }, { dependencies: [] })
 
-  const activeCubeMaterial = cubeMaterials[cubeActiveIndex]
+  const activeMaterial = materialsList[activeIndex]
 
   return (
     <>
       <div className="mp">
-        <section className="page-hero wrap" style={{ minHeight: '60vh', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-          <p className="hero-kicker"><span className="idx">0.7</span> <span className="meta">Materials</span></p>
-          <CharCascade as="h1" className="mega">Three metals, three woods.</CharCascade>
-          <Dilate>
-            <p className="lede">
-              Chosen for how they behave under a hammer, a chisel and twenty years on
-              a shelf. Every property below is measured on our floor, not copied from
-              a supplier’s brochure.
-            </p>
-          </Dilate>
+        {/* Page Hero */}
+        <section className="page-hero wrap" style={{ minHeight: '30vh', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+          <CharCascade as="h1" className="mega">Metals and hardwoods.</CharCascade>
         </section>
 
-        {/* ── Materials Scroll Section (Dark Background) ── */}
+        {/* ── 0.1 · MATERIALS SECTION ── */}
         <section className="mp__lamp-section" ref={sectionRef}>
           <div className="mp__slider-wrap mp__slider-wrap--visible" style={{ position: 'absolute', top: '48%', left: '50%', transform: 'translate(-50%, -60%)', width: '100%' }}>
             <MaterialSlider
-              materials={cubeMaterials}
-              activeIndex={cubeActiveIndex}
+              materials={materialsList}
+              activeIndex={activeIndex}
+              onSelect={(i) => setActiveIndex(i)}
             />
           </div>
           <div className="mp__material-label mp__material-label--visible" style={{ position: 'absolute', bottom: '10%', left: '50%', transform: 'translateX(-50%)', textAlign: 'center' }}>
-            <h2 className="mp__material-name">{activeCubeMaterial.name}</h2>
-            {activeCubeMaterial.desc && (
-              <p className="mp__material-desc">{activeCubeMaterial.desc}</p>
-            )}
+            <h2 className="mp__material-name">{activeMaterial.name}</h2>
           </div>
         </section>
 
-        {/* ── Finishes Section ── */}
-        <section className="fm-section alt" id="finishes" style={{ paddingBlock: '4rem 2rem' }}>
-          <div className="sec-head" style={{ position: 'relative', top: 0, left: 0, paddingInline: 'clamp(2.5rem, 5vw, 4.5rem)', marginBottom: '1rem' }}>
-            <CharCascade as="span" className="meta">Finishes we offer</CharCascade>
-          </div>
-          <div className="wrap">
-            <FinishMorph
-              mode="scroll"
-              finishes={HOME_COLLECTIONS}
-              label="FINISHES WE OFFER"
-            />
-          </div>
-        </section>
+        {/* ── 0.2 · FINISHES WE OFFER SECTION (Below Materials) ── */}
+        <FinishesCabinet />
 
         {/* Consultation CTA */}
         <section className="section clear" style={{ paddingBlock: '6rem 5rem', textAlign: 'center' }}>

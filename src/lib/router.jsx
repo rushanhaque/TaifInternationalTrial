@@ -102,6 +102,7 @@ export function Router({ routes, notFound, after = null }) {
   const busy = useRef(false)
   const stripsRef = useRef(null)
   const irisRef = useRef(null)
+  const wipeRef = useRef(null)
 
   const matched = matchRoutes(routes, path)
   const route = matched ? matched.route : notFound
@@ -136,7 +137,7 @@ export function Router({ routes, notFound, after = null }) {
     }
     if (push) window.history.pushState({}, '', to)
 
-    if (reduced() || (!stripsRef.current && !irisRef.current)) {
+    if (reduced() || (!stripsRef.current && !irisRef.current && !wipeRef.current)) {
       settle(to)
       requestAnimationFrame(() => ScrollTrigger.refresh())
       document.getElementById('main')?.focus({ preventScroll: true })
@@ -146,12 +147,14 @@ export function Router({ routes, notFound, after = null }) {
     busy.current = true
     try { getLenis()?.stop() } catch (_) {}
 
-    const mode = opts.transition || 'strips'
+    // Navbar links explicitly pass transition: 'strips'.
+    // ALL product cards (/catalogue/:slug), collection cards (/collections/:family), and in-page links run playWipe (the white diagonal wipe).
+    const mode = opts.transition === 'strips' ? 'strips' : 'wipe'
 
     if (mode === 'strips') {
       playStrips(to)
     } else {
-      playIris(to)
+      playWipe(to)
     }
   }
 
@@ -322,6 +325,69 @@ export function Router({ routes, notFound, after = null }) {
     })
   }
 
+  /* ── WHITE SMOOTH NORTH-WEST TO SOUTH-EAST DIAGONAL WIPE (collections & products) ── */
+  function playWipe(to) {
+    const veil = wipeRef.current || irisRef.current
+    const mainEl = document.getElementById('main')
+    if (!veil) { settle(to); busy.current = false; try { getLenis()?.start() } catch(_){} return }
+
+    veil.classList.add('is-active')
+
+    // Initial state: veil at left edge with North-West to South-East tilted edge
+    gsap.set(veil, {
+      opacity: 1,
+      clipPath: 'polygon(-30% 0%, -30% 0%, -10% 100%, -10% 100%)'
+    })
+
+    if (mainEl) {
+      gsap.set(mainEl, { transformOrigin: '50% 50%' })
+    }
+
+    const safety = setTimeout(teardown, 2400)
+
+    function teardown() {
+      clearTimeout(safety)
+      veil.classList.remove('is-active')
+      gsap.set(veil, { clearProps: 'all' })
+      if (mainEl) gsap.set(mainEl, { clearProps: 'all' })
+      busy.current = false
+      try { getLenis()?.start() } catch (_) { }
+      document.getElementById('main')?.focus({ preventScroll: true })
+      if (pathRef.current !== to) { settle(to); return }
+      if (window.location.pathname !== to) go(window.location.pathname, false)
+    }
+
+    // Phase 1: Main content recedes gracefully while white NW-SE diagonal veil sweeps in from left to right
+    if (mainEl) {
+      gsap.to(mainEl, {
+        scale: 0.985,
+        opacity: 0.6,
+        duration: 0.68,
+        ease: 'power3.inOut',
+      })
+    }
+
+    gsap.to(veil, {
+      clipPath: 'polygon(-30% 0%, 130% 0%, 110% 100%, -10% 100%)',
+      duration: 0.68,
+      ease: 'power3.inOut',
+      onComplete() {
+        settle(to)
+        try { ScrollTrigger.refresh() } catch (_) { }
+
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          // Phase 2: White veil sweeps off-screen to the right
+          gsap.to(veil, {
+            clipPath: 'polygon(130% 0%, 130% 0%, 110% 100%, 110% 100%)',
+            duration: 0.68,
+            ease: 'power3.inOut',
+            onComplete: teardown,
+          })
+        }))
+      },
+    })
+  }
+
   navigateFn = (to, opts = {}) => go(to, true, opts)
 
   useEffect(() => {
@@ -346,6 +412,9 @@ export function Router({ routes, notFound, after = null }) {
         </main>
         {after}
       </div>
+
+      {/* Casa & Crop diagonal wipe overlay — collections & products */}
+      <div className="wipe-overlay" ref={wipeRef} aria-hidden="true" />
 
       {/* Iris reveal overlay — diagonal sweep for in-page links */}
       <div className="iris-overlay" ref={irisRef} aria-hidden="true" />

@@ -12,14 +12,7 @@ export default function CarePage() {
   return (
     <>
       <section className="page-hero wrap">
-        <p className="hero-kicker"><span className="idx">1.0</span> <span className="meta">Care</span></p>
         <CharCascade as="h1" className="mega">Keep it well.</CharCascade>
-        <Dilate>
-          <p className="lede">
-            Four surfaces, four habits. Almost nothing here needs a product — mostly
-            it needs a dry cloth, ten minutes a year, and restraint.
-          </p>
-        </Dilate>
       </section>
 
       {/* the dial — care advice made tangible before it is written out */}

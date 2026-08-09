@@ -65,7 +65,7 @@ export default function Cart() {
       >
         <span className="ct-tab-mark" aria-hidden="true" />
         <span className="ct-tab-n">{String(count).padStart(2, '0')}</span>
-        <span className="ct-tab-label meta">Enquiry</span>
+        <span className="ct-tab-label meta">Cart</span>
       </button>
 
       <div
@@ -78,19 +78,19 @@ export default function Cart() {
         id="cart-pane"
         className={`ct-pane ${open ? 'is-open' : ''}`}
         ref={paneRef}
-        aria-label="Enquiry list"
+        aria-label="Cart list"
         aria-hidden={!open}
       >
         <header className="ct-head">
           <div>
             <span className="meta ct-kicker">Works docket</span>
-            <h2 className="ct-title">Enquiry</h2>
+            <h2 className="ct-title">Cart</h2>
           </div>
           <button
             type="button"
             className="ct-close"
             onClick={() => setOpen(false)}
-            aria-label="Close enquiry list"
+            aria-label="Close cart list"
           >
             <span aria-hidden="true">×</span>
           </button>
@@ -98,7 +98,7 @@ export default function Cart() {
 
         <p className="ct-note">
           No prices and no checkout — this gathers pieces so you can send them
-          as one enquiry. It clears when you reload.
+          as one order. It clears when you reload.
         </p>
 
         <ol className="ct-list">
@@ -117,7 +117,7 @@ export default function Cart() {
                 type="button"
                 className="ct-drop"
                 onClick={() => remove(p.slug)}
-                aria-label={`Remove ${p.name} from the enquiry`}
+                aria-label={`Remove ${p.name} from the cart`}
               >
                 <span aria-hidden="true">Remove</span>
               </button>

@@ -751,17 +751,24 @@
 }
 
 .tt-sec-head {
-  position: absolute;
-  top: calc(var(--nav-h) + clamp(1.2rem, 2.5vh, 2.5rem));
-  left: clamp(2.5rem, 5vw, 4.5rem);
+  position: relative;
+  top: 0;
+  left: 0;
   z-index: 20;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-top: clamp(2.5rem, 5vh, 4rem);
+  margin-bottom: clamp(2.5rem, 5vh, 4rem);
 }
 @media (max-width: 999.98px) {
   .tt-sec-head {
     position: relative;
     top: 0;
     left: 0;
-    margin-bottom: 1rem;
-    padding-inline: var(--gutter);
+    margin-top: clamp(2rem, 4vh, 3rem);
+    margin-bottom: clamp(2rem, 4vh, 3rem);
   }
 }

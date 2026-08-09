@@ -27,7 +27,7 @@ export default function Ribbon({ terms, className = '' }) {
     let tweens = []
     let cancelled = false
     document.fonts.ready.then(() => {
-      if (cancelled || !t1.current) return
+      if (cancelled || !t1.current || !tp1.current || !tp2.current || !p1.current || !p2.current) return
       let len
       try { len = t1.current.getSubStringLength(0, unit.length) } catch { len = 2400 }
       const o = { v: 0 }
@@ -35,8 +35,8 @@ export default function Ribbon({ terms, className = '' }) {
         gsap.to(o, {
           v: -len, duration: len / 85, ease: 'none', repeat: -1,
           onUpdate() {
-            tp1.current.setAttribute('startOffset', o.v)
-            tp2.current.setAttribute('startOffset', -len - o.v)
+            if (tp1.current) tp1.current.setAttribute('startOffset', o.v)
+            if (tp2.current) tp2.current.setAttribute('startOffset', -len - o.v)
           },
         }),
         /* same duration + phase: the mirrored paths keep equal arc length at
@@ -44,8 +44,13 @@ export default function Ribbon({ terms, className = '' }) {
         gsap.to(p1.current, { attr: { d: P1B }, duration: 5.5, yoyo: true, repeat: -1, ease: 'sine.inOut' }),
         gsap.to(p2.current, { attr: { d: P2B }, duration: 5.5, yoyo: true, repeat: -1, ease: 'sine.inOut' })
       )
+      if (cancelled) tweens.forEach((t) => t.kill())
     })
-    return () => { cancelled = true; tweens.forEach((t) => t.kill()) }
+    return () => {
+      cancelled = true
+      tweens.forEach((t) => t.kill())
+      tweens = []
+    }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (

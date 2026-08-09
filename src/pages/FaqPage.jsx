@@ -52,21 +52,14 @@ export default function FaqPage() {
   return (
     <>
       <section className="page-hero wrap">
-        <p className="hero-kicker"><span className="idx">1.2</span> <span className="meta">FAQ</span></p>
         <CharCascade as="h1" className="mega">Asked, answered.</CharCascade>
-        <Dilate>
-          <p className="lede">
-            Twelve questions, answered with numbers rather than adjectives.
-            Anything else —{' '}{BRAND.email} replies within a working day.
-          </p>
-        </Dilate>
       </section>
 
       <section className="section alt">
         <div className="wrap faq-wrap">
           {FAQS.map((g, gi) => (
             <div key={g.group} className="faq-group">
-              <div className="sec-head"><span className="idx">1.{gi + 1}</span><span className="meta">{g.group}</span></div>
+              <div className="sec-head"><span className="meta">{g.group}</span></div>
               <div className="faq-list">
                 {g.items.map((item, i) => (
                   <Row key={item.q} q={item.q} a={item.a} id={`faq-${gi}-${i}`} />

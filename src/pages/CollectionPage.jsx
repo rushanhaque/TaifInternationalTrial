@@ -149,11 +149,11 @@ function PlateCard({ p, add, remove, has, setOpen }) {
         className={`pl-add ${inCart ? 'is-in' : ''}`}
         onClick={() => (inCart ? remove(p.slug) : add(p))}
         aria-label={inCart
-          ? `Remove ${p.name} from your enquiry`
-          : `Add ${p.name} to your enquiry`}
+          ? `Remove ${p.name} from your cart`
+          : `Add ${p.name} to your cart`}
       >
         <i aria-hidden="true" />
-        <span>{inCart ? 'In enquiry' : 'Add'}</span>
+        <span>{inCart ? 'In cart' : 'Add to cart'}</span>
       </button>
     </li>
   )
@@ -255,7 +255,6 @@ export default function CollectionPage({ params = {} }) {
           </div>
 
           <div className="pl-meta">
-            <p className="pl-note">{FAMILY_NOTE[family]}</p>
             {stats && (
               <dl className="pl-figs">
                 <div><dt>Pieces</dt><dd>{String(stats.count).padStart(2, '0')}</dd></div>
@@ -321,8 +320,7 @@ export default function CollectionPage({ params = {} }) {
           </ul>
 
           <div className="hero-cta pl-cta">
-            <Button to="/catalogue">The full catalogue</Button>
-            <Button to="/contact" variant="ghost">Ask about {family.toLowerCase()}</Button>
+            <Button to="/contact">Get in touch</Button>
           </div>
         </div>
       </section>

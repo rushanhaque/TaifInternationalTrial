@@ -35,10 +35,11 @@ export default function CollectionsDolly() {
           scale: 1 / (1 + i * 0.42),
           opacity: i === 0 ? 1 : Math.max(0.25, 1 - i * 0.22),
           zIndex: 2 * (N - i),
+          pointerEvents: i === 0 ? 'auto' : 'none',
         })
       })
       gsap.set(hazes, { opacity: (i) => 0.35 + i * 0.18, zIndex: (i) => 2 * (N - i) - 1 })
-      gsap.set(end, { opacity: 0, zIndex: 2 * N + 2 })
+      gsap.set(end, { opacity: 0, zIndex: 2 * N + 2, pointerEvents: 'none' })
 
       const tl = gsap.timeline({
         scrollTrigger: {
@@ -56,12 +57,14 @@ export default function CollectionsDolly() {
       layers.forEach((l, i) => {
         const t = i * SEG
         const dir = i % 2 ? 1 : -1
-        /* the passing layer: swells past camera and drifts out an edge */
+        /* the passing layer: swells past camera, drops zIndex to 0 and pointerEvents to none */
         tl.to(l, {
           scale: 2.35,
           xPercent: dir * 46,
           yPercent: -12,
           opacity: 0,
+          zIndex: 0,
+          pointerEvents: 'none',
           duration: SEG * 0.9,
           ease: 'power1.in',
         }, t)
@@ -71,6 +74,7 @@ export default function CollectionsDolly() {
           tl.to(layers[j], {
             scale: 1 / (1 + depth * 0.42),
             opacity: depth === 0 ? 1 : Math.max(0.25, 1 - depth * 0.22),
+            pointerEvents: depth === 0 ? 'auto' : 'none',
             duration: SEG * 0.9,
             ease: 'power1.inOut',
           }, t)
@@ -81,7 +85,7 @@ export default function CollectionsDolly() {
         }
       })
       /* the alley's end — Bespoke wall */
-      tl.to(end, { opacity: 1, duration: SEG * 0.8, ease: 'power1.out' }, (N - 1) * SEG + 0.3)
+      tl.to(end, { opacity: 1, pointerEvents: 'auto', duration: SEG * 0.8, ease: 'power1.out' }, (N - 1) * SEG + 0.3)
 
       return () => tl.scrollTrigger?.kill()
     })
@@ -117,7 +121,7 @@ export default function CollectionsDolly() {
           </p>
           <div className="cd-end-ctas">
             <Button to="/contact">Connect</Button>
-            <Button to="/catalogue" variant="ghost">Or browse the catalogue</Button>
+            <Button to="/collections" variant="ghost">Browse all collections</Button>
           </div>
         </div>
       </div>
@@ -132,7 +136,7 @@ export default function CollectionsDolly() {
               to={`/collections/${familySlug(c.name)}`}
               aria-label={`Open the ${c.name} collection`}
             >
-              <Slab tone={c.tone} label={c.name.toUpperCase()} ratio="16/10"
+              <Slab tone={c.tone} label={c.name.toUpperCase()} ratio="16/10" bead
                 img={COLLECTION_IMGS[c.name]} alt={c.name} />
             </Link>
           ))}
@@ -142,7 +146,7 @@ export default function CollectionsDolly() {
           <p className="lede">Bespoke is the sixth family — described in a drawing you send.</p>
           <div className="cd-end-ctas">
             <Button to="/contact">Connect</Button>
-            <Button to="/catalogue" variant="ghost">Or browse the catalogue</Button>
+            <Button to="/collections" variant="ghost">Browse all collections</Button>
           </div>
         </div>
       </div>

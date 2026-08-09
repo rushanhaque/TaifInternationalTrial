@@ -1,78 +1,44 @@
-import '../styles/ReviewStack.css';
+import React from 'react'
+import { InfiniteMovingCards } from './ui/InfiniteMovingCards'
+import '../styles/ReviewStack.css'
 
-const REVIEWS = [
+const testimonials = [
   {
-    id: 1,
-    name: 'Sarah Jenkins',
-    role: 'Interior Designer',
-    text: 'The craftsmanship on these wooden pieces is unparalleled. They brought a unique warmth to my client\'s living space.',
-    rating: 5,
+    quote:
+      "The craftsmanship on these Moradabad brass pieces is utterly breathtaking. They brought an unmatched warmth, texture, and architectural gravity to my client’s penthouse living space.",
+    name: "Sarah Jenkins",
+    title: "Interior Architect · London, UK",
   },
   {
-    id: 2,
-    name: 'Michael Chen',
-    role: 'Architect',
-    text: 'Taif\'s attention to detail is evident in every curve. The brass accents perfectly complement the rich walnut textures.',
-    rating: 5,
+    quote:
+      "Taif’s attention to detail is evident in every hand-hammered curve. The brass accents complement rich walnut textures in a way that feels timeless yet unmistakably modern.",
+    name: "Michael Chen",
+    title: "Design Director · New York, USA",
   },
   {
-    id: 3,
-    name: 'Emma Thompson',
-    role: 'Art Director',
-    text: 'Absolutely stunning work. The fusion of traditional Moradabad metalwork with Saharanpur wood carving creates something entirely new.',
-    rating: 5,
+    quote:
+      "An extraordinary piece of living heritage. The fusion of traditional Indian metalworking with clean Scandinavian proportions creates something truly rare in contemporary design.",
+    name: "Emma Thompson",
+    title: "Art Collector · Paris, France",
   },
   {
-    id: 4,
-    name: 'David Rossi',
-    role: 'Collector',
-    text: 'I\'ve collected artisanal furniture for years, and the pieces from Taif stand out for their exceptional quality and narrative.',
-    rating: 5,
+    quote:
+      "I have specified luxury artisanal decor across Europe for over 15 years. The custom bronze vessels from Taif stand in a class of their own for quality and hand-burnished lustre.",
+    name: "David Rossi",
+    title: "Residential Architect · Milan, Italy",
   },
   {
-    id: 5,
-    name: 'Olivia Martinez',
-    role: 'Homeowner',
-    text: 'The dining table we received is a masterpiece. It has become the centerpiece of our home and a conversation starter for every guest.',
-    rating: 5,
-  }
-];
+    quote:
+      "The centerpiece bowl we commissioned is pure art. It anchors our entire dining room and captures the natural light from morning till dusk with incredible patina depth.",
+    name: "Olivia Martinez",
+    title: "Private Collector · Madrid, Spain",
+  },
+]
 
 export default function ReviewStack() {
-  // Duplicate array for seamless infinite marquee loop
-  const carouselReviews = [...REVIEWS, ...REVIEWS];
-
   return (
-    <div className="review-carousel-container">
-      <div className="review-marquee-wrapper">
-        <div className="review-marquee-track">
-          {carouselReviews.map((review, idx) => {
-            const initials = review.name.split(' ').map(n => n[0]).join('');
-            return (
-              <div key={`${review.id}-${idx}`} className="review-card-item">
-                <div className="review-card-top">
-                  <div className="review-stars">
-                    {'★'.repeat(review.rating)}
-                  </div>
-                  <div className="review-quote-icon">“</div>
-                </div>
-                
-                <p className="review-text">"{review.text}"</p>
-
-                <div className="review-author">
-                  <div className="review-avatar">
-                    {initials}
-                  </div>
-                  <div className="review-author-info">
-                    <strong>{review.name}</strong>
-                    <span>{review.role}</span>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
+    <div className="review-section-wrapper">
+      <InfiniteMovingCards items={testimonials} direction="right" speed="slow" />
     </div>
-  );
+  )
 }

@@ -16,15 +16,22 @@ export default function Footer() {
 
   useEffect(() => {
     if (reduced()) return
-    const tw = gsap.fromTo(rule.current,
-      { height: 3, scaleX: 0.15 },
-      {
-        height: 8, scaleX: 1, ease: 'none',
-        scrollTrigger: { trigger: root.current, start: 'top 80%', end: 'top 25%', scrub: 0.6 },
-      })
-    return () => {
-      tw.scrollTrigger?.kill(); tw.kill()
-    }
+    const ctx = gsap.context(() => {
+      gsap.fromTo(rule.current,
+        { scaleX: 0.05, height: 3, opacity: 0.3 },
+        {
+          scaleX: 1, height: 6, opacity: 1, ease: 'power2.out',
+          scrollTrigger: {
+            trigger: root.current,
+            start: 'top 95%',
+            end: 'top 50%',
+            scrub: 0.8,
+          },
+        }
+      )
+    }, root)
+
+    return () => ctx.revert()
   }, [])
 
   return (
@@ -108,23 +115,7 @@ export default function Footer() {
           </div>
 
           <div style={{ position: 'absolute', bottom: 'clamp(0.8rem, 1.5vw, 1.2rem)', right: 0 }}>
-            <button className="to-top" onClick={() => setShowColophon(!showColophon)}>Colophon ↑</button>
-            {showColophon && (
-              <div style={{
-                position: 'absolute', bottom: '100%', right: 0, 
-                marginBottom: '1rem', padding: '1rem',
-                background: 'var(--nav-bg)', color: 'var(--graphite)',
-                backdropFilter: 'blur(24px) saturate(200%)',
-                WebkitBackdropFilter: 'blur(24px) saturate(200%)',
-                borderRadius: 'var(--r-md)', boxShadow: 'var(--lift-3)',
-                border: '1px solid var(--hair-strong)',
-                width: 'max-content', zIndex: 10,
-                fontSize: '0.9rem',
-                animation: 'fadeUp 0.3s var(--ease-fluid)'
-              }}>
-                Revealing soon
-              </div>
-            )}
+            <span className="meta" style={{ opacity: 0.75, fontSize: '0.85rem' }}>Colophon</span>
           </div>
         </div>
       </div>

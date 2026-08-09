@@ -34,9 +34,7 @@ export default function ProductPage({ params }) {
               img={productImg(p.slug)} alt={p.name} />
           </div>
           <div className="sp-6 prod-info">
-            <p className="hero-kicker">
-              <span className="idx">0.3</span> <span className="meta">{p.category} · {p.idx}</span>
-            </p>
+            <p className="meta">{p.category}</p>
             <CharCascade as="h1" className="d1">{p.name}</CharCascade>
             <Dilate>
               <p className="lede" style={{ marginTop: '1rem' }}>{p.story}</p>
@@ -64,7 +62,7 @@ export default function ProductPage({ params }) {
                   thickness={1.5}
                   onClick={() => (has(p.slug) ? remove(p.slug) : add(p))}
                 >
-                  {has(p.slug) ? 'In your enquiry' : 'Add to enquiry'}
+                  {has(p.slug) ? 'In your cart' : 'Add to cart'}
                 </SpecularButton>
                 <SpecularButton
                   size="md"
@@ -95,7 +93,7 @@ export default function ProductPage({ params }) {
             <DragRail label={`More ${p.category}`} hint="Drag · fling">
               {related.map((r) => (
                 <Link key={r.slug} to={`/catalogue/${r.slug}`} className="rail-card">
-                  <Slab tone={r.tone} label={r.name.toUpperCase()} meta={r.material} bead
+                  <Slab tone={r.tone} label={r.name.toUpperCase()} meta={r.material}
                     img={productImg(r.slug)} alt={r.name} />
                   <div className="rail-card-meta meta"><span>{r.category}</span><span>{r.idx}</span></div>
                 </Link>

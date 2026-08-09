@@ -34,18 +34,18 @@ import { CharCascade, SmoothReveal, EditorialReveal } from '../Reveal'
    right; the anchor offsets are cos-derived from each row's height on the
    circle so every leader line lands on the true silhouette, not a bounding box. */
 const NOTES = [
-  { id: 'b1', mat: 'brass', a: 1, side: 'l', tag: 'Strike count', in: 0.05, out: 0.22,
-    text: '~10,000 strikes. Each one placed.' },
-  { id: 'b2', mat: 'brass', a: 2, side: 'r', tag: 'Hardness', in: 0.25, out: 0.42,
-    text: 'Work-hardened to 140 HV at the strike face.' },
-  { id: 'b3', mat: 'brass', a: 3, side: 'l', tag: 'Dimensions', in: 0.45, out: 0.58,
-    text: '280 mm diameter / 0.86 kg / IS 319 brass' },
-  { id: 'w1', mat: 'wood', a: 4, side: 'r', tag: 'Moisture', in: 0.68, out: 0.79,
-    text: 'Kiln-dried to 8–10% moisture before a single cut.' },
-  { id: 'w2', mat: 'wood', a: 5, side: 'l', tag: 'Finish', in: 0.80, out: 0.89,
-    text: 'Three coats of hard-wax oil, cured 48 hours.' },
-  { id: 'w3', mat: 'wood', a: 6, side: 'r', tag: 'Surface', in: 0.90, out: null,
-    text: 'The grain is the decoration. Nothing printed, nothing veneered.' },
+  { id: 'b1', mat: 'brass', a: 1, side: 'l', tag: 'Brass', in: 0.05, out: 0.22,
+    text: 'Solid Moradabad Brass — hand-hammered, warm, and acoustically resonant.' },
+  { id: 'b2', mat: 'brass', a: 2, side: 'r', tag: 'Copper', in: 0.25, out: 0.42,
+    text: 'Burnished Pure Copper — rose to umber patina, hand-worked depth.' },
+  { id: 'b3', mat: 'brass', a: 3, side: 'l', tag: 'Aluminium', in: 0.45, out: 0.58,
+    text: 'Precision Aluminium — lightweight, durable, hand-buffed satin sheen.' },
+  { id: 'w1', mat: 'wood', a: 4, side: 'r', tag: 'Sheesham', in: 0.68, out: 0.79,
+    text: 'Indian Rosewood (Sheesham) — rich natural grain, kiln-dried 8–10%.' },
+  { id: 'w2', mat: 'wood', a: 5, side: 'l', tag: 'Mango Wood', in: 0.80, out: 0.89,
+    text: 'Sustainable Mango Wood — warm golden tones, hard-wax oil cured.' },
+  { id: 'w3', mat: 'wood', a: 6, side: 'r', tag: 'Reclaimed Teak', in: 0.90, out: null,
+    text: 'Reclaimed Indian Teak — dense, weather-resistant, 400-grit smooth finish.' },
 ]
 
 const COLS = [
@@ -266,7 +266,7 @@ export default function TheTurn({ frames }) {
   return (
     <section className="tt section deep" ref={root} aria-labelledby="tt-h">
       <div className="tt-stage" ref={stage}>
-        <div className="sec-head tt-sec-head"><span className="meta">Finishes we offer</span></div>
+        <div className="sec-head tt-sec-head"><span className="meta">Materials we use</span></div>
         <span className="tt-lamp" aria-hidden="true" />
         <span className="tt-floor" aria-hidden="true" />
 

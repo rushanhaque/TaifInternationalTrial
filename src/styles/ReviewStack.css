@@ -1,137 +1,117 @@
-.review-carousel-container {
-  width: 100%;
-  max-width: 100%;
-  margin: 0 auto;
-  padding: 1rem 0 2.5rem;
-  overflow: hidden;
+/* ============ Infinite Moving Cards Review Section ============ */
+.review-section-wrapper {
   position: relative;
-}
-
-/* Soft Edge Fades */
-.review-carousel-container::before,
-.review-carousel-container::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: clamp(2rem, 8vw, 6rem);
-  z-index: 5;
-  pointer-events: none;
-}
-
-.review-carousel-container::before {
-  left: 0;
-  background: linear-gradient(90deg, var(--white, #ffffff) 0%, rgba(255, 255, 255, 0) 100%);
-}
-
-.review-carousel-container::after {
-  right: 0;
-  background: linear-gradient(270deg, var(--white, #ffffff) 0%, rgba(255, 255, 255, 0) 100%);
-}
-
-.review-marquee-wrapper {
   width: 100%;
+  padding: 0 0 3rem;
   overflow: hidden;
-  display: flex;
-}
-
-.review-marquee-track {
-  display: flex;
-  gap: 1.8rem;
-  width: max-content;
-  animation: marqueeScroll 35s linear infinite;
-  padding: 0.8rem 0;
-  will-change: transform;
-}
-
-/* Hover animation: pause carousel on hover */
-.review-marquee-wrapper:hover .review-marquee-track {
-  animation-play-state: paused;
-}
-
-@keyframes marqueeScroll {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
-}
-
-.review-card-item {
-  width: 360px;
-  flex-shrink: 0;
-  background: #fcfbf8; /* Porcelain — stands out from pure white section bg */
-  border-radius: var(--r-lg, 16px);
-  padding: 2.2rem 2rem;
-  box-shadow: 
-    0 12px 32px rgba(28, 28, 26, 0.06), 
-    0 2px 6px rgba(28, 28, 26, 0.03);
-  border: 1px solid rgba(28, 28, 26, 0.12);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  min-height: 270px;
-  gap: 1.5rem;
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease, background-color 0.35s ease, border-color 0.35s ease;
   box-sizing: border-box;
 }
 
-.review-card-item:hover {
-  transform: translateY(-6px) scale(1.02);
-  background: #ffffff;
-  border-color: rgba(28, 28, 26, 0.25);
+.scroller-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  mask-image: linear-gradient(to right, transparent, white 12%, white 88%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, white 12%, white 88%, transparent);
 }
 
-.review-card-top {
+.scroller-list {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  width: max-content;
+  flex-wrap: nowrap;
+  gap: 1.5rem;
+  padding: 0.85rem 0 1.25rem;
+  margin: 0;
+  list-style: none;
 }
 
-.review-stars {
-  color: var(--copper);
-  font-size: 1.25rem;
+@keyframes infinite-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-50% - 0.75rem));
+  }
+}
+
+.animate-scroll {
+  animation: infinite-scroll var(--animation-duration, 55s) var(--animation-direction, reverse) linear infinite;
+}
+
+.pause-on-hover:hover {
+  animation-play-state: paused;
+}
+
+/* Luxury Card Styling */
+.infinite-card {
+  position: relative;
+  width: clamp(300px, 28vw, 400px);
+  flex-shrink: 0;
+  background: linear-gradient(180deg, #FFFFFF 0%, #FAF8F5 100%);
+  border-radius: clamp(16px, 2vw, 24px);
+  padding: clamp(1.6rem, 2.5vw, 2.2rem);
+  box-shadow:
+    0 16px 45px rgba(28, 28, 26, 0.06),
+    0 3px 12px rgba(28, 28, 26, 0.03),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(28, 28, 26, 0.10);
+  box-sizing: border-box;
+  transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+.infinite-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(197, 151, 63, 0.35);
+  box-shadow:
+    0 22px 60px rgba(28, 28, 26, 0.10),
+    0 4px 16px rgba(197, 151, 63, 0.08);
+}
+
+.infinite-card-accent {
+  position: absolute;
+  top: 0;
+  left: 15%;
+  right: 15%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, rgba(197, 151, 63, 0.6) 50%, transparent 100%);
+  opacity: 0.7;
+}
+
+.infinite-card-stars {
+  color: var(--copper, #b87333);
+  font-size: 1.05rem;
   letter-spacing: 0.12em;
+  margin-bottom: 1rem;
 }
 
-.review-quote-icon {
-  font-family: var(--font-display);
-  font-size: 3.2rem;
-  line-height: 0.8;
-  color: rgba(184, 115, 51, 0.35);
-  user-select: none;
-}
-
-.review-text {
+.infinite-card-quote {
+  display: block;
   font-family: var(--font-body);
-  font-size: 1rem;
+  font-size: clamp(0.88rem, 1vw, 0.98rem);
   line-height: 1.65;
   color: #1c1c1a;
-  font-style: normal;
-  font-weight: 350;
-  margin: 0;
-  flex-grow: 1;
+  font-weight: 400;
+  margin-bottom: 1.5rem;
 }
 
-.review-author {
+.infinite-card-footer {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  padding-top: 1.2rem;
-  border-top: 1px solid rgba(28, 28, 26, 0.1);
+  gap: 0.85rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(28, 28, 26, 0.08);
 }
 
-.review-avatar {
-  width: 44px;
-  height: 44px;
+.infinite-card-avatar {
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
-  background: var(--white);
-  border: 1.5px solid var(--copper);
-  color: var(--copper);
-  font-family: var(--font-heading);
-  font-weight: 500;
-  font-size: 0.95rem;
+  background: linear-gradient(135deg, rgba(197, 151, 63, 0.15) 0%, rgba(184, 115, 51, 0.1) 100%);
+  border: 1px solid rgba(197, 151, 63, 0.3);
+  color: var(--copper, #b87333);
+  font-family: var(--font-display, "Cinzel", serif);
+  font-weight: 700;
+  font-size: 0.85rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -139,40 +119,23 @@
   flex-shrink: 0;
 }
 
-.review-author-info {
+.infinite-card-meta {
   display: flex;
   flex-direction: column;
-  gap: 0.15rem;
+  gap: 0.1rem;
 }
 
-.review-author-info strong {
-  font-family: var(--font-heading);
-  font-weight: 500;
+.infinite-card-author {
+  font-family: var(--font-display, "Cinzel", serif);
+  font-weight: 700;
   color: #1c1c1a;
-  font-size: 0.98rem;
+  font-size: 0.92rem;
+  letter-spacing: 0.01em;
 }
 
-.review-author-info span {
+.infinite-card-title {
   font-family: var(--font-body);
-  font-size: 0.85rem;
-  color: #4a4a48;
-  font-weight: 350;
+  font-size: 0.76rem;
+  color: #6a6a68;
+  font-weight: 400;
 }
-
-@media (max-width: 600px) {
-  .review-carousel-container {
-    padding: 0.5rem 0 1.5rem;
-  }
-  .review-marquee-track {
-    gap: 1.2rem;
-  }
-  .review-card-item {
-    width: clamp(270px, 82vw, 320px);
-    padding: 1.5rem 1.25rem;
-    min-height: 240px;
-  }
-  .review-text {
-    font-size: 0.95rem;
-  }
-}
-

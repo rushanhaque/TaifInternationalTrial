@@ -126,14 +126,7 @@ export default function LegalPage() {
   return (
     <>
       <section className="page-hero wrap">
-        <p className="hero-kicker"><span className="idx">1.3</span> <span className="meta">Legal</span></p>
         <CharCascade as="h1" className="mega">The fine print.</CharCascade>
-        <Dilate>
-          <p className="lede">
-            Eight clauses, numbered so they can be cited. Every one links to
-            itself — send a colleague the clause, not the page.
-          </p>
-        </Dilate>
       </section>
 
       <section className="section alt">

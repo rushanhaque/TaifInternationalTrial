@@ -1,28 +1,39 @@
 :root {
-  /* ═══ ground — the two whites. Pure White is the body ground;
-     Porcelain is the barely-warm elevated surface (cards, nav, inputs).
-     Together they create subtle depth without any colour. ═══ */
-  --white:      #ffffff;   /* pure white — body, main section backgrounds */
-  --bg:         #ffffff;
-  --chrome:     #ffffff;   /* pure solid white ground for homepage and sections */
-  --chrome-2:   #e7e2da;   /* soft linen — inset wells, toggle tracks, segmented controls */
-  --chrome-3:   #d4cec4;   /* darker linen — dividers, rules, hints */
-  --shadow-soft: rgba(28, 28, 26, 0.09);   /* shadows are carbon-tinted, never grey */
+  /* ═══ ground — Pure White everywhere (except footer) ═══ */
+  --white:      #FFFFFF;
+  --beige:      #FFFFFF;
+  --bg:         #FFFFFF;
+  --chrome:     #FFFFFF;
+  --chrome-2:   #FFFFFF;
+  --chrome-3:   #e2dcd2;   /* dividers, rules, hints */
+  --shadow-soft: rgba(28, 28, 26, 0.08);
 
-  /* ═══ ink — carbon black, never pure black ═══ */
+  /* ═══ ink ═══ */
   --graphite:   #1c1c1a;
   --graphite-2: #4a4a48;
   --dim:        rgba(28, 28, 26, 0.62);
   --faint:      rgba(28, 28, 26, 0.28);
   --hair:       rgba(28, 28, 26, 0.11);
   --hair-strong: rgba(28, 28, 26, 0.30);
-  --nav-bg:     linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0.70) 50%, rgba(255, 255, 255, 0.85) 100%);
+  --nav-bg:     linear-gradient(135deg, rgba(255, 255, 255, 0.90) 0%, rgba(255, 255, 255, 0.85) 100%);
 
-  /* ═══ the one dark surface — carbon black ═══ */
-  --deep:       #1c1c1a;
-  --on-deep:    #ffffff;
-  --dim-on-deep: rgba(255, 255, 255, 0.68);
-  --hair-on-deep: rgba(255, 255, 255, 0.16);
+  /* ═══ deep surfaces → white (except footer) ═══ */
+  --deep:       #FFFFFF;
+  --on-deep:    #1c1c1a;
+  --dim-on-deep: rgba(28, 28, 26, 0.72);
+  --hair-on-deep: rgba(28, 28, 26, 0.12);
+
+  /* ═══ section divider — a delicate brass-kissed hairline ═══ */
+  --section-divider: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(197, 151, 63, 0.08) 8%,
+    rgba(197, 151, 63, 0.22) 25%,
+    rgba(184, 115, 51, 0.35) 50%,
+    rgba(197, 151, 63, 0.22) 75%,
+    rgba(197, 151, 63, 0.08) 92%,
+    transparent 100%
+  );
 
   /* ═══ the metals — copper-brass, the house accent ═══ */
   --brass:      #c5973f;
@@ -57,13 +68,21 @@
   /* ═══ laid paper — clean ground ═══ */
   --paper: none;
 
-  /* clean grid tooth for the carbon surface */
-  --paper-deep:
+  /* ultra-faded, whisper-subtle paperlike grid texture for beige sections */
+  --paper-beige:
     repeating-linear-gradient(0deg,
-      rgba(255, 255, 255, 0.014) 0px, rgba(255, 255, 255, 0.014) 1px,
+      rgba(28, 28, 26, 0.006) 0px, rgba(28, 28, 26, 0.006) 1px,
       transparent 1px, transparent 4px),
     repeating-linear-gradient(90deg,
-      rgba(255, 255, 255, 0.016) 0px, rgba(255, 255, 255, 0.016) 1px,
+      rgba(28, 28, 26, 0.008) 0px, rgba(28, 28, 26, 0.008) 1px,
+      transparent 1px, transparent 58px);
+
+  --paper-deep:
+    repeating-linear-gradient(0deg,
+      rgba(28, 28, 26, 0.006) 0px, rgba(28, 28, 26, 0.006) 1px,
+      transparent 1px, transparent 4px),
+    repeating-linear-gradient(90deg,
+      rgba(28, 28, 26, 0.008) 0px, rgba(28, 28, 26, 0.008) 1px,
       transparent 1px, transparent 58px);
 
   /* ═══ neutral clean placeholder frames for future product images ═══ */

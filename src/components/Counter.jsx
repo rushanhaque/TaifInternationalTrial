@@ -32,7 +32,7 @@ export default function Counter({ value, unit, label, smaller = false }) {
     const tw = gsap.to(prox, {
       p: 1, duration: 1.4, ease: 'viscous',
       scrollTrigger: { trigger: root.current, start: 'top 90%', once: true },
-      onUpdate() { path.current.setAttribute('d', waveD(prox.p, performance.now() / 260)) },
+      onUpdate() { if (path.current) path.current.setAttribute('d', waveD(prox.p, performance.now() / 260)) },
       onComplete() { if (fill.current) { fill.current.style.clipPath = 'none'; fill.current.style.webkitClipPath = 'none' } },
     })
     return () => { tw.scrollTrigger?.kill(); tw.kill() }

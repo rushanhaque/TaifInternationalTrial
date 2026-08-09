@@ -13,60 +13,32 @@ import CircularGallery from '../components/reactbits/CircularGallery'
 const OPTIONS = ['All', ...CATEGORIES]
 
 export default function CataloguePage() {
-  const [cat, setCat] = useState('All')
-  let items = cat === 'All' ? CATALOGUE : CATALOGUE.filter((p) => p.category === cat)
-
-  // Reduce items to one per category for the collage view when showing All
-  if (cat === 'All') {
-    const seenCategories = new Set()
-    items = items.filter(p => {
-      if (seenCategories.has(p.category)) return false
-      seenCategories.add(p.category)
-      return true
-    })
-  }
+  const items = CATALOGUE
 
   return (
     <>
       <section className="page-hero wrap">
-        <p className="hero-kicker"><span className="idx">0.2</span> <span className="meta">Catalogue</span></p>
         <CharCascade as="h1" className="mega">Catalogue</CharCascade>
-        <Dilate>
-          <p className="lede">
-            Twenty production pieces across six families, in brass, copper and
-            seasoned hardwood. Every one carries its numbers — material, dimensions,
-            MOQ, lead time — because for a buyer that is the actual product.
-          </p>
-        </Dilate>
       </section>
 
       <section className="section alt">
         <div className="wrap">
-          <div className="cat-bar">
-            <Toggle
-              label="Filter by category"
-              options={OPTIONS.map((c) => ({ value: c, label: c }))}
-              value={cat}
-              onChange={setCat}
-            />
-            <div className="cat-count" aria-live="polite">
-              <Counter key={cat} value={String(items.length)} unit={items.length === 1 ? 'piece' : 'pieces'} smaller />
-            </div>
-          </div>
-
           <ol className="cat-collage">
               {items.map((p, i) => {
-                /* 6-item repeating collage rhythm:
-                   row A: 8-col hero  +  4-col portrait
-                   row B: 4-col  +  4-col  +  4-col  (trio)
-                   row C: 12-col full-width panoramic */
+                /* Professionally structured landscape collage rhythm:
+                   row A: 8-col wide landscape  +  4-col landscape
+                   row B: 4-col  +  4-col  +  4-col  (trio landscape)
+                   row C: 12-col full-width panoramic landscape
+                   row D: 6-col  +  6-col  (duo landscape) */
                 const PATTERN = [
-                  { span: 8,  ratio: '16/9'  },   // A1 — wide hero
-                  { span: 4,  ratio: '3/4'   },   // A2 — tall portrait
-                  { span: 4,  ratio: '4/3'   },   // B1 — square-ish
-                  { span: 4,  ratio: '4/3'   },   // B2
-                  { span: 4,  ratio: '4/3'   },   // B3
-                  { span: 12, ratio: '21/6'  },   // C  — full-width panoramic
+                  { span: 8,  ratio: '16/9'  },   // A1 — hero landscape
+                  { span: 4,  ratio: '16/10' },   // A2 — secondary landscape
+                  { span: 4,  ratio: '16/10' },   // B1 — trio landscape
+                  { span: 4,  ratio: '16/10' },   // B2 — trio landscape
+                  { span: 4,  ratio: '16/10' },   // B3 — trio landscape
+                  { span: 12, ratio: '21/9'  },   // C  — full-width panoramic landscape
+                  { span: 6,  ratio: '16/9'  },   // D1 — duo landscape
+                  { span: 6,  ratio: '16/9'  },   // D2 — duo landscape
                 ]
                 const tile = PATTERN[i % PATTERN.length]
                 return (
@@ -115,7 +87,7 @@ export default function CataloguePage() {
 
       <section className="section">
         <div className="wrap">
-          <div className="sec-head"><span className="idx">0.2</span><span className="meta">Recently added</span></div>
+          <div className="sec-head"><span className="meta">New arrivals</span></div>
           <div style={{ height: '600px', position: 'relative' }}>
             <CircularGallery
               items={railItems().map((p) => ({

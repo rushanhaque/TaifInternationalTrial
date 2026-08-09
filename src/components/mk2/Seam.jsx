@@ -154,7 +154,8 @@ export default function Seam() {
           scrollTrigger: {
             trigger: document.body,
             start: 'top top',
-            end: 'bottom bottom',
+            end: 'max',
+            refreshPriority: -10,
             /* A short scrub gives the spine mass — brass lags the scroll for
                about half a second and then settles, which is the whole
                difference between a wire and a graphic. */

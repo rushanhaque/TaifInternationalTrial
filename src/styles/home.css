@@ -83,7 +83,7 @@
   padding: 0 var(--gutter) 1.9rem;
   max-width: 1560px; margin-inline: auto;
 }
-.hb-foot .meta { color: var(--dim); }
+.hb-foot .meta { color: #000000; opacity: 1; }
 .hb-foot > .hb-side:first-child { justify-self: start; }
 .hb-foot > .hb-side:last-child { justify-self: end; text-align: right; }
 .hb-hint { justify-self: center; display: flex; flex-direction: column; align-items: center; gap: 0.55rem; }
@@ -106,11 +106,11 @@
 
 /* page-hero kicker + CTA rows (shared with inner pages) */
 .hero-kicker { display: flex; align-items: baseline; gap: .8rem; margin-bottom: 1.4rem; }
-.hero-kicker .meta { color: var(--dim); }
+.hero-kicker .meta { color: #000000; opacity: 1; }
 .hero-cta { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1.8rem; }
 
-.dim { color: var(--graphite-2); }
-.deep .dim { color: var(--dim-on-deep); }
+.dim { color: #000000; }
+.deep .dim { color: #000000; }
 
 .cert-chips { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1.1rem; }
 
@@ -318,146 +318,526 @@
 }
 
 
-/* ============ Best Sellers Section ============ */
-.bestsellers-section {
-  min-height: 105vh;
-  padding-top: clamp(5rem, 10vh, 8rem);
-  padding-bottom: clamp(2rem, 4vh, 4rem);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+/* ============ All Sections → Pure White + Designer Section Dividers ============ */
+.hp {
+  background-color: #FFFFFF !important;
 }
 
-/* ============ Heritage — big video placeholder card ============ */
+/* ── Brass-Kissed Section Divider ──
+   A delicate, center-fading metallic hairline with a tiny diamond ornament.
+   Placed explicitly between sections as <div class="section-divider" />. */
+.section-divider {
+  position: relative;
+  width: min(88%, 1000px);
+  height: 1px;
+  margin: 0 auto;
+  background: var(--section-divider);
+  pointer-events: none;
+}
+
+/* tiny diamond ornament at centre */
+.section-divider::before {
+  content: "◆";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 6px;
+  color: rgba(184, 115, 51, 0.32);
+  background: #FFFFFF;
+  padding: 0 10px;
+  letter-spacing: 0;
+  line-height: 1;
+}
+
+/* Section 1: Hero Brand */
+.hero-brand {
+  background-color: #FFFFFF !important;
+}
+
+/* Section 2: Hero Parallax */
+.hp-container {
+  background-color: #FFFFFF !important;
+  background-image: none !important;
+}
+
+/* Section 3: Wave Ribbon */
+.ribbon {
+  background-color: #FFFFFF !important;
+}
+
+/* Section 4: The Turn */
+.tt {
+  background-color: #FFFFFF !important;
+  background-image: none !important;
+}
+
+/* Section 5: Signature Piece Zoom Sampler */
+.czoom-section {
+  background-color: #FFFFFF !important;
+}
+
+/* Section 6: Big Video Card */
 #heritage {
+  background-color: #FFFFFF !important;
+  background-image: none !important;
+  color: #1c1c1a !important;
+}
+
+/* Section 7: Heritage Narrative & Process */
+#craft {
+  background-color: #FFFFFF !important;
+}
+
+/* Section 8: Countries Served Wrapper */
+.countries-section-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: clamp(320px, 45vh, 480px);
+  padding-block: clamp(3.5rem, 7vh, 5.5rem);
+  margin-block: 0;
+  background-color: #FFFFFF !important;
+  background-image: none !important;
+}
+
+.countries-section-wrap .wrap {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.countries-card {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  margin-inline: auto;
+  width: 100%;
+  padding: 4.5rem 0 2.5rem;
+  background-color: #FFFFFF !important;
+  border-radius: clamp(16px, 2vw, 24px) !important;
+  border: 1px solid rgba(28, 28, 26, 0.10) !important;
+  box-shadow: 0 10px 30px rgba(28, 28, 26, 0.03) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Section 9: Blogs and Socials */
+#instagram {
+  background-color: #FFFFFF !important;
+  margin-top: 0;
+  padding-top: clamp(2.5rem, 5vh, 4rem);
+}
+
+/* Section 10: Reviews */
+#reviews {
+  background-color: #FFFFFF !important;
+  background-image: none !important;
+  margin-top: 0;
+  padding-top: clamp(2.5rem, 5vh, 4rem);
+}
+
+.white-review-card {
+  background-color: #FFFFFF !important;
+  border: 1px solid rgba(28, 28, 26, 0.10) !important;
+}
+
+/* ============ Craft & About Section ============ */
+.craft-about-section {
+  padding-block: clamp(3rem, 6vh, 5rem);
+}
+
+.craft-container {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(3rem, 6vw, 5rem);
+}
+
+.craft-main-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(2.5rem, 5vw, 4.5rem);
+  align-items: start;
+}
+
+@media (min-width: 990px) {
+  .craft-main-grid {
+    grid-template-columns: 0.9fr 1.1fr;
+  }
+
+  .craft-intro {
+    position: sticky;
+    top: clamp(6rem, 12vh, 9rem);
+  }
+}
+
+.craft-headline {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+  font-weight: 600;
+  line-height: 1.15;
+  color: var(--graphite, #1c1c1a);
+  margin-bottom: 1.25rem;
+}
+
+.craft-highlight {
+  font-style: italic;
+  color: var(--brass-dk, #a0522d);
+}
+
+.craft-body {
+  font-family: var(--font-body);
+  font-size: clamp(0.95rem, 1.15vw, 1.1rem);
+  line-height: 1.65;
+  color: rgba(28, 28, 26, 0.82);
+  margin-bottom: 2rem;
+}
+
+.craft-process-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.craft-process-item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: clamp(1.2rem, 2vw, 1.8rem);
+  padding-block: 1.4rem;
+  border-top: 1px solid rgba(28, 28, 26, 0.12);
+  transition: border-color 0.35s ease;
+}
+
+.craft-process-item:last-child {
+  border-bottom: 1px solid rgba(28, 28, 26, 0.12);
+}
+
+.craft-process-item:hover {
+  border-color: rgba(197, 151, 63, 0.5);
+}
+
+.craft-process-num {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 2.5vw, 2.2rem);
+  font-weight: 600;
+  color: rgba(160, 82, 45, 0.45);
+  line-height: 1;
+  transition: color 0.35s ease;
+}
+
+.craft-process-item:hover .craft-process-num {
+  color: var(--brass-dk, #a0522d);
+}
+
+.craft-process-title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.1rem, 1.4vw, 1.35rem);
+  font-weight: 600;
+  color: var(--graphite, #1c1c1a);
+  margin: 0 0 0.35rem 0;
+}
+
+.craft-process-desc {
+  font-family: var(--font-body);
+  font-size: clamp(0.88rem, 1.05vw, 0.98rem);
+  line-height: 1.55;
+  color: rgba(28, 28, 26, 0.72);
+  margin: 0;
+}
+
+.about-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  width: 100%;
+}
+
+.about-stat-card {
+  background: #ffffff;
+  border-radius: clamp(14px, 1.6vw, 22px);
+  border: 1px solid rgba(28, 28, 26, 0.1);
+  padding: clamp(1.8rem, 3vw, 2.5rem) clamp(1.2rem, 2vw, 1.8rem);
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(28, 28, 26, 0.04);
+  transition: transform 0.35s var(--ease-fluid), box-shadow 0.35s ease, border-color 0.35s ease;
+}
+
+.about-stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 16px 40px rgba(28, 28, 26, 0.09);
+  border-color: rgba(197, 151, 63, 0.4);
+}
+
+.about-stat-number {
+  font-family: var(--font-display);
+  font-size: clamp(2.8rem, 5vw, 4.2rem);
+  font-weight: 700;
+  color: var(--brass-dk, #a0522d);
+  line-height: 1;
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.02em;
+}
+
+.about-stat-label {
+  font-family: var(--font-heading);
+  font-size: clamp(0.85rem, 1.1vw, 1rem);
+  font-weight: 600;
+  color: var(--graphite, #1c1c1a);
+  letter-spacing: 0.02em;
+}
+
+.about-stat-sub {
+  font-family: var(--font-accent);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(28, 28, 26, 0.55);
+  margin-top: 0.35rem;
+}
+
+/* ============ Reviews DragRail Section ============ */
+.bestsellers-section {
+  min-height: auto;
+  padding-top: clamp(2rem, 4vh, 3.5rem);
+  padding-bottom: clamp(5rem, 10vh, 8rem);
+  margin-bottom: 3rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
-  padding-block: clamp(5rem, 10vh, 8rem);
 }
 
-#heritage .wrap {
+/* Clean White Review Cards */
+.white-review-card {
+  position: relative;
+  width: clamp(280px, 28vw, 360px);
+  aspect-ratio: 16 / 10;
+  background: #ffffff;
+  border-radius: clamp(14px, 1.6vw, 22px);
+  border: 1px solid rgba(28, 28, 26, 0.12);
+  box-shadow: 0 10px 30px rgba(28, 28, 26, 0.08);
+  padding: clamp(1.4rem, 2vw, 1.8rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.35s var(--ease-fluid), box-shadow 0.35s ease, border-color 0.35s ease;
+  flex-shrink: 0;
+}
+
+.white-review-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(28, 28, 26, 0.12);
+  border-color: rgba(197, 151, 63, 0.4);
+}
+
+.white-review-inner {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.white-review-quote {
+  font-family: var(--font-body);
+  font-size: clamp(0.9rem, 1.1vw, 1.05rem);
+  line-height: 1.5;
+  color: #1c1c1a;
+  margin: 0;
+  font-weight: 450;
+}
+
+.white-review-author {
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--brass-dk, #a0522d);
+  letter-spacing: 0.02em;
+}
+
+/* ============ Craft Section — Big Screen-Fitted Card Container ============ */
+.craft-card-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
+  padding-block: clamp(4rem, 8vh, 7rem);
+  margin-top: clamp(48rem, 85vh, 68rem);
+  background-color: #FFFFFF !important;
+  background-image: none !important;
+}
+
+.craft-card-wrapper .wrap {
   width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.craft-card-container {
+  position: relative;
+  width: 100%;
+  max-width: min(calc(100vw - 2 * var(--gutter, 2rem)), 1440px);
+  height: clamp(560px, 84vh, 840px);
+  aspect-ratio: 16 / 9;
+  border-radius: clamp(20px, 2.5vw, 32px);
+  overflow: hidden;
+  background: #121210;
+  box-shadow:
+    0 24px 70px rgba(0, 0, 0, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(28, 28, 26, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  isolation: isolate;
+  margin: 0 auto;
+}
+
+.craft-card__video-wrap {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.craft-card__video-bg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  filter: brightness(0.85) contrast(1.05);
+}
+
+.craft-card__overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(0, 0, 0, 0.15) 0%, rgba(0, 0, 0, 0.45) 100%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.craft-card__content {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  padding-inline: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .heritage-video-card {
   position: relative;
   width: 100%;
   margin: 0 auto;
-  max-width: calc(100vw - 2 * var(--gutter));
-  aspect-ratio: 16 / 8.4;
-  min-height: 365px;
-  border-radius: var(--r-lg);
+  max-width: min(calc(100vw - 2 * var(--gutter)), 1400px);
+  aspect-ratio: 16 / 7.5;
+  min-height: 480px;
+  border-radius: clamp(20px, 2.5vw, 32px);
   overflow: hidden;
-  background:
-    linear-gradient(145deg,
-      #1c1c1a 0%,
-      #2a2927 30%,
-      #1c1c1a 60%,
-      #2a2927 100%);
+  background: #121210;
   box-shadow:
-    0 24px 64px -16px rgba(28, 28, 26, 0.45),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06);
-  cursor: pointer;
+    0 30px 90px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  border: 1px solid rgba(197, 151, 63, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  isolation: isolate;
+  /* Hover animation removed — card stays completely static */
+  transform: none !important;
 }
 
-.heritage-video-card::before {
-  content: '';
+.heritage-video-card:hover {
+  /* No scale, border, or shadow change on hover */
+  transform: none !important;
+  border-color: rgba(197, 151, 63, 0.3) !important;
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+}
+
+.heritage-bg-video {
   position: absolute;
   inset: 0;
-  border-radius: inherit;
-  border: 1px solid rgba(184, 115, 51, 0.2);
-  pointer-events: none;
-  transition: border-color 0.5s var(--ease-fluid);
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+  filter: brightness(0.95) contrast(1.05);
+  /* No scale on hover */
+  transform: none !important;
 }
 
-.heritage-video-card::after {
-  content: '';
+.heritage-video-card:hover .heritage-bg-video {
+  transform: none !important;
+}
+
+.heritage-card-vignette {
   position: absolute;
   inset: 0;
-  border-radius: inherit;
-  background:
-    radial-gradient(ellipse 60% 50% at 50% 45%, rgba(184, 115, 51, 0.06) 0%, transparent 70%),
-    repeating-linear-gradient(0deg,
-      rgba(255, 255, 255, 0.008) 0px, rgba(255, 255, 255, 0.008) 1px,
-      transparent 1px, transparent 4px);
+  z-index: 2;
+  background: radial-gradient(ellipse 85% 85% at 50% 50%, rgba(18, 18, 16, 0.15) 0%, rgba(18, 18, 16, 0.55) 100%);
   pointer-events: none;
-}
-
-.heritage-video-card:hover::before {
-  border-color: rgba(218, 165, 32, 0.45);
 }
 
 .heritage-video-inner {
   position: relative;
-  z-index: 1;
+  z-index: 3;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 1.5rem;
+  gap: 1.25rem;
   width: 100%;
   height: 100%;
-  min-height: inherit;
+  padding: 2rem;
+  text-align: center;
+  pointer-events: none;
 }
 
-.heritage-play {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 88px;
-  height: 88px;
-  border-radius: 50%;
-  color: rgba(218, 165, 32, 0.75);
-  background: rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(184, 115, 51, 0.2);
-  transition:
-    color 0.4s var(--ease-fluid),
-    background 0.4s var(--ease-fluid),
-    border-color 0.4s var(--ease-fluid),
-    box-shadow 0.4s var(--ease-fluid);
-}
-
-.heritage-video-card:hover .heritage-play {
-  color: #daa520;
-  background: rgba(218, 165, 32, 0.12);
-  border-color: rgba(218, 165, 32, 0.5);
-  box-shadow: 0 0 32px rgba(218, 165, 32, 0.25);
-}
-
-.heritage-label {
-  color: rgba(255, 255, 255, 0.5);
-  letter-spacing: 0.18em;
-  font-size: 0.72rem;
-  text-transform: uppercase;
-  transition: color 0.35s;
-}
-
-.heritage-video-card:hover .heritage-label {
-  color: rgba(218, 165, 32, 0.75);
+.heritage-craft-svg-text {
+  width: 92%;
+  max-width: 980px;
+  height: auto;
+  overflow: visible;
+  filter: drop-shadow(0 4px 25px rgba(0, 0, 0, 0.6)) drop-shadow(0 0 30px rgba(255, 255, 255, 0.18));
+  pointer-events: none;
 }
 
 @media (max-width: 768px) {
   .heritage-video-card {
     width: 100%;
-    margin-left: 0;
-    aspect-ratio: 16 / 13;
-    min-height: 364px;
+    aspect-ratio: 16 / 10;
+    min-height: 340px;
   }
 
-  .heritage-play {
-    width: 68px;
-    height: 68px;
+  .heritage-craft-svg-text {
+    width: 96%;
   }
 
-  .heritage-play svg {
-    width: 36px;
-    height: 36px;
+  .craft-card-wrapper {
+    margin-top: 0 !important;
+    padding-block: 2rem !important;
+  }
+
+  .craft-card-container {
+    height: clamp(280px, 45vh, 420px) !important;
+    aspect-ratio: 16 / 10 !important;
+    border-radius: 18px !important;
+  }
+
+  .craft-main-grid {
+    grid-template-columns: 1fr !important;
+    gap: 2.5rem !important;
+  }
+
+  .craft-headline {
+    font-size: clamp(1.8rem, 6.5vw, 2.5rem) !important;
+  }
+
+  .craft-process-list {
+    gap: 1.5rem !important;
   }
 }

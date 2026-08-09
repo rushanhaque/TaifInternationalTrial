@@ -12,20 +12,16 @@ import { familySlug } from './CollectionPage'
    end of it. */
 export default function CollectionsPage() {
   return (
-    <>
+    <div style={{ backgroundColor: '#FFFFFF', minHeight: '100vh' }}>
       {/* the brass spine — this page only */}
       <Seam />
-      <section className="section" style={{ paddingBottom: 0 }}>
+      <section className="section" style={{ paddingTop: 'calc(var(--nav-h, 80px) + 3rem)', paddingBottom: 0, backgroundColor: '#FFFFFF' }}>
         <div className="wrap">
-          <div className="hero-kicker">
-            <span className="idx">0.2</span>
-            <span className="meta">Collections</span>
-          </div>
-          <CharCascade as="h1" className="mega">Five families, one bench.</CharCascade>
+          <CharCascade as="h1" className="mega" style={{ marginTop: '1.5rem', color: '#1c1c1a' }}>Five families, one bench.</CharCascade>
         </div>
       </section>
 
       <CollectionsDolly />
-    </>
+    </div>
   )
 }

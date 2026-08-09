@@ -28,16 +28,18 @@ export default function Tension({ from = 'chrome' }) {
       const target = d < 140 ? (1 - d / 140) * 26 : 0
       cur += (target - cur) * 0.14
       if (cur < 0.25 && target === 0) {
-        if (!idle) { idle = true; path.current.setAttribute('d', FLAT) }
+        if (!idle) { idle = true; if (path.current) path.current.setAttribute('d', FLAT) }
         return
       }
       idle = false
       const px = gsap.utils.clamp(60, 1140, ((p.x - r.left) / r.width) * 1200)
       const b = (4 + cur).toFixed(2)
-      path.current.setAttribute(
-        'd',
-        `M0,0 H1200 V4 C${(px + 230).toFixed(0)},4 ${(px + 110).toFixed(0)},${b} ${px.toFixed(0)},${b} C${(px - 110).toFixed(0)},${b} ${(px - 230).toFixed(0)},4 0,4 Z`
-      )
+      if (path.current) {
+        path.current.setAttribute(
+          'd',
+          `M0,0 H1200 V4 C${(px + 230).toFixed(0)},4 ${(px + 110).toFixed(0)},${b} ${px.toFixed(0)},${b} C${(px - 110).toFixed(0)},${b} ${(px - 230).toFixed(0)},4 0,4 Z`
+        )
+      }
     })
     return () => { io.disconnect(); un() }
   }, [])
