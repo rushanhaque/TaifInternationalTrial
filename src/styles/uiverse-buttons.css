@@ -1,9 +1,9 @@
 /* =========================================
    TAIF INTERNATIONAL — LUXURY BUTTON SYSTEM
-   Decent, static, elegant site-wide button hover animations
+   Static, crisp, professional site-wide button hover styling
    ========================================= */
 
-/* Base reset & styling for all buttons */
+/* Base styling for all buttons */
 .btn {
   -webkit-tap-highlight-color: transparent;
   display: inline-flex;
@@ -24,12 +24,14 @@
   overflow: hidden;
   border: 1px solid transparent;
   outline: none;
+  will-change: auto;
+  translate: 0 0 !important;
+  transform: none !important;
   transition:
-    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-    background-color 0.35s ease,
-    color 0.35s ease,
-    border-color 0.35s ease,
-    box-shadow 0.35s ease;
+    background-color 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.4s var(--ease-fluid, cubic-bezier(0.65, 0, 0.35, 1));
 }
 
 .btn.small {
@@ -53,82 +55,237 @@
 /* ── Primary Solid Button ── */
 .btn.primary,
 .btn:not(.ghost) {
-  background-color: var(--graphite, #1c1c1a);
-  color: #FAF8F5;
+  background-color: #421520;
+  color: #FFFFFF !important;
   border: 1px solid rgba(255, 255, 255, 0.15);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+}
+
+.btn.primary .btn-label,
+.btn:not(.ghost) .btn-label {
+  color: #FFFFFF !important;
 }
 
 .btn.primary:hover,
 .btn:not(.ghost):hover {
-  background-color: var(--brass, #c5973f);
-  color: #121210;
-  border-color: rgba(255, 255, 255, 0.35);
-  transform: translateY(-3px);
-  box-shadow: 0 12px 30px rgba(197, 151, 63, 0.32);
+  translate: 0 0 !important;
+  transform: none !important;
+  background-color: #5C1F2E !important;
+  color: #FFFFFF !important;
+  border-color: rgba(255, 255, 255, 0.4) !important;
 }
 
-.btn.primary:active,
-.btn:not(.ghost):active {
-  transform: translateY(-1px) scale(0.98);
-  box-shadow: 0 6px 18px rgba(197, 151, 63, 0.25);
+.btn.primary:hover .btn-label,
+.btn:not(.ghost):hover .btn-label {
+  color: #FFFFFF !important;
 }
 
 /* ── Ghost Outline Button ── */
 .btn.ghost {
   background-color: transparent;
-  color: var(--graphite, #1c1c1a);
-  border: 1.5px solid var(--graphite, #1c1c1a);
+  color: #421520 !important;
+  border: 1.5px solid #421520;
   box-shadow: none;
 }
 
+.btn.ghost .btn-label {
+  color: #421520 !important;
+}
+
+/* the fill itself is animated by .btn.ghost::after (see below); here we only
+   flip the type and border so the label reads against the incoming fill */
 .btn.ghost:hover {
-  background-color: var(--graphite, #1c1c1a);
-  color: #FAF8F5;
-  border-color: var(--graphite, #1c1c1a);
-  transform: translateY(-3px);
-  box-shadow: 0 10px 28px rgba(28, 28, 26, 0.22);
+  background-color: transparent;
+  color: #FFFFFF !important;
+  border-color: var(--graphite, #421520) !important;
+  box-shadow: 0 10px 24px -8px rgba(66, 21, 32, 0.3) !important;
+}
+
+.btn.ghost:hover .btn-label {
+  color: #FFFFFF !important;
+}
+
+.btn.ghost:hover .btn-chip svg path {
+  stroke: #FFFFFF !important;
 }
 
 .btn.ghost:active {
-  transform: translateY(-1px) scale(0.98);
+  transform: none !important;
 }
 
-/* ── Arrow Chip Slide ── */
+/* ── Arrow Chip (Static) ── */
 .btn-chip {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: none !important;
 }
 
 .btn-chip svg path {
-  transition: stroke 0.35s ease;
+  stroke: #FFFFFF !important;
+  transition: stroke 0.25s ease;
+}
+
+.btn.ghost .btn-chip svg path {
+  stroke: #421520 !important;
 }
 
 .btn:hover .btn-chip {
-  transform: translate(3px, -2px);
+  transform: none !important;
 }
 
 .btn.primary:hover .btn-chip svg path,
-.btn:not(.ghost):hover .btn-chip svg path {
-  stroke: #121210;
-}
-
+.btn:not(.ghost):hover .btn-chip svg path,
 .btn.ghost:hover .btn-chip svg path {
-  stroke: #FAF8F5;
+  stroke: #FFFFFF !important;
 }
 
-/* ── Global button hover baseline for all site buttons ── */
-button {
-  transition:
-    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-    background-color 0.35s ease,
-    border-color 0.35s ease,
-    box-shadow 0.35s ease,
-    color 0.35s ease;
+/* ── Premium hover system ──────────────────────────────────────────────────
+   Static at rest, motion only on interaction. Primary buttons lift with a
+   warm shadow bloom and a sheen that sweeps across once; ghost buttons fill
+   from the centre. Nothing loops — the idle state is always still. */
+
+.btn { cursor: pointer; }
+
+/* the sheen — a single diagonal highlight that crosses on hover */
+.btn.primary::before,
+.btn:not(.ghost)::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -140%;
+  width: 60%;
+  height: 100%;
+  z-index: 1;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+  transform: skewX(-18deg);
+  transition: left 0.6s var(--ease-fluid, cubic-bezier(0.65, 0, 0.35, 1));
+  pointer-events: none;
 }
 
-button:hover:not(:disabled) {
-  cursor: pointer;
+.btn.primary:hover,
+.btn:not(.ghost):hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 30px -8px rgba(66, 21, 32, 0.45);
+}
+
+.btn.primary:hover::before,
+.btn:not(.ghost):hover::before {
+  left: 140%;
+}
+
+.btn.primary:active,
+.btn:not(.ghost):active {
+  transform: translateY(-1px);
+  transition-duration: 0.12s;
+}
+
+/* ghost: the fill grows from the centre rather than snapping in */
+.btn.ghost::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--graphite, #421520);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.42s var(--ease-surge, cubic-bezier(0.16, 1.1, 0.3, 1));
+}
+
+.btn.ghost:hover {
+  transform: translateY(-2px);
+}
+
+.btn.ghost:hover::after {
+  transform: scaleX(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn { transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease; }
+  .btn:hover { transform: none; }
+  .btn.primary::before, .btn:not(.ghost)::before,
+  .btn.ghost::after { transition: none; }
+}
+
+/* ── Buttons on the inverted ground ────────────────────────────────────────
+   .deep sections are burgundy with cream type. The rules above paint every
+   primary label #FFFFFF !important and every ghost label #421520 !important,
+   which on that ground gives cream-on-cream and burgundy-on-burgundy — the
+   "Join them." CTA on /partners had a completely invisible button face.
+   These restate both faces for the inverted case at higher specificity. */
+
+.deep .btn.primary,
+.deep .btn:not(.ghost) {
+  background-color: var(--white) !important;
+  color: var(--graphite) !important;
+  border-color: rgba(66, 21, 32, 0.15) !important;
+}
+
+.deep .btn.primary .btn-label,
+.deep .btn:not(.ghost) .btn-label {
+  color: var(--graphite) !important;
+}
+
+.deep .btn.primary:hover,
+.deep .btn:not(.ghost):hover {
+  background-color: var(--chrome-2) !important;
+  border-color: rgba(66, 21, 32, 0.28) !important;
+}
+
+.deep .btn.primary:hover .btn-label,
+.deep .btn:not(.ghost):hover .btn-label {
+  color: var(--graphite) !important;
+}
+
+.deep .btn.primary .btn-chip svg path,
+.deep .btn:not(.ghost) .btn-chip svg path,
+.deep .btn.primary:hover .btn-chip svg path,
+.deep .btn:not(.ghost):hover .btn-chip svg path {
+  stroke: var(--graphite) !important;
+}
+
+/* the outline button inverts the other way — cream rule, cream type */
+.deep .btn.ghost {
+  color: var(--on-deep) !important;
+  border-color: var(--hair-on-deep) !important;
+}
+
+.deep .btn.ghost .btn-label {
+  color: var(--on-deep) !important;
+}
+
+.deep .btn.ghost .btn-chip svg path {
+  stroke: var(--on-deep) !important;
+}
+
+/* on the burgundy ground the animated fill must be cream, not the default
+   --graphite (which is burgundy here) */
+.deep .btn.ghost::after {
+  background: var(--on-deep);
+}
+
+.deep .btn.ghost:hover {
+  background-color: transparent !important;
+  border-color: var(--on-deep) !important;
+}
+
+.deep .btn.ghost:hover .btn-label {
+  color: var(--graphite) !important;
+}
+
+.deep .btn.ghost:hover .btn-chip svg path {
+  stroke: var(--graphite) !important;
+}
+
+/* ── Ghost hover in dark mode ──────────────────────────────────────────────
+   The animated fill (.btn.ghost::after) paints --graphite, which is cream in
+   dark mode, so the hovered label must flip to ink rather than staying white
+   (white-on-cream). .deep is handled separately above. */
+html.dark .btn.ghost:hover .btn-label,
+html.dark .btn.ghost:hover {
+  color: var(--graphite) !important;
+}
+
+html.dark .btn.ghost:hover .btn-chip svg path {
+  stroke: var(--graphite) !important;
 }

@@ -1,93 +1,92 @@
 :root {
-  /* ═══ ground — Pure White everywhere (except footer) ═══ */
+  /* ═══ ground — Warm Sand / Cream Beige (#FFFFFF) everywhere ═══ */
   --white:      #FFFFFF;
   --beige:      #FFFFFF;
   --bg:         #FFFFFF;
   --chrome:     #FFFFFF;
-  --chrome-2:   #FFFFFF;
-  --chrome-3:   #e2dcd2;   /* dividers, rules, hints */
-  --shadow-soft: rgba(28, 28, 26, 0.08);
+  --chrome-2:   #F7F7F7;
+  --chrome-3:   #E5E5E5;   /* dividers, rules, hints */
+  --shadow-soft: rgba(0, 0, 0, 0.05);
 
-  /* ═══ ink ═══ */
-  --graphite:   #1c1c1a;
-  --graphite-2: #4a4a48;
-  --dim:        rgba(28, 28, 26, 0.62);
-  --faint:      rgba(28, 28, 26, 0.28);
-  --hair:       rgba(28, 28, 26, 0.11);
-  --hair-strong: rgba(28, 28, 26, 0.30);
-  --nav-bg:     linear-gradient(135deg, rgba(255, 255, 255, 0.90) 0%, rgba(255, 255, 255, 0.85) 100%);
+  /* ═══ ink — Rich Deep Burgundy (#421520) ═══ */
+  --graphite:   #421520;
+  --graphite-2: #5A1D2C;
+  --dim:        rgba(66, 21, 32, 0.72);
+  --faint:      rgba(66, 21, 32, 0.28);
+  --hair:       rgba(66, 21, 32, 0.14);
+  --hair-strong: rgba(66, 21, 32, 0.30);
+  --nav-bg:     linear-gradient(135deg, rgba(255, 255, 255, 0.94) 0%, rgba(245, 245, 245, 0.88) 100%);
 
-  /* ═══ deep surfaces → white (except footer) ═══ */
-  --deep:       #FFFFFF;
-  --on-deep:    #1c1c1a;
-  --dim-on-deep: rgba(28, 28, 26, 0.72);
-  --hair-on-deep: rgba(28, 28, 26, 0.12);
+  /* ═══ deep surfaces → Deep Burgundy (#421520) ═══ */
+  --deep:       #421520;
+  --on-deep:    #FFFFFF;
+  --dim-on-deep: rgba(255, 255, 255, 0.78);
+  --hair-on-deep: rgba(255, 255, 255, 0.16);
 
-  /* ═══ section divider — a delicate brass-kissed hairline ═══ */
+  /* ═══ section divider — subtle burgundy hairline ═══ */
   --section-divider: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(197, 151, 63, 0.08) 8%,
-    rgba(197, 151, 63, 0.22) 25%,
-    rgba(184, 115, 51, 0.35) 50%,
-    rgba(197, 151, 63, 0.22) 75%,
-    rgba(197, 151, 63, 0.08) 92%,
+    rgba(66, 21, 32, 0.08) 8%,
+    rgba(66, 21, 32, 0.22) 25%,
+    rgba(66, 21, 32, 0.40) 50%,
+    rgba(66, 21, 32, 0.22) 75%,
+    rgba(66, 21, 32, 0.08) 92%,
     transparent 100%
   );
 
-  /* ═══ the metals — copper-brass, the house accent ═══ */
-  --brass:      #c5973f;
-  --brass-lt:   #daa520;
-  --brass-dk:   #a0522d;
-  --copper:     #b87333;
-  --copper-lt:  #cd853f;
-  --copper-dk:  #8b4513;
+  /* ═══ house accents — rich burgundy spectrum ═══ */
+  --brass:      #421520;
+  --brass-lt:   #5A1D2C;
+  --brass-dk:   #2C0C14;
+  --copper:     #421520;
+  --copper-lt:  #5A1D2C;
+  --copper-dk:  #2C0C14;
 
-  /* ═══ the woods — kept as subtle tonal reference ═══ */
-  --walnut:     #6b4a2e;
-  --walnut-dk:  #3a2718;
-  --oak:        #c7a579;
-  --oak-lt:     #e7e2da;
+  /* ═══ deep tones ═══ */
+  --walnut:     #2C0C14;
+  --walnut-dk:  #421520;
+  --oak:        #F7F7F7;
+  --oak-lt:     #FFFFFF;
 
-  /* ═══ accent — rich copper-featured metallic sweep. ═══ */
+  /* ═══ accent — rich burgundy sweep ═══ */
   --metal: linear-gradient(100deg,
-    #b87333 0%, #a0522d 20%, #cd853f 40%, #b87333 60%, #daa520 80%, #b87333 100%);
+    #421520 0%, #2C0C14 20%, #5A1D2C 40%, #421520 60%, #8C3247 80%, #421520 100%);
   --metal-soft: linear-gradient(100deg,
-    rgba(184, 115, 51, .24), rgba(160, 82, 45, .20), rgba(205, 133, 63, .24));
+    rgba(66, 21, 32, .24), rgba(44, 12, 20, .20), rgba(90, 29, 44, .24));
 
-  /* solid accents — used wherever type or a focus ring needs real contrast
-     (§10: --metal never carries small text) */
-  --tint:       #b87333;   /* focus rings, active borders */
-  --tint-deep:  #b87333;   /* vibrant copper accent type on light */
-  --tint-on-deep: #cd853f; /* copper accent type on dark carbon */
+  /* solid accents — contrast elements */
+  --tint:       #421520;   /* focus rings, active borders */
+  --tint-deep:  #421520;   /* vibrant burgundy accent type on light */
+  --tint-on-deep: #FFFFFF; /* cream accent type on dark burgundy */
 
-  /* alert — terracotta, so even the errors belong to the palette */
-  --alert:      #9e3324;
-  --alert-soft: rgba(158, 51, 36, 0.25);
+  /* alert — deep crimson burgundy */
+  --alert:      #781A28;
+  --alert-soft: rgba(120, 26, 40, 0.25);
 
-  /* ═══ laid paper — clean ground ═══ */
+  /* ═══ laid paper ═══ */
   --paper: none;
 
-  /* ultra-faded, whisper-subtle paperlike grid texture for beige sections */
+  /* paperlike texture for beige sections */
   --paper-beige:
     repeating-linear-gradient(0deg,
-      rgba(28, 28, 26, 0.006) 0px, rgba(28, 28, 26, 0.006) 1px,
+      rgba(66, 21, 32, 0.008) 0px, rgba(66, 21, 32, 0.008) 1px,
       transparent 1px, transparent 4px),
     repeating-linear-gradient(90deg,
-      rgba(28, 28, 26, 0.008) 0px, rgba(28, 28, 26, 0.008) 1px,
+      rgba(66, 21, 32, 0.010) 0px, rgba(66, 21, 32, 0.010) 1px,
       transparent 1px, transparent 58px);
 
   --paper-deep:
     repeating-linear-gradient(0deg,
-      rgba(28, 28, 26, 0.006) 0px, rgba(28, 28, 26, 0.006) 1px,
+      rgba(255, 255, 255, 0.008) 0px, rgba(255, 255, 255, 0.008) 1px,
       transparent 1px, transparent 4px),
     repeating-linear-gradient(90deg,
-      rgba(28, 28, 26, 0.008) 0px, rgba(28, 28, 26, 0.008) 1px,
+      rgba(255, 255, 255, 0.010) 0px, rgba(255, 255, 255, 0.010) 1px,
       transparent 1px, transparent 58px);
 
-  /* ═══ neutral clean placeholder frames for future product images ═══ */
+  /* neutral clean placeholder frames */
   --sheen: linear-gradient(160deg,
-    #ffffff 0%, #f7f6f4 50%, #eeebe6 100%);
+    #FFFFFF 0%, #F7F7F7 50%, #E5E5E5 100%);
 
   --font-display: 'Cinzel', serif;
   --font-section: 'Cormorant Garamond', 'Cinzel', serif;
@@ -95,61 +94,42 @@
   --font-body:    'Plus Jakarta Sans', 'Jost', sans-serif;
   --font-accent:  'Tenor Sans', 'Montserrat', sans-serif;
 
-  /* ═══ THE LIGHT ═══════════════════════════════════════════════════════
-     One light source for the whole site: high and slightly left, which is
-     the angle every metal gradient already rakes at (100deg / 135deg). So
-     every shadow falls down and a touch right, and every specular sweep
-     travels the same way. Inconsistent light is the most visible tell that
-     a page was assembled rather than designed.
+  /* ═══ THE LIGHT ═══ */
+  --lift-1:
+    0 1px 2px -1px rgba(0, 0, 0, 0.04),
+    0 4px 12px -6px rgba(0, 0, 0, 0.05);
+  --lift-2:
+    0 2px 4px -2px rgba(0, 0, 0, 0.05),
+    0 12px 28px -12px rgba(0, 0, 0, 0.08);
+  --lift-3:
+    0 4px 8px -4px rgba(0, 0, 0, 0.06),
+    0 26px 56px -24px rgba(0, 0, 0, 0.10);
+  --lift-4:
+    0 6px 12px -6px rgba(0, 0, 0, 0.08),
+    0 48px 96px -40px rgba(0, 0, 0, 0.12);
 
-     THE DEPTH RAMP. Five tiers, carbon-tinted, never grey. Each is TWO
-     shadows: a tight contact shadow that keeps the object anchored, and a
-     broad ambient one that grows softer and lighter as the object lifts.
-     That pairing is what real depth looks like — a single blurred shadow
-     always reads as a sticker. ═══════════════════════════════════════════ */
-
-  --lift-1:                                   /* rest — sits on the page */
-    0 1px 2px -1px rgba(28, 28, 26, 0.10),
-    0 4px 12px -6px rgba(28, 28, 26, 0.10);
-  --lift-2:                                   /* raised — hover */
-    0 2px 4px -2px rgba(28, 28, 26, 0.12),
-    0 12px 28px -12px rgba(28, 28, 26, 0.16);
-  --lift-3:                                   /* floating — cards, panels */
-    0 4px 8px -4px rgba(28, 28, 26, 0.14),
-    0 26px 56px -24px rgba(28, 28, 26, 0.22);
-  --lift-4:                                   /* lifted far — modals, pane */
-    0 6px 12px -6px rgba(28, 28, 26, 0.16),
-    0 48px 96px -40px rgba(28, 28, 26, 0.30);
-
-  /* the same ramp on the carbon surface */
   --lift-deep-1:
-    0 2px 6px -2px rgba(0, 0, 0, 0.50),
-    0 14px 34px -14px rgba(0, 0, 0, 0.55);
+    0 2px 6px -2px rgba(0, 0, 0, 0.20),
+    0 14px 34px -14px rgba(0, 0, 0, 0.30);
   --lift-deep-2:
-    0 4px 10px -4px rgba(0, 0, 0, 0.55),
-    0 30px 64px -26px rgba(0, 0, 0, 0.65);
+    0 4px 10px -4px rgba(0, 0, 0, 0.30),
+    0 30px 64px -26px rgba(0, 0, 0, 0.40);
 
-  /* brass is the only thing on this site that emits rather than reflects */
-  --glow-brass:  0 0 14px rgba(218, 165, 32, 0.45);
-  --glow-brass-hot: 0 0 22px rgba(218, 165, 32, 0.70);
+  --glow-brass:  none;
+  --glow-brass-hot: none;
 
-  /* the inner highlight along a lit top edge — pairs with --lift-* */
   --edge-lit:   inset 0 1px 0 rgba(255, 255, 255, 0.72);
   --edge-hair:  inset 0 0 0 1px var(--hair);
 
-  /* ═══ TIME ═══════════════════════════════════════════════════════════
-     Four durations with fixed intent. ═══════════════════════════════════ */
-  --t-quick: 0.18s;   /* state flips — colour, opacity, a tick appearing */
-  --t-base:  0.35s;   /* the default hover */
-  --t-slow:  0.60s;   /* movement — travel, lifts, drawers */
-  --t-cine:  1.00s;   /* entrances and anything scroll-linked */
+  --t-quick: 0.18s;
+  --t-base:  0.35s;
+  --t-slow:  0.60s;
+  --t-cine:  1.00s;
 
-  /* easings */
   --ease-fluid:   cubic-bezier(0.65, 0, 0.35, 1);
   --ease-surge:   cubic-bezier(0.16, 1.1, 0.3, 1);
   --ease-viscous: cubic-bezier(0.5, 0, 0.1, 1);
 
-  /* radii */
   --r-sm: 10px;
   --r-md: 22px;
   --r-lg: 34px;
@@ -160,58 +140,71 @@
   --col: 12;
 }
 
-/* ═══ DARK MODE (html.dark) ════════════════════════════════════════════
-   Inverts the base colors (ground, ink, lifts) while keeping the metals
-   identical, so the copper-brass accent continues to pop against a
-   carbon background. ══════════════════════════════════════════════════ */
+/* ═══ DARK MODE (html.dark) ═══ */
 html.dark {
-  --white:      #111110;
-  --chrome:     #1c1c1a;
-  --chrome-2:   #2a2927;
-  --chrome-3:   #3a3936;
-  --shadow-soft: rgba(0, 0, 0, 0.50);
+  --white:      #2C0C14;
+  --chrome:     #421520;
+  --chrome-2:   #471823;
+  --chrome-3:   #36111a;
+  --shadow-soft: rgba(66, 21, 32, 0.50);
 
-  --graphite:   #fcfbf8;
-  --graphite-2: #d8d6d2;
-  --dim:        rgba(252, 251, 248, 0.62);
-  --faint:      rgba(252, 251, 248, 0.28);
-  --hair:       rgba(252, 251, 248, 0.16);
-  --hair-strong: rgba(252, 251, 248, 0.30);
-  --nav-bg:     linear-gradient(135deg, rgba(28, 28, 26, 0.78) 0%, rgba(17, 17, 16, 0.68) 100%);
+  --graphite:   #FFFFFF;
+  --graphite-2: #F7F7F7;
+  --dim:        rgba(255, 255, 255, 0.72);
+  --faint:      rgba(255, 255, 255, 0.28);
+  --hair:       rgba(255, 255, 255, 0.16);
+  --hair-strong: rgba(255, 255, 255, 0.30);
+  --nav-bg:     linear-gradient(135deg, rgba(66, 21, 32, 0.95) 0%, rgba(44, 12, 20, 0.88) 100%);
 
-  /* Deep stays deep so hardcoded light text inside .deep sections remains visible */
-  --deep:       #1c1c1a;
-  --on-deep:    #fcfbf8;
-  --dim-on-deep: rgba(252, 251, 248, 0.62);
-  --hair-on-deep: rgba(252, 251, 248, 0.16);
+  --deep:       #421520;
+  --on-deep:    #FFFFFF;
+  --dim-on-deep: rgba(255, 255, 255, 0.72);
+  --hair-on-deep: rgba(255, 255, 255, 0.16);
 
-  --tint:       #daa520;
-  --tint-deep:  #daa520;
-  --tint-on-deep: #daa520;
+  --tint:       #FFFFFF;
+  --tint-deep:  #FFFFFF;
+  --tint-on-deep: #FFFFFF;
+
+  /* The accent ramp had no dark-mode form, so every rule reading --brass kept
+     painting #421520 on the burgundy ground — kickers, rating marks, small
+     caps labels and the masthead numeral all disappeared. These are warm
+     off-whites: they read as brass against burgundy without introducing a
+     saturated gold the palette does not contain. */
+  --brass:      #EFE2D2;
+  --brass-lt:   #FFFFFF;
+  --brass-dk:   #D3C0A8;
+  --copper:     #EFE2D2;
+  --copper-lt:  #FFFFFF;
+  --copper-dk:  #D3C0A8;
+
+  --metal: linear-gradient(100deg,
+    #FFFFFF 0%, #E4D5C2 22%, #FFFFFF 45%, #D3C0A8 70%, #FFFFFF 100%);
+  --metal-soft: linear-gradient(100deg,
+    rgba(255, 255, 255, .12), rgba(255, 255, 255, .08), rgba(255, 255, 255, .12));
 
   --paper: none;
 
   --paper-deep:
     repeating-linear-gradient(0deg,
-      rgba(107, 74, 46, 0.016) 0px, rgba(107, 74, 46, 0.016) 1px,
+      rgba(255, 255, 255, 0.016) 0px, rgba(255, 255, 255, 0.016) 1px,
       transparent 1px, transparent 4px),
     repeating-linear-gradient(90deg,
-      rgba(107, 74, 46, 0.020) 0px, rgba(107, 74, 46, 0.020) 1px,
+      rgba(255, 255, 255, 0.020) 0px, rgba(255, 255, 255, 0.020) 1px,
       transparent 1px, transparent 58px);
 
   --lift-1:
-    0 2px 6px -2px rgba(0, 0, 0, 0.50),
-    0 14px 34px -14px rgba(0, 0, 0, 0.55);
+    0 2px 6px -2px rgba(66, 21, 32, 0.50),
+    0 14px 34px -14px rgba(66, 21, 32, 0.55);
   --lift-2:
-    0 4px 10px -4px rgba(0, 0, 0, 0.55),
-    0 30px 64px -26px rgba(0, 0, 0, 0.65);
+    0 4px 10px -4px rgba(66, 21, 32, 0.55),
+    0 30px 64px -26px rgba(66, 21, 32, 0.65);
   --lift-3:
-    0 4px 8px -4px rgba(0, 0, 0, 0.60),
-    0 26px 56px -24px rgba(0, 0, 0, 0.80);
+    0 4px 8px -4px rgba(66, 21, 32, 0.60),
+    0 26px 56px -24px rgba(66, 21, 32, 0.80);
   --lift-4:
-    0 6px 12px -6px rgba(0, 0, 0, 0.65),
-    0 48px 96px -40px rgba(0, 0, 0, 0.90);
+    0 6px 12px -6px rgba(66, 21, 32, 0.65),
+    0 48px 96px -40px rgba(66, 21, 32, 0.90);
 
-  --edge-lit:   inset 0 1px 0 rgba(255, 255, 255, 0.08);
-  --edge-hair:  inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+  --edge-lit:   inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  --edge-hair:  inset 0 0 0 1px rgba(255, 255, 255, 0.16);
 }

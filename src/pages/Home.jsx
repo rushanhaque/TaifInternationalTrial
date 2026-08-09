@@ -4,8 +4,10 @@ import { gsap, ScrollTrigger, reduced } from '../lib/gsap'
 import { useCounter } from '../lib/hooks'
 import { PROCESS_STAGES, RIBBON_TERMS, HOME_COLLECTIONS, MATERIALS, FINISHES } from '../data/site'
 import { railItems } from '../data/catalogue'
-import { CharCascade, SmoothReveal, Dilate } from '../components/Reveal'
+import { CharCascade, SmoothReveal, Dilate, CardsReveal } from '../components/Reveal'
 import '../styles/mk2/page-materials.css'
+/* the home Reviews block reuses the testimonial card styling */
+import '../styles/mk2/page-editorial.css'
 import HeroBrand from '../components/HeroBrand'
 import Slab from '../components/Slab'
 import Button from '../components/Button'
@@ -103,6 +105,19 @@ const REVIEW_CARDS = [
   }
 ]
 
+function StatCard({ target, suffix = '+', label, sub, duration = 1800 }) {
+  const [ref, count] = useCounter(target, duration)
+  return (
+    <div className="about-stat-card" ref={ref}>
+      <div className="about-stat-number">
+        {count}{suffix}
+      </div>
+      <div className="about-stat-label">{label}</div>
+      <div className="about-stat-sub">{sub}</div>
+    </div>
+  )
+}
+
 export default function Home() {
   return (
     <div className="hp">
@@ -112,7 +127,7 @@ export default function Home() {
       <div className="section-divider" />
 
       {/* 0.15 · HERO PARALLAX PRODUCTS GRID */}
-      <div style={{ marginBlock: '2rem 4rem' }}>
+      <div style={{ marginBlock: '2rem 5.5rem' }}>
         <HeroParallax />
       </div>
 
@@ -123,20 +138,25 @@ export default function Home() {
 
       <div className="section-divider" />
 
-      {/* 0.4 · THE TURN (From us to you) */}
-      <div id="the-turn" style={{ position: 'absolute', visibility: 'hidden' }} />
-      <TheTurn />
-
-      <div className="section-divider" />
-
       {/* 0.5 · SAMPLER — signature piece zoom transition sampler */}
-      <div id="sampler" style={{ position: 'absolute', visibility: 'hidden' }} />
       <Sampler />
 
       <div className="section-divider" />
 
-      {/* 0.9 · THE CRAFT — Full-screen Heritage Section (ported from Barha) */}
-      <Heritage />
+      {/* 0.9 · THE CRAFT — Full-screen Heritage Section (ported from Barha). */}
+      <div className="craft-card-spacer" style={{
+        marginTop: 'clamp(50rem, 65vh, 56rem)',
+        position: 'relative',
+        zIndex: 2,
+      }}>
+        <Heritage />
+      </div>
+
+      <div className="section-divider" />
+
+      {/* 0.4 · THE TURN (Materials We Use) — moved below Heritage */}
+      <div id="the-turn" style={{ position: 'absolute', visibility: 'hidden' }} />
+      <TheTurn />
 
       <div className="section-divider" />
 
@@ -212,28 +232,32 @@ export default function Home() {
               </ol>
             </div>
 
-            {/* Bottom Row: 4 Atelier Stats Placards */}
+            {/* Bottom Row: 4 Atelier Stats Placards with scroll-triggered counting animation */}
             <div className="about-stats-grid">
-              <div className="about-stat-card">
-                <div className="about-stat-number">15+</div>
-                <div className="about-stat-label">Hands in the workshop</div>
-                <div className="about-stat-sub">Specialist masters under one roof</div>
-              </div>
-              <div className="about-stat-card">
-                <div className="about-stat-number">600+</div>
-                <div className="about-stat-label">Pieces delivered per year</div>
-                <div className="about-stat-sub">Each piece finished by hand</div>
-              </div>
-              <div className="about-stat-card">
-                <div className="about-stat-number">18+</div>
-                <div className="about-stat-label">Countries served</div>
-                <div className="about-stat-sub">Global boutique export</div>
-              </div>
-              <div className="about-stat-card">
-                <div className="about-stat-number">10+</div>
-                <div className="about-stat-label">Years of excellence</div>
-                <div className="about-stat-sub">Est. Moradabad atelier</div>
-              </div>
+              <StatCard
+                target={15}
+                suffix="+"
+                label="Hands in the workshop"
+                sub="Specialist masters under one roof"
+              />
+              <StatCard
+                target={600}
+                suffix="+"
+                label="Pieces delivered per year"
+                sub="Each piece finished by hand"
+              />
+              <StatCard
+                target={18}
+                suffix="+"
+                label="Countries served"
+                sub="Global boutique export"
+              />
+              <StatCard
+                target={10}
+                suffix="+"
+                label="Years of excellence"
+                sub="Est. Moradabad atelier"
+              />
             </div>
           </div>
         </div>
@@ -334,20 +358,114 @@ export default function Home() {
   )
 }
 
+const HOME_TESTIMONIALS = [
+  {
+    id: 1,
+    category: 'VERIFIED ORDER',
+    stars: '★★★★★',
+    quote: '"They send a moisture reading with the sample. Nobody else in this category has ever done that unprompted."',
+    client: 'Meridian Living',
+    role: 'Head of Product',
+    tag: '300 PCS · 0 RETURNS',
+    location: 'Frankfurt, Germany'
+  },
+  {
+    id: 2,
+    category: 'INLAY PROJECT',
+    stars: '★★★★★',
+    quote: '"The brass inlay is the reason we moved. Four suppliers promised flush finish; only Taif delivered it."',
+    client: 'Atelier Kade',
+    role: 'Founding Partner',
+    location: 'Paris, France'
+  },
+  {
+    id: 3,
+    category: 'HOTEL SPEC',
+    stars: '★★★★★',
+    quote: '"Four properties, one patina, zero visible variation. Housekeeping notices these things before we do."',
+    client: 'Halcyon Hotels',
+    role: 'Procurement Director',
+    tag: 'GLOBAL BOUTIQUE SUITES',
+    location: 'Dubai, UAE'
+  },
+  {
+    id: 4,
+    category: 'ARCHITECTURAL',
+    stars: '★★★★★',
+    quote: '"Precision hand-carved teak paired with solid unlacquered brass. Flawless craftsmanship from Moradabad."',
+    client: 'Studio Moradabad',
+    role: 'Lead Architect',
+    tag: 'KILN-DRIED HARDWOOD',
+    location: 'London, UK'
+  },
+  {
+    id: 5,
+    category: 'EXPORT LINE',
+    stars: '★★★★★',
+    quote: '"Every container arrives with mill certificates and batch reports inside. Incredible consistency quarter after quarter."',
+    client: 'Oberoi Spaces',
+    role: 'Global Trade VP',
+    tag: '4 CONTAINER SHIPMENTS',
+    location: 'Toronto, Canada'
+  },
+  {
+    id: 6,
+    category: 'RETAIL COLLECTION',
+    stars: '★★★★★',
+    quote: '"Our customers immediately touch the unlacquered brass finish. It patinas beautifully over time."',
+    client: 'Vanguard Home',
+    role: 'Creative Director',
+    tag: '1,200 UNITS DELIVERED',
+    location: 'New York, USA'
+  }
+]
+
 function ReviewsSection() {
   return (
-    <section className="section alt fs-section bestsellers-section" id="reviews" style={{ paddingBlock: '3rem 2rem' }}>
-      <div className="sec-head" style={{ marginBottom: '1rem' }}>
-        <CharCascade as="span" className="meta">Reviews</CharCascade>
+    <section className="section alt fs-section bestsellers-section" id="reviews" style={{ paddingBlock: '4rem 3rem' }}>
+      <div className="wrap">
+        <div className="sec-head" style={{ marginBottom: '2.5rem' }}>
+          <CharCascade as="span" className="meta">Reviews and testimonials</CharCascade>
+        </div>
+
+        <CardsReveal className="home-reviews-grid" selector=":scope > .tm-card" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.8rem' }}>
+          {HOME_TESTIMONIALS.map((t) => (
+            <div
+              key={t.id}
+              className="pl-card tm-card"
+              style={{
+                padding: '2rem 1.8rem',
+                borderRadius: '1.25rem',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between'
+              }}
+            >
+              <div>
+                <div className="tm-card-head">
+                  <span className="tm-cat">{t.category}</span>
+                  <span className="tm-stars">{t.stars}</span>
+                </div>
+                <p className="tm-quote">{t.quote}</p>
+              </div>
+
+              <div className="tm-card-foot">
+                <div>
+                  <h3 className="tm-client">{t.client}</h3>
+                  <p className="tm-role">{t.role} · {t.location}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </CardsReveal>
       </div>
-      <ReviewStack />
     </section>
   )
 }
 
 function Heritage() {
   const bgVideo = "https://res.cloudinary.com/djszwbnxp/video/upload/v1786264932/IMG_0205_n1mn8t.mp4"
-  const posterImg = "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=1600&auto=format&fit=crop"
+  const bgVideoRef = useRef(null)
 
   return (
     <section className="section craft-card-wrapper" id="heritage">
@@ -356,12 +474,12 @@ function Heritage() {
           {/* Background Video */}
           <div className="craft-card__video-wrap">
             <video
+              ref={bgVideoRef}
               className="craft-card__video-bg"
               autoPlay
               loop
               muted
               playsInline
-              poster={posterImg}
               src={bgVideo}
             />
             <div className="craft-card__overlay" />
@@ -373,7 +491,7 @@ function Heritage() {
               text="THE CRAFT"
               mediaType="video"
               src={bgVideo}
-              poster={posterImg}
+              syncVideoRef={bgVideoRef}
               fillScale={1.35}
               parallax={32}
               brightness={1.05}

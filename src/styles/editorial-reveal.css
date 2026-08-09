@@ -22,7 +22,7 @@
   font-weight: 600;
   letter-spacing: 0.24em;
   text-transform: uppercase;
-  color: var(--brass, #c5973f);
+  color: var(--brass, #421520);
   margin: 0;
   padding: 0;
   -webkit-font-smoothing: antialiased;
@@ -47,7 +47,7 @@
   font-weight: 300;
   line-height: 1.12;
   letter-spacing: -0.02em;
-  color: var(--graphite, #1c1c1a);
+  color: var(--graphite, #421520);
   margin: 0;
   padding: 0;
   -webkit-font-smoothing: antialiased;
@@ -63,7 +63,7 @@
   font-weight: 400;
   line-height: 1.7;
   letter-spacing: 0.015em;
-  color: var(--dim, rgba(28, 28, 26, 0.68));
+  color: var(--dim, rgba(66, 21, 32, 0.68));
   max-width: 52ch;
   margin: 0;
   padding: 0;
@@ -90,8 +90,8 @@
   justify-content: center;
   gap: 0.25rem;
   padding: 0.75rem 1.25rem;
-  background: var(--chrome-2, rgba(28, 28, 26, 0.03));
-  border: 1px solid var(--hair, rgba(28, 28, 26, 0.12));
+  background: var(--chrome-2, rgba(66, 21, 32, 0.03));
+  border: 1px solid var(--hair, rgba(66, 21, 32, 0.12));
   border-radius: 8px;
   backdrop-filter: blur(8px);
   min-width: 130px;
@@ -103,8 +103,8 @@
 }
 
 .ed-spec-item:hover {
-  border-color: var(--brass, #c5973f);
-  background: var(--chrome, #ffffff);
+  border-color: var(--brass, #421520);
+  background: var(--chrome, #FFFFFF);
 }
 
 .ed-spec-label {
@@ -113,7 +113,7 @@
   font-weight: 600;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--faint, rgba(28, 28, 26, 0.42));
+  color: var(--faint, rgba(66, 21, 32, 0.42));
   line-height: 1;
 }
 
@@ -122,13 +122,13 @@
   font-size: 0.88rem;
   font-weight: 500;
   letter-spacing: 0.04em;
-  color: var(--graphite, #1c1c1a);
+  color: var(--graphite, #421520);
   line-height: 1.2;
 }
 
 /* Dark Mode Overrides */
 html.dark .ed-title {
-  color: var(--graphite, #fcfbf8);
+  color: var(--graphite, #FFFFFF);
 }
 
 html.dark .ed-body {
@@ -142,7 +142,7 @@ html.dark .ed-spec-item {
 
 html.dark .ed-spec-item:hover {
   background: rgba(255, 255, 255, 0.08);
-  border-color: var(--brass, #daa520);
+  border-color: var(--brass, #5A1D2C);
 }
 
 html.dark .ed-spec-label {
@@ -150,5 +150,5 @@ html.dark .ed-spec-label {
 }
 
 html.dark .ed-spec-value {
-  color: var(--graphite, #fcfbf8);
+  color: var(--graphite, #FFFFFF);
 }

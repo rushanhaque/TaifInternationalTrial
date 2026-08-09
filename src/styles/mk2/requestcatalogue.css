@@ -18,7 +18,7 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: radial-gradient(58% 70% at 78% 42%, rgba(184, 115, 51, 0.16), transparent 70%);
+  background: none, transparent 70%);
 }
 
 .rq-inner {

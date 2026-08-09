@@ -40,18 +40,17 @@
   --acc: var(--brass);
   --acc-lt: var(--brass-lt);
   --acc-dk: var(--brass-dk);
-  --acc-wash: rgba(184, 115, 51, 0.07);
+  --acc-wash: rgba(66, 21, 32, 0.07);
 
   position: relative;
   border: 1px solid var(--hair);
   border-radius: var(--r-lg);
   background: var(--white);
   /* warm shadow — two lifts plus an inner specular on the top edge */
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.9),
-    0 1px 2px rgba(28, 28, 26, 0.05),
-    0 10px 24px -16px rgba(28, 28, 26, 0.26),
-    0 30px 62px -42px rgba(28, 28, 26, 0.3);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 1px 2px rgba(0, 0, 0, 0.05),
+    0 10px 24px -16px rgba(0, 0, 0, 0.26),
+    0 30px 62px -42px rgba(0, 0, 0, 0.3);
   transition:
     transform 0.55s var(--ease-surge),
     box-shadow 0.55s var(--ease-fluid),
@@ -62,14 +61,14 @@
   --acc: var(--copper);
   --acc-lt: var(--copper-lt);
   --acc-dk: var(--copper-dk);
-  --acc-wash: rgba(184, 115, 51, 0.07);
+  --acc-wash: rgba(66, 21, 32, 0.07);
 }
 
 .cr-card[data-tone='walnut'] {
   --acc: var(--oak);
   --acc-lt: var(--oak-lt);
   --acc-dk: var(--walnut);
-  --acc-wash: rgba(28, 28, 26, 0.07);
+  --acc-wash: rgba(66, 21, 32, 0.07);
 }
 
 /* a warm wash rakes in from the top-left corner as the card opens */
@@ -89,11 +88,10 @@
 .cr-card.is-open {
   transform: translateY(-4px);
   border-color: var(--hair-strong);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.9),
-    0 2px 4px rgba(28, 28, 26, 0.06),
-    0 18px 34px -18px rgba(28, 28, 26, 0.28),
-    0 46px 84px -46px rgba(28, 28, 26, 0.45);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 2px 4px rgba(0, 0, 0, 0.06),
+    0 18px 34px -18px rgba(0, 0, 0, 0.28),
+    0 46px 84px -46px rgba(0, 0, 0, 0.45);
 }
 
 .cr-card.is-open::after {
@@ -240,7 +238,7 @@
   border-radius: 1.5px;
   transform: rotate(45deg);
   background: linear-gradient(135deg, var(--acc-lt), var(--acc) 60%, var(--acc-dk));
-  box-shadow: 0 1px 2px rgba(28, 28, 26, 0.35);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
 }
 
 .cr-statlabel {

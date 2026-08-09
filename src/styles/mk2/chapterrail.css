@@ -293,7 +293,7 @@
 
 /* ═══ over the espresso sections ═══════════════════════════════════════════
    .is-inverse is toggled by a ScrollTrigger watching every .deep panel. A
-   warm-ink rail is invisible on #1c1c1a; this is a contrast fix, not styling. */
+   warm-ink rail is invisible on #421520; this is a contrast fix, not styling. */
 .crail.is-inverse .crail-spine,
 .crail.is-inverse .crail-line {
   background: var(--on-deep);

@@ -5,6 +5,7 @@ import { CATALOGUE, CATEGORIES } from '../data/catalogue'
 import { productPlate } from '../data/images'
 import { useCart } from '../lib/cart'
 import Button from '../components/Button'
+import ProductCard from '../components/ui/ProductCard'
 
 /* ── /collections/:family — THE PLATE ROOM ──────────────────────────────────
    One family of work, presented as an archive of production plates.
@@ -104,57 +105,62 @@ const FAMILY_NOTE = {
   'Barware': 'Ice buckets, coasters, shakers and trays. The pieces that carry the evening.',
 }
 
-/* ── PlateCard — product listing card with direct add/remove action ─────────────── */
+/* ── PlateCard — Velora-inspired landscape product card ─────────────── */
 function PlateCard({ p, add, remove, has, setOpen }) {
   const inCart = has(p.slug)
 
   return (
     <li className="pl-plate">
-      <Link
-        to={`/catalogue/${p.slug}`}
-        className="pl-card"
-        data-cursor="VIEW"
-        transition="slide-product"
-      >
-        <span className="pl-frame" aria-hidden="true" />
+      <div className="pl-card group">
+        <Link
+          to={`/catalogue/${p.slug}`}
+          className="pl-card-link"
+          data-cursor="VIEW"
+          transition="slide-product"
+        >
+          {/* Studio Frame — 16/10 Landscape ratio with radial vitrine ground */}
+          <div className="pl-shot burnish">
+            <div className="pl-glow" aria-hidden="true" />
+            <img
+              className="pl-img"
+              src={productPlate(p.slug)}
+              alt={p.name}
+              loading="lazy"
+              decoding="async"
+            />
+            {/* Stamped Ref / Index tag top-left */}
+            <span className="pl-no" aria-hidden="true">{p.idx}</span>
+            {/* Brass light-catch hairline draw along lower edge on hover */}
+            <div className="pl-light-catch" aria-hidden="true" />
+          </div>
 
-        <span className="pl-shot">
-          <img
-            className="pl-img"
-            src={productPlate(p.slug)}
-            alt={p.name}
-            loading="lazy"
-            decoding="async"
-          />
-          <span className={`pl-wash tone-${p.tone}`} aria-hidden="true" />
-        </span>
+          {/* Caption & Metadata */}
+          <div className="pl-say">
+            <div className="pl-say-top">
+              <h3 className="pl-name">{p.name}</h3>
+              <p className="pl-mat">{p.material}</p>
+            </div>
+            <div className="pl-say-action">
+              <span className="pl-action-text">View piece</span>
+              <span className="pl-arrow-wrap" aria-hidden="true">
+                <span className="pl-arrow arrow-1">→</span>
+                <span className="pl-arrow arrow-2">→</span>
+              </span>
+            </div>
+          </div>
+        </Link>
 
-        <span className="pl-no meta" aria-hidden="true">{p.idx}</span>
-
-        {/* the numbers, held back until asked for */}
-        <span className="pl-rail" aria-hidden="true">
-          <b>{p.dims}</b>
-          <b>{p.weight}</b>
-          <b>MOQ {p.moq}</b>
-          <b>{p.lead}</b>
-        </span>
-        <span className="pl-say">
-          <span className="pl-name">{p.name}</span>
-          <span className="pl-mat meta">{p.material}</span>
-        </span>
-      </Link>
-
-      <button
-        type="button"
-        className={`pl-add ${inCart ? 'is-in' : ''}`}
-        onClick={() => (inCart ? remove(p.slug) : add(p))}
-        aria-label={inCart
-          ? `Remove ${p.name} from your cart`
-          : `Add ${p.name} to your cart`}
-      >
-        <i aria-hidden="true" />
-        <span>{inCart ? 'In cart' : 'Add to cart'}</span>
-      </button>
+        {/* Add to Cart floating action button */}
+        <button
+          type="button"
+          className={`pl-add ${inCart ? 'is-in' : ''}`}
+          onClick={() => (inCart ? remove(p.slug) : add(p))}
+          aria-label={inCart ? `Remove ${p.name} from your cart` : `Add ${p.name} to your cart`}
+        >
+          <i aria-hidden="true" />
+          <span>{inCart ? 'In cart' : 'Add to cart'}</span>
+        </button>
+      </div>
     </li>
   )
 }
@@ -200,12 +206,16 @@ export default function CollectionPage({ params = {} }) {
         scrollTrigger: { trigger: '.pl-mast', start: 'top 92%', once: true },
       })
 
-      /* plates rise with a whisper of rotation so the grid never feels stamped */
+      /* plates slide in from alternating sides as they enter — a staggered
+         card reveal rather than a uniform rise, so the grid assembles itself
+         diagonally. .pl clips its overflow, so the lateral offset never adds
+         a horizontal scrollbar. */
       gsap.utils.toArray('.pl-plate').forEach((el, i) => {
+        const dir = i % 2 ? 1 : -1
         gsap.from(el, {
-          y: 54, opacity: 0, rotate: i % 2 ? -0.5 : 0.5,
-          duration: 1, ease: 'atelys',
-          scrollTrigger: { trigger: el, start: 'top 90%', once: true },
+          y: 64, x: dir * 46, opacity: 0, scale: 0.955, rotate: dir * 0.6,
+          duration: 1.05, ease: 'atelys',
+          scrollTrigger: { trigger: el, start: 'top 88%', once: true },
         })
       })
 
@@ -253,16 +263,6 @@ export default function CollectionPage({ params = {} }) {
           <div className="pl-mast">
             <span className="pl-mast-line"><h1 className="pl-title">{family}</h1></span>
           </div>
-
-          <div className="pl-meta">
-            {stats && (
-              <dl className="pl-figs">
-                <div><dt>Pieces</dt><dd>{String(stats.count).padStart(2, '0')}</dd></div>
-                <div><dt>From MOQ</dt><dd>{stats.moq}</dd></div>
-                <div><dt>Lead</dt><dd>{stats.lead}</dd></div>
-              </dl>
-            )}
-          </div>
         </div>
       </section>
 
@@ -288,36 +288,31 @@ export default function CollectionPage({ params = {} }) {
           )}
           <ol className="pl-grid">
             {pieces.map((p) => (
-              <PlateCard key={p.slug} p={p} add={add} remove={remove} has={has} setOpen={setOpen} />
+              <ProductCard key={p.slug} p={p} />
             ))}
           </ol>
         </div>
       </section>
 
-      {/* ── the other five ─────────────────────────────────────────────── */}
+      {/* ── the other families ─────────────────────────────────────────────── */}
       <section className="pl-switch">
         <div className="wrap">
           <div className="sec-head">
-            <span className="idx">0.2</span><span className="meta">The other families</span>
+            <span className="meta">The other families</span>
           </div>
-          <ul className="pl-switch-list">
-            {others.map((c) => {
-              const n = familyPieces(c).length
-              return (
-                <li key={c} className="pl-switch-row">
-                  <button
-                    type="button"
-                    className="pl-switch-btn"
-                    onClick={() => navigate(`/collections/${familySlug(c)}`)}
-                  >
-                    <span className="pl-switch-name">{c}</span>
-                    <span className="pl-switch-n meta">{String(n).padStart(2, '0')} pieces</span>
-                    <span className="pl-switch-go" aria-hidden="true">→</span>
-                  </button>
-                </li>
-              )
-            })}
-          </ul>
+          <div className="pl-family-buttons-grid">
+            {others.map((c) => (
+              <button
+                key={c}
+                type="button"
+                className="pl-family-pill-btn"
+                onClick={() => navigate(`/collections/${familySlug(c)}`)}
+              >
+                <span className="pl-family-pill-name">{c}</span>
+                <span className="pl-family-pill-arrow" aria-hidden="true">→</span>
+              </button>
+            ))}
+          </div>
 
           <div className="hero-cta pl-cta">
             <Button to="/contact">Get in touch</Button>

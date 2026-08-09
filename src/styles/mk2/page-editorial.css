@@ -1,0 +1,520 @@
+/* ══════════════════════════════════════════════════════════════════════════
+   EDITORIAL PAGES — Shows · Testimonials · Care
+
+   These three pages were built with inline styles and literal hex values
+   (#FFFFFF grounds, #421520 type, a stray #9C7A44 gold that exists nowhere
+   in the palette). The result: they ignored the design system, and /shows
+   was unreadable in dark mode — a white page painted over a near-black body.
+
+   Everything here reads from tokens.css, so both themes follow for free, and
+   the vertical rhythm matches .section / .page-hero on every other page.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── shared: the small caps label above a page or block title ───────────── */
+.ed-kicker {
+  color: var(--brass);
+  font-weight: 600;
+  letter-spacing: 0.15em;
+}
+
+/* ── shared: a block title with the hairline that closes it ─────────────── */
+.ed-block-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: clamp(1.4rem, 2.6vw, 2rem);
+  padding-bottom: clamp(0.7rem, 1.4vw, 1rem);
+  border-bottom: 1px solid var(--hair-strong);
+}
+
+.ed-block-head > .meta { color: var(--dim); }
+
+/* ═══ SHOWS ══════════════════════════════════════════════════════════════ */
+
+/* The atelier plates. The old rule was a hard `repeat(3, 1fr)`, which held
+   three columns all the way down to 375px and left six 112px-wide thumbnails
+   stacked in a strip. auto-fit with a sane floor gives 3 / 2 / 1. */
+.shows-atelier-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+  gap: 1px;
+  background: var(--hair);
+  border: 1px solid var(--hair);
+  border-radius: var(--r-md);
+  overflow: hidden;
+}
+
+.shows-atelier-cell {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
+  background: var(--chrome-2);
+}
+
+.shows-atelier-cell img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform var(--t-slow) var(--ease-fluid);
+}
+
+.shows-atelier-cell:hover img { transform: scale(1.045); }
+
+/* ── full-width atelier background image banner ─────────────────────────── */
+.shows-atelier-banner {
+  position: relative;
+  width: 100%;
+  min-height: 480px;
+  border-radius: clamp(16px, 2vw, 28px);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: clamp(2.5rem, 5vw, 4.5rem);
+  color: #FFFFFF;
+  margin-top: 1.5rem;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25);
+  isolation: isolate;
+}
+
+.shows-atelier-bg-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  z-index: -2;
+  transition: transform 0.8s var(--ease-fluid);
+}
+
+.shows-atelier-banner:hover .shows-atelier-bg-img {
+  transform: scale(1.03);
+}
+
+.shows-atelier-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    180deg,
+    rgba(18, 12, 14, 0.35) 0%,
+    rgba(18, 12, 14, 0.75) 60%,
+    rgba(18, 12, 14, 0.92) 100%
+  );
+}
+
+.shows-atelier-content {
+  position: relative;
+  z-index: 2;
+  max-width: 720px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.shows-atelier-tag {
+  color: #E3C88F !important;
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.shows-atelier-title {
+  font-family: var(--font-display, serif);
+  font-size: clamp(1.8rem, 3.8vw, 3rem);
+  font-weight: 600;
+  color: #FFFFFF;
+  line-height: 1.1;
+  margin: 0;
+}
+
+.shows-atelier-desc {
+  font-family: var(--font-body, sans-serif);
+  font-size: clamp(0.95rem, 1.2vw, 1.1rem);
+  color: rgba(255, 255, 255, 0.88);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.shows-atelier-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.shows-atelier-pill {
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 14px;
+  padding: 0.85rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.shows-atelier-pill strong {
+  color: #FFFFFF;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.shows-atelier-pill span {
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 0.82rem;
+}
+
+/* ── exhibition cards (3 cards per row) ─────────────────────────────────── */
+.shows-events-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(1.4rem, 2.5vw, 2.2rem);
+}
+
+@media (max-width: 980px) {
+  .shows-events-grid {
+    grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+  }
+}
+
+.shows-event {
+  display: flex;
+  flex-direction: column;
+  background: var(--chrome-2);
+  border: 1px solid var(--hair);
+  border-radius: var(--r-md);
+  overflow: hidden;
+  box-shadow: var(--lift-1);
+  transition:
+    transform var(--t-slow) var(--ease-fluid),
+    box-shadow var(--t-slow) var(--ease-fluid),
+    border-color var(--t-base) ease;
+}
+
+.shows-event:hover {
+  transform: translateY(-5px);
+  border-color: var(--hair-strong);
+  box-shadow: var(--lift-3);
+}
+
+.shows-event-media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: var(--chrome-3);
+}
+
+.shows-event-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* the date chip sits on the plate, so it needs the deep ground in BOTH
+   themes — --deep is burgundy either way, --on-deep is always cream */
+.shows-event-date {
+  position: absolute;
+  left: 0.85rem;
+  bottom: 0.85rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: var(--r-sm);
+  background: var(--deep);
+  color: var(--on-deep);
+  font-family: var(--font-accent);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.shows-event-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: 1.25rem 1.5rem 1.4rem;
+}
+
+.shows-event-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.shows-event-title {
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: var(--graphite);
+  margin: 0;
+}
+
+.shows-event-cat { color: var(--dim); }
+
+/* the location line — the pin was a 📍 emoji, which renders as a colour
+   glyph and breaks the type colour. It is a drawn mark now. */
+.shows-event-loc {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0.15rem 0 0;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: var(--dim);
+}
+
+.shows-event-loc svg {
+  flex: none;
+  width: 0.95em;
+  height: 0.95em;
+  opacity: 0.7;
+}
+
+/* ── the closing appointment panel ──────────────────────────────────────── */
+.shows-cta {
+  text-align: center;
+  padding: clamp(2.5rem, 5vw, 4rem) clamp(1.25rem, 4vw, 3rem);
+  background: var(--chrome-2);
+  border: 1px solid var(--hair);
+  border-radius: var(--r-lg);
+  box-shadow: var(--lift-1);
+}
+
+.shows-cta h2 {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 2.5vw, 2.2rem);
+  font-weight: 600;
+  color: var(--graphite);
+  margin: 0 0 0.8rem;
+}
+
+.shows-cta .lede {
+  margin: 0 auto clamp(1.4rem, 2.6vw, 1.9rem);
+  max-width: 46ch;
+}
+
+/* ═══ TESTIMONIALS ═══════════════════════════════════════════════════════ */
+
+.tm-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  gap: clamp(1.25rem, 2.2vw, 1.8rem);
+}
+
+.tm-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: clamp(1.6rem, 3vw, 2rem);
+  border-radius: var(--r-md);
+  background: #FFFFFF !important;
+  background-color: #FFFFFF !important;
+  border: 1px solid rgba(66, 21, 32, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.tm-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 1.1rem;
+}
+
+.tm-cat {
+  font-family: var(--font-accent);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--brass);
+}
+
+.tm-stars {
+  color: var(--brass-lt);
+  font-size: 0.95rem;
+  letter-spacing: 0.1em;
+}
+
+.tm-quote {
+  font-family: var(--font-display);
+  font-size: clamp(1.05rem, 1.5vw, 1.15rem);
+  font-style: italic;
+  line-height: 1.5;
+  color: var(--graphite);
+  margin: 0;
+  text-wrap: pretty;
+}
+
+.tm-card-foot {
+  border-top: 1px solid var(--hair);
+  padding-top: 1rem;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.tm-client {
+  font-family: var(--font-heading);
+  font-size: 1.02rem;
+  font-weight: 600;
+  color: var(--graphite);
+  margin: 0;
+}
+
+.tm-role {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  color: var(--dim);
+  margin: 0.2rem 0 0;
+}
+
+.tm-tag {
+  display: none !important;
+}
+
+/* ═══ CARE ═══════════════════════════════════════════════════════════════ */
+
+.care-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: clamp(1.8rem, 3.5vw, 2.5rem);
+}
+
+/* the selected material — same shape as the hover state of the shared pill,
+   held open. Set with aria-pressed so it is not colour-only. */
+.pl-family-pill-btn[aria-pressed='true'] {
+  background: var(--deep);
+  border-color: var(--deep);
+  color: var(--on-deep);
+  font-weight: 700;
+}
+
+html.dark .pl-family-pill-btn[aria-pressed='true'] {
+  background: var(--white);
+  border-color: var(--white);
+  color: var(--graphite);
+}
+
+.care-card { padding: clamp(1.6rem, 3.4vw, 2.5rem) clamp(1.3rem, 2.6vw, 2rem); }
+
+.care-card-head {
+  margin-bottom: clamp(1.4rem, 2.8vw, 2rem);
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--hair);
+}
+
+.care-card-head h2 {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 2.6vw, 1.8rem);
+  color: var(--graphite);
+  margin: 0;
+}
+
+.care-card-head .meta {
+  display: block;
+  margin-top: 0.35rem;
+  color: var(--brass);
+  font-weight: 600;
+}
+
+.care-cols {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+  gap: clamp(1.8rem, 3.5vw, 2.5rem);
+}
+
+.care-col-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin: 0 0 1rem;
+}
+
+/* do / avoid are the one place a hue outside the house palette is correct —
+   they carry meaning. Both are darkened for AA on the cream ground and
+   lightened again for the burgundy one. */
+.care-col-title .care-mark {
+  display: grid;
+  place-items: center;
+  width: 1.35rem;
+  height: 1.35rem;
+  border-radius: 50%;
+  font-size: 0.8rem;
+  line-height: 1;
+}
+
+.care-col.is-do .care-col-title { color: #1F5B27; }
+.care-col.is-do .care-mark { background: rgba(31, 91, 39, 0.12); color: #1F5B27; }
+.care-col.is-do li::marker { color: #1F5B27; }
+
+.care-col.is-avoid .care-col-title { color: #A3242A; }
+.care-col.is-avoid .care-mark { background: rgba(163, 36, 42, 0.12); color: #A3242A; }
+.care-col.is-avoid li::marker { color: #A3242A; }
+
+html.dark .care-col.is-do .care-col-title,
+html.dark .care-col.is-do .care-mark,
+html.dark .care-col.is-do li::marker { color: #7DD68B; }
+html.dark .care-col.is-do .care-mark { background: rgba(125, 214, 139, 0.16); }
+
+html.dark .care-col.is-avoid .care-col-title,
+html.dark .care-col.is-avoid .care-mark,
+html.dark .care-col.is-avoid li::marker { color: #FF9BA0; }
+html.dark .care-col.is-avoid .care-mark { background: rgba(255, 155, 160, 0.16); }
+
+.care-list {
+  list-style: disc;
+  padding-left: 1.15rem;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.care-list li {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--graphite-2);
+}
+
+.care-note {
+  margin-top: clamp(1.8rem, 3.5vw, 2.5rem);
+  padding: 1.2rem 1.5rem;
+  border-radius: var(--r-sm);
+  border-left: 3px solid var(--brass);
+  background: var(--metal-soft);
+}
+
+html.dark .care-note { background: rgba(255, 255, 255, 0.06); }
+
+.care-note p {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: var(--graphite-2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shows-atelier-cell img,
+  .shows-event { transition: none; }
+  .shows-atelier-cell:hover img { transform: none; }
+  .shows-event:hover { transform: none; }
+}

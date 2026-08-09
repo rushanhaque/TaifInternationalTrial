@@ -102,11 +102,10 @@ export default function CollectionsDolly() {
             <Link
               className="cd-facade"
               to={`/collections/${familySlug(c.name)}`}
-              data-cursor="OPEN"
               aria-label={`Open the ${c.name} collection`}
             >
               <span className={`cd-tag a-${c.accent}`} aria-hidden="true">{c.no}</span>
-              <Slab tone={c.tone} label={c.name.toUpperCase()} ratio="16/10" bead
+              <Slab tone={c.tone} label={c.name.toUpperCase()} ratio="16/10" bead={false} warp={false} quietHover={true}
                 img={COLLECTION_IMGS[c.name]} alt={c.name} />
             </Link>
           </div>
@@ -114,7 +113,7 @@ export default function CollectionsDolly() {
         {[0, 1, 2].map((i) => <div className="cd-haze" key={i} aria-hidden="true" />)}
         <div className="cd-end">
           <span className="meta cd-end-kicker">The end of the line — the start of the piece.</span>
-          <h3 className="d1">The bench is open.</h3>
+          <h2 className="d1">The bench is open.</h2>
           <p className="lede" style={{ maxWidth: '48ch' }}>
             Bespoke sits past the last family. Send a drawing, a photograph or a
             sample — a priced quote returns in five working days.
@@ -136,14 +135,16 @@ export default function CollectionsDolly() {
               to={`/collections/${familySlug(c.name)}`}
               aria-label={`Open the ${c.name} collection`}
             >
-              <Slab tone={c.tone} label={c.name.toUpperCase()} ratio="16/10" bead
+              <Slab tone={c.tone} label={c.name.toUpperCase()} ratio="16/10" bead={false} warp={false} quietHover={true}
                 img={COLLECTION_IMGS[c.name]} alt={c.name} />
             </Link>
           ))}
         </div>
         <div className="cd-end-fallback">
-          <h3 className="d2">The bench is open.</h3>
-          <p className="lede">Bespoke is the sixth family — described in a drawing you send.</p>
+          <h2 className="d2">The bench is open.</h2>
+          {/* said "the sixth family" — bespoke is not one of the nine, it sits
+              past the end of them */}
+          <p className="lede">Bespoke sits past the last family — described in a drawing you send.</p>
           <div className="cd-end-ctas">
             <Button to="/contact">Connect</Button>
             <Button to="/collections" variant="ghost">Browse all collections</Button>

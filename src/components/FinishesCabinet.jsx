@@ -11,11 +11,11 @@ const FINISH_IMGS = {
 
 export default function FinishesCabinet() {
   return (
-    <section className="section alt" id="finishes-we-offer" style={{ paddingBlock: '4rem 5rem' }}>
+    <section className="section" id="finishes-we-offer" style={{ paddingBlock: '4rem 5rem', background: '#FFFFFF', color: '#421520' }}>
       <div className="wrap">
         <div className="sec-head" style={{ marginBottom: '1.5rem' }}>
-          <CharCascade as="h2" className="d2">Finishes we offer</CharCascade>
-          <p className="meta" style={{ marginTop: '0.5rem', color: 'var(--dim)' }}>
+          <CharCascade as="h2" className="d2" style={{ color: '#421520' }}>Finishes we offer</CharCascade>
+          <p className="meta" style={{ marginTop: '0.5rem', color: 'rgba(66, 21, 32, 0.75)' }}>
             Five hand-crafted surfaces · Struck, aged, burnished, oiled, and inlaid
           </p>
         </div>

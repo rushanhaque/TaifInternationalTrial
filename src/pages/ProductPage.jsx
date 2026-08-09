@@ -27,7 +27,7 @@ export default function ProductPage({ params }) {
     <>
       <SpecDock piece={p} />
 
-      <section className="page-hero wrap" style={{ marginTop: '-50px' }}>
+      <section className="page-hero wrap">
         <div className="grid" style={{ alignItems: 'center' }}>
           <div className="sp-6">
             <Slab warp={false} className="prod-hero-slab" tone={p.tone} ratio="7/5" label={p.name.toUpperCase()} meta={p.material}
@@ -56,7 +56,7 @@ export default function ProductPage({ params }) {
                   tint="var(--chrome)"
                   tintOpacity={1}
                   textColor="var(--graphite)"
-                  lineColor="#c5973f"
+                  lineColor="#421520"
                   baseColor="var(--hair-strong)"
                   intensity={1.2}
                   thickness={1.5}
@@ -70,7 +70,7 @@ export default function ProductPage({ params }) {
                   tint="transparent"
                   tintOpacity={0}
                   textColor="var(--graphite)"
-                  lineColor="#b87333"
+                  lineColor="#421520"
                   baseColor="var(--hair-strong)"
                   intensity={1}
                   thickness={1}

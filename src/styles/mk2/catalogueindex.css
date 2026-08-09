@@ -179,15 +179,15 @@
   width: 12px;
   height: 12px;
   border-radius: 3px;
-  box-shadow: inset 0 0 0 1px rgba(28, 28, 26, 0.22);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.22);
   background: var(--brass);
 }
 
 .cx-chip.tone-brass  { background: linear-gradient(135deg, var(--brass-lt), var(--brass)); }
-.cx-chip.tone-copper { background: linear-gradient(135deg, #cd853f, #b87333); }
-.cx-chip.tone-wood   { background: linear-gradient(135deg, #c7a579, #7c5634); }
+.cx-chip.tone-copper { background: linear-gradient(135deg, #5A1D2C, #421520); }
+.cx-chip.tone-wood   { background: linear-gradient(135deg, #F7F7F7, #7c5634); }
 .cx-chip.tone-walnut { background: linear-gradient(135deg, #a8814f, #5a3f26); }
-.cx-chip.tone-antique { background: linear-gradient(135deg, #c5973f, #6b5228); }
+.cx-chip.tone-antique { background: linear-gradient(135deg, #421520, #6b5228); }
 .cx-chip.tone-inlay  { background: linear-gradient(135deg, #7c5634 48%, var(--brass) 52%); }
 
 /* ── the add control ── */

@@ -13,15 +13,62 @@
 .tt {
   position: relative;
   padding-top: 0;
-  padding-bottom: 0;
-  /* Diameter of the vessel. Bounded by viewport HEIGHT as well as width so
-     the pinned plate — HUD, form, readout rule — always fits one screen. */
-  --form: clamp(240px, min(34vw, 44svh), 460px);
+  padding-bottom: clamp(6rem, 12vh, 12rem) !important;
+  background-color: #FFFFFF !important;
+  color: #1C1814 !important;
+  /* Diameter of the vessel circle. */
+  --form: clamp(420px, min(55vw, 70svh), 720px);
   /* The strips are wider than the form so a horizontal sweep never uncovers
      an edge. Geometry: left -90%, width 280% → the strip spans -90%…190% of
      the form and the fastest tween moves it 89.6%, landing at -179.6%…100.4%. */
   --strip-w: 280%;
   --strip-x: -90%;
+}
+
+.tt h2,
+.tt h3,
+.tt p,
+.tt span,
+.tt div,
+.tt .tt-caption,
+.tt .tt-hud-sub,
+.tt .tt-text {
+  color: #1C1814 !important;
+  -webkit-text-fill-color: #1C1814 !important;
+}
+
+.tt .tt-note-tag {
+  background: #421520 !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  padding: 0.4rem 1.1rem !important;
+  border-radius: 9999px !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12) !important;
+}
+
+/* The ink above is forced with !important and was left unscoped, so it also
+   applied in dark mode — where home.css drops this section onto a #1A090D
+   ground. The whole Turn (headings, captions, the metal and wood spec lists)
+   was rendering near-black on near-black. Reasserted for the dark ground at
+   matching specificity. */
+html.dark .tt h2,
+html.dark .tt h3,
+html.dark .tt p,
+html.dark .tt span,
+html.dark .tt div,
+html.dark .tt .tt-caption,
+html.dark .tt .tt-hud-sub,
+html.dark .tt .tt-text {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+/* the quieter tiers keep their hierarchy rather than all going pure cream */
+html.dark .tt .tt-caption,
+html.dark .tt .tt-hud-sub,
+html.dark .tt .ed-spec-label {
+  color: rgba(255, 255, 255, 0.62) !important;
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.62) !important;
 }
 
 /* ─── intro ─────────────────────────────────────────────────────────── */
@@ -57,11 +104,11 @@
 .tt-stage {
   position: relative;
   isolation: isolate;
-  overflow: hidden;
+  overflow: visible;
   display: flex;
   flex-direction: column;
   gap: clamp(0.6rem, 1.5vw, 1.2rem);
-  padding-block: calc(var(--nav-h) + clamp(0.8rem, 2vw, 1.6rem)) clamp(0.5rem, 1.2vw, 1rem);
+  padding-block: calc(var(--nav-h) + clamp(0.5rem, 1.2vw, 1.2rem)) clamp(8rem, 14vw, 16rem) !important;
   color: var(--on-deep);
   background: transparent;
 }
@@ -160,7 +207,8 @@
   max-width: 1560px;
   height: var(--form);
   margin-inline: auto;
-  margin-block: auto;
+  margin-top: 0;
+  margin-bottom: clamp(6rem, 10vw, 12rem) !important;
   padding-inline: var(--gutter);
 }
 
@@ -168,7 +216,7 @@
 
 .tt-form {
   position: absolute;
-  top: 0;
+  top: -36px;
   left: 50%;
   /* independent `translate` — GSAP writes `transform`, so the two never
      fight and the scale breath keeps its centre through the dissolve */
@@ -176,8 +224,7 @@
   width: var(--form);
   height: var(--form);
   border-radius: 50%;
-  box-shadow:
-    0 1px 0 rgba(255, 246, 224, 0.16),
+  box-shadow: 0 1px 0 rgba(255, 246, 224, 0.16),
     0 30px 60px -26px rgba(0, 0, 0, 0.9),
     0 80px 110px -60px rgba(0, 0, 0, 0.75);
 }
@@ -228,7 +275,7 @@
 .tt-skin.is-brass .tt-base {
   background:
     radial-gradient(142% 120% at 30% 13%,
-      #fff4da 0%, #f1d9a8 8%, #d7b073 20%, #c5973f 38%,
+      #fff4da 0%, #f1d9a8 8%, #d7b073 20%, #421520 38%,
       #94703a 54%, #6b4e26 72%, #3f2d12 90%, #241804 100%);
 }
 
@@ -256,7 +303,7 @@
     rgba(255, 255, 255, 0) 0%,
     rgba(255, 246, 218, 0.34) 0.42%,
     rgba(255, 255, 255, 0) 0.9%,
-    rgba(0, 0, 0, 0.24) 1.28%,
+    rgba(66, 21, 32, 0.24) 1.28%,
     rgba(255, 255, 255, 0) 1.75%);
 }
 
@@ -270,7 +317,7 @@
     radial-gradient(circle at 74% 72%, rgba(24, 14, 3, 0.30) 0 15%, rgba(24, 14, 3, 0) 44%),
     repeating-radial-gradient(circle at 50% 50%,
       rgba(255, 248, 226, 0.09) 0 1px,
-      rgba(0, 0, 0, 0.07) 1px 2px,
+      rgba(66, 21, 32, 0.07) 1px 2px,
       rgba(255, 255, 255, 0) 2px 7px);
   background-size: 3.6% 3.6%, 3.6% 3.6%, auto;
   background-position: 0 0, 1.8% 1.8%, 0 0;
@@ -282,7 +329,7 @@
   background:
     radial-gradient(142% 120% at 30% 13%,
       #e0c096 0%, #c49a68 9%, #a37a4d 22%, #7d573a 42%,
-      #6b4a2e 58%, #4d3220 76%, #33210f 92%, #241505 100%);
+      #2C0C14 58%, #4d3220 76%, #33210f 92%, #241505 100%);
 }
 
 /* three co-prime line periods stacked = grain that never visibly repeats,
@@ -315,7 +362,7 @@
   background-image:
     repeating-linear-gradient(91.2deg,
       rgba(255, 236, 204, 0.16) 0 0.18%,
-      rgba(0, 0, 0, 0.16) 0.18% 0.42%,
+      rgba(66, 21, 32, 0.16) 0.18% 0.42%,
       rgba(255, 255, 255, 0) 0.42% 1.05%),
     repeating-linear-gradient(89deg,
       rgba(255, 255, 255, 0) 0 2.2%,
@@ -374,8 +421,7 @@
       rgba(255, 240, 208, 0.30) 0%,
       rgba(126, 90, 42, 0.26) 34%,
       rgba(24, 15, 4, 0.9) 76%);
-  box-shadow:
-    inset 0 2px 4px rgba(0, 0, 0, 0.7),
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.7),
     0 1px 0 rgba(255, 244, 214, 0.32),
     0 -1px 3px rgba(0, 0, 0, 0.45);
 }
@@ -386,8 +432,7 @@
       rgba(226, 190, 140, 0.28) 0%,
       rgba(92, 63, 38, 0.3) 34%,
       rgba(20, 12, 5, 0.92) 76%);
-  box-shadow:
-    inset 0 2px 4px rgba(0, 0, 0, 0.72),
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.72),
     0 1px 0 rgba(232, 215, 189, 0.24),
     0 -1px 3px rgba(0, 0, 0, 0.5);
 }
@@ -453,8 +498,7 @@
   pointer-events: none;
   filter: blur(9px);
   background:
-    radial-gradient(closest-side,
-      rgba(0, 0, 0, 0.86) 0%, rgba(0, 0, 0, 0.42) 54%, rgba(0, 0, 0, 0) 78%);
+    none 0%, rgba(66, 21, 32, 0.42) 54%, rgba(66, 21, 32, 0) 78%);
 }
 
 /* ─── callouts ──────────────────────────────────────────────────────── */
@@ -484,13 +528,13 @@
 .tt-note-body {
   display: block;
   max-width: clamp(148px, 15vw, 238px);
-  padding-top: 0.5rem;
-  border-top: 1px solid rgba(252, 251, 248, 0.16);
+  padding-top: 0;
+  border-top: none !important;
 }
 
 .tt .tt-note-tag {
   display: block;
-  margin-bottom: 0.34rem;
+  margin-bottom: 0;
   font-size: 0.625rem;
   color: var(--tint-on-deep);
 }
@@ -508,31 +552,29 @@
 .tt-note-line {
   flex: none;
   width: clamp(38px, 5vw, 78px);
-  height: 1px;
+  height: 2px;
   margin-inline: 0.7rem;
-  background: linear-gradient(90deg,
-    rgba(218, 165, 32, 0.15), rgba(218, 165, 32, 0.85));
+  background: #421520 !important;
 }
 
 .tt-note.side-l .tt-note-line {
   transform-origin: right center;
+  background: linear-gradient(90deg, rgba(66, 21, 32, 0.2), rgba(66, 21, 32, 0.95)) !important;
 }
 
 .tt-note.side-r .tt-note-line {
   transform-origin: left center;
-  background: linear-gradient(270deg,
-    rgba(218, 165, 32, 0.15), rgba(218, 165, 32, 0.85));
+  background: linear-gradient(270deg, rgba(66, 21, 32, 0.2), rgba(66, 21, 32, 0.95)) !important;
 }
 
 .tt-note-dot {
   flex: none;
-  width: 7px;
-  height: 7px;
+  width: 9px;
+  height: 9px;
   border-radius: 50%;
-  background: var(--brass-lt);
-  box-shadow:
-    0 0 0 1px rgba(218, 165, 32, 0.3),
-    0 0 12px 2px rgba(218, 165, 32, 0.38);
+  background: #421520 !important;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.9),
+    0 2px 8px rgba(66, 21, 32, 0.4) !important;
 }
 
 /* Each row's horizontal offset is cos-derived from its height on the circle
@@ -548,24 +590,7 @@
 /* ─── progress rule ─────────────────────────────────────────────────── */
 
 .tt-bar {
-  display: none;
-  position: relative;
-  z-index: 3;
-  flex: none;
-  height: 2px;
-  margin-inline: var(--gutter);
-  border-radius: var(--r-pill);
-  overflow: hidden;
-  background: rgba(252, 251, 248, 0.1);
-}
-
-.tt-bar > i {
-  position: absolute;
-  inset: 0;
-  display: block;
-  transform: scaleX(0);
-  transform-origin: left center;
-  background: linear-gradient(90deg, var(--brass-dk), var(--brass) 42%, var(--brass-lt) 74%, #fff6e2);
+  display: none !important;
 }
 
 /* ─── the spec list ─────────────────────────────────────────────────── */
@@ -760,15 +785,23 @@
   justify-content: center;
   align-items: center;
   text-align: center;
-  margin-top: clamp(2.5rem, 5vh, 4rem);
-  margin-bottom: clamp(2.5rem, 5vh, 4rem);
+  margin-top: clamp(1.8rem, 3.5vh, 3rem);
+  margin-bottom: clamp(2rem, 4vh, 3.2rem);
+}
+.tt-sec-head .meta {
+  color: #421520 !important;
+  -webkit-text-fill-color: #421520 !important;
+}
+html.dark .tt-sec-head .meta {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
 }
 @media (max-width: 999.98px) {
   .tt-sec-head {
     position: relative;
     top: 0;
     left: 0;
-    margin-top: clamp(2rem, 4vh, 3rem);
-    margin-bottom: clamp(2rem, 4vh, 3rem);
+    margin-top: clamp(1.5rem, 3vh, 2.4rem);
+    margin-bottom: clamp(1.6rem, 3.2vh, 2.5rem);
   }
 }

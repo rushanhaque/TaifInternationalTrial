@@ -25,9 +25,9 @@
   pointer-events: none;
   background: linear-gradient(90deg,
     transparent,
-    rgba(184, 115, 51, .45) 18%,
-    rgba(218, 165, 32, .8) 50%,
-    rgba(184, 115, 51, .45) 82%,
+    rgba(66, 21, 32, .45) 18%,
+    rgba(90, 29, 44, .8) 50%,
+    rgba(66, 21, 32, .45) 82%,
     transparent);
 }
 
@@ -49,7 +49,7 @@
   background-image:
     repeating-linear-gradient(112deg,
       rgba(252, 251, 248, .022) 0 1px, transparent 1px 5px),
-    radial-gradient(125% 85% at 50% 46%, transparent 38%, rgba(0, 0, 0, .42) 100%);
+    none 100%);
 }
 
 /* brass light pooled behind the type; drifts across the pin */
@@ -58,8 +58,7 @@
   inset: -25%;
   z-index: 0;
   pointer-events: none;
-  background: radial-gradient(52% 44% at 40% 46%,
-    rgba(184, 115, 51, .22),
+  background: none,
     rgba(138, 103, 51, .085) 44%,
     transparent 72%);
 }
@@ -138,8 +137,8 @@
   pointer-events: none;
   user-select: none;
   background-image: linear-gradient(158deg,
-    rgba(218, 165, 32, .30),
-    rgba(184, 115, 51, .17) 46%,
+    rgba(90, 29, 44, .30),
+    rgba(66, 21, 32, .17) 46%,
     rgba(138, 103, 51, .05));
   -webkit-background-clip: text;
   background-clip: text;
@@ -166,7 +165,7 @@
   color: var(--on-deep);
   max-width: 21ch;
   margin: 0;
-  text-shadow: 0 1px 0 rgba(0, 0, 0, .25);
+  text-shadow: none;
 }
 
 /* word masks (JS-built). Padding widens the clip box past the line box so

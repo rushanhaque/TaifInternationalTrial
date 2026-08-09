@@ -175,8 +175,12 @@ export default function Sampler() {
   // heroScale shrinks from 2.25x down to 1.0x as user scrolls
   const p = progress
   const heroScale = Math.max(1, 2.25 - p * 1.25)
-  const heroOffsetY = (1 - p) * 175
-  const afterTransitionOffsetY = p * 140
+  const heroOffsetY = (1 - p) * 135
+  /* how far the settled grid drifts down at the end of the scroll. Was 140px,
+     which pushed the bottom cards and the CTA toward the sticky's lower edge —
+     right where the next (Craft) section approaches — so the two read as
+     overlapping. Kept small so the grid stays centred, clear of the boundary. */
+  const afterTransitionOffsetY = p * 48
 
   // Opacities for transition swap:
   // initialContentOpacity: Signature Piece title + 4 tiny cards fade out as user scrolls

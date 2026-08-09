@@ -22,7 +22,15 @@
 .page-hero {
   position: relative;
   padding-top: calc(var(--nav-h) + clamp(3.5rem, 8vw, 6.5rem));
-  padding-bottom: clamp(2.5rem, 5vw, 4.5rem);
+  padding-bottom: clamp(1.8rem, 4vw, 3rem);
+}
+
+.page-hero .mega,
+.page-hero h1,
+.page-hero .prt-h1 {
+  font-size: clamp(2.1rem, 4.8vw, 4.2rem) !important;
+  line-height: 1.02 !important;
+  letter-spacing: -0.025em !important;
 }
 
 /* the rule that closes the masthead — grows out of the left gutter */
@@ -328,4 +336,26 @@
   .cat-card, .loc-card, .principle-card, .team-card, .year-card, .care-panel,
   .spec-row, .faq-q, .legal-pill, .tg-pill, .direct-link, .faq-bead,
   .cat-card .slab-img { transition-duration: 0.01ms; }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   10 · THE MASTHEAD ON SMALL SCREENS
+   pages.css carries a @media (max-width: 768px) rule tightening .page-hero,
+   but this file redefines .page-hero later at equal specificity, so that
+   rule never applied and phones inherited the full desktop opening. The
+   tightened rhythm lives here instead, where it can actually win.
+   ───────────────────────────────────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  .page-hero {
+    padding-top: calc(var(--nav-h) + clamp(2rem, 7vw, 3.2rem));
+    padding-bottom: clamp(1.8rem, 5vw, 2.6rem);
+  }
+
+  /* (.pl-head takes the same treatment, but it is declared in
+     page-collection.css which loads after this file — the rule lives there) */
+
+  /* the lede is full-width on a phone — the desktop indent reads as a
+     mistake at this size */
+  .page-hero .lede { margin-left: 0; max-width: none; }
 }

@@ -12,7 +12,54 @@
 .hb-bg {
   display: none !important;
 }
-.hb-stage { position: relative; text-align: center; }
+
+/* ── hero video backdrop ──────────────────────────────────────────────────
+   Full-bleed ambient footage with a frosted scrim so the brass/walnut mark
+   and the ink tagline stay readable. The scrim is light in light mode and
+   burgundy in dark, matching whatever the wordmark is drawn against. */
+.hb-media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.hb-video,
+.hb-video--still {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background-size: cover;
+  background-position: center;
+  /* the footage is a texture, not the subject — kept quiet behind the mark */
+  opacity: 0.42;
+  filter: saturate(0.86) contrast(1.02);
+}
+
+.hb-scrim {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(120% 80% at 50% 30%, transparent 0%, rgba(255, 255, 255, 0.35) 78%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0.40) 45%, rgba(255, 255, 255, 0.62) 100%);
+}
+
+html.dark .hb-video,
+html.dark .hb-video--still { opacity: 0.5; }
+
+html.dark .hb-scrim {
+  background:
+    radial-gradient(120% 80% at 50% 30%, rgba(26, 9, 13, 0.30) 0%, rgba(26, 9, 13, 0.62) 82%),
+    linear-gradient(180deg, rgba(26, 9, 13, 0.55) 0%, rgba(26, 9, 13, 0.42) 45%, rgba(26, 9, 13, 0.72) 100%);
+}
+
+/* content sits above the media layer */
+.hero-brand > :not(.hb-media) { position: relative; z-index: 1; }
+
+.hb-stage { position: relative; z-index: 1; text-align: center; }
 
 .fs-section {
   min-height: 100svh;
@@ -46,7 +93,7 @@
    materials blend rather than meeting at a hard line */
 .hb-ch-wood {
   background-image: linear-gradient(165deg,
-    #4a4a48 0%, #2a2927 34%, #3a3936 58%, #1c1c1a 82%, #111110 100%);
+    #4a4a48 0%, #2a2927 34%, #3a3936 58%, #421520 82%, #2C0C14 100%);
   -webkit-mask-image: linear-gradient(to top,
     #000 0%, #000 calc(var(--seam) * 100% - 18%), transparent calc(var(--seam) * 100% + 6%));
   mask-image: linear-gradient(to top,
@@ -57,7 +104,7 @@
 .hb-ch-metal {
   position: absolute; left: 0; top: 0; width: 100%;
   background-image: linear-gradient(100deg,
-    #a0522d 0%, #b87333 22%, #daa520 40%, #cd853f 55%, #c5973f 74%, #daa520 90%, #a0522d 100%);
+    #2C0C14 0%, #421520 22%, #5A1D2C 40%, #5A1D2C 55%, #421520 74%, #5A1D2C 90%, #2C0C14 100%);
   -webkit-mask-image: linear-gradient(to bottom,
     #000 0%, #000 calc((1 - var(--seam)) * 100% - 18%), transparent calc((1 - var(--seam)) * 100% + 6%));
   mask-image: linear-gradient(to bottom,
@@ -78,15 +125,36 @@
   font-size: 0.78rem;
 }
 .hb-foot {
-  position: absolute; left: 0; right: 0; bottom: 0;
-  display: grid; grid-template-columns: 1fr auto 1fr; align-items: end; gap: 1rem;
-  padding: 0 var(--gutter) 1.9rem;
-  max-width: 1560px; margin-inline: auto;
+  position: absolute !important;
+  left: 50% !important;
+  bottom: 2rem !important;
+  transform: translateX(-50%) !important;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: auto;
+  margin: 0 auto;
+  padding: 0;
+  pointer-events: auto;
 }
-.hb-foot .meta { color: #000000; opacity: 1; }
+.hb-foot .meta { color: #421520; opacity: 1; text-align: center; }
 .hb-foot > .hb-side:first-child { justify-self: start; }
 .hb-foot > .hb-side:last-child { justify-self: end; text-align: right; }
-.hb-hint { justify-self: center; display: flex; flex-direction: column; align-items: center; gap: 0.55rem; }
+.hb-hint {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 0.55rem;
+  letter-spacing: 0.28em;
+  margin-right: -0.28em;
+  padding-left: 0 !important;
+  margin-inline: auto;
+}
 .hb-hint i {
   width: 2px; height: 34px; border-radius: var(--r-pill);
   background: var(--chrome-3); position: relative; overflow: hidden;
@@ -106,11 +174,13 @@
 
 /* page-hero kicker + CTA rows (shared with inner pages) */
 .hero-kicker { display: flex; align-items: baseline; gap: .8rem; margin-bottom: 1.4rem; }
-.hero-kicker .meta { color: #000000; opacity: 1; }
+.hero-kicker .meta { color: var(--dim); opacity: 1; }
 .hero-cta { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1.8rem; }
 
-.dim { color: #000000; }
-.deep .dim { color: #000000; }
+/* both were literal burgundy, so secondary copy stayed dark in dark mode and
+   went invisible — .deep .dim was burgundy ink on the burgundy ground */
+.dim { color: var(--dim); }
+.deep .dim { color: var(--dim-on-deep); }
 
 .cert-chips { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1.1rem; }
 
@@ -261,7 +331,7 @@
   padding: 4.5rem 0 2.5rem;
   background: var(--white);
   border-radius: var(--r-lg);
-  box-shadow: var(--lift-2), 0 24px 48px -12px rgba(0,0,0,0.06);
+  box-shadow: var(--lift-2), 0 24px 48px -12px rgba(0, 0, 0,0.06);
   border: 1px solid var(--hair);
   position: relative;
   overflow: hidden;
@@ -291,9 +361,13 @@
   }
 
   .hb-foot {
+    position: absolute !important;
+    left: 50% !important;
+    bottom: 1.5rem !important;
+    transform: translateX(-50%) !important;
     display: flex;
     justify-content: center;
-    padding-bottom: 1.2rem;
+    padding-bottom: 0;
   }
 
   .countries-card {
@@ -318,9 +392,59 @@
 }
 
 
-/* ============ All Sections → Pure White + Designer Section Dividers ============ */
-.hp {
-  background-color: #FFFFFF !important;
+.tt {
+  background-color: #1A090D !important;
+  color: #FFFFFF !important;
+}
+
+.hp,
+.hero-brand,
+.hp-container,
+.ribbon,
+.czoom-section,
+#heritage,
+#craft,
+.countries-section-wrap,
+.countries-card,
+.fs-section,
+.bestsellers-section {
+  background-color: var(--white);
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+html.dark .hp,
+html.dark .hero-brand,
+html.dark .hp-container,
+html.dark .ribbon,
+html.dark .tt,
+html.dark .czoom-section,
+html.dark #heritage,
+html.dark #craft,
+html.dark .countries-section-wrap,
+html.dark .countries-card,
+html.dark .fs-section,
+html.dark .bestsellers-section {
+  background-color: #1A090D !important;
+  color: #FFFFFF !important;
+}
+
+/* Signature Display Tagline in Hero.
+   This was cream with a heavy drop shadow, written for the photographic hero
+   plate — but .hb-bg is display:none, so the tagline was white on the white
+   hero ground and the first line of the site could not be read. It takes the
+   ink colour now, which also carries it into dark mode. */
+.hb-tag-title {
+  font-family: var(--font-display, 'Cinzel', serif);
+  font-size: clamp(1.6rem, 3.8vw, 3.4rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.18;
+  text-align: center;
+  color: var(--graphite);
+  -webkit-text-fill-color: var(--graphite);
+  text-wrap: balance;
+  margin-top: clamp(8rem, 18vh, 13rem);
+  padding: 0 1rem;
 }
 
 /* ── Brass-Kissed Section Divider ──
@@ -331,7 +455,7 @@
   width: min(88%, 1000px);
   height: 1px;
   margin: 0 auto;
-  background: var(--section-divider);
+  background: linear-gradient(90deg, transparent 0%, rgba(66, 21, 32, 0.28) 50%, transparent 100%);
   pointer-events: none;
 }
 
@@ -343,50 +467,20 @@
   left: 50%;
   transform: translate(-50%, -50%);
   font-size: 6px;
-  color: rgba(184, 115, 51, 0.32);
+  color: rgba(66, 21, 32, 0.32);
   background: #FFFFFF;
   padding: 0 10px;
   letter-spacing: 0;
   line-height: 1;
 }
 
-/* Section 1: Hero Brand */
-.hero-brand {
-  background-color: #FFFFFF !important;
+html.dark .section-divider {
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.5) 50%, transparent 100%) !important;
 }
 
-/* Section 2: Hero Parallax */
-.hp-container {
-  background-color: #FFFFFF !important;
-  background-image: none !important;
-}
-
-/* Section 3: Wave Ribbon */
-.ribbon {
-  background-color: #FFFFFF !important;
-}
-
-/* Section 4: The Turn */
-.tt {
-  background-color: #FFFFFF !important;
-  background-image: none !important;
-}
-
-/* Section 5: Signature Piece Zoom Sampler */
-.czoom-section {
-  background-color: #FFFFFF !important;
-}
-
-/* Section 6: Big Video Card */
-#heritage {
-  background-color: #FFFFFF !important;
-  background-image: none !important;
-  color: #1c1c1a !important;
-}
-
-/* Section 7: Heritage Narrative & Process */
-#craft {
-  background-color: #FFFFFF !important;
+html.dark .section-divider::before {
+  background: #1A090D !important;
+  color: #FFFFFF !important;
 }
 
 /* Section 8: Countries Served Wrapper */
@@ -398,8 +492,6 @@
   min-height: clamp(320px, 45vh, 480px);
   padding-block: clamp(3.5rem, 7vh, 5.5rem);
   margin-block: 0;
-  background-color: #FFFFFF !important;
-  background-image: none !important;
 }
 
 .countries-section-wrap .wrap {
@@ -415,12 +507,25 @@
   margin-inline: auto;
   width: 100%;
   padding: 4.5rem 0 2.5rem;
-  background-color: #FFFFFF !important;
   border-radius: clamp(16px, 2vw, 24px) !important;
-  border: 1px solid rgba(28, 28, 26, 0.10) !important;
-  box-shadow: 0 10px 30px rgba(28, 28, 26, 0.03) !important;
+  border: 1px solid rgba(66, 21, 32, 0.12) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03) !important;
   position: relative;
   overflow: hidden;
+  background-color: #FFFFFF;
+  transition: background-color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+html.dark .countries-card {
+  background-color: #2C0C14 !important;
+  border: 1px solid rgba(255, 255, 255, 0.4) !important;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4) !important;
+}
+
+html.dark .countries-card .meta,
+html.dark .countries-card span {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
 }
 
 /* Section 9: Blogs and Socials */
@@ -431,16 +536,36 @@
 }
 
 /* Section 10: Reviews */
-#reviews {
-  background-color: #FFFFFF !important;
-  background-image: none !important;
-  margin-top: 0;
-  padding-top: clamp(2.5rem, 5vh, 4rem);
+#reviews,
+#instagram,
+#craft,
+.fs-section,
+.bestsellers-section,
+.craft-about-section {
+  background-color: var(--white);
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+html.dark #reviews,
+html.dark #instagram,
+html.dark #craft,
+html.dark .fs-section,
+html.dark .bestsellers-section,
+html.dark .craft-about-section {
+  background-color: #1A090D !important;
+  color: #FFFFFF !important;
 }
 
 .white-review-card {
-  background-color: #FFFFFF !important;
-  border: 1px solid rgba(28, 28, 26, 0.10) !important;
+  background-color: #FFFFFF;
+  border: 1px solid rgba(66, 21, 32, 0.10);
+  transition: background-color 0.4s ease, border-color 0.4s ease;
+}
+
+html.dark .white-review-card {
+  background-color: #2C0C14 !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+  color: #FFFFFF !important;
 }
 
 /* ============ Craft & About Section ============ */
@@ -477,20 +602,20 @@
   font-size: clamp(1.8rem, 3.5vw, 2.8rem);
   font-weight: 600;
   line-height: 1.15;
-  color: var(--graphite, #1c1c1a);
+  color: var(--graphite, #421520);
   margin-bottom: 1.25rem;
 }
 
 .craft-highlight {
   font-style: italic;
-  color: var(--brass-dk, #a0522d);
+  color: var(--brass-dk, #2C0C14);
 }
 
 .craft-body {
   font-family: var(--font-body);
   font-size: clamp(0.95rem, 1.15vw, 1.1rem);
   line-height: 1.65;
-  color: rgba(28, 28, 26, 0.82);
+  color: rgba(66, 21, 32, 0.82);
   margin-bottom: 2rem;
 }
 
@@ -507,36 +632,36 @@
   grid-template-columns: auto 1fr;
   gap: clamp(1.2rem, 2vw, 1.8rem);
   padding-block: 1.4rem;
-  border-top: 1px solid rgba(28, 28, 26, 0.12);
+  border-top: 1px solid rgba(66, 21, 32, 0.12);
   transition: border-color 0.35s ease;
 }
 
 .craft-process-item:last-child {
-  border-bottom: 1px solid rgba(28, 28, 26, 0.12);
+  border-bottom: 1px solid rgba(66, 21, 32, 0.12);
 }
 
 .craft-process-item:hover {
-  border-color: rgba(197, 151, 63, 0.5);
+  border-color: rgba(66, 21, 32, 0.5);
 }
 
 .craft-process-num {
   font-family: var(--font-display);
   font-size: clamp(1.6rem, 2.5vw, 2.2rem);
   font-weight: 600;
-  color: rgba(160, 82, 45, 0.45);
+  color: rgba(44, 12, 20, 0.45);
   line-height: 1;
   transition: color 0.35s ease;
 }
 
 .craft-process-item:hover .craft-process-num {
-  color: var(--brass-dk, #a0522d);
+  color: var(--brass-dk, #2C0C14);
 }
 
 .craft-process-title {
   font-family: var(--font-heading);
   font-size: clamp(1.1rem, 1.4vw, 1.35rem);
   font-weight: 600;
-  color: var(--graphite, #1c1c1a);
+  color: var(--graphite, #421520);
   margin: 0 0 0.35rem 0;
 }
 
@@ -544,7 +669,7 @@
   font-family: var(--font-body);
   font-size: clamp(0.88rem, 1.05vw, 0.98rem);
   line-height: 1.55;
-  color: rgba(28, 28, 26, 0.72);
+  color: rgba(66, 21, 32, 0.72);
   margin: 0;
 }
 
@@ -556,26 +681,28 @@
 }
 
 .about-stat-card {
-  background: #ffffff;
+  background: #FFFFFF;
   border-radius: clamp(14px, 1.6vw, 22px);
-  border: 1px solid rgba(28, 28, 26, 0.1);
+  border: 1px solid rgba(66, 21, 32, 0.1);
   padding: clamp(1.8rem, 3vw, 2.5rem) clamp(1.2rem, 2vw, 1.8rem);
   text-align: center;
-  box-shadow: 0 10px 30px rgba(28, 28, 26, 0.04);
-  transition: transform 0.35s var(--ease-fluid), box-shadow 0.35s ease, border-color 0.35s ease;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+  overflow: hidden;
+  isolation: isolate;
+  transition: transform 0.35s var(--ease-fluid), box-shadow 0.35s ease, border-color 0.35s ease, background-color 0.35s ease;
 }
 
 .about-stat-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 16px 40px rgba(28, 28, 26, 0.09);
-  border-color: rgba(197, 151, 63, 0.4);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.09);
+  border-color: rgba(66, 21, 32, 0.4);
 }
 
 .about-stat-number {
   font-family: var(--font-display);
   font-size: clamp(2.8rem, 5vw, 4.2rem);
   font-weight: 700;
-  color: var(--brass-dk, #a0522d);
+  color: var(--brass-dk, #2C0C14);
   line-height: 1;
   margin-bottom: 0.75rem;
   letter-spacing: -0.02em;
@@ -585,7 +712,7 @@
   font-family: var(--font-heading);
   font-size: clamp(0.85rem, 1.1vw, 1rem);
   font-weight: 600;
-  color: var(--graphite, #1c1c1a);
+  color: var(--graphite, #421520);
   letter-spacing: 0.02em;
 }
 
@@ -594,8 +721,40 @@
   font-size: 0.72rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: rgba(28, 28, 26, 0.55);
+  color: rgba(66, 21, 32, 0.55);
   margin-top: 0.35rem;
+}
+
+/* ── Dark mode typography overrides for Craft & About ── */
+html.dark .craft-headline,
+html.dark .craft-highlight,
+html.dark .craft-body,
+html.dark .craft-process-title,
+html.dark .craft-process-desc,
+html.dark .about-stat-number,
+html.dark .about-stat-label,
+html.dark .about-stat-sub,
+html.dark .sec-head .meta,
+html.dark .meta {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+html.dark .craft-process-num {
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+
+html.dark .craft-process-item {
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+html.dark .craft-process-item:hover .craft-process-num {
+  color: #FFFFFF !important;
+}
+
+html.dark .about-stat-card {
+  background-color: #2C0C14 !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
 }
 
 /* ============ Reviews DragRail Section ============ */
@@ -614,10 +773,10 @@
   position: relative;
   width: clamp(280px, 28vw, 360px);
   aspect-ratio: 16 / 10;
-  background: #ffffff;
+  background: #FFFFFF;
   border-radius: clamp(14px, 1.6vw, 22px);
-  border: 1px solid rgba(28, 28, 26, 0.12);
-  box-shadow: 0 10px 30px rgba(28, 28, 26, 0.08);
+  border: 1px solid rgba(66, 21, 32, 0.12);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
   padding: clamp(1.4rem, 2vw, 1.8rem);
   display: flex;
   flex-direction: column;
@@ -628,8 +787,8 @@
 
 .white-review-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 16px 40px rgba(28, 28, 26, 0.12);
-  border-color: rgba(197, 151, 63, 0.4);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
+  border-color: rgba(66, 21, 32, 0.4);
 }
 
 .white-review-inner {
@@ -643,7 +802,7 @@
   font-family: var(--font-body);
   font-size: clamp(0.9rem, 1.1vw, 1.05rem);
   line-height: 1.5;
-  color: #1c1c1a;
+  color: #421520;
   margin: 0;
   font-weight: 450;
 }
@@ -652,18 +811,34 @@
   font-family: var(--font-heading);
   font-size: 0.95rem;
   font-weight: 700;
-  color: var(--brass-dk, #a0522d);
+  color: var(--brass-dk, #2C0C14);
   letter-spacing: 0.02em;
 }
 
 /* ============ Craft Section — Big Screen-Fitted Card Container ============ */
+
+/* Opaque spacer that sits between the sticky Sampler and the craft card,
+   preventing the Best Sellers grid from bleeding through the gap. */
+.craft-card-spacer {
+  background-color: #FFFFFF;
+}
+html.dark .craft-card-spacer {
+  background-color: #1A090D !important;
+}
+
 .craft-card-wrapper {
+  /* position + isolation so this section stacks cleanly above the pinned
+     Sampler that precedes it — with an opaque ground the two can never read
+     as overlapping at the scroll hand-off, whatever the pin does mid-motion */
+  position: relative;
+  z-index: 1;
+  isolation: isolate;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-block: clamp(4rem, 8vh, 7rem);
-  margin-top: clamp(48rem, 85vh, 68rem);
-  background-color: #FFFFFF !important;
+  padding-block: clamp(2rem, 4vh, 4rem);
+  margin-top: 0 !important;
+  background-color: var(--white) !important;
   background-image: none !important;
 }
 
@@ -682,11 +857,10 @@
   aspect-ratio: 16 / 9;
   border-radius: clamp(20px, 2.5vw, 32px);
   overflow: hidden;
-  background: #121210;
-  box-shadow:
-    0 24px 70px rgba(0, 0, 0, 0.12),
+  background: #2C0C14;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.12),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(28, 28, 26, 0.12);
+  border: 1px solid rgba(66, 21, 32, 0.12);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -714,7 +888,7 @@
 .craft-card__overlay {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at center, rgba(0, 0, 0, 0.15) 0%, rgba(0, 0, 0, 0.45) 100%);
+  background: none 0%, rgba(66, 21, 32, 0.45) 100%);
   pointer-events: none;
   z-index: 2;
 }
@@ -738,11 +912,10 @@
   min-height: 480px;
   border-radius: clamp(20px, 2.5vw, 32px);
   overflow: hidden;
-  background: #121210;
-  box-shadow:
-    0 30px 90px rgba(0, 0, 0, 0.22),
+  background: #2C0C14;
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.22),
     inset 0 1px 0 rgba(255, 255, 255, 0.25);
-  border: 1px solid rgba(197, 151, 63, 0.3);
+  border: 1px solid rgba(66, 21, 32, 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -754,7 +927,7 @@
 .heritage-video-card:hover {
   /* No scale, border, or shadow change on hover */
   transform: none !important;
-  border-color: rgba(197, 151, 63, 0.3) !important;
+  border-color: rgba(66, 21, 32, 0.3) !important;
   box-shadow: 0 30px 90px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
 }
 
@@ -778,7 +951,7 @@
   position: absolute;
   inset: 0;
   z-index: 2;
-  background: radial-gradient(ellipse 85% 85% at 50% 50%, rgba(18, 18, 16, 0.15) 0%, rgba(18, 18, 16, 0.55) 100%);
+  background: radial-gradient(ellipse 85% 85% at 50% 50%, rgba(44, 12, 20, 0.15) 0%, rgba(44, 12, 20, 0.55) 100%);
   pointer-events: none;
 }
 
@@ -802,7 +975,7 @@
   max-width: 980px;
   height: auto;
   overflow: visible;
-  filter: drop-shadow(0 4px 25px rgba(0, 0, 0, 0.6)) drop-shadow(0 0 30px rgba(255, 255, 255, 0.18));
+  filter: none) drop-shadow(0 0 30px rgba(255, 255, 255, 0.18));
   pointer-events: none;
 }
 

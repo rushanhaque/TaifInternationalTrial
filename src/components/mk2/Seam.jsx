@@ -201,27 +201,21 @@ export default function Seam() {
         focusable="false"
       >
         <defs>
-          {/* Literal hex, not tokens: var() is not substituted inside SVG
-              presentation attributes. These are --brass-lt / --brass /
-              --brass-dk by value. */}
           <linearGradient id={gradId} gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="100">
-            <stop offset="0" stopColor="#daa520" />
-            <stop offset="0.26" stopColor="#c5973f" />
-            <stop offset="0.5" stopColor="#a0522d" />
-            <stop offset="0.74" stopColor="#c5973f" />
-            <stop offset="1" stopColor="#daa520" />
+            <stop offset="0" stopColor="#8C3247" />
+            <stop offset="0.25" stopColor="#5C1F2E" />
+            <stop offset="0.5" stopColor="#A83B55" />
+            <stop offset="0.75" stopColor="#5C1F2E" />
+            <stop offset="1" stopColor="#8C3247" />
           </linearGradient>
           <radialGradient id={bloomId}>
-            <stop offset="0" stopColor="#daa520" stopOpacity="0.34" />
-            <stop offset="0.42" stopColor="#c5973f" stopOpacity="0.13" />
-            <stop offset="1" stopColor="#c5973f" stopOpacity="0" />
+            <stop offset="0" stopColor="#A83B55" stopOpacity="0.95" />
+            <stop offset="0.45" stopColor="#8C3247" stopOpacity="0.5" />
+            <stop offset="1" stopColor="#5C1F2E" stopOpacity="0" />
           </radialGradient>
         </defs>
 
-        {/* One geometry, three passes. The source path is unclassed so it
-            inherits its stroke from the halo group; each <use> clone inherits
-            from its own group instead. That keeps the `d` write down to a
-            single attribute per frame. */}
+        {/* One geometry, three passes. */}
         <g className="seam-halo">
           <path
             ref={pathRef}
@@ -238,12 +232,10 @@ export default function Seam() {
           <use href={`#seam-src-${uid}`} />
         </g>
 
-        {/* The molten bead. Its group is counter-scaled every frame so the
-            radii below are plain screen pixels on any viewport. */}
+        {/* The scroll indicator dot */}
         <g className="seam-bead" ref={beadRef} transform={BEAD_REST}>
-          <circle className="seam-bloom" r="54" fill={`url(#${bloomId})`} />
-          <circle className="seam-ring" r="9" />
-          <circle className="seam-hot" r="3.4" />
+          <circle className="seam-ring" r="8" />
+          <circle className="seam-hot" r="4.5" />
         </g>
       </svg>
     </div>

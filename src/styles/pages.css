@@ -146,7 +146,7 @@
   width: 40px; height: 40px; border-radius: 50%;
   background: var(--white); color: var(--graphite);
   display: grid; place-items: center; font-size: 1rem;
-  box-shadow: 0 6px 18px -6px rgba(28, 28, 26, 0.32);
+  box-shadow: 0 6px 18px -6px rgba(0, 0, 0, 0.32);
 }
 .cmp input[type="range"] {
   position: absolute; inset: 0; width: 100%; height: 100%;
@@ -188,12 +188,12 @@
 .contact-form button {
   align-self: flex-start;
   margin-top: .4rem;
-  color: #ffffff !important;
+  color: #FFFFFF !important;
   background-color: #1e1710 !important;
   border: 1px solid #b0894f !important;
 }
 .contact-form button * {
-  color: #ffffff !important;
+  color: #FFFFFF !important;
 }
 .sent-card {
   border: 1px solid var(--hair); border-radius: var(--r-lg);
@@ -237,8 +237,8 @@
 }
 .faq-bead {
   flex-shrink: 0; width: 11px; height: 11px; border-radius: 50%;
-  background: linear-gradient(140deg, #daa520, #b87333);
-  box-shadow: inset 0 0 0 1px var(--hair), 0 1px 4px rgba(28, 28, 26,.22);
+  background: linear-gradient(140deg, #5A1D2C, #421520);
+  box-shadow: inset 0 0 0 1px var(--hair), 0 1px 4px rgba(0, 0, 0,.22);
   will-change: transform;
 }
 /* The disclosure opens on grid-template-rows rather than height: the row
@@ -303,9 +303,12 @@
 .cd { position: relative; }
 .cd-stage {
   position: relative; height: 100vh; overflow: hidden;
-  background-color: #FFFFFF !important;
+  /* was #FFFFFF / #421520 forced, so the pinned dolly stayed a white stage
+     with burgundy end-copy in dark mode — the "Browse all collections" CTA
+     and its kicker sat invisibly on it */
+  background-color: var(--chrome) !important;
   background-image: none !important;
-  color: #1c1c1a !important;
+  color: var(--graphite) !important;
   border-block: none;
 }
 .cd-layer {
@@ -337,68 +340,83 @@
 @media (hover: none) { .cd-open { opacity: 1; transform: none; } }
 .cd-facade .slab { width: 100%; }
 
-.cd-tag {
+.cd-facade,
+.cd-facade:hover,
+.cd-fallback-cell,
+.cd-fallback-cell:hover {
+  transform: none !important;
+  transition: none !important;
+}
+
+.cd-tag,
+.cd-tag.a-brass,
+.cd-tag.a-copper,
+.cd-tag.a-antique {
   position: absolute; top: -14px; left: -14px; z-index: 3;
   display: inline-flex; align-items: center; justify-content: center;
   width: 46px; height: 46px; border-radius: 50%;
-  background: var(--white);
-  font-family: var(--font-heading); font-weight: 500; font-size: .95rem;
-  color: var(--graphite);
-  box-shadow: 0 8px 24px -8px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(184, 115, 51, 0.3);
+  background: linear-gradient(135deg, #5A1D2C, #421520);
+  font-family: var(--font-heading); font-weight: 600; font-size: .95rem;
+  color: #FFFFFF !important;
+  box-shadow: 0 8px 24px -8px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(0, 0, 0, 0.3);
 }
-.cd-tag.a-brass   { background: linear-gradient(135deg, #daa520, #b87333); color: #1c1c1a; }
-.cd-tag.a-copper  { background: linear-gradient(135deg, #cd853f, #a0522d); color: #1c1c1a; }
-.cd-tag.a-antique { background: linear-gradient(135deg, #c5973f, #6b4a2e); color: #fcfbf8; }
 
 .cd-caption {
   display: flex; flex-direction: column; gap: .5rem;
-  color: #1c1c1a;
+  color: #421520;
 }
 .cd-stub {
   font-family: var(--font-accent); font-weight: 500; font-size: .75rem;
   letter-spacing: .22em; text-transform: uppercase;
-  color: var(--brass-dk, #a0522d);
+  color: var(--brass-dk, #2C0C14);
 }
-.cd-stub-name { color: #1c1c1a; font-weight: 500; letter-spacing: .12em; }
+.cd-stub-name { color: #421520; font-weight: 500; letter-spacing: .12em; }
 .cd-pitch {
   font-family: var(--font-body); font-weight: 350;
-  color: rgba(28, 28, 26, 0.78); font-size: .95rem; max-width: 34ch; line-height: 1.55;
+  color: rgba(66, 21, 32, 0.78); font-size: .95rem; max-width: 34ch; line-height: 1.55;
 }
 
 .cd-haze {
   position: absolute; inset: -5%;
   background:
     radial-gradient(80% 70% at 50% 55%, transparent 30%, rgba(255, 255, 255, 0.86) 100%),
-    radial-gradient(60% 50% at 30% 40%, rgba(197, 151, 63, 0.08), transparent 60%);
+    none, transparent 60%);
   pointer-events: none;
   will-change: opacity;
 }
 
+/* the end-wall copy is theme-aware — the dolly ground follows --chrome, which
+   inverts to burgundy in dark mode, so burgundy-on-burgundy hid the whole
+   closing panel */
 .cd-end {
   position: absolute; inset: 0;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   gap: 1.2rem; text-align: center; padding: 0 var(--gutter);
-  color: #1c1c1a;
+  color: var(--graphite);
 }
-.cd-end .d1 { color: #1c1c1a; }
-.cd-end .lede { color: rgba(28, 28, 26, 0.8); }
-.cd-end-kicker { color: var(--brass-dk, #a0522d); letter-spacing: .22em; }
+.cd-end .d1 { color: var(--graphite); }
+.cd-end .lede { color: var(--graphite-2); }
+.cd-end-kicker { color: var(--brass-dk, #2C0C14); letter-spacing: .22em; }
+html.dark .cd-end-kicker { color: var(--dim-on-deep); }
 .cd-end-ctas { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1rem; justify-content: center; }
 .cd-end-ctas .ghost,
 .cd-end-ctas .ghost *,
 .cd-end-ctas a.ghost,
 .cd-end-ctas a.ghost * {
-  color: #1c1c1a !important;
-  border: 1px solid rgba(28, 28, 26, 0.3) !important;
+  color: var(--graphite) !important;
+  border-color: var(--hair-strong) !important;
   background: transparent !important;
+}
+.cd-end-ctas .ghost {
+  border: 1px solid var(--hair-strong) !important;
 }
 .cd-end-ctas .ghost:hover,
 .cd-end-ctas .ghost:hover *,
 .cd-end-ctas a.ghost:hover,
 .cd-end-ctas a.ghost:hover * {
-  color: #1c1c1a !important;
-  background: rgba(28, 28, 26, 0.08) !important;
-  border-color: rgba(28, 28, 26, 0.5) !important;
+  color: var(--graphite) !important;
+  background: color-mix(in srgb, var(--graphite) 8%, transparent) !important;
+  border-color: var(--graphite) !important;
 }
 
 /* mobile / reduced-motion fallback — stacked cards */

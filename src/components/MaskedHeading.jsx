@@ -10,6 +10,7 @@ export default function MaskedHeading({
   mediaType = 'video',
   src = 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
   poster = '',
+  syncVideoRef,
   fillScale = 1.25,
   parallax = 26,
   drift = 18,
@@ -171,6 +172,45 @@ export default function MaskedHeading({
   useEffect(() => {
     sync();
   }, [sync, words, Tag, align, weight, tracking, lineHeight, textScale]);
+
+  /* Synchronize video playback with background video element if syncVideoRef is provided */
+  useEffect(() => {
+    if (!syncVideoRef?.current || !videoRef.current || mediaType !== 'video') return;
+    const targetVideo = syncVideoRef.current;
+    const maskedVideo = videoRef.current;
+
+    const syncTime = () => {
+      if (Math.abs(maskedVideo.currentTime - targetVideo.currentTime) > 0.04) {
+        try {
+          maskedVideo.currentTime = targetVideo.currentTime;
+        } catch (_) {}
+      }
+    };
+
+    const onPlay = () => {
+      maskedVideo.play().catch(() => {});
+      syncTime();
+    };
+
+    const onPause = () => {
+      maskedVideo.pause();
+    };
+
+    targetVideo.addEventListener('timeupdate', syncTime);
+    targetVideo.addEventListener('play', onPlay);
+    targetVideo.addEventListener('pause', onPause);
+
+    syncTime();
+    if (!targetVideo.paused) {
+      maskedVideo.play().catch(() => {});
+    }
+
+    return () => {
+      targetVideo.removeEventListener('timeupdate', syncTime);
+      targetVideo.removeEventListener('play', onPlay);
+      targetVideo.removeEventListener('pause', onPause);
+    };
+  }, [syncVideoRef, mediaType]);
 
   return (
     <Tag

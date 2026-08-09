@@ -7,39 +7,18 @@ import Button from '../components/Button'
 /* Inflating disclosure rows — opening grows the pill into a rounded panel,
    the answer dilates inside, and a droplet bead slides across (H4).
    Real buttons, aria-expanded/aria-controls (§10). */
+/* Clean, static disclosure rows — opening expands the answer panel cleanly.
+   Real buttons, aria-expanded/aria-controls. */
 function Row({ q, a, id }) {
   const [open, setOpen] = useState(false)
-  const bead = useRef(null)
-  const row = useRef(null)
-
-  /* The panel opens on grid-template-rows 0fr → 1fr, driven purely by the
-     `open` class. This used to tween `height` to 'auto' in GSAP, which meant
-     every frame of every open reflowed the whole column beneath it — the one
-     layout-thrashing animation left in the codebase. The grid technique
-     needs no measurement, no JS per frame, and no fixed height, so it also
-     stays correct when the answer rewraps at a different width.
-
-     FAIL-OPEN: the row is readable with no JS — the button is still a real
-     disclosure control and the panel is in the DOM. */
-  function toggle() {
-    const next = !open
-    setOpen(next)
-    if (reduced() || !bead.current || !row.current) return
-    /* the bead is the only thing still tweened: pure transform, no layout */
-    if (next) {
-      gsap.fromTo(bead.current, { x: 0 }, {
-        x: () => row.current.offsetWidth - 58, duration: 0.65, ease: 'fluid',
-      })
-    } else {
-      gsap.to(bead.current, { x: 0, duration: 0.5, ease: 'fluid' })
-    }
-  }
 
   return (
-    <div className={`faq-row ${open ? 'open' : ''}`} ref={row}>
-      <button className="faq-q" aria-expanded={open} aria-controls={id} onClick={toggle}>
+    <div className={`faq-row ${open ? 'open' : ''}`}>
+      <button className="faq-q" aria-expanded={open} aria-controls={id} onClick={() => setOpen(!open)}>
         <span>{q}</span>
-        <span className="faq-bead" ref={bead} aria-hidden="true" />
+        <span className="faq-toggle-icon" aria-hidden="true" style={{ fontSize: '1.25rem', fontWeight: 500, color: 'var(--brass)', transition: 'color 0.25s ease' }}>
+          {open ? '−' : '+'}
+        </span>
       </button>
       <div className="faq-a" id={id} role="region">
         <div className="faq-a-inner"><p className="body">{a}</p></div>

@@ -115,7 +115,9 @@ export function Router({ routes, notFound, after = null }) {
       description: real ? resolve(route.desc, params) : resolve(notFound.desc, params),
       path,
       canonical: real && route.canonical ? route.canonical(params) : undefined,
-      index: real,
+      /* `noindex` keeps a route reachable but out of the index — /admin is a
+         real working page, not a soft-404, so `ok` is the wrong lever. */
+      index: real && !route.noindex,
       jsonLd: real && route.jsonLd ? route.jsonLd(params) : null,
     })
   }, [path]) // eslint-disable-line react-hooks/exhaustive-deps
@@ -147,15 +149,69 @@ export function Router({ routes, notFound, after = null }) {
     busy.current = true
     try { getLenis()?.stop() } catch (_) {}
 
-    // Navbar links explicitly pass transition: 'strips'.
-    // ALL product cards (/catalogue/:slug), collection cards (/collections/:family), and in-page links run playWipe (the white diagonal wipe).
-    const mode = opts.transition === 'strips' ? 'strips' : 'wipe'
+    const mode = opts.transition === 'strips' ? 'strips' : 'smooth'
 
     if (mode === 'strips') {
       playStrips(to)
     } else {
-      playWipe(to)
+      playSmoothFade(to)
     }
+  }
+
+  /* ── MINIMAL DISSOLVE — opening & closing a collection or product ─────────
+     The premium version of "just go there": the current page recedes a hair
+     and dissolves, the new one settles in from a whisper larger. Pure opacity
+     and a sub-percent scale — no veils, wipes or slides — so it reads as a
+     soft focus-pull rather than a panel swap. Transform-origin is the top so
+     the motion is felt at the masthead, where the eye already is. */
+  function playSmoothFade(to) {
+    const mainEl = document.getElementById('main')
+    if (!mainEl) {
+      settle(to)
+      busy.current = false
+      try { getLenis()?.start() } catch (_) {}
+      return
+    }
+
+    const safety = setTimeout(teardown, 1400)
+
+    function teardown() {
+      clearTimeout(safety)
+      if (mainEl) gsap.set(mainEl, { clearProps: 'all' })
+      busy.current = false
+      try { getLenis()?.start() } catch (_) {}
+      document.getElementById('main')?.focus({ preventScroll: true })
+      if (pathRef.current !== to) { settle(to); return }
+      if (window.location.pathname !== to) go(window.location.pathname, false)
+    }
+
+    gsap.set(mainEl, { transformOrigin: '50% 0%', willChange: 'opacity, transform' })
+
+    // Phase 1 — recede & dissolve (0.30s)
+    gsap.to(mainEl, {
+      opacity: 0,
+      scale: 0.988,
+      y: -6,
+      duration: 0.3,
+      ease: 'power2.in',
+      onComplete() {
+        settle(to)
+        try { ScrollTrigger.refresh() } catch (_) {}
+
+        // Phase 2 — settle in from a whisper larger (0.5s, long premium tail)
+        gsap.set(mainEl, { opacity: 0, scale: 1.012, y: 8, transformOrigin: '50% 0%' })
+        requestAnimationFrame(() => {
+          gsap.to(mainEl, {
+            opacity: 1,
+            scale: 1,
+            y: 0,
+            duration: 0.5,
+            ease: 'expo.out',
+            onComplete: teardown,
+          })
+        })
+      },
+    })
   }
 
   /* ── STRIPS CURTAIN ─────────────────────────────────────────────────── */

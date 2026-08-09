@@ -16,9 +16,37 @@
 
 .czoom-section {
   position: relative;
+  z-index: 0;
   width: 100%;
-  height: 220vh;
-  background: #ffffff;
+  height: 350vh;
+  background-color: var(--white);
+  color: var(--graphite);
+  isolation: isolate;
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+.czoom-bestsellers-title {
+  color: #421520 !important;
+  -webkit-text-fill-color: #421520 !important;
+  text-shadow: none !important;
+}
+
+.sig-title,
+.czoom-card-name,
+.czoom-card-sub {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.7) !important;
+}
+
+html.dark .czoom-section {
+  background-color: #1A090D !important;
+  color: #FFFFFF !important;
+}
+
+html.dark .czoom-bestsellers-title {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
 }
 
 .czoom-sticky {
@@ -26,6 +54,7 @@
   top: 0;
   height: 100vh;
   width: 100%;
+  overflow: visible;
   display: flex;
   align-items: flex-start;
   justify-content: center;
@@ -34,7 +63,7 @@
 /* Floating Top 'Best Sellers' Section Heading */
 .czoom-bestsellers-header {
   position: absolute;
-  top: clamp(8rem, 15vh, 12rem);
+  top: clamp(2.5rem, 5vh, 4.5rem);
   left: 50%;
   transform: translateX(-50%);
   z-index: 10;
@@ -48,7 +77,7 @@
   font-family: var(--font-display);
   font-size: clamp(2rem, 4.5vw, 3.8rem);
   font-weight: 600;
-  color: var(--graphite, #1c1c1a);
+  color: var(--graphite, #421520);
   letter-spacing: -0.02em;
   margin: 0;
   line-height: 1.08;
@@ -60,7 +89,7 @@
   position: relative;
   width: min(92vw, 1260px);
   height: auto;
-  margin-top: 5rem;
+  margin-top: clamp(10rem, 18vh, 14rem);
   margin-bottom: 5rem;
   display: flex;
   flex-direction: column;
@@ -84,8 +113,8 @@
   align-items: center;
   gap: 0.75rem;
   padding: 1.1rem 2.5rem;
-  background: var(--graphite, #1c1c1a);
-  color: var(--chrome, #ffffff);
+  background: #421520 !important;
+  color: #FFFFFF !important;
   font-family: var(--font-heading, 'Montserrat', sans-serif);
   font-size: clamp(0.85rem, 1.1vw, 1rem);
   font-weight: 600;
@@ -94,16 +123,27 @@
   border-radius: 9999px;
   text-decoration: none;
   box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+.czoom-schedule-btn span,
+.czoom-schedule-btn svg {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
 .czoom-schedule-btn:hover {
-  background: var(--brass, #c5973f);
-  color: #121210;
-  transform: translateY(-3px) scale(1.03);
-  box-shadow: 0 18px 45px rgba(197, 151, 63, 0.4);
+  background: #5C1F2E !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.4);
   border-color: rgba(255, 255, 255, 0.4);
+}
+
+.czoom-schedule-btn:hover span,
+.czoom-schedule-btn:hover svg {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
 }
 
 .czoom-schedule-btn svg {
@@ -134,7 +174,7 @@
   overflow: hidden;
   box-shadow: 0 30px 90px rgba(0, 0, 0, 0.6);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  background: #121210;
+  background: #121212;
   isolation: isolate;
   transform-origin: center center;
   will-change: transform;
@@ -147,7 +187,7 @@
   aspect-ratio: 16 / 10;
   border-radius: clamp(12px, 1.4vw, 18px);
   overflow: hidden;
-  background: #121210;
+  background: #121212;
   border: 1px solid rgba(255, 255, 255, 0.14);
   box-shadow: 0 15px 45px rgba(0, 0, 0, 0.4);
   transform-origin: center center;
@@ -195,17 +235,17 @@
   text-transform: uppercase;
   letter-spacing: 0.12em;
   color: rgba(227, 200, 143, 0.95);
-  text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+  text-shadow: none;
 }
 
 .czoom-card-name {
   font-family: var(--font-heading, 'Montserrat', sans-serif);
   font-size: clamp(0.95rem, 1.35vw, 1.25rem);
   font-weight: 600;
-  color: #ffffff;
+  color: #FFFFFF;
   margin: 0;
   line-height: 1.2;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.85);
+  text-shadow: none;
 }
 
 .sig-card-bg-img {
@@ -231,8 +271,7 @@
   right: 0;
   bottom: 0;
   z-index: 2;
-  background: 
-    linear-gradient(to bottom, rgba(0, 0, 0, 0.65) 0%, rgba(0, 0, 0, 0.05) 35%, rgba(0, 0, 0, 0.2) 60%, rgba(0, 0, 0, 0.82) 100%);
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.05) 35%, rgba(0, 0, 0, 0.2) 60%, rgba(0, 0, 0, 0.75) 100%);
   pointer-events: none;
 }
 
@@ -251,10 +290,10 @@
   font-family: var(--font-display, 'Cinzel', serif);
   font-size: clamp(1.2rem, 2vw, 1.8rem);
   font-weight: 700;
-  color: #ffffff;
+  color: #FFFFFF;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.9);
+  text-shadow: none;
   margin: 0;
 }
 
@@ -443,25 +482,9 @@
   pointer-events: none;
 }
 
-.smp-glow {
-  position: absolute;
-  left: 50%;
-  bottom: -6%;
-  width: 84%;
-  height: 17%;
-  transform: translateX(-50%);
-  border-radius: 50%;
-  filter: blur(20px);
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.66s var(--ease-fluid), visibility 0s linear 0.66s;
-}
+.smp-glow { display: none !important; }
 
-.smp-glow.is-on {
-  opacity: 1;
-  visibility: visible;
-  transition: opacity 0.66s var(--ease-fluid), visibility 0s;
-}
+.smp-glow { display: none !important; }
 
 .g-hammered  { background: radial-gradient(closest-side, rgba(160, 118, 52, 0.60), rgba(160, 118, 52, 0) 100%); }
 .g-antique   { background: radial-gradient(closest-side, rgba(74, 58, 30, 0.55), rgba(74, 58, 30, 0) 100%); }
@@ -515,7 +538,7 @@
     /* contact shade where the foot meets the table */
     linear-gradient(0deg, rgba(22, 14, 6, 0.52) 0%, rgba(22, 14, 6, 0) 17%),
     /* barrel curvature */
-    radial-gradient(ellipse 94% 60% at 33% 32%, rgba(255, 250, 238, 0.20), rgba(0, 0, 0, 0) 64%);
+    radial-gradient(ellipse 94% 60% at 33% 32%, rgba(255, 250, 238, 0.20), rgba(66, 21, 32, 0) 64%);
 }
 
 /* the mouth — a dark ellipse with a lit far wall. Sells "vessel" more than
@@ -533,8 +556,7 @@
       rgba(16, 10, 4, 0.94) 0%,
       rgba(30, 20, 10, 0.78) 46%,
       rgba(128, 94, 50, 0.44) 100%);
-  box-shadow:
-    inset 0 2px 4px rgba(0, 0, 0, 0.65),
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.65),
     0 1px 0 rgba(255, 246, 228, 0.30);
 }
 
@@ -572,9 +594,8 @@
   border-radius: var(--r-sm);
   background: var(--white);
   transform: rotate(-3.5deg);
-  box-shadow:
-    0 0 0 1px var(--hair),
-    0 16px 30px -18px rgba(28, 28, 26, 0.6);
+  box-shadow: 0 0 0 1px var(--hair),
+    0 16px 30px -18px rgba(0, 0, 0, 0.6);
   pointer-events: none;
 }
 
@@ -584,7 +605,7 @@
   aspect-ratio: 1;
   border-radius: 5px;
   overflow: hidden;
-  box-shadow: inset 0 0 0 1px rgba(28, 28, 26, 0.16);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.16);
   --tex: 22px;
 }
 
@@ -618,7 +639,7 @@
     radial-gradient(circle at 30% 26%, rgba(72, 44, 12, 0) 33%, rgba(72, 44, 12, 0.36) 45%, rgba(72, 44, 12, 0) 58%),
     radial-gradient(circle at 76% 70%, rgba(255, 248, 228, 0.48) 0 5%, rgba(255, 248, 228, 0) 27%),
     radial-gradient(circle at 76% 70%, rgba(72, 44, 12, 0) 30%, rgba(72, 44, 12, 0.28) 42%, rgba(72, 44, 12, 0) 55%),
-    linear-gradient(148deg, #f5e2b6 0%, #dcb872 21%, #c5973f 47%, #d2ab68 67%, #a0522d 100%);
+    linear-gradient(148deg, #f5e2b6 0%, #dcb872 21%, #421520 47%, #d2ab68 67%, #2C0C14 100%);
   background-size:
     var(--tex) var(--tex),
     var(--tex) var(--tex),
@@ -657,7 +678,7 @@
       rgba(255, 232, 206, 0) 16%,
       rgba(255, 232, 206, 0.34) 40%,
       rgba(255, 232, 206, 0) 64%),
-    linear-gradient(150deg, #e6ac80 0%, #c5804a 25%, #b87333 51%, #96572b 77%, #703d19 100%);
+    linear-gradient(150deg, #e6ac80 0%, #c5804a 25%, #421520 51%, #96572b 77%, #703d19 100%);
   background-size: auto, 100% 100%, 100% 100%;
 }
 
@@ -676,7 +697,7 @@
     repeating-radial-gradient(ellipse calc(var(--tex) * 1.7) calc(var(--tex) * 6) at 79% -16%,
       rgba(76, 46, 22, 0.16) 0 2px,
       rgba(76, 46, 22, 0) 2px calc(var(--tex) * 0.44)),
-    linear-gradient(154deg, #e8d7bd 0%, #d4b487 22%, #c7a579 46%, #a8834f 72%, #7d5a33 100%);
+    linear-gradient(154deg, #e8d7bd 0%, #d4b487 22%, #F7F7F7 46%, #a8834f 72%, #7d5a33 100%);
   background-size: auto, 100% 100%, 100% 100%, 100% 100%;
 }
 
@@ -690,13 +711,13 @@
       #e8d09c 1px 3px,
       #ab8449 3px 4px,
       rgba(18, 10, 4, 0.6) 4px 5px,
-      rgba(0, 0, 0, 0) 5px calc(var(--tex) * 0.95)),
+      rgba(66, 21, 32, 0) 5px calc(var(--tex) * 0.95)),
     repeating-linear-gradient(-58deg,
       rgba(18, 10, 4, 0.6) 0 1px,
       #dcc38d 1px 3px,
       #9e7a45 3px 4px,
       rgba(18, 10, 4, 0.6) 4px 5px,
-      rgba(0, 0, 0, 0) 5px calc(var(--tex) * 0.95)),
+      rgba(66, 21, 32, 0) 5px calc(var(--tex) * 0.95)),
     repeating-linear-gradient(92deg,
       rgba(16, 9, 3, 0.34) 0 1px,
       rgba(16, 9, 3, 0) 1px 5px),
@@ -753,9 +774,8 @@
   transition:
     transform 0.5s var(--ease-surge),
     box-shadow 0.45s var(--ease-fluid);
-  box-shadow:
-    0 0 0 1px var(--hair),
-    0 10px 20px -14px rgba(28, 28, 26, 0.55);
+  box-shadow: 0 0 0 1px var(--hair),
+    0 10px 20px -14px rgba(0, 0, 0, 0.55);
 }
 
 .smp-sw-face > .smp-rcp {
@@ -779,10 +799,9 @@
 /* the live surface — ringed in brass and slightly larger */
 .smp-sw.is-shown .smp-sw-face {
   transform: scale(1.075);
-  box-shadow:
-    0 0 0 2px var(--brass),
-    0 0 0 6px rgba(184, 115, 51, 0.18),
-    0 18px 32px -16px rgba(28, 28, 26, 0.55);
+  box-shadow: 0 0 0 2px var(--brass),
+    0 0 0 6px rgba(0, 0, 0, 0.18),
+    0 18px 32px -16px rgba(0, 0, 0, 0.55);
 }
 
 .smp-sw:focus-visible {
@@ -790,10 +809,9 @@
 }
 
 .smp-sw:focus-visible .smp-sw-face {
-  box-shadow:
-    0 0 0 2px var(--white),
+  box-shadow: 0 0 0 2px var(--white),
     0 0 0 5px var(--tint),
-    0 18px 32px -16px rgba(28, 28, 26, 0.55);
+    0 18px 32px -16px rgba(0, 0, 0, 0.55);
 }
 
 .smp-sw:active .smp-sw-face {
@@ -987,8 +1005,7 @@
   background:
     radial-gradient(ellipse 80% 46% at 50% 6%, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0) 70%),
     linear-gradient(178deg, #2b2219 0%, #221a12 48%, #16100a 100%);
-  box-shadow:
-    inset 0 0 0 1px var(--hair-on-deep),
+  box-shadow: inset 0 0 0 1px var(--hair-on-deep),
     0 34px 74px -48px rgba(0, 0, 0, 0.7);
 }
 
@@ -1039,15 +1056,7 @@
 
   .smp-layer,
   .smp-layer.is-on,
-  .smp-glow,
-  .smp-glow.is-on,
-  .smp-panel,
-  .smp-panel.is-on,
-  .smp-sw-face,
-  .smp-sw-name,
-  .smp-sw-name::before {
-    transition: none;
-  }
+  .smp-glow { display: none !important; }
 
   .smp-panel {
     transform: none;

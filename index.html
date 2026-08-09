@@ -5,7 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>TAIF INTERNATIONAL — Metal &amp; Wood Handicraft Manufacture</title>
     <meta name="description" content="TAIF INTERNATIONAL manufactures metal and wood handicraft in Moradabad, India — hand-hammered brass, burnished copper, seasoned sheesham and flush brass inlay, exported to 42 countries." />
-    <meta name="theme-color" content="#fcfbf8" />
+    <!-- These track the actual grounds in src/styles/tokens.css (--bg in :root
+         and html.dark). The single #fcfbf8 left over from the old palette put
+         a cream browser chrome above a burgundy page in dark mode. -->
+    <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#1A090D" media="(prefers-color-scheme: dark)" />
+    <meta name="color-scheme" content="light dark" />
     <meta name="keywords" content="metal handicraft manufacturer, wood handicraft exporter, brass handicraft Moradabad, handicraft export India, brass inlay, hammered brass, contract manufacture handicraft, private label homeware" />
     <meta property="og:title" content="TAIF INTERNATIONAL — Where Metal Meets Grain" />
     <meta property="og:description" content="Metal and wood handicraft manufacture and export. Hand-hammered brass, burnished copper, seasoned hardwood and flush brass inlay — made in Moradabad, shipped to 42 countries." />
@@ -50,6 +55,9 @@
          can be done about that from here. DELETE THIS LINE when the real
          photographs move into public/img/. -->
     <link rel="preconnect" href="https://picsum.photos" crossorigin />
+    <!-- /shows sources its atelier and exhibition plates from Unsplash. Same
+         caveat as above — DELETE when the real photographs land. -->
+    <link rel="preconnect" href="https://images.unsplash.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Tenor+Sans&display=swap" rel="stylesheet" />
     <!-- NOTE: the brand facts below are stated a second time here, outside
          src/data/site.js, because a crawler that never runs JavaScript sees

@@ -72,7 +72,9 @@ export function HeroParallax() {
   return (
     <div ref={containerRef} className="hp-container">
       <div className="hp-content-header">
-        <h1 className="d1 hp-title">Browse our<br />collections</h1>
+        {/* a section heading, not a page title — the homepage h1 is the
+            wordmark in HeroBrand */}
+        <h2 className="d1 hp-title">Browse our<br />collections</h2>
       </div>
       <div className="hp-perspective">
         <div ref={rowsRef} className="hp-rows">
@@ -109,7 +111,7 @@ function CollectionCard({ collection }) {
       >
         <div className="hp-card-overlay" />
         {img ? (
-          <img src={img.src} alt={collection.name} className="hp-card-img" loading="lazy" />
+          <img src={img} alt={collection.name} className="hp-card-img" loading="lazy" decoding="async" />
         ) : (
           <div className="hp-card-placeholder" />
         )}

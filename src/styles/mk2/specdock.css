@@ -36,20 +36,27 @@
   box-shadow: var(--lift-3), var(--edge-hair);
 }
 
+/* the dock is a frosted white pill; in dark mode its type flips to cream via
+   --graphite and vanished against it. The glass goes dark with the theme. */
+html.dark .sd-in {
+  background: rgba(44, 12, 20, 0.86);
+  box-shadow: var(--lift-3), inset 0 0 0 1px rgba(255, 255, 255, 0.16);
+}
+
 .sd-chip {
   flex: none;
   width: 26px;
   height: 26px;
   border-radius: 50%;
   background: var(--brass);
-  box-shadow: inset 0 0 0 1px rgba(28, 28, 26, 0.22), var(--lift-1);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.22), var(--lift-1);
 }
 
 .sd-chip.tone-brass  { background: linear-gradient(135deg, var(--brass-lt), var(--brass)); }
-.sd-chip.tone-copper { background: linear-gradient(135deg, #cd853f, #b87333); }
-.sd-chip.tone-wood   { background: linear-gradient(135deg, #c7a579, #7c5634); }
+.sd-chip.tone-copper { background: linear-gradient(135deg, #5A1D2C, #421520); }
+.sd-chip.tone-wood   { background: linear-gradient(135deg, #F7F7F7, #7c5634); }
 .sd-chip.tone-walnut { background: linear-gradient(135deg, #a8814f, #5a3f26); }
-.sd-chip.tone-antique { background: linear-gradient(135deg, #c5973f, #6b5228); }
+.sd-chip.tone-antique { background: linear-gradient(135deg, #421520, #6b5228); }
 .sd-chip.tone-inlay  { background: linear-gradient(135deg, #7c5634 48%, var(--brass) 52%); }
 
 .sd-name {

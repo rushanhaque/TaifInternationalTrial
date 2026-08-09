@@ -28,7 +28,7 @@ import { useRoute } from '../../lib/router'
 const CANDIDATES = [
   '[class*="tl-"]', '[class*="rig-"]', '[class*="pl-"]', '[class*="cat-"]',
   '[class*="qs-"]', '[class*="cix-"]', '[class*="tf-"]', '[class*="smp-"]',
-  '[class*="rq-"]',
+  '[class*="rq-"]', '[class*="shows-"]', '[class*="tm-"]', '[class*="care-"]',
   '.wrap > *', '.grid > *',
   'section p', 'section h1', 'section h2', 'section h3', 'section li',
 ].join(',')

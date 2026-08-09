@@ -268,7 +268,7 @@ export default function CraftIndex() {
             Metal words belong to Moradabad, wood words to Saharanpur. Almost
             nothing leaves here that did not need one from each list.
           </p>
-          <Button to="/materials" variant="ghost" small>
+          <Button to="/#the-turn" variant="ghost" small>
             The materials these are used on
           </Button>
         </div>

@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react'
 import { TIMELINE, PRINCIPLES, TEAM, BRAND } from '../data/site'
 import { CharCascade, Dilate } from '../components/Reveal'
 import Slab from '../components/Slab'
@@ -11,22 +12,34 @@ const TEAM_TONES = ['brass', 'wood', 'copper', 'antique', 'walnut', 'inlay']
 export default function AboutPage() {
   const bgVideo = "https://res.cloudinary.com/djszwbnxp/video/upload/v1786264932/IMG_0205_n1mn8t.mp4"
   const posterImg = "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=1600&auto=format&fit=crop"
+  const bgVideoRef = useRef(null)
 
   return (
     <>
-      {/* ── 0.1 · HERITAGE & THE CRAFT SECTION (First section of About page) ── */}
-      <section className="section craft-card-wrapper" id="heritage" style={{ paddingTop: '2rem' }}>
+      {/* Top Hero Header — the shared masthead, so this page opens on the
+          same line as every other inner page rather than 57px higher */}
+      <section className="page-hero wrap">
+        <div className="hero-kicker">
+          {/* a plain span, as on every other masthead — CharCascade renders a
+              block wrapper that dropped this kicker 22px below the others */}
+          <span className="meta">About Us</span>
+        </div>
+        <CharCascade as="h1" className="mega">Where metal meets grain.</CharCascade>
+      </section>
+
+      {/* ── 0.1 · HERITAGE & THE CRAFT SECTION ── */}
+      <section className="section craft-card-wrapper" id="heritage" style={{ paddingTop: '0' }}>
         <div className="wrap">
           <div className="craft-card-container">
             {/* Background Video */}
             <div className="craft-card__video-wrap">
               <video
+                ref={bgVideoRef}
                 className="craft-card__video-bg"
                 autoPlay
                 loop
                 muted
                 playsInline
-                poster={posterImg}
                 src={bgVideo}
               />
               <div className="craft-card__overlay" />
@@ -38,7 +51,7 @@ export default function AboutPage() {
                 text="THE CRAFT"
                 mediaType="video"
                 src={bgVideo}
-                poster={posterImg}
+                syncVideoRef={bgVideoRef}
                 fillScale={1.35}
                 parallax={32}
                 brightness={1.05}
@@ -131,10 +144,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── 0.2 · ATELIER OVERVIEW ── */}
-      <section className="page-hero wrap">
-        <CharCascade as="h1" className="mega">Two floors.</CharCascade>
-      </section>
+
 
       {/* the chronology, as a rail that fills while you read */}
       <Timeline />

@@ -67,7 +67,7 @@ export function useCounter(target = 100, duration = 1800) {
           io.disconnect()
         }
       },
-      { threshold: 0.4 }
+      { threshold: 0.15 }
     )
     io.observe(el)
     return () => {

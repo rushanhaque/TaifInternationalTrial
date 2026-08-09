@@ -548,7 +548,7 @@ export default function AdminPage() {
 const CSS = `
 :root {
   --pm-bg: var(--chrome, #faf7f2);
-  --pm-card: var(--white, #ffffff);
+  --pm-card: var(--white, #FFFFFF);
   --pm-brass: var(--brass, #b0894f);
   --pm-brass-dark: var(--brass-dk, #8a6733);
   --pm-brass-tint: rgba(176, 137, 79, 0.12);
@@ -577,7 +577,7 @@ const CSS = `
   position: fixed;
   top: 100px;
   right: 24px;
-  background: var(--white, #ffffff);
+  background: var(--white, #FFFFFF);
   border: 1px solid var(--pm-border);
   border-left: 4px solid var(--pm-brass);
   border-radius: var(--r-sm, 12px);
@@ -672,17 +672,17 @@ const CSS = `
 
 .pm-btn--primary {
   background: var(--pm-text);
-  color: var(--white, #ffffff);
+  color: var(--white, #FFFFFF);
   box-shadow: 0 4px 14px -4px rgba(36, 28, 20, 0.24);
 }
 .pm-btn--primary:hover {
   background: var(--pm-brass-dark);
-  color: #ffffff;
+  color: #FFFFFF;
   transform: translateY(-1px);
 }
 
 .pm-btn--outline {
-  background: var(--white, #ffffff);
+  background: var(--white, #FFFFFF);
   color: var(--pm-text);
   border: 1px solid var(--pm-border-hair);
 }
@@ -693,7 +693,7 @@ const CSS = `
 }
 
 .pm-btn--ghost {
-  background: var(--white, #ffffff);
+  background: var(--white, #FFFFFF);
   color: var(--pm-text-secondary);
   border: 1px solid var(--pm-border-hair);
 }
@@ -726,7 +726,7 @@ const CSS = `
   padding: 8px 18px;
   border-radius: var(--r-pill, 999px);
   border: 1px solid var(--pm-border-hair);
-  background: var(--white, #ffffff);
+  background: var(--white, #FFFFFF);
   color: var(--pm-text-secondary);
   font-family: var(--font-body, 'Inter Tight', sans-serif);
   font-size: 13px;
@@ -742,9 +742,9 @@ const CSS = `
 .pm-chip--active {
   background: var(--pm-text);
   border-color: var(--pm-text);
-  color: var(--white, #ffffff);
+  color: var(--white, #FFFFFF);
 }
-.pm-chip--active:hover { color: var(--white, #ffffff); }
+.pm-chip--active:hover { color: var(--white, #FFFFFF); }
 
 .pm-chip-count {
   font-family: var(--font-body, 'Inter Tight', sans-serif);
@@ -757,7 +757,7 @@ const CSS = `
 }
 .pm-chip--active .pm-chip-count {
   background: rgba(255, 255, 255, 0.22);
-  color: #ffffff;
+  color: #FFFFFF;
 }
 
 /* Scrollable Content Section */
@@ -979,7 +979,7 @@ const CSS = `
   animation: pmFadeIn 0.2s ease;
 }
 .pm-modal {
-  background: var(--white, #ffffff);
+  background: var(--white, #FFFFFF);
   border-radius: 16px;
   width: 100%;
   max-width: 520px;
@@ -1074,7 +1074,7 @@ const CSS = `
   position: absolute;
   inset: 0;
   background: rgba(36, 28, 20, 0.5);
-  color: #fff;
+  color: #FFFFFF;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1122,7 +1122,7 @@ const CSS = `
   font-weight: 400;
   color: var(--pm-text);
   outline: none;
-  background: var(--white, #ffffff);
+  background: var(--white, #FFFFFF);
   transition: all 0.18s ease;
 }
 
@@ -1176,7 +1176,7 @@ const CSS = `
     padding: 12px;
     gap: 14px;
     border-radius: var(--r-sm, 16px);
-    background: var(--white, #ffffff);
+    background: var(--white, #FFFFFF);
     box-shadow: 0 2px 8px rgba(36, 28, 20, 0.04);
   }
 

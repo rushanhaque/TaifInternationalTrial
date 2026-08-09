@@ -8,6 +8,10 @@ import './styles/home.css'
 import './styles/pages.css'
 /* Mark II layers last so they win where they overlap the base sheets */
 import './styles/mk2/index.css'
+/* site-wide hover polish, layered over every card family */
+import './styles/interactions-premium.css'
+/* mobile-only refinements, last so its media query wins */
+import './styles/mobile-polish.css'
 
 initLenis()
 startPointer()

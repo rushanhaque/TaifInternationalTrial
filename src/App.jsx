@@ -20,9 +20,10 @@ import Home from './pages/Home'
 import CollectionsPage from './pages/CollectionsPage'
 import CollectionPage, { resolveFamily, familyPieces, canonicalFamilySlug } from './pages/CollectionPage'
 import ProductPage from './pages/ProductPage'
-import MaterialsPage from './pages/MaterialsPage'
+import ShowsPage from './pages/ShowsPage'
 import AboutPage from './pages/AboutPage'
 import PartnersPage from './pages/PartnersPage'
+import TestimonialsPage from './pages/TestimonialsPage'
 import CarePage from './pages/CarePage'
 import ContactPage from './pages/ContactPage'
 import FaqPage from './pages/FaqPage'
@@ -77,12 +78,15 @@ const ROUTES = [
         ]),
       ]
     } },
-  { path: '/materials', page: MaterialsPage, idx: '0.7', name: 'Materials',
-    title: t('Materials'),
-    desc: 'Six materials: brass, aluminium, iron, copper, steel, and wood.' },
+  { path: '/shows', page: ShowsPage, idx: '0.75', name: 'Shows',
+    title: t('Shows & Showroom'),
+    desc: 'Exhibitions, international trade shows and Moradabad atelier showroom.' },
   { path: '/about', page: AboutPage, idx: '0.8', name: 'About',
     title: t('About'),
     desc: 'Founded 1998 in Moradabad. 10-15 artisans, 600+ yearly orders, 16 export markets.' },
+  { path: '/testimonials', page: TestimonialsPage, idx: '0.85', name: 'Testimonials',
+    title: t('Testimonials'),
+    desc: 'Client reviews, trade partner testimonials and verified order feedback.' },
   { path: '/partners', page: PartnersPage, idx: '0.9', name: 'Partners',
     title: t('Partners'),
     desc: 'Hospitality groups, retailers, design studios and architects who ship our metal and wood under their own names.' },
@@ -100,7 +104,9 @@ const ROUTES = [
     desc: 'Terms of trade and privacy policy.' },
   { path: '/admin', page: AdminPage, idx: '1.4', name: 'Admin',
     title: t('Admin'),
-    desc: 'Admin area' },
+    desc: 'Admin area',
+    /* a working page, but never an indexable one */
+    noindex: true },
 ]
 
 const NOT_FOUND = {

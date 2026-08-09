@@ -7,27 +7,29 @@
   letter-spacing: 0.02em;
   border-radius: var(--r-pill, 999px);
   cursor: pointer;
-  border: 1px solid var(--copper, #b87333);
-  background: linear-gradient(135deg, #b87333, #1c1c1a); /* Copper to Carbon fill on hover */
-  color: var(--graphite);
+  border: 1px solid var(--copper, #421520);
+  background: #421520;
+  color: #FFFFFF !important;
   overflow: hidden;
-  height: 32px; /* Reduced container height */
+  height: 32px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   padding: 0;
   margin: 0;
+  transform: none !important;
+  transition: background-color 0.25s ease, border-color 0.25s ease;
 }
 
 .cssbuttons-io span {
   position: relative;
   z-index: 10;
-  transition: color 0.4s ease;
+  transition: color 0.25s ease;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   padding: 0 1.1em;
-  color: var(--graphite); /* Same color as other navbar text before hover */
+  color: #421520;
 }
 
 .cssbuttons-io::before,
@@ -42,21 +44,26 @@
 
 .cssbuttons-io::before {
   content: "";
-  background: var(--white, #ffffff); /* Base background before hover */
+  background: var(--white, #FFFFFF);
   width: 120%;
   left: -10%;
-  transform: skew(30deg);
-  transition: transform 0.4s cubic-bezier(0.3, 1, 0.8, 1);
+  transform: none;
+  transition: opacity 0.25s ease;
+}
+
+.cssbuttons-io:hover {
+  background: #5C1F2E !important;
+  border-color: #5C1F2E !important;
 }
 
 .cssbuttons-io:hover::before {
-  transform: translate3d(100%, 0, 0); /* Reveals brown fill on hover */
+  opacity: 0;
 }
 
 .cssbuttons-io:hover span {
-  color: #ffffff; /* White text after hover */
+  color: #FFFFFF !important;
 }
 
 .cssbuttons-io:active {
-  transform: scale(0.95);
+  transform: none !important;
 }

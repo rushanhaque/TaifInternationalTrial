@@ -1,0 +1,134 @@
+/* ══════════════════════════════════════════════════════════════════════════
+   MOBILE POLISH — the small-screen experience, brought up to the desktop bar
+
+   Loaded last. Everything here is inside a max-width query, so it only ever
+   touches phones and never disturbs the desktop layout that is already right.
+   Three jobs: give every control a real 44px touch target, lift the tiniest
+   labels to a legible size, and tighten the vertical rhythm so a phone reads
+   as composed rather than merely reflowed.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+  /* ── touch targets ──────────────────────────────────────────────────────
+     Apple/Google both put the floor at ~44px. Several controls sat in the
+     34–39px band. */
+  .btn {
+    min-height: 44px;
+    padding-block: 0.85rem;
+  }
+
+  .btn.small {
+    min-height: 40px;
+  }
+
+  /* the card add/remove toggle on the plate grids */
+  .pl-toggle-btn {
+    width: 42px;
+    height: 42px;
+  }
+
+  /* footer social icons up to a full touch target */
+  .social-icon {
+    width: 44px;
+    height: 44px;
+  }
+
+  /* the two nav controls — burger and theme toggle — to 44px */
+  .burger,
+  .theme-toggle-btn {
+    width: 44px !important;
+    height: 44px !important;
+  }
+
+  /* the secondary "more" links inside the mobile menu sat at 37px */
+  .sheet .chip {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  /* spec-dock add-to-cart */
+  .sd-add {
+    min-height: 44px;
+    padding-block: 0.7rem;
+  }
+
+  /* footer links get room to be tapped without hitting a neighbour */
+  .foot-grid nav a,
+  .foot-grid > div > div > a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+  }
+
+  /* the email / phone lines on Contact are direct-dial targets */
+  .contact-line a,
+  a[href^='tel:'],
+  a[href^='mailto:'] {
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+  }
+
+  /* ── legibility of the smallest labels ──────────────────────────────────
+     Eyebrow labels and tags were rendering at 10–11px; nudged up so they
+     read cleanly on a handset without changing the desktop scale. */
+  .tm-cat,
+  .tm-tag,
+  .ed-spec-label,
+  .czoom-card-sub,
+  .shows-event-cat {
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+  }
+
+  .meta {
+    font-size: 0.74rem;
+  }
+
+  /* ── vertical rhythm ────────────────────────────────────────────────────
+     Sections were carrying desktop-scale block padding onto a screen a third
+     the width, which reads as loose. Tightened to a phone cadence. */
+  .section {
+    padding-block: clamp(1.6rem, 6vw, 2.4rem);
+  }
+
+  .section.tight {
+    padding-block: clamp(2rem, 7vw, 3rem);
+  }
+
+  /* card grids: a hair more breathing room between stacked cards than the
+     desktop gap allows, and never a cramped single column */
+  .tm-grid,
+  .shows-events-grid,
+  .home-reviews-grid,
+  .care-cols {
+    gap: 1.15rem;
+  }
+
+  /* the review / testimonial cards get a touch more inner padding so the
+     quote does not crowd the edges on a narrow card */
+  .tm-card {
+    padding: 1.5rem 1.35rem;
+  }
+
+  /* ── headings ───────────────────────────────────────────────────────────
+     .mega can run away on a phone; clamp its lower bound so it never
+     overwhelms a 360px column, and keep the lede comfortably measured */
+  .page-hero .lede,
+  .lede {
+    max-width: 40ch;
+  }
+}
+
+@media (max-width: 420px) {
+  /* the very small end — keep the masthead numeral and mega heading in
+     proportion and stop any two-column remnants from squeezing */
+  .grid {
+    gap: 1.1rem;
+  }
+
+  .shows-atelier-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

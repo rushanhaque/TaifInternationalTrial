@@ -62,10 +62,14 @@ export default function Cart() {
         onClick={() => setOpen(true)}
         aria-expanded={open}
         aria-controls="cart-pane"
+        aria-label={`View Cart (${count} items)`}
       >
-        <span className="ct-tab-mark" aria-hidden="true" />
-        <span className="ct-tab-n">{String(count).padStart(2, '0')}</span>
-        <span className="ct-tab-label meta">Cart</span>
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"></path>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <path d="M16 10a4 4 0 01-8 0"></path>
+        </svg>
+        <span className="ct-tab-n">{count}</span>
       </button>
 
       <div
@@ -95,11 +99,6 @@ export default function Cart() {
             <span aria-hidden="true">×</span>
           </button>
         </header>
-
-        <p className="ct-note">
-          No prices and no checkout — this gathers pieces so you can send them
-          as one order. It clears when you reload.
-        </p>
 
         <ol className="ct-list">
           {items.map((p, i) => (
@@ -146,10 +145,6 @@ export default function Cart() {
               <span className="ct-btn-go" aria-hidden="true">↗</span>
             </a>
           </div>
-
-          <p className="ct-fine">
-            The message is written for you — pieces, MOQs and lead times included.
-          </p>
         </footer>
       </aside>
     </>

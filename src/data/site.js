@@ -10,7 +10,7 @@ export const BRAND = {
   name: 'TAIF INTERNATIONAL',
   mark: 'TAIF',                       // short wordmark for display lockups
   suffix: 'INTERNATIONAL',            // set beside the mark, letterspaced
-  line: 'Where Metal Meets Grain',
+  line: 'An Atelier of Metal and Wood',
   descriptor: 'Metal & Wood Handicraft Manufacture · Export',
   est: '1998',
   origin: 'Moradabad · India',
@@ -25,7 +25,7 @@ export const BRAND = {
 
 export const NAV_LINKS = [
   { to: '/collections', label: 'Collections' },
-  { to: '/materials', label: 'Materials' },
+  { to: '/shows', label: 'Shows' },
   { to: '/about', label: 'About' },
   { to: '/contact', label: 'Contact' },
 ]
@@ -52,10 +52,9 @@ export const COLLECTIONS = [
 ]
 
 export const MORE_LINKS = [
-  { to: '/partners', label: 'Partners' },
+  { to: '/testimonials', label: 'Testimonials' },
   { to: '/care', label: 'Care' },
   { to: '/faq', label: 'FAQ' },
-  { to: '/legal', label: 'Legal' },
 ]
 
 export const FIGURES = [
@@ -220,28 +219,39 @@ export const TESTIMONIALS = [
 
 export const CARE = [
   {
-    key: 'brass', name: 'Unlacquered Brass',
-    dos: ['Dry microfibre wipe, weekly', 'Mild soap for fingerprints', 'Museum wax twice a year if you want the shine held'],
-    nevers: ['Abrasive pads or powders', 'Bleach or ammonia', 'Dishwashers'],
-    note: 'Left alone, brass drifts to a warm umber. That is not damage — it is the alloy ageing, and a ten-minute polish returns it to day one.',
+    key: 'brass', name: 'Brass',
+    subtitle: 'Unlacquered & Polished Brass',
+    dos: ['Wipe with a soft dry microfibre cloth weekly', 'Use mild soap water for removing fingerprints', 'Apply museum wax twice a year to preserve mirror polish'],
+    nevers: ['Harsh chemical cleaners, bleach, or ammonia', 'Abrasive pads, steel wool, or scouring powder', 'Automatic dishwashers'],
+    note: 'Left raw, brass naturally patinas to a rich warm umber. If preferred, a 5-minute polish restores its day-one golden sheen.',
   },
   {
     key: 'copper', name: 'Copper',
-    dos: ['Rinse and dry immediately after use', 'Lemon and salt for a fast re-brighten', 'Keep interiors tinned for food contact'],
-    nevers: ['Leaving acidic food standing', 'Scouring a tinned interior', 'Salt air without a wax coat'],
-    note: 'Copper is the fastest-moving surface we make. Embrace the patina or schedule the polish — both answers are correct.',
-  },
-  {
-    key: 'sealed', name: 'Sealed & Lacquered',
-    dos: ['Dry cloth only — the seal does the work', 'Gloves during installation', 'Check the fixings, not the finish'],
-    nevers: ['Any abrasive or polish compound', 'Adhesive tape on the surface', 'Chlorinated cleaners'],
-    note: 'A lacquer is a film, not a paint. If a mark will not wipe off it is sitting on the film, not in it — and we can strip and re-seal.',
+    subtitle: 'Hand-Hammered Copper Vessels',
+    dos: ['Rinse thoroughly and dry immediately after use', 'Use natural lemon juice and salt for fast brightening', 'Ensure inner lining remains food-safe'],
+    nevers: ['Leaving acidic liquids or vinegar standing', 'Scouring the tinned interior lining', 'Salt air exposure without a protective wax coat'],
+    note: 'Copper is a living, breathing metal. Embrace the evolving natural patina or re-brighten periodically as needed.',
   },
   {
     key: 'wood', name: 'Solid Wood',
-    dos: ['Wipe with a barely damp cloth', 'Re-oil once a year with hard-wax oil', 'Use mats under anything hot or wet'],
-    nevers: ['Standing water or a sunny windowsill', 'Silicone sprays and furniture polish', 'Dry indoor heat below 35% humidity'],
-    note: 'Wood moves. Seasoned properly it moves in millimetres you will never notice — but keep it out of direct heat and it will outlive the room.',
+    subtitle: 'Kiln-Dried Sheesham, Mango & Teak',
+    dos: ['Wipe clean using a slightly damp cloth', 'Re-oil annually with food-safe hard-wax oil', 'Use protective mats under hot or wet items'],
+    nevers: ['Direct sunlight or placement right next to heaters', 'Silicone furniture sprays or harsh detergents', 'Soaking in water or placing in high humidity above 75%'],
+    note: 'Our timber is kiln-dried to 8–10% moisture content. Proper care ensures the wood holds its shape and finish for decades.',
+  },
+  {
+    key: 'aluminium', name: 'Aluminium',
+    subtitle: 'Cast & Brushed Aluminium',
+    dos: ['Clean with warm water and mild neutral detergent', 'Dry with a lint-free cloth to avoid water spots', 'Store in a dry, ventilated area'],
+    nevers: ['Acidic or alkaline chemical solutions', 'Scouring pads that scratch polished surfaces', 'Direct contact with harsh outdoor salt spray'],
+    note: 'Aluminium is lightweight and naturally corrosion-resistant. Regular gentle wiping keeps the smooth brushed surface pristine.',
+  },
+  {
+    key: 'iron-steel', name: 'Iron & Steel',
+    subtitle: 'Hand-Forged Iron & Powder-Coated Steel',
+    dos: ['Wipe with a dry cloth after outdoor use', 'Apply a light oil coat on bare forged iron surfaces', 'Inspect rubber feet and mounting screws periodically'],
+    nevers: ['Leaving standing water or prolonged moisture', 'Scratching powder-coated protective layers', 'Exposure to unvented damp environments'],
+    note: 'Powder-coated finishes form a durable shield against rust. Any surface scratches can be touched up easily with metal sealant.',
   },
 ]
 

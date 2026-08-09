@@ -86,7 +86,7 @@
 /* ── metal ground: espresso raked into brass ── */
 .tf-metal .tf-ground {
   background:
-    radial-gradient(120% 85% at 8% 6%, rgba(218, 165, 32, 0.20), transparent 62%),
+    none, transparent 62%),
     radial-gradient(90% 70% at 96% 96%, rgba(138, 78, 36, 0.34), transparent 66%),
     linear-gradient(148deg,
       #17110a 0%,
@@ -200,7 +200,7 @@
   font-size: clamp(7rem, 15vw, 15rem);
   line-height: 0.76;
   letter-spacing: -0.05em;
-  color: rgba(218, 165, 32, 0.085);
+  color: rgba(90, 29, 44, 0.085);
   pointer-events: none;
 }
 
@@ -332,7 +332,7 @@
 .tf-spec {
   margin: 0;
   padding: 0.5rem 1rem 0.55rem;
-  border: 1px solid rgba(218, 165, 32, 0.3);
+  border: 1px solid rgba(90, 29, 44, 0.3);
   border-radius: var(--r-pill);
   background: rgba(20, 13, 6, 0.42);
   backdrop-filter: blur(6px);
@@ -385,8 +385,7 @@
   left: 0;
   width: 260px;
   margin-left: -130px;
-  background: radial-gradient(closest-side ellipse at 50% 50%,
-    rgba(218, 165, 32, 0.26), rgba(218, 165, 32, 0.06) 55%, transparent 78%);
+  background: none, rgba(90, 29, 44, 0.06) 55%, transparent 78%);
   filter: blur(6px);
   opacity: 0.72;
   transition: opacity 0.4s var(--ease-fluid);
@@ -406,16 +405,15 @@
   margin-left: -1px;
   transform-origin: 50% 0;
   background: linear-gradient(180deg,
-    rgba(218, 165, 32, 0) 0%,
+    rgba(90, 29, 44, 0) 0%,
     var(--brass-dk) 5%,
     var(--brass) 22%,
     #f6e6c2 50%,
     var(--brass) 78%,
     var(--brass-dk) 95%,
-    rgba(218, 165, 32, 0) 100%);
-  box-shadow:
-    0 0 14px rgba(218, 165, 32, 0.55),
-    0 0 44px rgba(184, 115, 51, 0.3);
+    rgba(90, 29, 44, 0) 100%);
+  box-shadow: 0 0 14px rgba(0, 0, 0, 0.55),
+    0 0 44px rgba(0, 0, 0, 0.3);
 }
 
 /* Hit strip — full height so the seam is grabbable anywhere along it. */
@@ -448,11 +446,10 @@
     #6d4f24 0%,
     #c9a15c 14%,
     #f7ecd2 34%,
-    #c5973f 56%,
-    #a0522d 74%,
-    #daa520 100%);
-  box-shadow:
-    0 14px 34px rgba(0, 0, 0, 0.52),
+    #421520 56%,
+    #2C0C14 74%,
+    #5A1D2C 100%);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.52),
     0 2px 6px rgba(0, 0, 0, 0.38),
     inset 0 1px 0 rgba(255, 252, 240, 0.72),
     inset 0 -1px 0 rgba(50, 32, 14, 0.55),
@@ -481,16 +478,14 @@
    pressed state even while the pointer is still technically over the strip. */
 .tf.is-dragging .tf-hit .tf-grip {
   transform: scaleX(1.2) scaleY(0.95);
-  box-shadow:
-    0 18px 44px rgba(0, 0, 0, 0.6),
-    0 0 26px rgba(218, 165, 32, 0.45),
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.6),
+    0 0 26px rgba(0, 0, 0, 0.45),
     inset 0 1px 0 rgba(255, 252, 240, 0.8),
     inset 0 -1px 0 rgba(50, 32, 14, 0.55);
 }
 
 .tf-hit:focus-visible .tf-grip {
-  box-shadow:
-    0 0 0 3px var(--deep),
+  box-shadow: 0 0 0 3px var(--deep),
     0 0 0 6px var(--tint-on-deep),
     0 14px 34px rgba(0, 0, 0, 0.52);
 }
@@ -508,12 +503,12 @@
 
 .tf-arrow-l {
   right: calc(50% + 30px);
-  border-right: 7px solid rgba(218, 165, 32, 0.75);
+  border-right: 7px solid rgba(90, 29, 44, 0.75);
 }
 
 .tf-arrow-r {
   left: calc(50% + 30px);
-  border-left: 7px solid rgba(218, 165, 32, 0.75);
+  border-left: 7px solid rgba(90, 29, 44, 0.75);
 }
 
 .tf-hit:hover .tf-arrow-l { transform: translateX(-4px); }
@@ -533,7 +528,7 @@
   gap: 0.85rem;
   white-space: nowrap;
   padding: 0.62rem 1.15rem 0.68rem;
-  border: 1px solid rgba(218, 165, 32, 0.32);
+  border: 1px solid rgba(90, 29, 44, 0.32);
   border-radius: var(--r-pill);
   background: rgba(16, 10, 4, 0.62);
   backdrop-filter: blur(12px);
@@ -556,7 +551,7 @@
 }
 
 .tf-slash {
-  color: rgba(218, 165, 32, 0.42);
+  color: rgba(90, 29, 44, 0.42);
   font-weight: 400;
 }
 
@@ -723,8 +718,7 @@
   }
 
   .tf-hit:hover .tf-grip {
-    box-shadow:
-      0 0 0 2px rgba(218, 165, 32, 0.6),
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.6),
       0 14px 34px rgba(0, 0, 0, 0.52),
       inset 0 1px 0 rgba(255, 252, 240, 0.72);
   }

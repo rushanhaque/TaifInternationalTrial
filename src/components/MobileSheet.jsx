@@ -44,7 +44,7 @@ export default function MobileSheet({ open, onClose }) {
 
   return (
     <div className="sheet" id="sheet" ref={ref} role="dialog" aria-modal="true" aria-label="Menu">
-      {NAV_LINKS.map((l) => (
+      {(path !== '/' ? [{ to: '/', label: 'Home' }, ...NAV_LINKS] : NAV_LINKS).map((l) => (
         <NavLink key={l.to} to={l.to} className="sheet-link">{l.label}</NavLink>
       ))}
       <div className="sheet-more">

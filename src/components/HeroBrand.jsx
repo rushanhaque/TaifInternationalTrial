@@ -33,20 +33,25 @@ export default function HeroBrand() {
   /* ── the pour ─────────────────────────────────────────────────────────── */
   useEffect(() => {
     if (reduced()) return undefined
-    const chars = gsap.utils.toArray(mark.current.querySelectorAll('.hb-ch'))
+    const chars = mark.current ? gsap.utils.toArray(mark.current.querySelectorAll('.hb-ch')) : []
 
     const tl = gsap.timeline({ delay: introDelay })
 
-    /* each letter seats itself like an inlay piece tapped into its channel */
-    tl.fromTo(chars,
-      { y: 24, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.85, ease: 'power3.out', stagger: 0.08 })
-      .fromTo(intl.current,
+    if (chars.length) {
+      tl.fromTo(chars,
+        { y: 24, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.85, ease: 'power3.out', stagger: 0.08 })
+    }
+    if (intl.current) {
+      tl.fromTo(intl.current,
         { opacity: 0, y: 15, letterSpacing: '0.2em' },
         { opacity: 1, y: 0, letterSpacing: '0.58em', duration: 0.9, ease: 'power3.out' }, '-=0.45')
-      .fromTo(foot.current,
+    }
+    if (foot.current) {
+      tl.fromTo(foot.current,
         { opacity: 0, y: 20 },
         { opacity: 1, y: 0, duration: 0.75, ease: 'power3.out' }, '-=0.55')
+    }
 
     return () => tl.kill()
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
@@ -55,9 +60,6 @@ export default function HeroBrand() {
   useEffect(() => {
     const mm = gsap.matchMedia()
 
-    /* Clear the properties outright rather than tweening back to a remembered
-       value — both breakpoint branches write to the same nodes, so a value
-       left by one must never become the other's resting state. */
     const resetMark = () => {
       const metals = root.current?.querySelectorAll('.hb-ch-metal')
       const woods = root.current?.querySelectorAll('.hb-ch-wood')
@@ -67,17 +69,15 @@ export default function HeroBrand() {
       if (foot.current) gsap.set(foot.current, { clearProps: 'all' })
       if (stage.current) gsap.set(stage.current, { clearProps: 'all' })
       const bg = root.current?.querySelector('.hb-bg')
-      /* only the transform props GSAP touched — clearProps:'all' would also
-         wipe the --hero-image variable that lives on this element */
       if (bg) gsap.set(bg, { clearProps: 'yPercent,scale,transform' })
-      if (tag.current) gsap.set(tag.current, { autoAlpha: 0, y: 18 })
+      if (tag.current) gsap.set(tag.current, { autoAlpha: 1, y: 0 })
     }
 
     mm.add('(min-width: 900px) and (prefers-reduced-motion: no-preference)', () => {
-      const metals = root.current.querySelectorAll('.hb-ch-metal')
-      const woods = root.current.querySelectorAll('.hb-ch-wood')
+      const metals = root.current?.querySelectorAll('.hb-ch-metal')
+      const woods = root.current?.querySelectorAll('.hb-ch-wood')
       const shift = () => window.innerWidth * 0.34
-      gsap.set(tag.current, { autoAlpha: 0, y: 18 })
+      if (tag.current) gsap.set(tag.current, { autoAlpha: 1, y: 0 })
 
       const tl = gsap.timeline({
         scrollTrigger: {
@@ -90,71 +90,34 @@ export default function HeroBrand() {
         },
       })
 
-      /* fromTo, not to: with invalidateOnRefresh a to() re-reads its start
-         values from whatever is on screen when a refresh fires, and refresh
-         can fire mid-scroll. An explicit `from` keeps the rest state fixed. */
-      /* the halves taper and soften as they part, so it reads as one object
-         being pulled open rather than two graphics sliding apart */
-      tl.fromTo(metals,
-        { x: 0, scaleX: 1, scaleY: 1, filter: 'blur(0px)', opacity: 1, transformOrigin: '100% 50%' },
-        {
-          x: () => -shift(), scaleX: 1.28, scaleY: 0.92,
-          filter: 'blur(2px)', opacity: 0, transformOrigin: '100% 50%',
-          duration: 1, ease: 'power2.out', immediateRender: false,
-        }, 0)
-        .fromTo(woods,
+      if (metals?.length) {
+        tl.fromTo(metals,
+          { x: 0, scaleX: 1, scaleY: 1, filter: 'blur(0px)', opacity: 1, transformOrigin: '100% 50%' },
+          {
+            x: () => -shift(), scaleX: 1.28, scaleY: 0.92,
+            filter: 'blur(2px)', opacity: 0, transformOrigin: '100% 50%',
+            duration: 1, ease: 'power2.out', immediateRender: false,
+          }, 0)
+      }
+      if (woods?.length) {
+        tl.fromTo(woods,
           { x: 0, scaleX: 1, scaleY: 1, filter: 'blur(0px)', opacity: 1, transformOrigin: '0% 50%' },
           {
             x: () => shift(), scaleX: 1.28, scaleY: 0.92,
             filter: 'blur(2px)', opacity: 0, transformOrigin: '0% 50%',
             duration: 1, ease: 'power2.out', immediateRender: false,
           }, 0)
-        .fromTo(intl.current,
-          { opacity: 1, y: 0 },
-          { opacity: 0, y: 14, duration: 0.34, ease: 'power2.out', immediateRender: false }, 0.08)
-        .fromTo(tag.current,
-          { autoAlpha: 0, y: 18 },
+      }
+      if (tag.current) {
+        tl.fromTo(tag.current,
+          { autoAlpha: 1, y: 0 },
           { autoAlpha: 1, y: 0, duration: 0.36, ease: 'fluid', immediateRender: false }, 0.22)
-        .fromTo(foot.current,
+      }
+      if (foot.current) {
+        tl.fromTo(foot.current,
           { opacity: 1 },
           { opacity: 0, duration: 0.26, ease: 'power2.out', immediateRender: false }, 0.1)
-        .fromTo(stage.current,
-          { yPercent: 0 },
-          { yPercent: -9, duration: 1, ease: 'none', immediateRender: false }, 0)
-        /* the photograph drifts slower than the page — depth */
-        .fromTo('.hb-bg',
-          { yPercent: 0, scale: 1 },
-          { yPercent: 12, scale: 1.06, duration: 1, ease: 'none', immediateRender: false }, 0)
-
-      return () => { tl.scrollTrigger?.kill(); tl.kill(); resetMark() }
-    })
-
-    /* mobile — the same drain, lighter and unpinned */
-    mm.add('(max-width: 899px) and (prefers-reduced-motion: no-preference)', () => {
-      const metals = root.current.querySelectorAll('.hb-ch-metal')
-      const woods = root.current.querySelectorAll('.hb-ch-wood')
-      gsap.set(tag.current, { autoAlpha: 0, y: 14 })
-
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: root.current,
-          start: 'top top',
-          end: 'bottom 35%',
-          scrub: 0.6,
-          invalidateOnRefresh: true,
-          onLeaveBack: resetMark,
-        },
-      })
-      tl.fromTo(metals, { xPercent: 0, opacity: 1 },
-        { xPercent: -16, opacity: 0.15, duration: 0.7, ease: 'power1.in', immediateRender: false }, 0)
-        .fromTo(woods, { xPercent: 0, opacity: 1 },
-          { xPercent: 16, opacity: 0.15, duration: 0.7, ease: 'power1.in', immediateRender: false }, 0)
-        .fromTo(tag.current, { autoAlpha: 0, y: 14 },
-          { autoAlpha: 1, y: 0, duration: 0.3, ease: 'fluid', immediateRender: false }, 0.1)
-        .fromTo(intl.current, { opacity: 1 },
-          { opacity: 0.25, duration: 0.5, immediateRender: false }, 0.15)
-        .fromTo(foot.current, { opacity: 1 },
-          { opacity: 0, duration: 0.3, immediateRender: false }, 0.3)
+      }
 
       return () => { tl.scrollTrigger?.kill(); tl.kill(); resetMark() }
     })
@@ -162,48 +125,42 @@ export default function HeroBrand() {
     return () => mm.revert()
   }, [])
 
-  /* ── the raking light ─────────────────────────────────────────────────── */
-  useEffect(() => {
-    if (reduced() || coarse()) return undefined
-    const el = root.current
-    const markEl = mark.current
-    if (!el || !markEl) return undefined
-
-    /* one quickTo per property, so pointer moves never allocate a tween */
-    const xTo = gsap.quickTo(markEl, 'x', { duration: 0.9, ease: 'fluid' })
-    const iTo = gsap.quickTo(intl.current, 'x', { duration: 1.1, ease: 'fluid' })
-
-    const onMove = (e) => {
-      const n = e.clientX / window.innerWidth - 0.5
-      xTo(n * 16)
-      iTo(n * -7)
-    }
-    el.addEventListener('mousemove', onMove)
-    return () => el.removeEventListener('mousemove', onMove)
-  }, [])
-
   return (
     <section className="hero-brand" ref={root}>
       <h1 className="sr-only">
-        {BRAND.name} — metal &amp; wood handicraft manufacture and export, {BRAND.origin.replace(' · ', ', ')}
+        {BRAND.name} — {BRAND.line}
       </h1>
-      <div className="hb-bg" aria-hidden="true" style={{ '--hero-image': `url('${HERO_IMG}')` }} />
+      {/* Ambient workshop footage behind the wordmark. Muted + loop + inline so
+          it autoplays everywhere; a scrim over it keeps the mark and tagline
+          legible in both themes. reduced-motion users get the poster still,
+          never the moving video. The clip is the client's own Cloudinary
+          asset (same one the Craft section uses) — swap the URL to change it. */}
+      <div className="hb-media" aria-hidden="true">
+        {!reduced() && (
+          <video
+            className="hb-video"
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="metadata"
+            poster={HERO_IMG}
+            src="https://res.cloudinary.com/djszwbnxp/video/upload/v1786264932/IMG_0205_n1mn8t.mp4"
+          />
+        )}
+        {reduced() && (
+          <div className="hb-video hb-video--still" style={{ backgroundImage: `url('${HERO_IMG}')` }} />
+        )}
+        <div className="hb-scrim" />
+      </div>
       <div className="hb-stage" ref={stage}>
-        <div className="hb-mark" ref={mark} aria-hidden="true">
-          {MARK_CHARS.map((c, i) => (
-            <span key={i} className="hb-ch">
-              <span className="hb-ch-wood">{c}</span>
-              <span className="hb-ch-metal">{c}</span>
-            </span>
-          ))}
-        </div>
-        <p className="hb-intl" ref={intl} aria-hidden="true">{BRAND.suffix}</p>
-        <p className="hb-tag meta" ref={tag}>{BRAND.line}</p>
+        {/* the visible tagline repeats the line already inside the sr-only h1
+            above, so it is a paragraph — three competing h1s on the homepage
+            left the document with no single title */}
+        <p className="hb-tag-title" ref={tag}>{BRAND.line}</p>
       </div>
       <div className="hb-foot" ref={foot}>
-        <span className="meta hb-side">Est. {BRAND.est} · {BRAND.origin.replace(' · ', ', ')}</span>
         <span className="hb-hint meta" aria-hidden="true">Scroll<i /></span>
-        <span className="meta hb-side">{BRAND.descriptor}</span>
       </div>
     </section>
   )

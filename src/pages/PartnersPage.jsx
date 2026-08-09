@@ -1,5 +1,5 @@
 import { useLayoutEffect, useMemo, useRef, useState } from 'react'
-import { PARTNERS, CASES, TESTIMONIALS } from '../data/site'
+import { PARTNERS, CASES, TESTIMONIALS, FIGURES } from '../data/site'
 import { CharCascade, Dilate } from '../components/Reveal'
 import Toggle from '../components/Toggle'
 import Button from '../components/Button'
@@ -359,10 +359,6 @@ export default function PartnersPage() {
         <div className="prt-hero-grid">
 
           <div className="prt-hero-side">
-            <p className="prt-hero-note">
-              We are the floor behind other people’s labels. Twelve houses let us use
-              their name. Three let us print the numbers.
-            </p>
             <dl className="prt-figs">
               <div className="prt-fig">
                 <dt className="meta">Partners</dt>
@@ -370,7 +366,10 @@ export default function PartnersPage() {
               </div>
               <div className="prt-fig">
                 <dt className="meta">Markets</dt>
-                <dd>42</dd>
+                {/* was hardcoded 42 while FIGURES in data/site.js — which
+                    /about and the homepage both read — says 16. Single-sourced
+                    so the two pages stop contradicting each other. */}
+                <dd>{FIGURES.find((f) => f.unit === 'countries')?.value ?? '—'}</dd>
               </div>
               <div className="prt-fig">
                 <dt className="meta">Since</dt>

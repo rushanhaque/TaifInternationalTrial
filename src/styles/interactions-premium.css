@@ -1,0 +1,158 @@
+/* ══════════════════════════════════════════════════════════════════════════
+   PREMIUM INTERACTIONS — site-wide hover polish
+
+   One cohesive interaction language layered over the existing cards. Every
+   surface rests completely still; motion only ever happens on hover or focus,
+   and always on the house easing ramp. Loaded last so it settles the feel
+   across families that were each styled in isolation.
+
+   The vocabulary:
+   · cards lift a hair and deepen their shadow (the "pick up off the bench")
+   · any photograph inside a card eases in a touch (the "lean closer")
+   · quiet cards (stats, process steps) draw a warm top rule on approach
+   Nothing spins, pulses or loops.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── shared timing ───────────────────────────────────────────────────────── */
+.pl-card,
+.shows-event,
+.cat-card,
+.czoom-card,
+.about-stat-card,
+.craft-process-item,
+.team-card,
+.year-card,
+.tm-card,
+.slab {
+  transition:
+    transform 0.5s var(--ease-surge, cubic-bezier(0.16, 1.1, 0.3, 1)),
+    box-shadow 0.5s var(--ease-fluid, cubic-bezier(0.65, 0, 0.35, 1)),
+    border-color 0.35s ease;
+}
+
+/* ── photographs ease in inside their frame ──────────────────────────────── */
+.pl-card .pl-img,
+.shows-event-media img,
+.cat-card img,
+.czoom-card-img,
+.slab-img {
+  transition: transform 0.7s var(--ease-fluid, cubic-bezier(0.65, 0, 0.35, 1)),
+    filter 0.5s ease;
+}
+
+.pl-card:hover .pl-img,
+.shows-event:hover .shows-event-media img,
+.cat-card:hover img,
+.czoom-card:hover .czoom-card-img,
+.slab:hover .slab-img {
+  transform: scale(1.05);
+}
+
+/* ── process items: a warm top rule that draws in on hover ──────────────── */
+.craft-process-item {
+  position: relative;
+}
+
+.craft-process-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 2px;
+  width: 100%;
+  transform: scaleX(0);
+  transform-origin: left center;
+  background: linear-gradient(90deg, var(--brass, #421520), transparent);
+  transition: transform 0.5s var(--ease-fluid, cubic-bezier(0.65, 0, 0.35, 1));
+  pointer-events: none;
+  z-index: 2;
+}
+
+.craft-process-item:hover {
+  transform: translateY(-4px);
+}
+
+.craft-process-item:hover::before {
+  transform: scaleX(1);
+}
+
+/* ── about stat cards: glass pane shine flare on hover ───────────────────── */
+.about-stat-card {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  transition: transform 0.4s var(--ease-surge, cubic-bezier(0.16, 1.1, 0.3, 1)),
+              box-shadow 0.4s var(--ease-fluid, cubic-bezier(0.65, 0, 0.35, 1)),
+              border-color 0.35s ease;
+}
+
+.about-stat-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -150%;
+  width: 100%;
+  height: 200%;
+  background: linear-gradient(
+    115deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.05) 25%,
+    rgba(255, 255, 255, 0.48) 50%,
+    rgba(255, 255, 255, 0.05) 75%,
+    transparent 100%
+  );
+  transform: skewX(-20deg);
+  transition: left 0.75s var(--ease-fluid, cubic-bezier(0.16, 1, 0.3, 1));
+  pointer-events: none;
+  z-index: 5;
+}
+
+.about-stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 18px 45px rgba(66, 21, 32, 0.12);
+  border-color: rgba(66, 21, 32, 0.35);
+}
+
+.about-stat-card:hover::before {
+  left: 150%;
+}
+
+html.dark .about-stat-card::before {
+  background: linear-gradient(
+    115deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.03) 25%,
+    rgba(255, 255, 255, 0.28) 50%,
+    rgba(255, 255, 255, 0.03) 75%,
+    transparent 100%
+  );
+}
+
+/* ── focus parity: keyboard users get the same read as hover ──────────────── */
+.pl-card:focus-within,
+.shows-event:focus-within,
+.cat-card:focus-within,
+.czoom-card:focus-visible {
+  transform: translateY(-4px);
+  box-shadow: var(--lift-3);
+}
+
+.pl-card:focus-within .pl-img,
+.cat-card:focus-within img,
+.czoom-card:focus-visible .czoom-card-img {
+  transform: scale(1.04);
+}
+
+@media (hover: none), (prefers-reduced-motion: reduce) {
+  .pl-card, .shows-event, .cat-card, .czoom-card, .about-stat-card,
+  .craft-process-item, .team-card, .year-card, .tm-card, .slab,
+  .pl-card .pl-img, .shows-event-media img, .cat-card img,
+  .czoom-card-img, .slab-img {
+    transition-duration: 0.2s;
+  }
+  .pl-card:hover .pl-img, .shows-event:hover .shows-event-media img,
+  .cat-card:hover img, .czoom-card:hover .czoom-card-img,
+  .slab:hover .slab-img { transform: none; }
+  .about-stat-card:hover, .craft-process-item:hover { transform: none; }
+  .about-stat-card::before, .craft-process-item::before { display: none; }
+}

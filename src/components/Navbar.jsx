@@ -1,20 +1,39 @@
 import { useEffect, useRef, useState } from 'react'
 import { gsap, ScrollTrigger, reduced } from '../lib/gsap'
 import { Link, NavLink, useRoute } from '../lib/router'
-import { BRAND, NAV_LINKS } from '../data/site'
+import { BRAND, NAV_LINKS, COLLECTIONS } from '../data/site'
+import { familySlug } from '../pages/CollectionPage'
+import { AnimatedThemeToggler } from './magicui/AnimatedThemeToggler'
 import Button from './Button'
 import MobileSheet from './MobileSheet'
 
 /* E6 Liquid Pill — the active indicator stretches toward its new target,
    leading edge first, trailing edge ~120ms behind, like a droplet in transit.
    H3 Elastic Underline — the hover underline rubber-bands between links. */
+const ALL_NAV_LINKS = [{ to: '/', label: 'Home' }, ...NAV_LINKS]
+
 export default function Navbar() {
   const { path } = useRoute()
   const [open, setOpen] = useState(false)
+  const [dropdownOpen, setDropdownOpen] = useState(false)
+  const dropdownTimer = useRef(null)
+  const lastScrollY = useRef(0)
   const nav = useRef(null)
   const list = useRef(null)
   const pillEl = useRef(null)
   const pillPos = useRef({ l: 0, r: 0, on: false })
+
+  const handleDropdownMouseEnter = () => {
+    if (dropdownTimer.current) clearTimeout(dropdownTimer.current)
+    setDropdownOpen(true)
+  }
+
+  const handleDropdownMouseLeave = () => {
+    if (dropdownTimer.current) clearTimeout(dropdownTimer.current)
+    dropdownTimer.current = setTimeout(() => {
+      setDropdownOpen(false)
+    }, 1500)
+  }
 
   const isActive = (to) => (to === '/' ? path === '/' : path.startsWith(to))
 
@@ -55,101 +74,22 @@ export default function Navbar() {
   }, [path]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    const isHome = path === '/'
-
-    const checkDarkBg = () => {
-      if (!nav.current) return
-      if (isHome || path.startsWith('/collections')) {
-        nav.current.classList.remove('nav-dark-bg')
-        return
-      }
-      const rect = nav.current.getBoundingClientRect()
-      const y = rect.top + rect.height / 2
-      const xMid = rect.left + rect.width / 2
-
-      const prevVis = nav.current.style.visibility
-      nav.current.style.visibility = 'hidden'
-
-      let isDark = false
-      const points = [
-        { x: rect.left + 60, y },
-        { x: xMid, y },
-        { x: rect.left + rect.width - 60, y }
-      ]
-
-      for (const pt of points) {
-        let el = document.elementFromPoint(pt.x, pt.y)
-        while (el && el !== document.body && el !== document.documentElement) {
-          const cls = el.className ? String(el.className) : ''
-          const tag = el.tagName ? el.tagName.toUpperCase() : ''
-          const id = el.id ? String(el.id) : ''
-
-          if (
-            cls.includes('deep') ||
-            cls.includes('dark') ||
-            cls.includes('tt') ||
-            cls.includes('hero') ||
-            cls.includes('footer') ||
-            cls.includes('black') ||
-            cls.includes('obsidian') ||
-            id === 'the-turn' ||
-            id === 'two-floors' ||
-            id === 'sampler' ||
-            tag === 'FOOTER' ||
-            el.getAttribute('data-theme') === 'dark'
-          ) {
-            isDark = true
-            break
-          }
-
-          const bg = window.getComputedStyle(el).backgroundColor
-          if (bg && bg !== 'transparent' && bg !== 'rgba(0, 0, 0, 0)') {
-            const match = bg.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/)
-            if (match) {
-              const [, r, g, b, a] = match
-              const alpha = a !== undefined ? parseFloat(a) : 1
-              if (alpha > 0.35) {
-                const lum = (parseInt(r) * 0.299 + parseInt(g) * 0.587 + parseInt(b) * 0.114)
-                if (lum < 165) {
-                  isDark = true
-                  break
-                } else {
-                  break
-                }
-              }
-            }
-          }
-          el = el.parentElement
-        }
-        if (isDark) break
-      }
-
-      nav.current.style.visibility = prevVis
-
-      if (isDark || document.documentElement.classList.contains('dark')) {
-        nav.current.classList.add('nav-dark-bg')
-      } else {
-        nav.current.classList.remove('nav-dark-bg')
-      }
-    }
-
     const onScroll = () => {
       if (!nav.current) return
-      nav.current.classList.remove('nav-hide-top')
-      checkDarkBg()
+      if (window.scrollY > 40) {
+        nav.current.classList.add('nav-scrolled')
+      } else {
+        nav.current.classList.remove('nav-scrolled')
+      }
     }
 
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
     window.addEventListener('resize', onScroll, { passive: true })
 
-    const observer = new MutationObserver(checkDarkBg)
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] })
-
     return () => {
       window.removeEventListener('scroll', onScroll)
       window.removeEventListener('resize', onScroll)
-      observer.disconnect()
     }
   }, [path])
 
@@ -157,35 +97,78 @@ export default function Navbar() {
     <>
       <header className="nav" ref={nav}>
         <Link to="/" className="brand" aria-label={`${BRAND.name} — home`}>
-          <span className="brand-mark">{BRAND.mark}</span>
-          <span className="brand-suffix" aria-hidden="true">{BRAND.suffix}</span>
+          <img
+            src="/img/taif-logo-maroon.png"
+            alt={BRAND.name}
+            className="header-brand-img"
+            style={{
+              height: '36px',
+              width: 'auto',
+              objectFit: 'contain',
+              display: 'block'
+            }}
+          />
         </Link>
         <nav className="nav-links" aria-label="Primary" ref={list}>
           <span className="nav-pill" ref={pillEl} aria-hidden="true" />
-          {NAV_LINKS.map((l) => (
-            <NavLink
-              key={l.to}
-              to={l.to}
-              className={isActive(l.to) ? 'on' : ''}
-              aria-current={isActive(l.to) ? 'page' : undefined}
-            >
-              {/* H3 Label Roll — the word steps up, its twin steps in below */}
-              <span className="nl-roll">
-                <span className="nl-up">{l.label}</span>
-                <span className="nl-in" aria-hidden="true">{l.label}</span>
-              </span>
-            </NavLink>
-          ))}
+          {ALL_NAV_LINKS.map((l) => {
+            const isCollections = l.to === '/collections'
+
+            const navItem = (
+              <NavLink
+                key={l.to}
+                to={l.to}
+                className={isActive(l.to) ? 'on' : ''}
+                aria-current={isActive(l.to) ? 'page' : undefined}
+              >
+                {/* H3 Label Roll — the word steps up, its twin steps in below */}
+                <span className="nl-roll">
+                  <span className="nl-up">{l.label}</span>
+                  <span className="nl-in" aria-hidden="true">{l.label}</span>
+                </span>
+              </NavLink>
+            )
+
+            if (!isCollections) return navItem
+
+            return (
+              <div
+                key={l.to}
+                className={`nav-dropdown-wrap ${dropdownOpen ? 'is-open' : ''}`}
+                onMouseEnter={handleDropdownMouseEnter}
+                onMouseLeave={handleDropdownMouseLeave}
+              >
+                {navItem}
+                <div className="nav-dropdown-menu">
+                  <div className="nav-dropdown-list">
+                    {COLLECTIONS.map((c) => (
+                      <Link
+                        key={c.no}
+                        to={`/collections/${familySlug(c.name)}`}
+                        className="nav-dropdown-item"
+                        onClick={() => setDropdownOpen(false)}
+                      >
+                        {c.name}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )
+          })}
         </nav>
-        <button
-          className="burger"
-          aria-expanded={open}
-          aria-controls="sheet"
-          aria-label={open ? 'Close menu' : 'Open menu'}
-          onClick={() => setOpen(!open)}
-        >
-          <i aria-hidden="true" />
-        </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+          <AnimatedThemeToggler duration={500} variant="circle" />
+          <button
+            className="burger"
+            aria-expanded={open}
+            aria-controls="sheet"
+            aria-label={open ? 'Close menu' : 'Open menu'}
+            onClick={() => setOpen(!open)}
+          >
+            <i aria-hidden="true" />
+          </button>
+        </div>
       </header>
       <MobileSheet open={open} onClose={() => setOpen(false)} />
     </>

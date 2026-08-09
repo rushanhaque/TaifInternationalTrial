@@ -254,7 +254,7 @@ export const AnimatedThemeToggler = ({
       type="button"
       ref={buttonRef}
       onClick={toggleTheme}
-      className={className || ''}
+      className={`theme-toggle-btn ${className || ''}`}
       style={{
         display: 'inline-flex',
         alignItems: 'center',
@@ -265,7 +265,7 @@ export const AnimatedThemeToggler = ({
         background: 'transparent',
         border: 'none',
         cursor: 'pointer',
-        color: 'var(--ink)'
+        color: 'inherit'
       }}
       {...props}
     >
