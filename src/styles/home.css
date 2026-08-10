@@ -28,8 +28,7 @@
   pointer-events: none;
 }
 
-.hb-video,
-.hb-video--still {
+.hb-video {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -61,8 +60,7 @@
     );
 }
 
-html.dark .hb-video,
-html.dark .hb-video--still { opacity: 0.5; }
+html.dark .hb-video { opacity: 0.5; }
 
 html.dark .hb-scrim {
   background:

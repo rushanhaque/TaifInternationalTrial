@@ -1,7 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { gsap, reduced, coarse } from '../lib/gsap'
 import { BRAND } from '../data/site'
-import { HERO_IMG } from '../data/images'
 
 /* the hero clip — swap this URL to change the landing-page backdrop */
 const HERO_VIDEO = 'https://res.cloudinary.com/djszwbnxp/video/upload/v1786354702/IMG_0217_mkksta.mp4'
@@ -133,27 +132,22 @@ export default function HeroBrand() {
       <h1 className="sr-only">
         {BRAND.name} — {BRAND.line}
       </h1>
-      {/* Ambient workshop footage behind the wordmark. Muted + loop + inline so
-          it autoplays everywhere; a scrim over it keeps the mark and tagline
-          legible in both themes. reduced-motion users get the poster still,
-          never the moving video. The clip is the client's own Cloudinary
-          asset (same one the Craft section uses) — swap the URL to change it. */}
+      {/* Ambient workshop footage behind the wordmark, and nothing else — no
+          poster frame, no photographic fallback: the clip is the landing page.
+          Muted + loop + inline so it autoplays everywhere. Reduced-motion
+          visitors get the same file held on its first frame rather than a
+          different image, so the page never shows a photograph.
+          The clip is the client's own Cloudinary asset — swap the URL above. */}
       <div className="hb-media" aria-hidden="true">
-        {!reduced() && (
-          <video
-            className="hb-video"
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="metadata"
-            poster={HERO_IMG}
-            src={HERO_VIDEO}
-          />
-        )}
-        {reduced() && (
-          <div className="hb-video hb-video--still" style={{ backgroundImage: `url('${HERO_IMG}')` }} />
-        )}
+        <video
+          className="hb-video"
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="auto"
+          src={HERO_VIDEO}
+        />
         <div className="hb-scrim" />
       </div>
       <div className="hb-stage" ref={stage}>

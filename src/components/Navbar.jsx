@@ -31,9 +31,7 @@ export default function Navbar() {
 
   const handleDropdownMouseLeave = () => {
     if (dropdownTimer.current) clearTimeout(dropdownTimer.current)
-    dropdownTimer.current = setTimeout(() => {
-      setDropdownOpen(false)
-    }, 1500)
+    setDropdownOpen(false)
   }
 
   const isActive = (to) => (to === '/' ? path === '/' : path.startsWith(to))
