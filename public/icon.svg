@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="TAIF INTERNATIONAL">
-  <!-- The mark: a brass form resting on a wood ground. Metal meets grain. -->
-  <rect width="64" height="64" rx="14" fill="#faf7f2"/>
-  <rect x="14" y="40" width="36" height="10" rx="2" fill="#6b4a2e"/>
-  <circle cx="32" cy="26" r="13" fill="#b0894f"/>
-  <!-- the raised highlight a hammered surface throws -->
-  <path d="M24 20a13 13 0 0 1 12-5" fill="none" stroke="#e3c88f" stroke-width="2.5" stroke-linecap="round"/>
-</svg>

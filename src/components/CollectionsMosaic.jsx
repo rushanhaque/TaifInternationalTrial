@@ -106,9 +106,11 @@ export default function CollectionsMosaic() {
                       <span className="cm-name-mask">
                         <span className="cm-name">{c.name}</span>
                       </span>
+                      {/* the material line ("Brass · Wood · Copper") used to sit
+                          above the pitch here — dropped, so the cover carries
+                          the family name and its one-line description only */}
                       <span className="cm-detail">
                         <span className="cm-detail-in">
-                          <span className="cm-mat">{c.material}</span>
                           <span className="cm-pitch">{c.pitch}</span>
                         </span>
                       </span>

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link } from '../lib/router'
-import { CATALOGUE, CATEGORIES, railItems } from '../data/catalogue'
+import { CATEGORIES } from '../data/catalogue'
+import { useContent, railProducts } from '../lib/content'
 import { CharCascade, Dilate } from '../components/Reveal'
 import ProductCard from '../components/ui/ProductCard'
 import CircularGallery from '../components/reactbits/CircularGallery'
@@ -9,7 +10,7 @@ import { productImg } from '../data/images'
 const OPTIONS = ['All', ...CATEGORIES]
 
 export default function CataloguePage() {
-  const items = CATALOGUE
+  const items = useContent('products')
 
   return (
     <>
@@ -32,7 +33,7 @@ export default function CataloguePage() {
           <div className="sec-head"><span className="meta">New arrivals</span></div>
           <div style={{ height: '600px', position: 'relative' }}>
             <CircularGallery
-              items={railItems().map((p) => ({
+              items={railProducts().map((p) => ({
                 image: productImg(p.slug),
                 text: p.name.toUpperCase()
               }))}

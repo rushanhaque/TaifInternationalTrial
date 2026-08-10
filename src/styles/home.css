@@ -348,12 +348,22 @@ html.dark .hb-scrim {
 .countries-card {
   margin-top: 3rem;
   padding: 4.5rem 0 2.5rem;
-  background: var(--white);
+  /* A faint silver wash rather than flat white — just enough cool grey to
+     separate the card from the cream page behind it and give the flags a
+     ground to sit on. Kept very light so the flag colours stay the brightest
+     thing in the band. */
+  background: linear-gradient(168deg, #FBFBFC 0%, #F1F2F4 52%, #E8EAEE 100%);
   border-radius: var(--r-lg);
   box-shadow: var(--lift-2), 0 24px 48px -12px rgba(0, 0, 0,0.06);
   border: 1px solid var(--hair);
   position: relative;
   overflow: hidden;
+}
+
+/* dark mode keeps the same idea — a cool lift off the burgundy ground, not
+   the light silver, which would glare */
+html.dark .countries-card {
+  background: linear-gradient(168deg, #241318 0%, #1E1015 55%, #190C11 100%);
 }
 
 /* ============ Mobile Responsiveness Overrides ============ */
@@ -611,11 +621,25 @@ html.dark .white-review-card {
     grid-template-columns: 0.9fr 1.1fr;
   }
 
+  /* The left column locks while the process list scrolls past it. Because the
+     "Heritage" kicker is now the first thing inside this column, the lock
+     begins at the heading rather than at the "A hundred hammers" headline —
+     which is the whole point of the arrangement. */
   .craft-intro {
     position: sticky;
     top: clamp(6rem, 12vh, 9rem);
   }
 }
+
+/* the section label, left-aligned at the head of the narrative column */
+.craft-kicker {
+  display: block;
+  margin-bottom: clamp(0.9rem, 2vh, 1.4rem);
+  color: #421520;
+  opacity: 1;
+}
+
+html.dark .craft-kicker { color: var(--on-deep, #F4EEE8); }
 
 .craft-headline {
   font-family: var(--font-display);

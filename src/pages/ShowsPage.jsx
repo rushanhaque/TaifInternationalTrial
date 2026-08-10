@@ -1,6 +1,7 @@
 import { CharCascade, Dilate, CardsReveal } from '../components/Reveal'
 import Button from '../components/Button'
 import SignatureScroll from '../components/SignatureScroll'
+import { useContent } from '../lib/content'
 import '../styles/mk2/page-editorial.css'
 
 /* ── /shows — exhibitions and the Moradabad showroom ───────────────────────
@@ -9,21 +10,8 @@ import '../styles/mk2/page-editorial.css'
    burgundy type, which meant the whole page inverted to unreadable the
    moment the theme toggle was used. */
 
-const ATELIER_IMAGES = [
-  { id: 1, img: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=1200&auto=format&fit=crop', alt: 'Finishing bench in the Moradabad atelier' },
-  { id: 2, img: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1200&auto=format&fit=crop', alt: 'Showroom display of finished metalware' },
-  { id: 3, img: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?q=80&w=1200&auto=format&fit=crop', alt: 'Seasoned timber stacked in the wood shop' },
-  { id: 4, img: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=1200&auto=format&fit=crop', alt: 'Hand-hammered vessels awaiting patina' },
-  { id: 5, img: 'https://images.unsplash.com/photo-1507652313519-d4e9174996dd?q=80&w=1200&auto=format&fit=crop', alt: 'Buyer viewing room at the Saharanpur floor' },
-  { id: 6, img: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=1200&auto=format&fit=crop', alt: 'Finished pieces staged for packing' },
-]
-
-const EXHIBITION_CARDS = [
-  { id: 1, title: 'IHGF Delhi Fair', category: 'International exposition', date: 'Autumn 2026', location: 'Greater Noida, Delhi NCR', img: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=1200&auto=format&fit=crop' },
-  { id: 2, title: 'Ambiente Frankfurt', category: 'Global home & living', date: 'Spring 2027', location: 'Frankfurt, Germany', img: 'https://images.unsplash.com/photo-1511578314322-379afb476865?q=80&w=1200&auto=format&fit=crop' },
-  { id: 3, title: 'High Point Market', category: 'North American showcase', date: 'Spring 2027', location: 'North Carolina, USA', img: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?q=80&w=1200&auto=format&fit=crop' },
-  { id: 4, title: 'Maison & Objet', category: 'Design & decoration', date: 'Autumn 2027', location: 'Paris, France', img: 'https://images.unsplash.com/photo-1582555172866-f73bb12a2ab3?q=80&w=1200&auto=format&fit=crop' },
-]
+/* the atelier plates and the trade-show cards are editable in /admin — they
+   live in the content store now rather than as constants here */
 
 /* a drawn pin — the emoji it replaces rendered as a colour glyph and ignored
    the surrounding type colour in both themes */
@@ -37,6 +25,9 @@ function PinIcon() {
 }
 
 export default function ShowsPage() {
+  const atelier = useContent('atelier')
+  const exhibitions = useContent('exhibitions')
+
   return (
     <>
       <section className="page-hero wrap">
@@ -53,7 +44,7 @@ export default function ShowsPage() {
             <span className="meta">Moradabad · Saharanpur</span>
           </div>
 
-          <SignatureScroll />
+          <SignatureScroll slides={atelier} />
         </div>
       </section>
 
@@ -65,7 +56,7 @@ export default function ShowsPage() {
           </div>
 
           <CardsReveal className="shows-events-grid" selector=":scope > .shows-event">
-            {EXHIBITION_CARDS.map((event) => (
+            {exhibitions.map((event) => (
               <article key={event.id} className="shows-event">
                 <div className="shows-event-media">
                   <img src={event.img} alt="" loading="lazy" decoding="async" />

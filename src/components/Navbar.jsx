@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { gsap, ScrollTrigger, reduced } from '../lib/gsap'
 import { Link, NavLink, useRoute } from '../lib/router'
+import { useDarkMode } from '../lib/hooks'
 import { BRAND, NAV_LINKS, COLLECTIONS } from '../data/site'
 import { familySlug } from '../pages/CollectionPage'
 import { AnimatedThemeToggler } from './magicui/AnimatedThemeToggler'
@@ -14,6 +15,7 @@ const ALL_NAV_LINKS = [{ to: '/', label: 'Home' }, ...NAV_LINKS]
 
 export default function Navbar() {
   const { path } = useRoute()
+  const dark = useDarkMode()
   const [open, setOpen] = useState(false)
   const [atTop, setAtTop] = useState(true)
   const [dropdownOpen, setDropdownOpen] = useState(false)
@@ -29,10 +31,19 @@ export default function Navbar() {
     setDropdownOpen(true)
   }
 
+  /* A grace period, not a decoration: the pointer has to cross a gap between
+     the "Collections" link and the panel below it, and closing the instant it
+     leaves either one makes the menu impossible to reach. Half a second is
+     long enough to cross and short enough not to feel stuck open. */
   const handleDropdownMouseLeave = () => {
     if (dropdownTimer.current) clearTimeout(dropdownTimer.current)
-    setDropdownOpen(false)
+    dropdownTimer.current = setTimeout(() => setDropdownOpen(false), 500)
   }
+
+  /* a pending close must not fire after the menu unmounts */
+  useEffect(() => () => {
+    if (dropdownTimer.current) clearTimeout(dropdownTimer.current)
+  }, [])
 
   const isActive = (to) => (to === '/' ? path === '/' : path.startsWith(to))
 
@@ -104,8 +115,17 @@ export default function Navbar() {
         ref={nav}
       >
         <Link to="/" className="brand" aria-label={`${BRAND.name} — home`}>
+          {/* Three grounds, three marks. Hero is the transparent bar over the
+              video, so the white mark reads on it in either theme. Off the
+              hero the bar is solid: cream in light mode (burgundy mark) and
+              #1A090D in dark (white mark) — the burgundy one was being used
+              there too, at 1.25:1 against the dark bar, i.e. invisible. */}
           <img
-            src={heroMode ? '/img/taif-logo-white.png' : '/img/taif-logo-maroon.png'}
+            src={
+              heroMode ? '/img/taif-logo-white.png'
+                : dark ? '/img/taif-logo-darkmode.png'
+                  : '/img/taif-logo-maroon.png'
+            }
             alt={BRAND.name}
             className="header-brand-img"
             style={{

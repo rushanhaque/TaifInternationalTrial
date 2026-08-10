@@ -1,13 +1,12 @@
 import { useEffect, useRef } from 'react'
 import { TIMELINE, PRINCIPLES, TEAM, BRAND } from '../data/site'
 import { CharCascade, Dilate } from '../components/Reveal'
-import Slab from '../components/Slab'
 import Button from '../components/Button'
 import MaskedHeading from '../components/MaskedHeading'
 import { WORKSHOP_IMGS } from '../data/images'
 import Timeline from '../components/mk2/Timeline'
+import '../styles/people-cards.css'
 
-const TEAM_TONES = ['brass', 'wood', 'copper', 'antique', 'walnut', 'inlay']
 
 export default function AboutPage() {
   const bgVideo = "https://res.cloudinary.com/djszwbnxp/video/upload/v1786264932/IMG_0205_n1mn8t.mp4"
@@ -166,14 +165,48 @@ export default function AboutPage() {
       <section className="section alt">
         <div className="wrap">
           <div className="sec-head"><span className="meta">The people</span></div>
-          <div className="grid">
-            {TEAM.map((m, i) => (
-              <div key={m.name} className="sp-4 team-card">
-                <Slab tone={TEAM_TONES[i]} ratio="4/5" label={m.name.toUpperCase()} meta={m.role}
-                  img={WORKSHOP_IMGS[i % WORKSHOP_IMGS.length]} alt={m.role} />
-              </div>
-            ))}
-          </div>
+
+          {/* Each card is a single portrait cut along a horizontal seam. At
+              rest the two halves sit flush and it reads as one plate; on hover
+              they draw apart — brass above, grain below — and the line about
+              the person surfaces in the gap. It is the hero wordmark's own
+              motion, applied to a face instead of a letterform. */}
+          <ul className="pcx-row">
+            {TEAM.map((m, i) => {
+              const img = WORKSHOP_IMGS[i % WORKSHOP_IMGS.length]
+              return (
+                <li className="pcx" key={m.name}>
+                  <article className="pcx-card">
+                    <div className="pcx-plate">
+                      {/* both halves carry the same image and are clipped to
+                          opposite halves, so they align seamlessly at rest */}
+                      <span className="pcx-half pcx-half--top">
+                        <img src={img} alt="" loading="lazy" decoding="async" />
+                      </span>
+                      <span className="pcx-half pcx-half--bot">
+                        <img src={img} alt="" loading="lazy" decoding="async" />
+                      </span>
+
+                      <span className="pcx-seam" aria-hidden="true" />
+
+                      <span className="pcx-reveal">
+                        <span className="pcx-reveal-in">{m.seam}</span>
+                      </span>
+
+                      <span className="pcx-since">{m.since}</span>
+                    </div>
+
+                    <div className="pcx-foot">
+                      <span className="meta pcx-discipline">{m.discipline}</span>
+                      <h3 className="pcx-name">{m.name}</h3>
+                      <p className="pcx-role">{m.role}</p>
+                    </div>
+                  </article>
+                </li>
+              )
+            })}
+          </ul>
+
           <div style={{ marginTop: '2.2rem' }}>
             <Button to="/contact" variant="ghost">Visit the works</Button>
           </div>

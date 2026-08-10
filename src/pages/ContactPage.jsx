@@ -4,6 +4,15 @@ import { CharCascade } from '../components/Reveal'
 import Field from '../components/Field'
 import Button from '../components/Button'
 
+/* Both the embed and the link are built from the one real address in
+   LOCATIONS, so the pin follows a change there. The old embed used a `pb=`
+   blob that resolved to "Moradabad, Uttar Pradesh" — the city, not the works;
+   the `q=` form needs no API key and centres on the address given. */
+const addressLine = [LOCATIONS[0].name, ...LOCATIONS[0].lines].join(', ')
+const mapQuery = encodeURIComponent(LOCATIONS[0].lines.join(', '))
+const mapEmbedSrc = `https://www.google.com/maps?q=${mapQuery}&output=embed`
+const mapsHref = `https://www.google.com/maps/search/?api=1&query=${mapQuery}`
+
 export default function ContactPage() {
   const [sent, setSent] = useState(false)
 
@@ -99,19 +108,43 @@ export default function ContactPage() {
       <section className="section">
         <div className="wrap">
           <div className="sec-head"><span className="idx">1.2</span><span className="meta">Location</span></div>
-          <div className="contact-map-wrap">
+          {/* A picture of the map, not a map. The embed is left non-interactive
+              — no panning, no ctrl+scroll zoom, no Street Street View — and the
+              whole panel is a single link that opens the real thing in Google
+              Maps. `pointer-events: none` on the frame is what does it: wheel
+              and drag events pass straight through to the page, so scrolling
+              over the map scrolls the page as it should.
+
+              The frame is aria-hidden and taken out of the tab order because
+              the anchor around it already carries the accessible name; without
+              that, keyboard users tabbed into a map they cannot operate. */}
+          <a
+            className="contact-map-wrap"
+            href={mapsHref}
+            target="_blank"
+            rel="noreferrer"
+            aria-label={`Open ${BRAND.name}'s location in Google Maps — ${addressLine}`}
+          >
             <iframe
               className="contact-map"
-              title="Taif International – Moradabad"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d112046.89357949399!2d78.70791570000001!3d28.838888700000003!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390b07539e9bd80b%3A0x8393adc0e67adea7!2sMoradabad%2C%20Uttar%20Pradesh!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
+              title="Map of the Moradabad works"
+              src={mapEmbedSrc}
               width="100%"
               height="450"
-              style={{ border: 0, borderRadius: 'var(--r-lg)' }}
-              allowFullScreen=""
+              style={{ border: 0 }}
               loading="lazy"
+              tabIndex={-1}
+              aria-hidden="true"
               referrerPolicy="no-referrer-when-downgrade"
             />
-          </div>
+            <span className="contact-map-cue">
+              Open in Google Maps
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M7 17 17 7" /><path d="M8 7h9v9" />
+              </svg>
+            </span>
+          </a>
         </div>
       </section>
     </>

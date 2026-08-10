@@ -14,8 +14,12 @@ export const BRAND = {
   descriptor: 'Metal & Wood Handicraft Manufacture · Export',
   est: '1998',
   origin: 'Moradabad · India',
-  email: 'export@taifinternational.com',
-  phone: '+91 98370 42200',
+  /* Every mailto: and wa.me link on the site derives from these two — the
+     footer icons, the contact page, the enquiry forms and the JSON-LD. Change
+     them here and every enquiry route follows. */
+  email: 'internationaltaif93@gmail.com',
+  phone: '+91 9389686112',
+  instagram: 'https://instagram.com/taif_internaitonal93',
   /* The canonical production origin, no trailing slash. Every canonical URL,
      og:url and structured-data URL derives from this. Leave it empty and the
      site canonicalises to whatever origin is serving it, which is what you
@@ -58,7 +62,7 @@ export const MORE_LINKS = [
 ]
 
 export const FIGURES = [
-  { value: '10–15', unit: 'artisans', label: 'People working in the workshop' },
+  { value: '15+', unit: 'artisans', label: 'People working in the workshop' },
   { value: '600+', unit: 'orders', label: 'Estimated orders fulfilled per year' },
   { value: '16', unit: 'countries', label: 'Export markets shipped worldwide' },
   { value: '99.1', unit: '% on time', label: 'Container dispatch record, trailing twelve months' },
@@ -192,7 +196,7 @@ export const TIMELINE = [
   { year: '2013', copy: 'Seasoning yard and kiln commissioned. Wood is dried to 8–10% before it is cut, not after.' },
   { year: '2019', copy: 'Lacquer and powder-coat lines brought in-house. Colour becomes a process instead of a subcontract.' },
   { year: '2024', copy: 'Rooftop solar carries the finishing lines; metal offcuts go back to the smelter, wood offcuts to the boiler.' },
-  { year: '2026', copy: 'Today: 10-15 artisans, 16 export markets, and six materials.' },
+  { year: '2026', copy: 'Today: 15+ artisans, 16 export markets, and six materials.' },
 ]
 
 export const PRINCIPLES = [
@@ -202,13 +206,34 @@ export const PRINCIPLES = [
   { name: 'Papers travel with the goods', copy: 'Mill certificates, harvest documents, test reports and packing lists ship inside the container. If we cannot document a claim, we do not make it.' },
 ]
 
+/* Three cards, deliberately — the About page shows the whole of this list, so
+   adding a fourth entry adds a fourth card and breaks the three-up rhythm.
+   `seam` is the line revealed when the card splits on hover; keep it short.
+
+   NOTE FOR HANDOVER: these names are still placeholders. Swap them, their
+   roles and their `since` years for the real bench before launch. */
 export const TEAM = [
-  { name: 'Imran Taif', role: 'Founder & Managing Director' },
-  { name: 'Rehana Qureshi', role: 'Head of Finishing' },
-  { name: 'Devendra Sharma', role: 'Master Metalsmith' },
-  { name: 'Anjali Rawat', role: 'Wood Shop & Seasoning' },
-  { name: 'Faizan Ahmed', role: 'Export & Compliance' },
-  { name: 'Neha Kulshrestha', role: 'Design & Sampling' },
+  {
+    name: 'Imran Taif',
+    role: 'Founder & Managing Director',
+    discipline: 'The bench',
+    since: '1998',
+    seam: 'Signs off every sample against the master.',
+  },
+  {
+    name: 'Devendra Sharma',
+    role: 'Master Metalsmith',
+    discipline: 'Metal floor',
+    since: '2004',
+    seam: 'Raises, chases and planishes by hand.',
+  },
+  {
+    name: 'Anjali Rawat',
+    role: 'Wood Shop & Seasoning',
+    discipline: 'Wood floor',
+    since: '2009',
+    seam: 'Meters moisture before a single cut.',
+  },
 ]
 
 export const TESTIMONIALS = [
@@ -286,10 +311,15 @@ export const FAQS = [
   },
 ]
 
+/* The single real address. The Saharanpur and Delhi entries that used to sit
+   beside this one were placeholders written to the right shape — they are gone
+   rather than left to read as premises the business does not have. */
 export const LOCATIONS = [
-  { name: 'Moradabad Works', lines: ['Plot 21, Industrial Estate', 'Moradabad 244001, Uttar Pradesh'], meta: 'Metal · HQ' },
-  { name: 'Saharanpur Wood Shop', lines: ['Village Nakur Road', 'Saharanpur 247001, Uttar Pradesh'], meta: 'Wood · Joinery' },
-  { name: 'Delhi Office', lines: ['412 Okhla Phase III', 'New Delhi 110020'], meta: 'Export · Commercial' },
+  {
+    name: 'Moradabad Works',
+    lines: ['Sarai Husaini Begum, Jhabbu Ka Nala', 'Moradabad 244001, Uttar Pradesh'],
+    meta: 'Metal & Wood · HQ',
+  },
 ]
 
 export const CERTS = ['ISO 9001:2015', 'BSCI audited', 'FSC® mixed sources', 'EPCH member', 'REACH', 'FDA food-contact']

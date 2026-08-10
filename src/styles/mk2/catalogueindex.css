@@ -44,7 +44,8 @@
     box-shadow var(--t-base) var(--ease-fluid);
 }
 
-.cv-btn:hover { color: var(--graphite); }
+/* the view toggle keeps its colour on hover; the pressed state below is what
+   marks the active view, and it is not a hover */
 
 .cv-btn[aria-pressed='true'] {
   background: var(--white);

@@ -1,5 +1,5 @@
 import { Link, navigate } from '../lib/router'
-import { CATALOGUE, bySlug } from '../data/catalogue'
+import { productBySlug, useContent } from '../lib/content'
 import { FINISHES } from '../data/site'
 import { CharCascade, Dilate } from '../components/Reveal'
 import Slab from '../components/Slab'
@@ -12,12 +12,13 @@ import { productImg } from '../data/images'
 import { useCart } from '../lib/cart'
 
 export default function ProductPage({ params }) {
-  const p = bySlug(params.slug)
+  const products = useContent('products')
+  const p = productBySlug(params.slug)
   const { add, remove, has, setOpen } = useCart()
   if (!p) return <NotFoundPage />
 
   const finishes = FINISHES.filter((f) => p.finishes.includes(f.key))
-  const related = CATALOGUE.filter((x) => x.category === p.category && x.slug !== p.slug).slice(0, 6)
+  const related = products.filter((x) => x.category === p.category && x.slug !== p.slug).slice(0, 6)
   const specs = [
     ['Material', p.material],
     ['Finishes', finishes.map((f) => f.name).join(' · ')],

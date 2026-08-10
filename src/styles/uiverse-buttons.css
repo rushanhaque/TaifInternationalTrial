@@ -66,19 +66,9 @@
   color: #FFFFFF !important;
 }
 
-.btn.primary:hover,
-.btn:not(.ghost):hover {
-  translate: 0 0 !important;
-  transform: none !important;
-  background-color: #5C1F2E !important;
-  color: #FFFFFF !important;
-  border-color: rgba(255, 255, 255, 0.4) !important;
-}
-
-.btn.primary:hover .btn-label,
-.btn:not(.ghost):hover .btn-label {
-  color: #FFFFFF !important;
-}
+/* Hover does not recolour anything — see the note at the foot of this file.
+   The face, the label and the rule all hold their rest values; the only
+   feedback is the lift and shadow further down. */
 
 /* ── Ghost Outline Button ── */
 .btn.ghost {
@@ -92,21 +82,8 @@
   color: #421520 !important;
 }
 
-/* the fill itself is animated by .btn.ghost::after (see below); here we only
-   flip the type and border so the label reads against the incoming fill */
 .btn.ghost:hover {
-  background-color: transparent;
-  color: #FFFFFF !important;
-  border-color: var(--graphite, #421520) !important;
-  box-shadow: 0 10px 24px -8px rgba(66, 21, 32, 0.3) !important;
-}
-
-.btn.ghost:hover .btn-label {
-  color: #FFFFFF !important;
-}
-
-.btn.ghost:hover .btn-chip svg path {
-  stroke: #FFFFFF !important;
+  box-shadow: 0 10px 24px -8px rgba(66, 21, 32, 0.3);
 }
 
 .btn.ghost:active {
@@ -134,70 +111,28 @@
   transform: none !important;
 }
 
-.btn.primary:hover .btn-chip svg path,
-.btn:not(.ghost):hover .btn-chip svg path,
-.btn.ghost:hover .btn-chip svg path {
-  stroke: #FFFFFF !important;
-}
+/* ── Hover system ──────────────────────────────────────────────────────────
+   A button never changes colour on hover. The face, the label, the rule and
+   the arrow chip all hold their rest values in every context — light, dark
+   and the inverted .deep ground.
 
-/* ── Premium hover system ──────────────────────────────────────────────────
-   Static at rest, motion only on interaction. Primary buttons lift with a
-   warm shadow bloom and a sheen that sweeps across once; ghost buttons fill
-   from the centre. Nothing loops — the idle state is always still. */
+   The affordance is motion instead: a small lift and a shadow. Both are
+   dropped under prefers-reduced-motion, which leaves those visitors with the
+   cursor change alone — acceptable, because the control is already a <button>
+   and reads as one to assistive tech.
+
+   Removed deliberately, and worth not reinstating: a white sheen that swept
+   across the primary face, and a fill that grew from the centre of the ghost
+   face. Both were colour changes wearing a motion costume. */
 
 .btn { cursor: pointer; }
 
-/* the sheen — a single diagonal highlight that crosses on hover */
-.btn.primary::before,
-.btn:not(.ghost)::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -140%;
-  width: 60%;
-  height: 100%;
-  z-index: 1;
-  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.35), transparent);
-  transform: skewX(-18deg);
-  transition: left 0.6s var(--ease-fluid, cubic-bezier(0.65, 0, 0.35, 1));
-  pointer-events: none;
-}
-
+/* No transform here: the base .btn rule pins `transform: none !important`, so
+   a lift would be dead CSS that only looks like it does something. The shadow
+   is the whole affordance, and it does apply. */
 .btn.primary:hover,
 .btn:not(.ghost):hover {
-  transform: translateY(-3px);
   box-shadow: 0 14px 30px -8px rgba(66, 21, 32, 0.45);
-}
-
-.btn.primary:hover::before,
-.btn:not(.ghost):hover::before {
-  left: 140%;
-}
-
-.btn.primary:active,
-.btn:not(.ghost):active {
-  transform: translateY(-1px);
-  transition-duration: 0.12s;
-}
-
-/* ghost: the fill grows from the centre rather than snapping in */
-.btn.ghost::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: var(--graphite, #421520);
-  transform: scaleX(0);
-  transform-origin: center;
-  transition: transform 0.42s var(--ease-surge, cubic-bezier(0.16, 1.1, 0.3, 1));
-}
-
-.btn.ghost:hover {
-  transform: translateY(-2px);
-}
-
-.btn.ghost:hover::after {
-  transform: scaleX(1);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -226,21 +161,8 @@
   color: var(--graphite) !important;
 }
 
-.deep .btn.primary:hover,
-.deep .btn:not(.ghost):hover {
-  background-color: var(--chrome-2) !important;
-  border-color: rgba(66, 21, 32, 0.28) !important;
-}
-
-.deep .btn.primary:hover .btn-label,
-.deep .btn:not(.ghost):hover .btn-label {
-  color: var(--graphite) !important;
-}
-
 .deep .btn.primary .btn-chip svg path,
-.deep .btn:not(.ghost) .btn-chip svg path,
-.deep .btn.primary:hover .btn-chip svg path,
-.deep .btn:not(.ghost):hover .btn-chip svg path {
+.deep .btn:not(.ghost) .btn-chip svg path {
   stroke: var(--graphite) !important;
 }
 
@@ -258,34 +180,7 @@
   stroke: var(--on-deep) !important;
 }
 
-/* on the burgundy ground the animated fill must be cream, not the default
-   --graphite (which is burgundy here) */
-.deep .btn.ghost::after {
-  background: var(--on-deep);
-}
-
-.deep .btn.ghost:hover {
-  background-color: transparent !important;
-  border-color: var(--on-deep) !important;
-}
-
-.deep .btn.ghost:hover .btn-label {
-  color: var(--graphite) !important;
-}
-
-.deep .btn.ghost:hover .btn-chip svg path {
-  stroke: var(--graphite) !important;
-}
-
-/* ── Ghost hover in dark mode ──────────────────────────────────────────────
-   The animated fill (.btn.ghost::after) paints --graphite, which is cream in
-   dark mode, so the hovered label must flip to ink rather than staying white
-   (white-on-cream). .deep is handled separately above. */
-html.dark .btn.ghost:hover .btn-label,
-html.dark .btn.ghost:hover {
-  color: var(--graphite) !important;
-}
-
-html.dark .btn.ghost:hover .btn-chip svg path {
-  stroke: var(--graphite) !important;
-}
+/* The .deep and dark-mode ghost hover overrides that used to sit here existed
+   only to keep the label legible against the sweeping fill. With the fill gone
+   the rest colours already read correctly on both grounds, so re-adding a
+   hover colour here would reintroduce the exact problem they solved. */

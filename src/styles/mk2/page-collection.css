@@ -4,28 +4,8 @@
 
 .pl { position: relative; overflow: clip; background: var(--chrome); }
 
-/* ---- the ground word ---- */
-.pl-ground {
-  position: absolute;
-  top: 8vh;
-  left: 50%;
-  z-index: 0;
-  transform: translateX(-50%);
-  font-family: var(--font-display);
-  font-stretch: 125%;
-  font-weight: 500;
-  font-size: clamp(7rem, 26vw, 26rem);
-  line-height: 0.8;
-  letter-spacing: -0.05em;
-  white-space: nowrap;
-  pointer-events: none;
-  user-select: none;
-  /* barely there — it is the paper, not the print */
-  color: transparent;
-  background-image: linear-gradient(180deg, rgba(66, 21, 32, 0.11), rgba(66, 21, 32, 0.02));
-  -webkit-background-clip: text;
-  background-clip: text;
-}
+/* The ground word (.pl-ground) that used to sit here is gone — the family's
+   cover photograph is the masthead ground now. See .pl-head--shot below. */
 
 /* ---- masthead ---- */
 /* the family masthead is a .page-hero by another name — it carries the same
@@ -35,6 +15,105 @@
   z-index: 1;
   padding-top: calc(var(--nav-h) + clamp(3.5rem, 8vw, 6.5rem));
   padding-bottom: clamp(2rem, 4vw, 3.5rem);
+}
+
+/* ── masthead over the family's cover photograph ───────────────────────────
+   The band goes transparent and the collection's own plate shows through.
+   Everything below exists to keep the type readable on top of a photograph
+   nobody has vetted: the images are client-supplied and can be pale, busy or
+   blown out, so legibility cannot rest on the picture behaving. */
+.pl-head--shot {
+  padding-bottom: clamp(2.6rem, 5vw, 4.2rem);
+  background: transparent;
+  isolation: isolate;
+}
+
+.pl-head-media {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.pl-head-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+/* Two layers, each with a job, sized against the worst case: a blown-out
+   near-white photograph.
+
+   The HORIZONTAL wedge is the one that guarantees legibility. All the type is
+   left-aligned inside .wrap, so the scrim is heaviest on the left and clears
+   toward the right, where the picture is left to read. A radial was tried
+   first and was the wrong shape — the title is `white-space: nowrap`, so on a
+   wide screen it ran straight out of the radial's reach and the crumb fell to
+   3.47:1, under the 4.5:1 small-text floor.
+
+   The VERTICAL floor is lighter and does the rest: it seats the band against
+   the nav above and the grid below, and stops a bright sky at the top edge
+   from bleaching the whole thing. */
+.pl-head-scrim {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(12, 5, 7, 0.58) 0%,
+      rgba(12, 5, 7, 0.52) 42%,
+      rgba(12, 5, 7, 0.22) 72%,
+      rgba(12, 5, 7, 0.06) 100%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(12, 5, 7, 0.58) 0%,
+      rgba(12, 5, 7, 0.44) 45%,
+      rgba(12, 5, 7, 0.46) 78%,
+      rgba(12, 5, 7, 0.6) 100%
+    );
+}
+
+/* the type, forced light — .pl-title otherwise follows --graphite, which is
+   ink in light mode and would vanish into the scrim */
+.pl-head--shot .pl-title {
+  color: #FFFFFF;
+  -webkit-text-fill-color: #FFFFFF;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.55);
+}
+
+/* fully opaque, not the 0.86 it started at — the crumb is 11px, which WCAG
+   holds to 4.5:1, and the alpha was costing about a point of contrast */
+.pl-head--shot .pl-crumb,
+.pl-head--shot .pl-crumb a,
+.pl-head--shot .pl-crumb [aria-current] {
+  color: #FFFFFF;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.55);
+}
+
+.pl-head--shot .pl-crumb a:hover { color: #FFFFFF; }
+
+/* dark mode already runs a dark page, but the photograph is the same one, so
+   the scrim stays — only deepened a little to match the surrounding ground */
+html.dark .pl-head-scrim {
+  background:
+    linear-gradient(
+      90deg,
+      rgba(8, 3, 5, 0.66) 0%,
+      rgba(8, 3, 5, 0.6) 42%,
+      rgba(8, 3, 5, 0.3) 72%,
+      rgba(8, 3, 5, 0.12) 100%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(8, 3, 5, 0.68) 0%,
+      rgba(8, 3, 5, 0.54) 45%,
+      rgba(8, 3, 5, 0.56) 78%,
+      rgba(8, 3, 5, 0.7) 100%
+    );
 }
 
 .pl-crumb {
@@ -230,9 +309,6 @@ html.dark .pl-ref-tag {
 
 .pl-toggle-btn:hover {
   transform: scale(1.08);
-  background: rgba(255, 255, 255, 0.95);
-  border-color: #421520;
-  color: #421520;
 }
 
 .pl-toggle-btn.is-in {
@@ -411,34 +487,13 @@ html.dark .pl-mat {
 
 .pl-family-pill-btn:hover {
   transform: translateY(-3px);
-  background: #421520;
-  border-color: #421520;
-  color: #FFFFFF;
   box-shadow: 0 10px 25px rgba(66, 21, 32, 0.25);
-}
-
-.pl-family-pill-btn:hover .pl-family-pill-name,
-.pl-family-pill-btn:hover .pl-family-pill-arrow {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
 }
 
 html.dark .pl-family-pill-btn {
   background: rgba(255, 255, 255, 0.08);
   border-color: rgba(255, 255, 255, 0.2);
   color: #FFFFFF;
-}
-
-html.dark .pl-family-pill-btn:hover {
-  background: #FFFFFF;
-  border-color: #FFFFFF;
-  color: #1A090D;
-}
-
-html.dark .pl-family-pill-btn:hover .pl-family-pill-name,
-html.dark .pl-family-pill-btn:hover .pl-family-pill-arrow {
-  color: #1A090D !important;
-  -webkit-text-fill-color: #1A090D !important;
 }
 
 .pl-switch-list { border-top: 1px solid var(--hair); }

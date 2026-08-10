@@ -1,5 +1,6 @@
 import { useLayoutEffect, useMemo, useRef, useState } from 'react'
-import { PARTNERS, CASES, TESTIMONIALS, FIGURES } from '../data/site'
+import { PARTNERS, CASES, TESTIMONIALS } from '../data/site'
+import { useContent } from '../lib/content'
 import { CharCascade, Dilate } from '../components/Reveal'
 import Toggle from '../components/Toggle'
 import Button from '../components/Button'
@@ -313,6 +314,7 @@ function CaseSpread({ c, i }) {
 }
 
 export default function PartnersPage() {
+  const stats = useContent('stats')
   const [cat, setCat] = useState('All')
   const partners = cat === 'All' ? PARTNERS : PARTNERS.filter((p) => p.cat === cat)
   const root = useRef(null)
@@ -366,10 +368,10 @@ export default function PartnersPage() {
               </div>
               <div className="prt-fig">
                 <dt className="meta">Markets</dt>
-                {/* was hardcoded 42 while FIGURES in data/site.js — which
-                    /about and the homepage both read — says 16. Single-sourced
-                    so the two pages stop contradicting each other. */}
-                <dd>{FIGURES.find((f) => f.unit === 'countries')?.value ?? '—'}</dd>
+                {/* was hardcoded 42, then read from a FIGURES list the homepage
+                    did not actually share — so the two pages still disagreed
+                    (18 there, 16 here). Both now read the admin-editable stats. */}
+                <dd>{stats.find((s) => s.unit === 'countries')?.value ?? '—'}</dd>
               </div>
               <div className="prt-fig">
                 <dt className="meta">Since</dt>

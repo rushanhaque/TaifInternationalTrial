@@ -1,5 +1,9 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link } from '../../lib/router'
+import { getLenis } from '../../lib/useLenis'
+import { reduced } from '../../lib/gsap'
+import { useContent } from '../../lib/content'
+import { productImg } from '../../data/images'
 
 const SIGNATURE_ITEMS = [
   {
@@ -28,107 +32,39 @@ const SIGNATURE_ITEMS = [
   }
 ]
 
-const OTHER_PIECES = [
-  {
-    id: 'piece-1',
-    name: 'Aurelia Brass Lamp',
-    subtitle: 'Solid Hammered Brass',
-    image: 'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?q=80&w=800&auto=format&fit=crop',
-    gridPos: { row: 1, col: 1 },
-    dx: -120,
-    dy: -110
-  },
-  {
-    id: 'piece-2',
-    name: 'Verona Bronze Stand',
-    subtitle: 'Hand-Buffed Finish',
-    image: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?q=80&w=800&auto=format&fit=crop',
-    gridPos: { row: 2, col: 2 },
-    dx: 0,
-    dy: 0
-  },
-  {
-    id: 'piece-3',
-    name: 'Solstice Copper Bowl',
-    subtitle: 'Flame-Oxidized Patina',
-    image: 'https://images.unsplash.com/photo-1579656381226-5fc0f0100c3b?q=80&w=800&auto=format&fit=crop',
-    gridPos: { row: 1, col: 3 },
-    dx: 120,
-    dy: -110
-  },
-  {
-    id: 'piece-4',
-    name: 'Helios Brass Lantern',
-    subtitle: 'Architectural Lighting',
-    image: 'https://images.unsplash.com/photo-1540932239986-30128078f3c5?q=80&w=800&auto=format&fit=crop',
-    gridPos: { row: 2, col: 1 },
-    dx: -130,
-    dy: 0
-  },
-  {
-    id: 'piece-5',
-    name: 'Regent Cast Bench',
-    subtitle: 'Heavy Foundry Iron',
-    image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=800&auto=format&fit=crop',
-    gridPos: { row: 2, col: 3 },
-    dx: 130,
-    dy: 0
-  },
-  {
-    id: 'piece-6',
-    name: 'Celeste Copper Pitcher',
-    subtitle: 'Raw Copper Craft',
-    image: 'https://images.unsplash.com/photo-1615873968403-89e068629265?q=80&w=800&auto=format&fit=crop',
-    gridPos: { row: 3, col: 1 },
-    dx: -120,
-    dy: 100
-  },
-  {
-    id: 'piece-7',
-    name: 'Marbella Teak Table',
-    subtitle: 'Architectural Salvage',
-    image: 'https://images.unsplash.com/photo-1532372576444-dda954194ad0?q=80&w=800&auto=format&fit=crop',
-    gridPos: { row: 3, col: 2 },
-    dx: 0,
-    dy: 120
-  },
-  {
-    id: 'piece-8',
-    name: 'Zenith Brass Inlay',
-    subtitle: 'Precision Metalwork',
-    image: 'https://images.unsplash.com/photo-1616046229478-9901c5536a45?q=80&w=800&auto=format&fit=crop',
-    gridPos: { row: 3, col: 3 },
-    dx: 120,
-    dy: 100
-  },
-  {
-    id: 'piece-9',
-    name: 'Kashmiri Carved Tray',
-    subtitle: 'Walnut & Brass Trim',
-    image: 'https://images.unsplash.com/photo-1544457070-4cd773b4d71e?q=80&w=800&auto=format&fit=crop',
-    gridPos: { row: 4, col: 1 },
-    dx: -120,
-    dy: 150
-  },
-  {
-    id: 'piece-10',
-    name: 'Antiqued Nickel Urn',
-    subtitle: 'Spun Nickel Metalwork',
-    image: 'https://images.unsplash.com/photo-1581783342308-f792dbdd27c5?q=80&w=800&auto=format&fit=crop',
-    gridPos: { row: 4, col: 2 },
-    dx: 0,
-    dy: 160
-  },
-  {
-    id: 'piece-11',
-    name: 'Solarium Lantern',
-    subtitle: 'Clear Glass & Brass',
-    image: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=800&auto=format&fit=crop',
-    gridPos: { row: 4, col: 3 },
-    dx: 120,
-    dy: 150
-  }
+/* The best-sellers grid is now a selection of real catalogue products, chosen
+   in /admin → Best sellers and stored as slugs. Positions are derived rather
+   than authored: the nine cells sit in three rows beneath the signature plate,
+   and each card floats in from the direction of its own column, so the layout
+   still works when fewer than nine are selected.
+
+   The hardcoded eleven-piece list that used to live here was invented stock —
+   names and photographs of pieces that are not in the catalogue. */
+/* The signature plate occupies row 1, column 2, so the first two cards flank
+   it — that top row is the arrangement this section has always had. Filling
+   rows 2-4 only (which an earlier version did) left the plate stranded alone
+   on row 1 with a gap either side.
+
+   The ninth slot lands centred on row 4 rather than in the left corner, so a
+   full selection ends on a deliberate capstone instead of a lopsided orphan. */
+const CELLS = [
+  { row: 1, col: 1 }, { row: 1, col: 3 },                    // flanking the plate
+  { row: 2, col: 1 }, { row: 2, col: 2 }, { row: 2, col: 3 },
+  { row: 3, col: 1 }, { row: 3, col: 2 }, { row: 3, col: 3 },
+  { row: 4, col: 2 },                                        // centred tail
 ]
+
+function layoutFor(index) {
+  const { row, col } = CELLS[index % CELLS.length]
+  return {
+    row,
+    col,
+    /* drift in from the side the card lands on, and from further below the
+       lower its row — the same choreography the authored offsets described */
+    dx: (col - 2) * 125,
+    dy: (row - 1) * 55 + 30,
+  }
+}
 
 export default function Sampler() {
   const [activeIdx, setActiveIdx] = useState(0)
@@ -139,6 +75,35 @@ export default function Sampler() {
   const rafRef = useRef(null)
 
   const activeItem = SIGNATURE_ITEMS[activeIdx]
+
+  /* Resolve the chosen slugs against the live catalogue. A slug that no longer
+     matches a product — deleted, or renamed in the Products tab — is dropped
+     rather than rendered as a blank card, and empty slots are skipped, so the
+     grid closes up around whatever is genuinely selected. */
+  const bestSellers = useContent('bestSellers')
+  const products = useContent('products')
+  const pieces = (bestSellers || [])
+    .map((slug) => products.find((pr) => pr.slug === slug))
+    .filter(Boolean)
+
+  /* Clicking the signature plate runs the whole transition for you: it scrolls
+     to the exact offset where p reaches 1, which is the end of the section's
+     scroll travel, leaving the best-sellers grid fully settled and every card
+     landed. Without this the only way through was to keep wheeling.
+
+     Lenis owns the scroll position when it is running, so ask it rather than
+     window.scrollTo — the two fight each other otherwise. */
+  const skipToBestSellers = () => {
+    const sec = sectionRef.current
+    if (!sec) return
+    const maxScroll = sec.offsetHeight - window.innerHeight
+    if (maxScroll <= 0) return
+    const target = sec.offsetTop + maxScroll
+
+    const lenis = getLenis()
+    if (lenis) lenis.scrollTo(target, { duration: 1.1 })
+    else window.scrollTo({ top: target, behavior: reduced() ? 'auto' : 'smooth' })
+  }
 
   useEffect(() => {
     const handleScroll = () => {
@@ -206,33 +171,34 @@ export default function Sampler() {
         <div className="czoom-container">
           <div className="czoom-grid">
 
-            {/* Surrounding Cards (Pieces floating into place around Signature Piece) */}
-            {OTHER_PIECES.map((item, idx) => {
+            {/* Best sellers, floating into place around the signature plate */}
+            {pieces.map((item, idx) => {
+              const { row, col, dx, dy } = layoutFor(idx)
               const stagger = idx * 0.04
               const rawCardP = Math.min(1, Math.max(0, (p - 0.1 - stagger) / 0.6))
               const cardP = rawCardP * rawCardP * (3 - 2 * rawCardP)
 
               const opacity = cardP
               const scale = 0.5 + cardP * 0.5
-              const translateX = (1 - cardP) * item.dx
-              const translateY = (1 - cardP) * item.dy + afterTransitionOffsetY
+              const translateX = (1 - cardP) * dx
+              const translateY = (1 - cardP) * dy + afterTransitionOffsetY
 
               return (
                 <Link
-                  key={item.id}
-                  to="/catalogue"
+                  key={item.slug}
+                  to={`/catalogue/${item.slug}`}
                   className="czoom-card"
                   style={{
-                    gridRow: item.gridPos.row,
-                    gridColumn: item.gridPos.col,
+                    gridRow: row,
+                    gridColumn: col,
                     opacity,
                     transform: `translate3d(${translateX}px, ${translateY}px, 0) scale(${scale})`,
                     pointerEvents: p > 0.4 ? 'auto' : 'none'
                   }}
                 >
-                  <img src={item.image} alt={item.name} className="czoom-card-img" />
+                  <img src={item.image || productImg(item.slug)} alt={item.name} className="czoom-card-img" />
                   <div className="czoom-card-meta">
-                    <span className="czoom-card-sub">{item.subtitle}</span>
+                    <span className="czoom-card-sub">{item.material}</span>
                     <h3 className="czoom-card-name">{item.name}</h3>
                   </div>
                 </Link>
@@ -249,6 +215,18 @@ export default function Sampler() {
                 zIndex: p < 0.5 ? 12 : 2
               }}
             >
+              {/* Click anywhere on the plate to run the transition. It sits
+                  under the thumbnails and the settled caption in the stack, so
+                  it never swallows their clicks, and it retires once the grid
+                  has landed — past that point the plate is just a card. */}
+              {p < 0.5 && (
+                <button
+                  type="button"
+                  className="sig-skip"
+                  onClick={skipToBestSellers}
+                  aria-label="Skip to the best sellers"
+                />
+              )}
               {/* Full Card Big Image */}
               <img
                 key={activeItem.id}

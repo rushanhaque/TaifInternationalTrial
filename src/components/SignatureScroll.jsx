@@ -18,7 +18,10 @@ const WIPE_DURATION = 800    // ms for the clipPath wipe animation
 const HOLD_DURATION = 2000   // ms to hold each image before wiping to next
 
 export default function SignatureScroll({ slides = SIGNATURE_SLIDES }) {
-  const count = slides.length
+  /* the slide list is admin-editable, so it can arrive empty or malformed —
+     an empty array would make the advance modulo divide by zero */
+  const safe = Array.isArray(slides) ? slides.filter((s) => s && s.src) : []
+  const count = safe.length
   const slideRefs = useRef([])
   const dividerRefs = useRef([])
   const rafRef = useRef(null)
@@ -124,7 +127,7 @@ export default function SignatureScroll({ slides = SIGNATURE_SLIDES }) {
         isolation: 'isolate'
       }}
     >
-      {slides.map((s, i) => (
+      {safe.map((s, i) => (
         <div
           key={i}
           style={{

@@ -3,7 +3,7 @@ import { Link } from '../lib/router'
 import { gsap, ScrollTrigger, reduced } from '../lib/gsap'
 import { useCounter } from '../lib/hooks'
 import { PROCESS_STAGES, RIBBON_TERMS, HOME_COLLECTIONS, MATERIALS, FINISHES } from '../data/site'
-import { railItems } from '../data/catalogue'
+import { useContent, railProducts } from '../lib/content'
 import { CharCascade, SmoothReveal, Dilate, CardsReveal } from '../components/Reveal'
 import '../styles/mk2/page-materials.css'
 /* the home Reviews block reuses the testimonial card styling */
@@ -30,80 +30,39 @@ import TheTurn from '../components/mk2/TheTurn'
 import Sampler from '../components/mk2/Sampler'
 import MaskedHeading from '../components/MaskedHeading'
 
-import ReviewStack from '../components/ReviewStack'
 import LogoLoop from '../components/reactbits/LogoLoop'
 import CircularGallery from '../components/reactbits/CircularGallery'
 import { HeroVideoDialog } from '../components/magicui/HeroVideoDialog'
 
+/* The export markets, in the order given by the client. The count here is what
+   the "Countries served" figure should agree with — 16 — so if a market is
+   added or dropped, update that figure in /admin → Figures to match.
+
+   "Europe" is a region rather than a country and carries the EU flag; it sits
+   alongside France, Italy, Spain and Switzerland, which are themselves in
+   Europe. That is how the list was supplied. */
 const countryFlags = [
-  { src: "https://flagcdn.com/w160/us.png", alt: "United States", title: "United States" },
   { src: "https://flagcdn.com/w160/gb.png", alt: "United Kingdom", title: "United Kingdom" },
+  { src: "https://flagcdn.com/w160/us.png", alt: "United States", title: "United States" },
+  { src: "https://flagcdn.com/w160/eu.png", alt: "Europe", title: "Europe" },
+  { src: "https://flagcdn.com/w160/za.png", alt: "South Africa", title: "South Africa" },
   { src: "https://flagcdn.com/w160/au.png", alt: "Australia", title: "Australia" },
-  { src: "https://flagcdn.com/w160/de.png", alt: "Germany", title: "Germany" },
+  { src: "https://flagcdn.com/w160/bd.png", alt: "Bangladesh", title: "Bangladesh" },
+  { src: "https://flagcdn.com/w160/ca.png", alt: "Canada", title: "Canada" },
+  { src: "https://flagcdn.com/w160/cr.png", alt: "Costa Rica", title: "Costa Rica" },
   { src: "https://flagcdn.com/w160/fr.png", alt: "France", title: "France" },
   { src: "https://flagcdn.com/w160/it.png", alt: "Italy", title: "Italy" },
-  { src: "https://flagcdn.com/w160/es.png", alt: "Spain", title: "Spain" },
+  { src: "https://flagcdn.com/w160/ke.png", alt: "Kenya", title: "Kenya" },
   { src: "https://flagcdn.com/w160/ae.png", alt: "United Arab Emirates", title: "United Arab Emirates" },
-  { src: "https://flagcdn.com/w160/ca.png", alt: "Canada", title: "Canada" },
+  { src: "https://flagcdn.com/w160/tr.png", alt: "Turkey", title: "Turkey" },
+  { src: "https://flagcdn.com/w160/ch.png", alt: "Switzerland", title: "Switzerland" },
+  { src: "https://flagcdn.com/w160/sg.png", alt: "Singapore", title: "Singapore" },
+  { src: "https://flagcdn.com/w160/es.png", alt: "Spain", title: "Spain" },
 ]
 
-const REVIEW_CARDS = [
-  {
-    id: 1,
-    tone: 'walnut',
-    category: 'VERIFIED ORDER',
-    idx: '01',
-    stars: '★★★★★',
-    quote: '"They send a moisture reading with the sample. Nobody else in this category has ever done that unprompted."',
-    client: 'Meridian Living',
-    role: 'Head of Product',
-    tag: '300 PCS · 0 RETURNS'
-  },
-  {
-    id: 2,
-    tone: 'brass',
-    category: 'INLAY PROJECT',
-    idx: '02',
-    stars: '★★★★★',
-    quote: '"The brass inlay is the reason we moved. Four suppliers promised flush finish; only Taif delivered it."',
-    client: 'Atelier Kade',
-    role: 'Founding Partner',
-    tag: '36 SKUS · 0.5% DEFECTS'
-  },
-  {
-    id: 3,
-    tone: 'copper',
-    category: 'HOTEL SPEC',
-    idx: '03',
-    stars: '★★★★★',
-    quote: '"Four properties, one patina, zero visible variation. Housekeeping notices these things before we do."',
-    client: 'Halcyon Hotels',
-    role: 'Procurement Director',
-    tag: 'GLOBAL BOUTIQUE SUITES'
-  },
-  {
-    id: 4,
-    tone: 'antique',
-    category: 'ARCHITECTURAL',
-    idx: '04',
-    stars: '★★★★★',
-    quote: '"Precision hand-carved teak paired with solid unlacquered brass. Flawless craftsmanship from Moradabad."',
-    client: 'Studio Moradabad',
-    role: 'Lead Architect',
-    tag: 'KILN-DRIED HARDWOOD'
-  },
-  {
-    id: 5,
-    tone: 'inlay',
-    category: 'EXPORT LINE',
-    idx: '05',
-    stars: '★★★★★',
-    quote: '"Every container arrives with mill certificates and batch reports inside. Incredible consistency quarter after quarter."',
-    client: 'Oberoi Spaces',
-    role: 'Design Director',
-    tag: '16 EXPORT MARKETS'
-  }
-]
+/* (a fourth hardcoded copy of the reviews lived here, feeding a ReviewStack
+   that was never rendered — removed so /admin is the single place reviews
+   are edited) */
 
 function StatCard({ target, suffix = '+', label, sub, duration = 1800 }) {
   const [ref, count] = useCounter(target, duration)
@@ -119,6 +78,9 @@ function StatCard({ target, suffix = '+', label, sub, duration = 1800 }) {
 }
 
 export default function Home() {
+  const blogs = useContent('blogs')
+  const stats = useContent('stats')
+
   return (
     <div className="hp">
       {/* 0.1 · HERO BRAND — the title sequence */}
@@ -160,15 +122,23 @@ export default function Home() {
 
       {/* 0.92 · HERITAGE NARRATIVE & PROCESS SECTION */}
       <section className="section clear fs-section craft-about-section" id="craft">
-        <div className="sec-head">
-          <CharCascade as="span" className="meta">Heritage</CharCascade>
-        </div>
         <div className="wrap">
           <div className="craft-container">
             {/* Top Split: Narrative + 5-Step Process */}
             <div className="craft-main-grid">
               {/* Left Narrative Column */}
               <div className="craft-intro">
+                {/* The "Heritage" label lives inside the sticky column, not in
+                    a .sec-head above the section. That is what makes the lock
+                    begin at the heading: the label and the narrative are one
+                    sticky element, so they pin together and release together.
+
+                    Kept outside, the two sat in different containing blocks —
+                    the label in .craft-container, the column in the grid — and
+                    no offset could make them release in step. The label stayed
+                    pinned for 500px after the column had gone. */}
+                <span className="meta craft-kicker">Heritage</span>
+
                 <h3 className="craft-headline">
                   A hundred hammers, <span className="craft-highlight">one steady hand.</span>
                 </h3>
@@ -232,30 +202,15 @@ export default function Home() {
 
             {/* Bottom Row: 4 Atelier Stats Placards with scroll-triggered counting animation */}
             <div className="about-stats-grid">
-              <StatCard
-                target={15}
-                suffix="+"
-                label="Hands in the workshop"
-                sub="Specialist masters under one roof"
-              />
-              <StatCard
-                target={600}
-                suffix="+"
-                label="Pieces delivered per year"
-                sub="Each piece finished by hand"
-              />
-              <StatCard
-                target={18}
-                suffix="+"
-                label="Countries served"
-                sub="Global boutique export"
-              />
-              <StatCard
-                target={10}
-                suffix="+"
-                label="Years of excellence"
-                sub="Est. Moradabad atelier"
-              />
+              {stats.map((s) => (
+                <StatCard
+                  key={s.id}
+                  target={Number(s.value) || 0}
+                  suffix={s.suffix}
+                  label={s.label}
+                  sub={s.sub}
+                />
+              ))}
             </div>
           </div>
         </div>
@@ -295,54 +250,16 @@ export default function Home() {
         </div>
         <div className="wrap">
           <div className="grid">
-            <div className="sp-2">
-              <HeroVideoDialog
-                animationStyle="from-center"
-                videoSrc="https://www.youtube.com/embed/qh3NGpYRG3I?si=4rb-zSdDkVK9qxxb"
-                thumbnailSrc={productImg('the-arc')}
-                thumbnailAlt="Workshop preview 1"
-              />
-            </div>
-            <div className="sp-2">
-              <HeroVideoDialog
-                animationStyle="from-center"
-                videoSrc="https://www.youtube.com/embed/qh3NGpYRG3I?si=4rb-zSdDkVK9qxxb"
-                thumbnailSrc={productImg('the-block')}
-                thumbnailAlt="Workshop preview 2"
-              />
-            </div>
-            <div className="sp-2">
-              <HeroVideoDialog
-                animationStyle="from-center"
-                videoSrc="https://www.youtube.com/embed/qh3NGpYRG3I?si=4rb-zSdDkVK9qxxb"
-                thumbnailSrc={productImg('the-sweep')}
-                thumbnailAlt="Workshop preview 3"
-              />
-            </div>
-            <div className="sp-2">
-              <HeroVideoDialog
-                animationStyle="from-center"
-                videoSrc="https://www.youtube.com/embed/qh3NGpYRG3I?si=4rb-zSdDkVK9qxxb"
-                thumbnailSrc={productImg('the-lean')}
-                thumbnailAlt="Workshop preview 4"
-              />
-            </div>
-            <div className="sp-2">
-              <HeroVideoDialog
-                animationStyle="from-center"
-                videoSrc="https://www.youtube.com/embed/qh3NGpYRG3I?si=4rb-zSdDkVK9qxxb"
-                thumbnailSrc={productImg('the-dip')}
-                thumbnailAlt="Workshop preview 5"
-              />
-            </div>
-            <div className="sp-2">
-              <HeroVideoDialog
-                animationStyle="from-center"
-                videoSrc="https://www.youtube.com/embed/qh3NGpYRG3I?si=4rb-zSdDkVK9qxxb"
-                thumbnailSrc={productImg('the-turn')}
-                thumbnailAlt="Workshop preview 6"
-              />
-            </div>
+            {blogs.map((b) => (
+              <div className="sp-2" key={b.id}>
+                <HeroVideoDialog
+                  animationStyle="from-center"
+                  videoSrc={b.videoSrc}
+                  thumbnailSrc={b.thumbnail}
+                  thumbnailAlt={b.alt || b.title}
+                />
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -356,69 +273,12 @@ export default function Home() {
   )
 }
 
-const HOME_TESTIMONIALS = [
-  {
-    id: 1,
-    category: 'VERIFIED ORDER',
-    stars: '★★★★★',
-    quote: '"They send a moisture reading with the sample. Nobody else in this category has ever done that unprompted."',
-    client: 'Meridian Living',
-    role: 'Head of Product',
-    tag: '300 PCS · 0 RETURNS',
-    location: 'Frankfurt, Germany'
-  },
-  {
-    id: 2,
-    category: 'INLAY PROJECT',
-    stars: '★★★★★',
-    quote: '"The brass inlay is the reason we moved. Four suppliers promised flush finish; only Taif delivered it."',
-    client: 'Atelier Kade',
-    role: 'Founding Partner',
-    location: 'Paris, France'
-  },
-  {
-    id: 3,
-    category: 'HOTEL SPEC',
-    stars: '★★★★★',
-    quote: '"Four properties, one patina, zero visible variation. Housekeeping notices these things before we do."',
-    client: 'Halcyon Hotels',
-    role: 'Procurement Director',
-    tag: 'GLOBAL BOUTIQUE SUITES',
-    location: 'Dubai, UAE'
-  },
-  {
-    id: 4,
-    category: 'ARCHITECTURAL',
-    stars: '★★★★★',
-    quote: '"Precision hand-carved teak paired with solid unlacquered brass. Flawless craftsmanship from Moradabad."',
-    client: 'Studio Moradabad',
-    role: 'Lead Architect',
-    tag: 'KILN-DRIED HARDWOOD',
-    location: 'London, UK'
-  },
-  {
-    id: 5,
-    category: 'EXPORT LINE',
-    stars: '★★★★★',
-    quote: '"Every container arrives with mill certificates and batch reports inside. Incredible consistency quarter after quarter."',
-    client: 'Oberoi Spaces',
-    role: 'Global Trade VP',
-    tag: '4 CONTAINER SHIPMENTS',
-    location: 'Toronto, Canada'
-  },
-  {
-    id: 6,
-    category: 'RETAIL COLLECTION',
-    stars: '★★★★★',
-    quote: '"Our customers immediately touch the unlacquered brass finish. It patinas beautifully over time."',
-    client: 'Vanguard Home',
-    role: 'Creative Director',
-    tag: '1,200 UNITS DELIVERED',
-    location: 'New York, USA'
-  }
-]
+/* reviews come from the shared content store so /admin edits both this
+   rail and the /testimonials page from one list */
 
 function ReviewsSection() {
+  const reviews = useContent('reviews')
+
   return (
     <section className="section alt fs-section bestsellers-section" id="reviews" style={{ paddingBlock: '4rem 3rem' }}>
       <div className="wrap">
@@ -427,7 +287,7 @@ function ReviewsSection() {
         </div>
 
         <CardsReveal className="home-reviews-grid" selector=":scope > .tm-card" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.8rem' }}>
-          {HOME_TESTIMONIALS.map((t) => (
+          {reviews.map((t) => (
             <div
               key={t.id}
               className="pl-card tm-card"
@@ -442,9 +302,11 @@ function ReviewsSection() {
               <div>
                 <div className="tm-card-head">
                   <span className="tm-cat">{t.category}</span>
-                  <span className="tm-stars">{t.stars}</span>
+                  <span className="tm-stars" role="img" aria-label={`${t.stars} out of 5`}>
+                    <span aria-hidden="true">{'★'.repeat(Number(t.stars) || 0)}</span>
+                  </span>
                 </div>
-                <p className="tm-quote">{t.quote}</p>
+                <p className="tm-quote">“{t.quote}”</p>
               </div>
 
               <div className="tm-card-foot">

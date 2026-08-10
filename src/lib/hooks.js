@@ -21,6 +21,31 @@ function observer() {
   return _io
 }
 
+/** True while the dark theme is on.
+ *
+ *  The theme lives as a class on <html>, toggled outside React by
+ *  AnimatedThemeToggler, so there is no state to subscribe to — an observer on
+ *  the class attribute is what keeps a component (the navbar's logo swap) in
+ *  step with it. Reads the class on mount too, so a reload in dark mode is
+ *  correct on the first paint rather than flashing the light asset.
+ */
+export function useDarkMode() {
+  const [dark, setDark] = useState(
+    () => typeof document !== 'undefined' && document.documentElement.classList.contains('dark')
+  )
+
+  useEffect(() => {
+    const el = document.documentElement
+    const sync = () => setDark(el.classList.contains('dark'))
+    sync()
+    const mo = new MutationObserver(sync)
+    mo.observe(el, { attributes: true, attributeFilter: ['class'] })
+    return () => mo.disconnect()
+  }, [])
+
+  return dark
+}
+
 /** Attach to any element with a `.reveal` / mask base class. Adds `is-in` once. */
 export function useReveal() {
   const ref = useRef(null)

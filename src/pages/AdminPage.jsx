@@ -1,1267 +1,912 @@
-import React, { useState, useRef, useMemo, useEffect } from "react";
-import { getLenis } from "../lib/useLenis";
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { CATEGORIES } from '../data/catalogue'
+import { SOCIAL_PLATFORMS, BEST_SELLER_SLOTS } from '../data/defaults'
+import {
+  useContent, getContent, setSection, resetContent, exportContent, importContent, nextId, hasStorage,
+} from '../lib/content'
+import {
+  getToken as getGhToken, setToken as setGhToken,
+  getConfig as getGhConfig, setConfig as setGhConfig,
+  verifyAccess, publishSnapshot,
+} from '../lib/publish'
+import { getLenis } from '../lib/useLenis'
+import '../styles/admin.css'
 
-/* ---------------------------------------------------------------
-   Admin · Product Management — Taif International Design System
-   Fonts: var(--font-display) 'Archivo Expanded' · var(--font-body) 'Inter Tight'
-   Palette: var(--chrome) · var(--graphite) · var(--brass) · var(--hair)
---------------------------------------------------------------- */
+/* ── /admin ────────────────────────────────────────────────────────────────
+   One screen per editable section, all driven by the schemas below: a section
+   declares its fields and how a row summarises itself, and the generic list /
+   modal / delete machinery is shared. Adding a new editable section is a
+   schema entry plus a key in src/data/defaults.js — no new UI code.
 
-const EMPTY_PRODUCT = {
-  id: null,
-  image: null,
-  imagePreview: null,
-  name: "",
-  category: "",
-  subcategory: "",
-  sku: "",
-  material: "",
-  finish: "",
-};
+   Edits are saved to localStorage by src/lib/content.jsx and are visible
+   immediately on the public pages *in this browser*. Publishing them to real
+   visitors means exporting content.json from the Settings tab — see the note
+   rendered there, and the header comment in src/lib/content.jsx.            */
 
-function BoxIcon() {
-  return (
-    <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-      <path
-        d="M20 5 L34 12 V28 L20 35 L6 28 V12 Z"
-        stroke="var(--brass, #b0894f)"
-        strokeWidth="1.3"
-        strokeLinejoin="round"
-      />
-      <path d="M6 12 L20 19 L34 12" stroke="var(--brass, #b0894f)" strokeWidth="1.3" strokeLinejoin="round" />
-      <path d="M20 19 V35" stroke="var(--brass, #b0894f)" strokeWidth="1.3" />
-    </svg>
-  );
-}
+/* A gate, not a lock: this is a static site with no server, so anything the
+   browser can check the visitor can read in the bundle. It keeps /admin from
+   being stumbled into; it is NOT access control. Real protection needs the
+   route served behind auth (Netlify Identity, Cloudflare Access, a backend). */
+const PASSCODE = 'taif@ruh'
+const GATE_KEY = 'taif:admin:open'
 
-function UploadIcon() {
-  return (
-    <svg width="24" height="24" viewBox="0 0 22 22" fill="none">
-      <path d="M11 14V3" stroke="var(--brass, #b0894f)" strokeWidth="1.4" strokeLinecap="round" />
-      <path d="M6.5 7.5 11 3l4.5 4.5" stroke="var(--brass, #b0894f)" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M4 15v2.2c0 1 .8 1.8 1.8 1.8h10.4c1 0 1.8-.8 1.8-1.8V15" stroke="var(--brass, #b0894f)" strokeWidth="1.4" strokeLinecap="round" />
-    </svg>
-  );
-}
+const MAX_IMAGE_BYTES = 1_500_000
 
-function EditIcon() {
-  return (
-    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-    </svg>
-  );
-}
+/* ── icons ───────────────────────────────────────────────────────────────── */
+const Ico = ({ d, ...rest }) => (
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" {...rest}>
+    {d}
+  </svg>
+)
+const EditIco = () => <Ico d={<><path d="M12 20h9" /><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" /></>} />
+const TrashIco = () => <Ico d={<><path d="M3 6h18" /><path d="M8 6V4h8v2" /><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" /></>} />
+const UpIco = () => <Ico d={<><path d="m18 15-6-6-6 6" /></>} />
+const DownIco = () => <Ico d={<><path d="m6 9 6 6 6-6" /></>} />
 
-function TrashIcon() {
-  return (
-    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <polyline points="3 6 5 6 21 6" />
-      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-      <line x1="10" y1="11" x2="10" y2="17" />
-      <line x1="14" y1="11" x2="14" y2="17" />
-    </svg>
-  );
-}
+/* ── schemas ─────────────────────────────────────────────────────────────── */
+const slugify = (s) => String(s).toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
 
-function CheckIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--brass, #b0894f)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-      <polyline points="20 6 9 17 4 12" />
-    </svg>
-  );
-}
+const SECTIONS = [
+  {
+    key: 'products',
+    label: 'Products',
+    title: 'Products',
+    blurb: 'The catalogue behind every collection page and product page. Deleting a piece also removes it from its collection.',
+    singular: 'product',
+    rowTitle: (p) => p.name,
+    rowSub: (p) => [p.category, p.subcategory, p.moq ? `MOQ ${p.moq}` : ''].filter(Boolean).join(' · '),
+    rowImg: (p) => p.image,
+    blank: { name: '', category: CATEGORIES[0], subcategory: '', slug: '', material: '', dims: '', weight: '', moq: '', lead: '', image: '', story: '', tone: 'brass', finishes: [], rail: false },
+    fields: [
+      { key: 'name', label: 'Name', required: true, full: true },
+      { key: 'category', label: 'Category', type: 'select', options: () => CATEGORIES, required: true },
+      { key: 'subcategory', label: 'Subcategory', type: 'select', options: (draft, content) => ['', ...(content.subcategories[draft.category] || [])], hint: 'Managed in the Subcategories tab.' },
+      { key: 'slug', label: 'URL slug', hint: 'Left blank, built from the name.' },
+      { key: 'material', label: 'Material', placeholder: 'Brass' },
+      { key: 'dims', label: 'Dimensions', placeholder: '460 × 220 × 24 mm' },
+      { key: 'weight', label: 'Weight', placeholder: '1.05 kg' },
+      { key: 'moq', label: 'MOQ', type: 'number', placeholder: '100' },
+      { key: 'lead', label: 'Lead time', placeholder: '4 wks' },
+      { key: 'image', label: 'Image', type: 'image', full: true, hint: 'Leave blank to keep the generated placeholder.' },
+      { key: 'story', label: 'Description', type: 'textarea', full: true },
+      { key: 'rail', label: 'Feature on the homepage drag rail', type: 'check', full: true },
+    ],
+    /* a product with no slug is unroutable, so derive one on save */
+    normalise: (d) => ({ ...d, slug: d.slug?.trim() || slugify(d.name), moq: d.moq === '' ? '' : Number(d.moq) }),
+  },
+  {
+    key: 'stats',
+    label: 'Figures',
+    title: 'Figures',
+    blurb: 'The four counting placards on the homepage. The Partners page quotes the countries figure from this same list.',
+    singular: 'figure',
+    /* a fixed set: these render into a layout that expects a known number of
+       items, so they are edit-only — no adding, no deleting, no reordering */
+    fixed: true,
+    rowTitle: (s) => `${s.value}${s.suffix || ''} — ${s.label}`,
+    rowSub: (s) => s.sub,
+    blank: { unit: '', value: 0, suffix: '+', label: '', sub: '' },
+    fields: [
+      { key: 'value', label: 'Number', type: 'number', required: true, hint: 'Digits only — the homepage counts up to it.' },
+      { key: 'suffix', label: 'After the number', placeholder: '+' },
+      { key: 'label', label: 'Label', required: true, full: true, placeholder: 'Pieces delivered per year' },
+      { key: 'sub', label: 'Caption', full: true, placeholder: 'Each piece finished by hand' },
+      { key: 'unit', label: 'Reference key', hint: 'Other pages look a figure up by this. Leave “countries” alone unless you also change the Partners page.' },
+    ],
+    normalise: (d) => ({ ...d, value: Number(d.value) || 0 }),
+  },
+  {
+    key: 'reviews',
+    label: 'Reviews',
+    title: 'Reviews',
+    blurb: 'Shown on the Testimonials page and in the homepage reviews band. One list feeds both.',
+    singular: 'review',
+    /* a fixed set: these render into a layout that expects a known number of
+       items, so they are edit-only — no adding, no deleting, no reordering */
+    fixed: true,
+    rowTitle: (r) => r.client,
+    rowSub: (r) => [r.role, r.location, `${r.stars}★`].filter(Boolean).join(' · '),
+    blank: { client: '', role: '', category: '', stars: 5, tag: '', location: '', quote: '' },
+    fields: [
+      { key: 'client', label: 'Client', required: true },
+      { key: 'role', label: 'Role', placeholder: 'Head of Product' },
+      { key: 'category', label: 'Label', placeholder: 'Verified order' },
+      { key: 'stars', label: 'Stars', type: 'number', min: 1, max: 5 },
+      { key: 'location', label: 'Location', placeholder: 'Frankfurt, Germany' },
+      { key: 'tag', label: 'Tag', placeholder: '300 pcs · 0 returns' },
+      { key: 'quote', label: 'Quote', type: 'textarea', full: true, required: true, hint: 'Written without quotation marks — the page adds them.' },
+    ],
+    normalise: (d) => ({ ...d, stars: Math.min(5, Math.max(1, Number(d.stars) || 5)) }),
+  },
+  {
+    key: 'blogs',
+    label: 'Blogs',
+    title: 'Blogs and socials band',
+    blurb: 'The video cards on the homepage. Each opens a lightbox, so the video URL must be an embed link.',
+    singular: 'post',
+    /* a fixed set: these render into a layout that expects a known number of
+       items, so they are edit-only — no adding, no deleting, no reordering */
+    fixed: true,
+    rowTitle: (b) => b.title,
+    rowSub: (b) => b.videoSrc,
+    rowImg: (b) => b.thumbnail,
+    blank: { title: '', videoSrc: '', thumbnail: '', alt: '' },
+    fields: [
+      { key: 'title', label: 'Title', required: true, full: true },
+      { key: 'videoSrc', label: 'Video embed URL', required: true, full: true, placeholder: 'https://www.youtube.com/embed/VIDEO_ID', hint: 'Use the /embed/ form of the link, not the watch?v= one.' },
+      { key: 'thumbnail', label: 'Thumbnail', type: 'image', full: true },
+      { key: 'alt', label: 'Image description', full: true, hint: 'Read aloud by screen readers.' },
+    ],
+  },
+  {
+    key: 'socials',
+    label: 'Socials',
+    title: 'Social links',
+    blurb: 'The icon row in the footer. The platform picks the icon; an empty link is hidden rather than shown broken.',
+    singular: 'link',
+    /* a fixed set: these render into a layout that expects a known number of
+       items, so they are edit-only — no adding, no deleting, no reordering */
+    fixed: true,
+    rowTitle: (s) => s.label || s.platform,
+    rowSub: (s) => s.url || (s.platform === 'whatsapp' || s.platform === 'email' ? 'Using the brand contact details' : 'No link set — hidden'),
+    blank: { platform: 'instagram', label: '', url: '' },
+    fields: [
+      { key: 'platform', label: 'Platform', type: 'select', options: () => SOCIAL_PLATFORMS, required: true },
+      { key: 'label', label: 'Label', placeholder: 'Instagram', hint: 'Used as the accessible name.' },
+      { key: 'url', label: 'Link', full: true, placeholder: 'https://instagram.com/yourhandle', hint: 'WhatsApp and Email fall back to the brand phone/email when left blank.' },
+    ],
+  },
+  {
+    key: 'atelier',
+    label: 'Atelier images',
+    title: 'Atelier images',
+    blurb: 'The wiping image reel in the Ateliers band on the Shows page. They advance automatically, in this order.',
+    singular: 'image',
+    rowTitle: (a) => a.alt || 'Untitled image',
+    rowSub: (a) => a.src,
+    rowImg: (a) => a.src,
+    blank: { src: '', alt: '' },
+    fields: [
+      { key: 'src', label: 'Image', type: 'image', full: true, required: true },
+      { key: 'alt', label: 'Image description', full: true, hint: 'Read aloud by screen readers.' },
+    ],
+  },
+  {
+    key: 'exhibitions',
+    label: 'Exhibitions',
+    title: 'Exhibitions',
+    blurb: 'The trade-show cards on the Shows page.',
+    singular: 'exhibition',
+    rowTitle: (e) => e.title,
+    rowSub: (e) => [e.date, e.location].filter(Boolean).join(' · '),
+    rowImg: (e) => e.img,
+    blank: { title: '', category: '', date: '', location: '', img: '' },
+    fields: [
+      { key: 'title', label: 'Name', required: true },
+      { key: 'category', label: 'Kind', placeholder: 'International exposition' },
+      { key: 'date', label: 'When', placeholder: 'Autumn 2026' },
+      { key: 'location', label: 'Where', placeholder: 'Frankfurt, Germany' },
+      { key: 'img', label: 'Image', type: 'image', full: true },
+    ],
+  },
+]
 
-function Modal({ title, onClose, children, wide }) {
-  useEffect(() => {
-    // Lock body scroll when modal mounts
-    const originalOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    getLenis()?.stop();
-    return () => {
-      // Restore on unmount
-      document.body.style.overflow = originalOverflow;
-      getLenis()?.start();
-    };
-  }, []);
+/* ── field renderer ──────────────────────────────────────────────────────── */
+function Field({ f, draft, content, onChange, onFile }) {
+  const v = draft[f.key] ?? ''
+  const cls = `ad-field${f.full ? ' ad-field--full' : ''}`
+  const id = `ad-f-${f.key}`
 
-  return (
-    <div className="pm-overlay" onMouseDown={onClose}>
-      <div
-        className={`pm-modal ${wide ? "pm-modal--wide" : ""}`}
-        onMouseDown={(e) => e.stopPropagation()}
-      >
-        <div className="pm-modal-head">
-          <h2>{title}</h2>
-          <button className="pm-icon-btn" onClick={onClose} aria-label="Close">
-            ×
-          </button>
-        </div>
-        {children}
+  if (f.type === 'check') {
+    return (
+      <div className={`${cls} ad-check`}>
+        <input id={id} type="checkbox" checked={!!draft[f.key]} onChange={(e) => onChange(f.key, e.target.checked)} />
+        <label htmlFor={id}>{f.label}</label>
       </div>
-    </div>
-  );
-}
-
-export default function AdminPage() {
-  const [products, setProducts] = useState([]);
-  const [customCategories, setCustomCategories] = useState([]);
-  const [activeCategory, setActiveCategory] = useState("All");
-
-  const [showAddProduct, setShowAddProduct] = useState(false);
-  const [showAddSub, setShowAddSub] = useState(false);
-
-  const [productForm, setProductForm] = useState(EMPTY_PRODUCT);
-  const [imagePreview, setImagePreview] = useState(null);
-  const fileInputRef = useRef(null);
-
-  const [subForm, setSubForm] = useState({ category: "", subcategory: "" });
-
-  // Toast notifications state
-  const [toast, setToast] = useState(null);
-
-  const triggerToast = (msg) => {
-    setToast(msg);
-  };
-
-  useEffect(() => {
-    if (!toast) return;
-    const timer = setTimeout(() => setToast(null), 3000);
-    return () => clearTimeout(timer);
-  }, [toast]);
-
-  // Dynamically derived list of categories added by user
-  const availableCategories = useMemo(() => {
-    const set = new Set(customCategories);
-    products.forEach((p) => {
-      if (p.category && p.category.trim()) {
-        set.add(p.category.trim());
-      }
-    });
-    return Array.from(set);
-  }, [customCategories, products]);
-
-  // Category filter chips starting with only "All"
-  const categoryChips = useMemo(() => {
-    return ["All", ...availableCategories];
-  }, [availableCategories]);
-
-  // Category counts
-  const categoryCounts = useMemo(() => {
-    const counts = { All: products.length };
-    products.forEach((p) => {
-      if (p.category) {
-        counts[p.category] = (counts[p.category] || 0) + 1;
-      }
-    });
-    return counts;
-  }, [products]);
-
-  const filteredProducts = useMemo(() => {
-    return products.filter((p) => {
-      return activeCategory === "All" || p.category === activeCategory;
-    });
-  }, [products, activeCategory]);
-
-  const resetProductForm = () => {
-    setProductForm(EMPTY_PRODUCT);
-    setImagePreview(null);
-    if (fileInputRef.current) fileInputRef.current.value = "";
-  };
-
-  const handleImageChange = (e) => {
-    const file = e.target.files && e.target.files[0];
-    if (!file) return;
-    setProductForm((f) => ({ ...f, image: file }));
-    const reader = new FileReader();
-    reader.onload = (ev) => setImagePreview(ev.target.result);
-    reader.readAsDataURL(file);
-  };
-
-  const handleSaveProduct = (e) => {
-    e.preventDefault();
-    if (!productForm.name.trim()) return;
-
-    const trimmedCategory = productForm.category.trim();
-    if (trimmedCategory && !customCategories.includes(trimmedCategory)) {
-      setCustomCategories((prev) => [...prev, trimmedCategory]);
-    }
-
-    if (productForm.id) {
-      // Edit existing product
-      setProducts((prev) =>
-        prev.map((p) =>
-          p.id === productForm.id
-            ? { ...productForm, category: trimmedCategory, imagePreview }
-            : p
-        )
-      );
-      triggerToast(`Updated "${productForm.name}" successfully`);
-    } else {
-      // Create new product
-      const newProd = {
-        ...productForm,
-        category: trimmedCategory,
-        id: Date.now(),
-        imagePreview,
-      };
-      setProducts((prev) => [newProd, ...prev]);
-      triggerToast(`Added "${newProd.name}" to products`);
-    }
-
-    resetProductForm();
-    setShowAddProduct(false);
-  };
-
-  const handleEditProduct = (prod) => {
-    setProductForm(prod);
-    setImagePreview(prod.imagePreview || null);
-    setShowAddProduct(true);
-  };
-
-  const handleDeleteProduct = (id, name) => {
-    if (window.confirm(`Are you sure you want to delete "${name}"?`)) {
-      setProducts((prev) => prev.filter((p) => p.id !== id));
-      triggerToast(`Deleted "${name}"`);
-    }
-  };
-
-  const handleCreateSub = (e) => {
-    e.preventDefault();
-    const trimmedCat = subForm.category.trim();
-    const trimmedSub = subForm.subcategory.trim();
-    if (!trimmedCat || !trimmedSub) return;
-
-    if (!customCategories.includes(trimmedCat)) {
-      setCustomCategories((prev) => [...prev, trimmedCat]);
-    }
-
-    setSubForm({ category: "", subcategory: "" });
-    setShowAddSub(false);
-    triggerToast(`Created subcategory "${trimmedSub}" under ${trimmedCat}`);
-  };
+    )
+  }
 
   return (
-    <div className="pm-root">
-      <style>{CSS}</style>
+    <div className={cls}>
+      <label htmlFor={id}>{f.label}{f.required ? ' *' : ''}</label>
 
-      {/* Toast Notification */}
-      {toast && (
-        <div className="pm-toast">
-          <CheckIcon />
-          <span>{toast}</span>
+      {f.type === 'select' && (
+        <select id={id} value={v} required={f.required} onChange={(e) => onChange(f.key, e.target.value)}>
+          {f.options(draft, content).map((o) => (
+            <option key={o} value={o}>{o === '' ? '— none —' : o}</option>
+          ))}
+        </select>
+      )}
+
+      {f.type === 'textarea' && (
+        <textarea id={id} value={v} required={f.required} placeholder={f.placeholder} onChange={(e) => onChange(f.key, e.target.value)} />
+      )}
+
+      {f.type === 'image' && (
+        <div className="ad-img">
+          {v
+            ? <img className="ad-img-preview" src={v} alt="" />
+            : <div className="ad-img-preview ad-thumb--empty">None</div>}
+          <div className="ad-img-side">
+            <input id={id} value={v} placeholder="https://… or upload" onChange={(e) => onChange(f.key, e.target.value)} />
+            <label className="ad-btn ad-btn--quiet ad-btn--sm" style={{ alignSelf: 'flex-start', cursor: 'pointer' }}>
+              Upload file
+              <input type="file" accept="image/*" hidden onChange={(e) => onFile(f.key, e)} />
+            </label>
+          </div>
         </div>
       )}
 
-      <div className="pm-container">
-        {/* Fixed Top Section */}
-        <div className="pm-top-section">
-          <header className="pm-header">
-            <h1 className="pm-title">Product Management</h1>
-            <p className="lede" style={{ marginTop: ".4rem", fontSize: "1rem" }}>
-              Add, edit, sub-categorize, and organize product items across the catalogue.
-            </p>
-          </header>
+      {!f.type || f.type === 'text' || f.type === 'number' ? (
+        <input
+          id={id}
+          type={f.type === 'number' ? 'number' : 'text'}
+          value={v}
+          min={f.min}
+          max={f.max}
+          required={f.required}
+          placeholder={f.placeholder}
+          onChange={(e) => onChange(f.key, e.target.value)}
+        />
+      ) : null}
 
-          {/* Category chips bar */}
-          <div className="pm-chips-bar">
-            <div className="pm-chips">
-              {categoryChips.map((cat) => {
-                const count = categoryCounts[cat] || 0;
-                return (
-                  <button
-                    key={cat}
-                    className={`pm-chip ${activeCategory === cat ? "pm-chip--active" : ""}`}
-                    onClick={() => setActiveCategory(cat)}
-                  >
-                    <span>{cat}</span>
-                    {count > 0 && <span className="pm-chip-count">{count}</span>}
-                  </button>
-                );
-              })}
-            </div>
+      {f.hint && <span className="ad-hint">{f.hint}</span>}
+    </div>
+  )
+}
+
+/* ── record modal ────────────────────────────────────────────────────────── */
+function RecordModal({ section, record, content, onSave, onClose, notify }) {
+  const [draft, setDraft] = useState(() => ({ ...section.blank, ...record }))
+
+  /* the page behind the modal is Lenis-smooth-scrolled; without stopping it
+     the wheel scrolls the page instead of a long form */
+  useEffect(() => {
+    const prev = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    getLenis()?.stop()
+    const onKey = (e) => { if (e.key === 'Escape') onClose() }
+    window.addEventListener('keydown', onKey)
+    return () => {
+      document.body.style.overflow = prev
+      getLenis()?.start()
+      window.removeEventListener('keydown', onKey)
+    }
+  }, [onClose])
+
+  const set = (k, val) => setDraft((d) => ({ ...d, [k]: val }))
+
+  const onFile = (key, e) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    if (file.size > MAX_IMAGE_BYTES) {
+      /* base64 in localStorage is ~33% larger than the file and the whole
+         quota is a few MB — a big upload would silently drop every edit */
+      notify(`That image is ${(file.size / 1e6).toFixed(1)} MB. Use one under 1.5 MB, or paste a URL.`, true)
+      e.target.value = ''
+      return
+    }
+    const reader = new FileReader()
+    reader.onload = (ev) => set(key, ev.target.result)
+    reader.readAsDataURL(file)
+    e.target.value = ''
+  }
+
+  const submit = (e) => {
+    e.preventDefault()
+    onSave(section.normalise ? section.normalise(draft) : draft)
+  }
+
+  return (
+    <div className="ad-overlay" onMouseDown={onClose}>
+      <div className="ad-modal" role="dialog" aria-modal="true" aria-label={`${record ? 'Edit' : 'New'} ${section.singular}`} onMouseDown={(e) => e.stopPropagation()}>
+        <form onSubmit={submit}>
+          <div className="ad-modal-head">
+            <h2>{record ? `Edit ${section.singular}` : `New ${section.singular}`}</h2>
+            <button type="button" className="ad-ibtn" onClick={onClose} aria-label="Close">✕</button>
           </div>
-        </div>
 
-        {/* Datalist for existing categories in forms */}
-        <datalist id="pm-category-list">
-          {availableCategories.map((cat) => (
-            <option key={cat} value={cat} />
-          ))}
-        </datalist>
-
-        {/* Scrollable Products Content Area */}
-        <div className="pm-scrollable-content">
-          {filteredProducts.length === 0 ? (
-            <div className="pm-empty">
-              <div className="pm-empty-icon">
-                <BoxIcon />
-              </div>
-              <h3>No products found</h3>
-              <p>
-                {activeCategory === "All"
-                  ? "Start by adding your first product using the button below."
-                  : `No products in "${activeCategory}" category yet.`}
-              </p>
-            </div>
-          ) : (
-            <div className="pm-grid">
-              {filteredProducts.map((p) => (
-                <div className="pm-card" key={p.id}>
-                  <div className="pm-card-image">
-                    {p.imagePreview ? (
-                      <img src={p.imagePreview} alt={p.name} />
-                    ) : (
-                      <div className="pm-card-placeholder">
-                        <BoxIcon />
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="pm-card-body">
-                    <div className="pm-card-top">
-                      <h4>{p.name}</h4>
-                      {p.sku && <span className="pm-sku">SKU: {p.sku}</span>}
-                    </div>
-
-                    <p className="pm-card-meta">
-                      {p.category}
-                      {p.subcategory ? ` · ${p.subcategory}` : ""}
-                    </p>
-
-                    {(p.material || p.finish) && (
-                      <div className="pm-card-tags">
-                        {p.material && <span className="pm-tag">{p.material}</span>}
-                        {p.finish && <span className="pm-tag">{p.finish}</span>}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Card Actions */}
-                  <div className="pm-card-actions">
-                    <button
-                      className="pm-card-btn pm-card-btn--edit"
-                      onClick={() => handleEditProduct(p)}
-                      title="Edit Product"
-                      aria-label="Edit product"
-                    >
-                      <EditIcon />
-                    </button>
-                    <button
-                      className="pm-card-btn pm-card-btn--delete"
-                      onClick={() => handleDeleteProduct(p.id, p.name)}
-                      title="Delete Product"
-                      aria-label="Delete product"
-                    >
-                      <TrashIcon />
-                    </button>
-                  </div>
-                </div>
+          <div className="ad-modal-body">
+            <div className="ad-form">
+              {section.fields.map((f) => (
+                <Field key={f.key} f={f} draft={draft} content={content} onChange={set} onFile={onFile} />
               ))}
             </div>
+          </div>
+
+          <div className="ad-modal-foot">
+            <button type="button" className="ad-btn ad-btn--quiet" onClick={onClose}>Cancel</button>
+            <button type="submit" className="ad-btn ad-btn--primary">{record ? 'Save changes' : `Add ${section.singular}`}</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  )
+}
+
+/* ── generic list section ────────────────────────────────────────────────── */
+function ListSection({ section, notify }) {
+  const content = useContent()
+  const items = content[section.key] || []
+  const [editing, setEditing] = useState(null)   // record being edited
+  const [adding, setAdding] = useState(false)
+
+  const save = (draft) => {
+    if (editing) {
+      setSection(section.key, items.map((i) => (i.id === editing.id ? { ...draft, id: editing.id } : i)))
+      notify(`${section.singular[0].toUpperCase()}${section.singular.slice(1)} updated.`)
+    } else {
+      setSection(section.key, [...items, { ...draft, id: nextId(items) }])
+      notify(`${section.singular[0].toUpperCase()}${section.singular.slice(1)} added.`)
+    }
+    setEditing(null)
+    setAdding(false)
+  }
+
+  const remove = (item) => {
+    const name = section.rowTitle(item) || `this ${section.singular}`
+    if (!window.confirm(`Delete “${name}”? This cannot be undone.`)) return
+    setSection(section.key, items.filter((i) => i.id !== item.id))
+    notify(`Deleted “${name}”.`)
+  }
+
+  /* order is meaningful for atelier slides, blog cards and exhibition rows */
+  const move = (idx, dir) => {
+    const to = idx + dir
+    if (to < 0 || to >= items.length) return
+    const next = items.slice()
+    ;[next[idx], next[to]] = [next[to], next[idx]]
+    setSection(section.key, next)
+  }
+
+  return (
+    <>
+      <div className="ad-head">
+        <div>
+          <h1>{section.title}</h1>
+          <p>{section.blurb}</p>
+        </div>
+        {!section.fixed && (
+          <button className="ad-btn ad-btn--primary" onClick={() => { setEditing(null); setAdding(true) }}>
+            Add {section.singular}
+          </button>
+        )}
+      </div>
+
+      {items.length === 0 ? (
+        <div className="ad-empty">
+          <p>Nothing here yet.</p>
+          {!section.fixed && (
+            <button className="ad-btn ad-btn--primary" onClick={() => setAdding(true)}>Add the first {section.singular}</button>
           )}
         </div>
+      ) : (
+        <div className="ad-list">
+          {items.map((item, i) => {
+            const img = section.rowImg?.(item)
+            return (
+              <div className="ad-row" key={item.id}>
+                {section.rowImg && (img
+                  ? <img className="ad-thumb" src={img} alt="" loading="lazy" />
+                  : <div className="ad-thumb ad-thumb--empty">None</div>)}
 
-        {/* Fixed Bottom Action Bar */}
-        <div className="pm-bottom-bar">
-          <div className="pm-bottom-actions">
-            <button
-              className="pm-btn pm-btn--primary"
-              onClick={() => {
-                resetProductForm();
-                setShowAddProduct(true);
-              }}
-            >
-              <span className="pm-plus">+</span> Add Product
-            </button>
-            <button className="pm-btn pm-btn--outline" onClick={() => setShowAddSub(true)}>
-              <span className="pm-plus">+</span> Add Subcategory
-            </button>
-          </div>
+                <div className="ad-row-main">
+                  <p className="ad-row-title">{section.rowTitle(item)}</p>
+                  <p className="ad-row-sub">{section.rowSub(item)}</p>
+                </div>
+
+                <div className="ad-row-acts">
+                  {!section.fixed && (
+                    <>
+                      <button className="ad-ibtn" onClick={() => move(i, -1)} disabled={i === 0} aria-label="Move up"><UpIco /></button>
+                      <button className="ad-ibtn" onClick={() => move(i, 1)} disabled={i === items.length - 1} aria-label="Move down"><DownIco /></button>
+                    </>
+                  )}
+                  <button className="ad-ibtn" onClick={() => { setAdding(false); setEditing(item) }} aria-label={`Edit ${section.rowTitle(item)}`}><EditIco /></button>
+                  {!section.fixed && (
+                    <button className="ad-ibtn ad-ibtn--danger" onClick={() => remove(item)} aria-label={`Delete ${section.rowTitle(item)}`}><TrashIco /></button>
+                  )}
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      )}
+
+      {(adding || editing) && (
+        <RecordModal
+          section={section}
+          record={editing}
+          content={content}
+          notify={notify}
+          onSave={save}
+          onClose={() => { setAdding(false); setEditing(null) }}
+        />
+      )}
+    </>
+  )
+}
+
+/* ── best sellers ────────────────────────────────────────────────────────── */
+function BestSellersSection({ notify }) {
+  const chosen = useContent('bestSellers') || []
+  const products = useContent('products')
+
+  /* Always render exactly BEST_SELLER_SLOTS rows, padding the stored list with
+     blanks. That is what makes this a picker with a fixed shape rather than a
+     list you can grow: there is no row to add and none to remove, only nine
+     slots that are either filled or empty. */
+  const slots = Array.from({ length: BEST_SELLER_SLOTS }, (_, i) => chosen[i] || '')
+
+  const setSlot = (i, slug) => {
+    const next = slots.slice()
+    next[i] = slug
+    /* trailing blanks are trimmed so the stored list stays tidy, but interior
+       blanks are kept — clearing slot 2 should not shuffle slot 3 upward */
+    while (next.length && !next[next.length - 1]) next.pop()
+    setSection('bestSellers', next)
+    notify(slug ? `Slot ${i + 1} set to “${products.find((p) => p.slug === slug)?.name}”.` : `Slot ${i + 1} cleared.`)
+  }
+
+  const filled = slots.filter(Boolean).length
+  const dupes = slots.filter(Boolean).filter((s, i, a) => a.indexOf(s) !== i)
+
+  return (
+    <>
+      <div className="ad-head">
+        <div>
+          <h1>Best sellers</h1>
+          <p>
+            The grid the homepage settles into after the signature piece. Nine slots, each holding one
+            product from the catalogue — pick a different product to change a slot, or leave it blank to
+            show one fewer card.
+          </p>
+        </div>
+        <span className="ad-tab-count" style={{ fontSize: '0.8rem' }}>{filled} of {BEST_SELLER_SLOTS}</span>
+      </div>
+
+      {dupes.length > 0 && (
+        <div className="ad-sub-group" style={{ borderColor: 'var(--ad-danger)' }}>
+          <p className="ad-hint" style={{ margin: 0, color: 'var(--ad-danger)' }}>
+            The same product is in more than one slot. It will appear twice in the grid.
+          </p>
+        </div>
+      )}
+
+      <div className="ad-list">
+        {slots.map((slug, i) => {
+          const product = products.find((p) => p.slug === slug)
+          return (
+            <div className="ad-row" key={i}>
+              <span className="ad-slot-no">{i + 1}</span>
+
+              {product?.image
+                ? <img className="ad-thumb" src={product.image} alt="" loading="lazy" />
+                : <div className="ad-thumb ad-thumb--empty">{product ? 'None' : 'Empty'}</div>}
+
+              <div className="ad-row-main">
+                <label className="ad-hint" htmlFor={`bs-${i}`} style={{ display: 'block', marginBottom: '0.25rem' }}>
+                  Slot {i + 1}
+                </label>
+                <select
+                  id={`bs-${i}`}
+                  value={slug}
+                  onChange={(e) => setSlot(i, e.target.value)}
+                  style={{
+                    width: '100%', font: 'inherit', fontSize: '0.88rem',
+                    padding: '0.5rem 0.65rem', borderRadius: '9px',
+                    border: '1px solid var(--ad-line-2)', background: 'var(--ad-bg)',
+                    color: 'var(--ad-ink)',
+                  }}
+                >
+                  <option value="">— empty —</option>
+                  {products.map((p) => (
+                    <option key={p.slug} value={p.slug}>{p.name} · {p.category}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          )
+        })}
+      </div>
+    </>
+  )
+}
+
+/* ── subcategories ───────────────────────────────────────────────────────── */
+function SubcategoriesSection({ notify }) {
+  const subs = useContent('subcategories')
+  const products = useContent('products')
+  const [drafts, setDrafts] = useState({})
+
+  const add = (cat) => {
+    const name = (drafts[cat] || '').trim()
+    if (!name) return
+    if ((subs[cat] || []).some((s) => s.toLowerCase() === name.toLowerCase())) {
+      notify(`“${name}” is already under ${cat}.`, true)
+      return
+    }
+    setSection('subcategories', { ...subs, [cat]: [...(subs[cat] || []), name] })
+    setDrafts((d) => ({ ...d, [cat]: '' }))
+    notify(`Added “${name}” to ${cat}.`)
+  }
+
+  const remove = (cat, name) => {
+    /* a subcategory in use would leave those products pointing at a label that
+       no longer exists, so clear it off them in the same write */
+    const used = products.filter((p) => p.category === cat && p.subcategory === name)
+    const msg = used.length
+      ? `Delete “${name}”? ${used.length} product${used.length === 1 ? '' : 's'} will lose this subcategory.`
+      : `Delete “${name}”?`
+    if (!window.confirm(msg)) return
+
+    setSection('subcategories', { ...subs, [cat]: (subs[cat] || []).filter((s) => s !== name) })
+    if (used.length) {
+      setSection('products', products.map((p) => (
+        p.category === cat && p.subcategory === name ? { ...p, subcategory: '' } : p
+      )))
+    }
+    notify(`Deleted “${name}”.`)
+  }
+
+  return (
+    <>
+      <div className="ad-head">
+        <div>
+          <h1>Subcategories</h1>
+          <p>Optional groupings inside each of the nine collections. A product picks one in the Products tab.</p>
         </div>
       </div>
 
-      {/* Add / Edit Product Modal */}
-      {showAddProduct && (
-        <Modal
-          title={productForm.id ? "Edit Product" : "Add Product"}
-          onClose={() => {
-            setShowAddProduct(false);
-            resetProductForm();
-          }}
-          wide
-        >
-          <form className="pm-form" onSubmit={handleSaveProduct}>
-            <label className="pm-upload" htmlFor="pm-file-input">
-              {imagePreview ? (
-                <div className="pm-upload-preview-container">
-                  <img src={imagePreview} alt="Preview" className="pm-upload-preview" />
-                  <span className="pm-upload-change">Change Image</span>
-                </div>
-              ) : (
-                <>
-                  <UploadIcon />
-                  <span>Upload Product Image</span>
-                  <small className="pm-upload-hint">PNG, JPG up to 10MB</small>
-                </>
-              )}
-            </label>
-            <input
-              id="pm-file-input"
-              ref={fileInputRef}
-              type="file"
-              accept="image/*"
-              onChange={handleImageChange}
-              hidden
-            />
-
-            <div className="pm-field">
-              <label>PRODUCT NAME *</label>
-              <input
-                type="text"
-                value={productForm.name}
-                onChange={(e) => setProductForm((f) => ({ ...f, name: e.target.value }))}
-                placeholder="e.g. Brass Memorial Urn"
-                required
-              />
-            </div>
-
-            <div className="pm-field-row">
-              <div className="pm-field">
-                <label>CATEGORY *</label>
-                <input
-                  type="text"
-                  list="pm-category-list"
-                  value={productForm.category}
-                  onChange={(e) => setProductForm((f) => ({ ...f, category: e.target.value }))}
-                  placeholder="e.g. Lighting"
-                  required
-                />
-              </div>
-              <div className="pm-field">
-                <label>SUBCATEGORY</label>
-                <input
-                  type="text"
-                  value={productForm.subcategory}
-                  onChange={(e) => setProductForm((f) => ({ ...f, subcategory: e.target.value }))}
-                  placeholder="e.g. Pendant Lights"
-                />
-              </div>
-            </div>
-
-            <div className="pm-field-row">
-              <div className="pm-field">
-                <label>SKU</label>
-                <input
-                  type="text"
-                  value={productForm.sku}
-                  onChange={(e) => setProductForm((f) => ({ ...f, sku: e.target.value }))}
-                  placeholder="e.g. FN-0182"
-                />
-              </div>
-              <div className="pm-field">
-                <label>MATERIAL</label>
-                <input
-                  type="text"
-                  value={productForm.material}
-                  onChange={(e) => setProductForm((f) => ({ ...f, material: e.target.value }))}
-                  placeholder="e.g. Brass"
-                />
-              </div>
-            </div>
-
-            <div className="pm-field">
-              <label>FINISH</label>
-              <input
-                type="text"
-                value={productForm.finish}
-                onChange={(e) => setProductForm((f) => ({ ...f, finish: e.target.value }))}
-                placeholder="e.g. Matte, Polished"
-              />
-            </div>
-
-            <div className="pm-modal-actions">
-              <button
-                type="button"
-                className="pm-btn pm-btn--ghost"
-                onClick={() => {
-                  setShowAddProduct(false);
-                  resetProductForm();
-                }}
+      {CATEGORIES.map((cat) => {
+        const list = subs[cat] || []
+        return (
+          <div className="ad-sub-group" key={cat}>
+            <div className="ad-sub-head">
+              <h3>{cat}</h3>
+              <form
+                style={{ display: 'flex', gap: '0.4rem' }}
+                onSubmit={(e) => { e.preventDefault(); add(cat) }}
               >
-                Cancel
-              </button>
-              <button type="submit" className="pm-btn pm-btn--primary">
-                {productForm.id ? "Update Product" : "Save Product"}
-              </button>
-            </div>
-          </form>
-        </Modal>
-      )}
-
-      {/* Add Subcategory Modal */}
-      {showAddSub && (
-        <Modal title="Add Subcategory" onClose={() => setShowAddSub(false)}>
-          <form className="pm-form" onSubmit={handleCreateSub}>
-            <div className="pm-field">
-              <label>CATEGORY NAME *</label>
-              <input
-                type="text"
-                list="pm-category-list"
-                value={subForm.category}
-                onChange={(e) => setSubForm((f) => ({ ...f, category: e.target.value }))}
-                placeholder="e.g. Lighting"
-                required
-              />
+                <input
+                  className="ad-sub-input"
+                  value={drafts[cat] || ''}
+                  placeholder="New subcategory"
+                  aria-label={`New subcategory under ${cat}`}
+                  onChange={(e) => setDrafts((d) => ({ ...d, [cat]: e.target.value }))}
+                  style={{
+                    font: 'inherit', fontSize: '0.83rem', padding: '0.4rem 0.6rem',
+                    borderRadius: '8px', border: '1px solid var(--ad-line-2)',
+                    background: 'var(--ad-bg)', color: 'var(--ad-ink)', minWidth: 0, width: '11rem',
+                  }}
+                />
+                <button className="ad-btn ad-btn--quiet ad-btn--sm" type="submit">Add</button>
+              </form>
             </div>
 
-            <div className="pm-field">
-              <label>SUBCATEGORY NAME *</label>
-              <input
-                type="text"
-                value={subForm.subcategory}
-                onChange={(e) => setSubForm((f) => ({ ...f, subcategory: e.target.value }))}
-                placeholder="e.g. Pendant Lights"
-                required
-              />
-            </div>
+            {list.length === 0 ? (
+              <p className="ad-sub-none">No subcategories.</p>
+            ) : (
+              <div className="ad-chips">
+                {list.map((s) => (
+                  <span className="ad-chip" key={s}>
+                    {s}
+                    <button onClick={() => remove(cat, s)} aria-label={`Delete ${s}`}>×</button>
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+        )
+      })}
+    </>
+  )
+}
 
-            <div className="pm-modal-actions">
-              <button
-                type="button"
-                className="pm-btn pm-btn--ghost"
-                onClick={() => setShowAddSub(false)}
-              >
-                Cancel
-              </button>
-              <button type="submit" className="pm-btn pm-btn--primary">
-                Create Subcategory
-              </button>
-            </div>
-          </form>
-        </Modal>
+/* ── settings ────────────────────────────────────────────────────────────── */
+function SubHead({ children }) {
+  return <h3 style={{ margin: '0 0 0.5rem', fontSize: '0.92rem', fontWeight: 650 }}>{children}</h3>
+}
+
+function PublishToGitHub({ notify }) {
+  const [cfg, setCfg] = useState(() => getGhConfig())
+  const [token, setTokenState] = useState(() => getGhToken())
+  const [busy, setBusy] = useState(false)
+  const [checked, setChecked] = useState(null)   // { ok, fullName } | null
+
+  const saveCfg = (next) => { setCfg(next); setGhConfig(next) }
+  const onToken = (v) => { setTokenState(v); setGhToken(v); setChecked(null) }
+
+  const test = async () => {
+    setBusy(true)
+    try {
+      const r = await verifyAccess()
+      setChecked(r)
+      notify(`Connected — write access confirmed on ${r.fullName}.`)
+    } catch (err) {
+      setChecked(null)
+      notify(err.message, true)
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  const publish = async () => {
+    if (!window.confirm(
+      `Commit the current content to ${cfg.owner}/${cfg.repo} (${cfg.branch})?\n\n`
+      + 'This triggers a real deploy — every visitor will see these edits once it finishes.'
+    )) return
+    setBusy(true)
+    try {
+      await publishSnapshot(getContent())
+      notify('Published. The site will update once the deploy finishes (usually 1–3 min).')
+    } catch (err) {
+      notify(err.message, true)
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  return (
+    <div className="ad-sub-group">
+      <SubHead>Publish directly (optional)</SubHead>
+      <p className="ad-hint" style={{ marginBottom: '0.9rem' }}>
+        Commits the content shown above straight to the repo using a GitHub token, which redeploys the site
+        automatically. The token is pasted here each session — it is held only in this browser tab&rsquo;s
+        memory (<code>sessionStorage</code>), never written to a file, and gone when the tab closes.
+        Use a fine-grained token scoped to <strong>this repo only</strong>, with{' '}
+        <strong>Contents: Read and write</strong> and nothing else.
+      </p>
+
+      <div className="ad-form" style={{ marginBottom: '0.9rem' }}>
+        <div className="ad-field ad-field--full">
+          <label htmlFor="gh-token">GitHub token</label>
+          <input
+            id="gh-token"
+            type="password"
+            autoComplete="off"
+            value={token}
+            placeholder="github_pat_…"
+            onChange={(e) => onToken(e.target.value)}
+          />
+          <span className="ad-hint">Not saved to disk. You will need to paste it again next session.</span>
+        </div>
+        <div className="ad-field">
+          <label htmlFor="gh-owner">Repo owner</label>
+          <input id="gh-owner" value={cfg.owner} onChange={(e) => saveCfg({ ...cfg, owner: e.target.value })} />
+        </div>
+        <div className="ad-field">
+          <label htmlFor="gh-repo">Repo name</label>
+          <input id="gh-repo" value={cfg.repo} onChange={(e) => saveCfg({ ...cfg, repo: e.target.value })} />
+        </div>
+        <div className="ad-field">
+          <label htmlFor="gh-branch">Branch</label>
+          <input id="gh-branch" value={cfg.branch} onChange={(e) => saveCfg({ ...cfg, branch: e.target.value })} />
+        </div>
+        <div className="ad-field">
+          <label htmlFor="gh-path">File path</label>
+          <input id="gh-path" value={cfg.path} onChange={(e) => saveCfg({ ...cfg, path: e.target.value })} />
+        </div>
+      </div>
+
+      <div style={{ display: 'flex', gap: '0.6rem', flexWrap: 'wrap', alignItems: 'center' }}>
+        <button className="ad-btn ad-btn--quiet" onClick={test} disabled={busy || !token}>
+          {busy ? 'Checking…' : 'Test connection'}
+        </button>
+        <button className="ad-btn ad-btn--primary" onClick={publish} disabled={busy || !token}>
+          {busy ? 'Publishing…' : 'Publish now'}
+        </button>
+        {checked?.ok && <span className="ad-hint" style={{ color: 'var(--ad-accent)' }}>✓ Write access confirmed</span>}
+        {token && (
+          <button className="ad-btn ad-btn--quiet ad-btn--sm" onClick={() => onToken('')}>
+            Forget token
+          </button>
+        )}
+      </div>
+    </div>
+  )
+}
+
+function SettingsSection({ notify }) {
+  const fileRef = useRef(null)
+
+  const onImport = async (e) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    try {
+      notify(await importContent(file))
+    } catch (err) {
+      notify(err.message, true)
+    }
+    e.target.value = ''
+  }
+
+  const onReset = () => {
+    if (!window.confirm('Discard every change and go back to the content the site shipped with?')) return
+    resetContent()
+    notify('Reset to the shipped content.')
+  }
+
+  return (
+    <>
+      <div className="ad-head">
+        <div>
+          <h1>Save and publish</h1>
+          <p>How the edits made here reach the live site.</p>
+        </div>
+      </div>
+
+      <div className="ad-sub-group">
+        <SubHead>Where your edits are right now</SubHead>
+        <p className="ad-hint" style={{ marginBottom: '0.9rem' }}>
+          Every change is saved in this browser and shows on the site immediately — open the homepage or
+          Shows page in another tab and you will see it. It is <strong>not</strong> yet visible to anyone
+          else: this site is served as static files with no database behind it, so there is nowhere for a
+          change to be stored centrally, unless you publish it below.
+          {!hasStorage() && ' Storage is unavailable in this browser, so changes will be lost when you close the tab.'}
+        </p>
+      </div>
+
+      <PublishToGitHub notify={notify} />
+
+      <div className="ad-sub-group">
+        <SubHead>Or hand off the file manually</SubHead>
+        <p className="ad-hint" style={{ marginBottom: '0.9rem' }}>
+          Export the file below and send it to whoever maintains the site. They replace the contents of
+          <code style={{ padding: '0 .3em' }}>src/data/defaults.js</code> with it and redeploy — from then on
+          every visitor sees it, and this page starts from the new baseline.
+        </p>
+
+        <div style={{ display: 'flex', gap: '0.6rem', flexWrap: 'wrap' }}>
+          <button className="ad-btn ad-btn--primary" onClick={exportContent}>Export content.json</button>
+          <button className="ad-btn ad-btn--quiet" onClick={() => fileRef.current?.click()}>Import a file</button>
+          <input ref={fileRef} type="file" accept="application/json,.json" hidden onChange={onImport} />
+        </div>
+      </div>
+
+      <div className="ad-sub-group">
+        <SubHead>Start over</SubHead>
+        <p className="ad-hint" style={{ marginBottom: '0.9rem' }}>
+          Throws away every edit stored in this browser. Export first if you might want them back.
+        </p>
+        <button className="ad-btn ad-btn--quiet" onClick={onReset} style={{ color: 'var(--ad-danger)' }}>
+          Reset all content
+        </button>
+      </div>
+    </>
+  )
+}
+
+/* ── gate ────────────────────────────────────────────────────────────────── */
+function Gate({ onOpen }) {
+  const [val, setVal] = useState('')
+  const [bad, setBad] = useState(false)
+
+  const submit = (e) => {
+    e.preventDefault()
+    if (val === PASSCODE) {
+      sessionStorage.setItem(GATE_KEY, '1')
+      onOpen()
+    } else {
+      setBad(true)
+    }
+  }
+
+  return (
+    <div className="ad ad-gate" style={{ display: 'grid', gridTemplateColumns: '1fr', paddingTop: 'var(--nav-h, 72px)' }}>
+      <form className="ad-gate-card" onSubmit={submit}>
+        <h1>Admin</h1>
+        <p>Enter the passcode to manage site content.</p>
+        <div className="ad-field">
+          <label htmlFor="ad-pass">Passcode</label>
+          <input
+            id="ad-pass"
+            type="password"
+            value={val}
+            autoFocus
+            onChange={(e) => { setVal(e.target.value); setBad(false) }}
+          />
+          {bad && <span className="ad-hint" style={{ color: 'var(--ad-danger)' }}>That passcode is not right.</span>}
+        </div>
+        <button className="ad-btn ad-btn--primary ad-btn--wide" type="submit" style={{ marginTop: '1rem' }}>
+          Open admin
+        </button>
+      </form>
+    </div>
+  )
+}
+
+/* ── shell ───────────────────────────────────────────────────────────────── */
+export default function AdminPage() {
+  const [open, setOpen] = useState(() => {
+    try { return sessionStorage.getItem(GATE_KEY) === '1' } catch { return false }
+  })
+  const [tab, setTab] = useState('products')
+  const [toast, setToast] = useState(null)
+  const content = useContent()
+
+  const notify = (msg, warn = false) => setToast({ msg, warn })
+
+  useEffect(() => {
+    if (!toast) return
+    const t = setTimeout(() => setToast(null), 3600)
+    return () => clearTimeout(t)
+  }, [toast])
+
+  const counts = useMemo(() => {
+    const c = {}
+    for (const s of SECTIONS) c[s.key] = (content[s.key] || []).length
+    c.subcategories = Object.values(content.subcategories || {}).reduce((n, l) => n + l.length, 0)
+    c.bestSellers = (content.bestSellers || []).filter(Boolean).length
+    return c
+  }, [content])
+
+  if (!open) return <Gate onOpen={() => setOpen(true)} />
+
+  const section = SECTIONS.find((s) => s.key === tab)
+
+  return (
+    <div className="ad">
+      <aside className="ad-nav">
+        <p className="ad-nav-title">Content</p>
+
+        {SECTIONS.map((s) => (
+          <button
+            key={s.key}
+            className="ad-tab"
+            aria-current={tab === s.key}
+            onClick={() => setTab(s.key)}
+          >
+            <span>{s.label}</span>
+            <span className="ad-tab-count">{counts[s.key]}</span>
+          </button>
+        ))}
+
+        <button className="ad-tab" aria-current={tab === 'subcategories'} onClick={() => setTab('subcategories')}>
+          <span>Subcategories</span>
+          <span className="ad-tab-count">{counts.subcategories}</span>
+        </button>
+
+        <button className="ad-tab" aria-current={tab === 'bestsellers'} onClick={() => setTab('bestsellers')}>
+          <span>Best sellers</span>
+          <span className="ad-tab-count">{counts.bestSellers}</span>
+        </button>
+
+        <div className="ad-nav-foot">
+          {/* Deliberately not styled as another .ad-tab: this is the only
+              control that leaves the browser and changes what visitors see,
+              so it reads as an action rather than a place to navigate to. */}
+          <button
+            className="ad-publish-cta"
+            aria-current={tab === 'settings'}
+            onClick={() => setTab('settings')}
+          >
+            <span className="ad-publish-ico" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 19V5" />
+                <path d="m5 12 7-7 7 7" />
+              </svg>
+            </span>
+            <span className="ad-publish-text">
+              <strong>Save &amp; publish</strong>
+              <em>Push edits live</em>
+            </span>
+          </button>
+        </div>
+      </aside>
+
+      <main className="ad-main">
+        {section && <ListSection key={section.key} section={section} notify={notify} />}
+        {tab === 'subcategories' && <SubcategoriesSection notify={notify} />}
+        {tab === 'bestsellers' && <BestSellersSection notify={notify} />}
+        {tab === 'settings' && <SettingsSection notify={notify} />}
+      </main>
+
+      {toast && (
+        <div className={`ad-toast${toast.warn ? ' ad-toast--warn' : ''}`} role="status">{toast.msg}</div>
       )}
     </div>
-  );
+  )
 }
-
-const CSS = `
-:root {
-  --pm-bg: var(--chrome, #faf7f2);
-  --pm-card: var(--white, #FFFFFF);
-  --pm-brass: var(--brass, #b0894f);
-  --pm-brass-dark: var(--brass-dk, #8a6733);
-  --pm-brass-tint: rgba(176, 137, 79, 0.12);
-  --pm-border: var(--chrome-3, #e3d9c9);
-  --pm-border-hair: var(--hair, rgba(36, 28, 20, 0.11));
-  --pm-text: var(--graphite, #241c14);
-  --pm-text-secondary: var(--graphite-2, #5a4632);
-  --pm-tint-deep: var(--tint-deep, #8a5a20);
-}
-
-.pm-root {
-  background: var(--pm-bg);
-  min-height: 100vh;
-  width: 100%;
-  padding-top: 110px;
-  padding-bottom: 60px;
-  font-family: var(--font-body, 'Inter Tight', system-ui, sans-serif);
-  color: var(--pm-text);
-  box-sizing: border-box;
-  -webkit-font-smoothing: antialiased;
-}
-.pm-root *, .pm-root *::before, .pm-root *::after { box-sizing: border-box; }
-
-/* Toast Notification */
-.pm-toast {
-  position: fixed;
-  top: 100px;
-  right: 24px;
-  background: var(--white, #FFFFFF);
-  border: 1px solid var(--pm-border);
-  border-left: 4px solid var(--pm-brass);
-  border-radius: var(--r-sm, 12px);
-  padding: 14px 20px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  box-shadow: 0 12px 32px rgba(36, 28, 20, 0.12);
-  z-index: 1100;
-  animation: pmToastSlide 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  font-family: var(--font-body, 'Inter Tight', sans-serif);
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--pm-text);
-}
-@keyframes pmToastSlide {
-  from { opacity: 0; transform: translateY(-12px) scale(0.96); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
-}
-
-/* App Viewport Container */
-.pm-container {
-  max-width: 1080px;
-  margin: 0 auto;
-  min-height: calc(100vh - 160px);
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  padding: 0 24px 20px;
-  box-sizing: border-box;
-}
-
-/* Fixed Top Section */
-.pm-top-section {
-  flex-shrink: 0;
-}
-
-/* Header & Meta */
-.pm-header {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin-bottom: 24px;
-}
-.pm-admin-tag {
-  font-family: var(--font-body, 'Inter Tight', sans-serif);
-  font-size: 0.72rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--pm-tint-deep);
-}
-.pm-count-badge {
-  font-family: var(--font-body, 'Inter Tight', sans-serif);
-  font-variant-numeric: tabular-nums;
-  font-size: 12px;
-  font-weight: 600;
-  background: var(--chrome-2, #f1ebe1);
-  color: var(--pm-text-secondary);
-  padding: 2px 10px;
-  border-radius: 999px;
-}
-.pm-title {
-  font-family: var(--font-display, 'Archivo Expanded', 'Archivo', system-ui, sans-serif);
-  font-stretch: 125%;
-  font-weight: 700;
-  font-size: clamp(2.2rem, 4.2vw, 3.4rem);
-  letter-spacing: -0.04em;
-  line-height: 0.96;
-  margin: 0;
-  color: var(--pm-text);
-}
-
-/* Buttons */
-.pm-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  font-family: var(--font-body, 'Inter Tight', sans-serif);
-  font-size: 0.92rem;
-  font-weight: 600;
-  padding: 12px 24px;
-  border-radius: var(--r-pill, 999px);
-  border: 1px solid transparent;
-  cursor: pointer;
-  transition: transform 0.25s var(--ease-surge, ease), background 0.18s ease, border-color 0.18s ease;
-  white-space: nowrap;
-}
-.pm-btn:active { transform: scale(0.96); }
-.pm-plus { font-size: 16px; line-height: 1; }
-
-.pm-btn--primary {
-  background: var(--pm-text);
-  color: var(--white, #FFFFFF);
-  box-shadow: 0 4px 14px -4px rgba(36, 28, 20, 0.24);
-}
-.pm-btn--primary:hover {
-  background: var(--pm-brass-dark);
-  color: #FFFFFF;
-  transform: translateY(-1px);
-}
-
-.pm-btn--outline {
-  background: var(--white, #FFFFFF);
-  color: var(--pm-text);
-  border: 1px solid var(--pm-border-hair);
-}
-.pm-btn--outline:hover {
-  border-color: var(--pm-border);
-  background: var(--pm-brass-tint);
-  transform: translateY(-1px);
-}
-
-.pm-btn--ghost {
-  background: var(--white, #FFFFFF);
-  color: var(--pm-text-secondary);
-  border: 1px solid var(--pm-border-hair);
-}
-.pm-btn--ghost:hover {
-  background: var(--chrome-2, #f1ebe1);
-  color: var(--pm-text);
-}
-
-/* Chips Bar */
-.pm-chips-bar {
-  border-top: 1px solid var(--pm-border-hair);
-  border-bottom: 1px solid var(--pm-border-hair);
-  padding: 12px 0;
-  margin-bottom: 24px;
-}
-.pm-chips {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-.pm-chips::-webkit-scrollbar { display: none; }
-
-.pm-chip {
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 18px;
-  border-radius: var(--r-pill, 999px);
-  border: 1px solid var(--pm-border-hair);
-  background: var(--white, #FFFFFF);
-  color: var(--pm-text-secondary);
-  font-family: var(--font-body, 'Inter Tight', sans-serif);
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.18s ease;
-}
-.pm-chip:hover {
-  border-color: var(--pm-border);
-  color: var(--pm-text);
-  transform: scale(1.02);
-}
-.pm-chip--active {
-  background: var(--pm-text);
-  border-color: var(--pm-text);
-  color: var(--white, #FFFFFF);
-}
-.pm-chip--active:hover { color: var(--white, #FFFFFF); }
-
-.pm-chip-count {
-  font-family: var(--font-body, 'Inter Tight', sans-serif);
-  font-variant-numeric: tabular-nums;
-  font-size: 11px;
-  font-weight: 700;
-  background: rgba(36, 28, 20, 0.08);
-  padding: 1px 7px;
-  border-radius: 999px;
-}
-.pm-chip--active .pm-chip-count {
-  background: rgba(255, 255, 255, 0.22);
-  color: #FFFFFF;
-}
-
-/* Scrollable Content Section */
-.pm-scrollable-content {
-  flex: 1;
-  min-height: 280px;
-  padding-right: 4px;
-  padding-bottom: 16px;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(176, 137, 79, 0.25) transparent;
-}
-.pm-scrollable-content::-webkit-scrollbar {
-  width: 6px;
-}
-.pm-scrollable-content::-webkit-scrollbar-thumb {
-  background: rgba(176, 137, 79, 0.25);
-  border-radius: 999px;
-}
-.pm-scrollable-content::-webkit-scrollbar-thumb:hover {
-  background: var(--pm-brass);
-}
-
-/* Empty State */
-.pm-empty {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  min-height: 260px;
-  padding: 40px 24px;
-  background: var(--pm-card);
-  border: 1.5px dashed var(--pm-border);
-  border-radius: var(--r-md, 22px);
-  box-shadow: 0 1px 3px rgba(36, 28, 20, 0.04);
-}
-.pm-empty-icon {
-  width: 72px;
-  height: 72px;
-  border-radius: 50%;
-  background: var(--pm-brass-tint);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 18px;
-}
-.pm-empty h3 {
-  font-family: var(--font-display, 'Archivo Expanded', sans-serif);
-  font-stretch: 125%;
-  margin: 0 0 8px;
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--pm-text);
-}
-.pm-empty p {
-  margin: 0;
-  font-family: var(--font-body, 'Inter Tight', sans-serif);
-  font-size: 14px;
-  color: var(--pm-text-secondary);
-  max-width: 360px;
-  line-height: 1.5;
-}
-
-/* Product Grid */
-.pm-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 20px;
-}
-.pm-card {
-  background: var(--pm-card);
-  border: 1px solid var(--pm-border-hair);
-  border-radius: var(--r-md, 20px);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
-  position: relative;
-}
-.pm-card:hover {
-  border-color: var(--pm-border);
-  box-shadow: 0 8px 24px -4px rgba(176, 137, 79, 0.12), 0 4px 12px rgba(36, 28, 20, 0.04);
-  transform: translateY(-2px);
-}
-
-.pm-card-image {
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  background: var(--chrome-2, #f1ebe1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  position: relative;
-}
-.pm-card-image img { width: 100%; height: 100%; object-fit: cover; }
-.pm-card-placeholder { opacity: 0.45; }
-
-/* Card Actions Overlay */
-.pm-card-actions {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  display: flex;
-  gap: 6px;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-  z-index: 2;
-}
-.pm-card:hover .pm-card-actions {
-  opacity: 1;
-}
-
-.pm-card-btn {
-  width: 34px;
-  height: 34px;
-  border-radius: 999px;
-  border: none;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(4px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: var(--pm-text-secondary);
-  box-shadow: 0 2px 8px rgba(36, 28, 20, 0.12);
-  transition: background 0.16s ease, color 0.16s ease;
-}
-.pm-card-btn--edit:hover { color: var(--pm-brass-dark); background: #FFFFFF; }
-.pm-card-btn--delete:hover { color: #9e3324; background: #FFFFFF; }
-
-.pm-card-body {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
-.pm-card-top {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 8px;
-  margin-bottom: 4px;
-}
-.pm-card-body h4 {
-  font-family: var(--font-body, 'Inter Tight', sans-serif);
-  margin: 0;
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--pm-text);
-  line-height: 1.3;
-  letter-spacing: -0.01em;
-}
-.pm-card-meta {
-  font-family: var(--font-body, 'Inter Tight', sans-serif);
-  margin: 0 0 12px;
-  font-size: 12px;
-  color: var(--pm-text-secondary);
-  font-weight: 500;
-}
-
-.pm-sku {
-  font-family: var(--font-body, 'Inter Tight', sans-serif);
-  font-variant-numeric: tabular-nums;
-  font-size: 10px;
-  font-weight: 600;
-  color: var(--pm-tint-deep);
-  background: var(--pm-brass-tint);
-  padding: 2px 7px;
-  border-radius: 6px;
-  white-space: nowrap;
-}
-
-.pm-card-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-top: auto;
-}
-.pm-tag {
-  font-family: var(--font-body, 'Inter Tight', sans-serif);
-  font-size: 11px;
-  color: var(--pm-text-secondary);
-  background: var(--chrome-2, #f1ebe1);
-  border: 1px solid var(--pm-border-hair);
-  padding: 3px 8px;
-  border-radius: 999px;
-}
-
-/* Fixed Bottom Action Bar */
-.pm-bottom-bar {
-  flex-shrink: 0;
-  padding-top: 16px;
-  border-top: 1px solid var(--pm-border-hair);
-  display: flex;
-  justify-content: center;
-  background: var(--pm-bg);
-}
-.pm-bottom-actions {
-  display: flex;
-  gap: 14px;
-  width: 100%;
-  max-width: 480px;
-}
-.pm-bottom-actions .pm-btn { flex: 1; }
-
-/* Modal & Window Form UI Improvements */
-.pm-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(36, 28, 20, 0.45);
-  backdrop-filter: blur(5px);
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  z-index: 1000;
-  padding: 40px 24px;
-  overflow-y: auto;
-  animation: pmFadeIn 0.2s ease;
-}
-.pm-modal {
-  background: var(--white, #FFFFFF);
-  border-radius: 16px;
-  width: 100%;
-  max-width: 520px;
-  margin: auto;
-  padding: 32px;
-  box-shadow: 0 24px 64px rgba(36, 28, 20, 0.22);
-  animation: pmScaleIn 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.pm-modal--wide { max-width: 560px; }
-
-@keyframes pmFadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-@keyframes pmScaleIn {
-  from { opacity: 0; transform: scale(0.96) translateY(8px); }
-  to { opacity: 1; transform: scale(1) translateY(0); }
-}
-
-.pm-modal-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 24px;
-  padding-bottom: 14px;
-  border-bottom: 1px solid var(--pm-border-hair);
-}
-.pm-modal-head h2 {
-  font-family: var(--font-display, 'Archivo Expanded', 'Archivo', system-ui, sans-serif);
-  font-stretch: 125%;
-  font-size: 22px;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  margin: 0;
-  color: var(--pm-text);
-}
-.pm-icon-btn {
-  background: none;
-  border: none;
-  font-size: 24px;
-  line-height: 1;
-  color: var(--pm-text-secondary);
-  cursor: pointer;
-  padding: 4px 8px;
-  border-radius: 8px;
-  transition: background 0.15s ease, color 0.15s ease;
-}
-.pm-icon-btn:hover { background: var(--chrome-2, #f1ebe1); color: var(--pm-text); }
-
-/* Form Fields & Textboxes */
-.pm-form {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
-
-.pm-upload {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  border: 1.5px dashed var(--pm-border);
-  border-radius: var(--r-sm, 14px);
-  padding: 24px 16px;
-  cursor: pointer;
-  color: var(--pm-tint-deep);
-  font-family: var(--font-body, 'Inter Tight', sans-serif);
-  font-size: 13px;
-  font-weight: 600;
-  transition: border-color 0.18s ease, background 0.18s ease;
-  overflow: hidden;
-  position: relative;
-  background: var(--pm-bg);
-}
-.pm-upload:hover { border-color: var(--pm-brass); background: var(--pm-brass-tint); }
-.pm-upload-hint { font-weight: 400; color: var(--pm-text-secondary); font-size: 11px; }
-
-.pm-upload-preview-container {
-  width: 100%;
-  position: relative;
-  border-radius: 10px;
-  overflow: hidden;
-}
-.pm-upload-preview {
-  width: 100%;
-  height: 140px;
-  object-fit: cover;
-  display: block;
-}
-.pm-upload-change {
-  position: absolute;
-  inset: 0;
-  background: rgba(36, 28, 20, 0.5);
-  color: #FFFFFF;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-  font-size: 13px;
-  font-weight: 600;
-}
-.pm-upload-preview-container:hover .pm-upload-change { opacity: 1; }
-
-.pm-field-row {
-  display: flex;
-  gap: 16px;
-  width: 100%;
-}
-
-.pm-field {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  flex: 1;
-  min-width: 0;
-  width: 100%;
-}
-
-.pm-field label {
-  font-family: var(--font-body, 'Inter Tight', sans-serif);
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--pm-text-secondary);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.pm-field input,
-.pm-field select {
-  width: 100%;
-  box-sizing: border-box;
-  height: 44px;
-  border: 1px solid var(--pm-border-hair);
-  border-radius: var(--r-sm, 10px);
-  padding: 0 14px;
-  font-family: var(--font-body, 'Inter Tight', sans-serif);
-  font-size: 14px;
-  font-weight: 400;
-  color: var(--pm-text);
-  outline: none;
-  background: var(--white, #FFFFFF);
-  transition: all 0.18s ease;
-}
-
-.pm-field input:hover,
-.pm-field select:hover {
-  border-color: var(--pm-border);
-}
-
-.pm-field input:focus,
-.pm-field select:focus {
-  border-color: var(--tint, #a9762f);
-  box-shadow: 0 0 0 3px rgba(169, 118, 47, 0.15);
-}
-
-.pm-field input::placeholder {
-  color: rgba(36, 28, 20, 0.38);
-}
-
-.pm-modal-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-  margin-top: 10px;
-  padding-top: 16px;
-  border-top: 1px solid var(--pm-border-hair);
-}
-
-/* Mobile UI Optimization */
-@media (max-width: 640px) {
-  .pm-root {
-    padding-top: 90px;
-  }
-  .pm-container {
-    padding: 0 16px 16px;
-  }
-  .pm-title {
-    font-size: 26px;
-  }
-
-  /* List View Format on Mobile UI */
-  .pm-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .pm-card {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    padding: 12px;
-    gap: 14px;
-    border-radius: var(--r-sm, 16px);
-    background: var(--white, #FFFFFF);
-    box-shadow: 0 2px 8px rgba(36, 28, 20, 0.04);
-  }
-
-  .pm-card-image {
-    width: 80px;
-    height: 80px;
-    min-width: 80px;
-    aspect-ratio: 1 / 1;
-    border-radius: 12px;
-    flex-shrink: 0;
-  }
-
-  .pm-card-body {
-    padding: 0;
-    flex: 1;
-    min-width: 0;
-    justify-content: center;
-  }
-
-  .pm-card-top {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 2px;
-    margin-bottom: 3px;
-  }
-
-  .pm-card-body h4 {
-    font-size: 15px;
-    font-weight: 700;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 100%;
-  }
-
-  .pm-card-meta {
-    margin-bottom: 6px;
-    font-size: 12px;
-  }
-
-  .pm-card-actions {
-    position: static;
-    opacity: 1;
-    flex-direction: column;
-    gap: 6px;
-    margin-left: auto;
-    flex-shrink: 0;
-  }
-
-  .pm-card-btn {
-    width: 36px;
-    height: 36px;
-    box-shadow: 0 1px 4px rgba(36, 28, 20, 0.08);
-    border: 1px solid var(--pm-border-hair);
-  }
-
-  .pm-field-row {
-    flex-direction: column;
-    gap: 18px;
-  }
-
-  .pm-overlay {
-    padding: 16px;
-    align-items: flex-start;
-    justify-content: center;
-  }
-  .pm-modal {
-    max-width: 100%;
-    width: 100%;
-    margin: auto;
-    padding: 24px 20px 28px;
-    border-radius: 16px;
-    animation: pmScaleIn 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  .pm-bottom-bar {
-    padding-top: 12px;
-  }
-  .pm-bottom-actions {
-    max-width: 100%;
-    gap: 10px;
-  }
-  .pm-bottom-actions .pm-btn {
-    padding: 13px 12px;
-    font-size: 13px;
-  }
-}
-`

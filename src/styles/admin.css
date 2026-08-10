@@ -1,0 +1,487 @@
+/* ============ /admin ============
+   Deliberately plain: a neutral shell, one accent, no motion beyond a fade.
+   Everything is scoped under `.ad` so the site's editorial type scale and
+   reveal animations do not leak into the forms. */
+
+.ad {
+  --ad-bg: #FAF8F5;
+  --ad-panel: #FFFFFF;
+  --ad-ink: #241C14;
+  --ad-ink-2: #6B5B49;
+  --ad-line: rgba(36, 28, 20, 0.10);
+  --ad-line-2: rgba(36, 28, 20, 0.16);
+  --ad-accent: #8A5A20;
+  --ad-accent-soft: rgba(138, 90, 32, 0.09);
+  --ad-danger: #9E3324;
+
+  min-height: 100vh;
+  background: var(--ad-bg);
+  color: var(--ad-ink);
+  font-family: var(--font-body, 'Inter Tight', system-ui, sans-serif);
+  -webkit-font-smoothing: antialiased;
+  display: grid;
+  grid-template-columns: 232px minmax(0, 1fr);
+  align-items: start;
+  padding-top: var(--nav-h, 72px);
+}
+.ad *, .ad *::before, .ad *::after { box-sizing: border-box; }
+
+html.dark .ad {
+  --ad-bg: #17100F;
+  --ad-panel: #1F1614;
+  --ad-ink: #F4EEE8;
+  --ad-ink-2: #A99787;
+  --ad-line: rgba(255, 255, 255, 0.10);
+  --ad-line-2: rgba(255, 255, 255, 0.18);
+  --ad-accent: #C79A55;
+  --ad-accent-soft: rgba(199, 154, 85, 0.14);
+}
+
+/* ── sidebar ─────────────────────────────────────────────────────────────── */
+.ad-nav {
+  position: sticky;
+  top: var(--nav-h, 72px);
+  height: calc(100vh - var(--nav-h, 72px));
+  border-right: 1px solid var(--ad-line);
+  padding: 1.6rem 0.9rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  overflow-y: auto;
+}
+.ad-nav-title {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ad-ink-2);
+  padding: 0 0.7rem;
+  margin: 0 0 0.85rem;
+}
+.ad-tab {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.6rem 0.7rem;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--ad-ink-2);
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.ad-tab:hover { background: var(--ad-accent-soft); color: var(--ad-ink); }
+.ad-tab[aria-current='true'] {
+  background: var(--ad-accent-soft);
+  color: var(--ad-accent);
+  font-weight: 650;
+}
+.ad-tab-count {
+  font-variant-numeric: tabular-nums;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--ad-ink-2);
+  background: var(--ad-line);
+  border-radius: 999px;
+  padding: 1px 7px;
+}
+.ad-nav-foot {
+  margin-top: auto;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--ad-line);
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+/* ── main ────────────────────────────────────────────────────────────────── */
+.ad-main { padding: 2rem clamp(1rem, 3vw, 2.4rem) 4rem; min-width: 0; }
+
+.ad-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding-bottom: 1.1rem;
+  border-bottom: 1px solid var(--ad-line);
+  margin-bottom: 1.5rem;
+}
+.ad-head h1 {
+  margin: 0;
+  font-family: inherit;
+  font-size: 1.55rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: var(--ad-ink);
+  text-transform: none;
+}
+.ad-head p {
+  margin: 0.3rem 0 0;
+  font-size: 0.86rem;
+  color: var(--ad-ink-2);
+  max-width: 56ch;
+  line-height: 1.5;
+}
+
+/* ── generic list rows ───────────────────────────────────────────────────── */
+.ad-list { display: flex; flex-direction: column; gap: 0.55rem; }
+
+.ad-row {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  background: var(--ad-panel);
+  border: 1px solid var(--ad-line);
+  border-radius: 12px;
+  padding: 0.7rem 0.8rem;
+  transition: border-color 0.15s ease;
+}
+.ad-row:hover { border-color: var(--ad-line-2); }
+
+.ad-thumb {
+  width: 52px; height: 52px;
+  flex: 0 0 52px;
+  border-radius: 8px;
+  object-fit: cover;
+  background: var(--ad-accent-soft);
+  border: 1px solid var(--ad-line);
+}
+.ad-thumb--empty {
+  display: grid; place-items: center;
+  font-size: 0.62rem; font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--ad-ink-2);
+  text-transform: uppercase;
+}
+
+.ad-row-main { flex: 1; min-width: 0; }
+.ad-row-title {
+  margin: 0;
+  font-size: 0.925rem;
+  font-weight: 650;
+  letter-spacing: -0.005em;
+  color: var(--ad-ink);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.ad-row-sub {
+  margin: 0.15rem 0 0;
+  font-size: 0.78rem;
+  color: var(--ad-ink-2);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.ad-row-acts { display: flex; gap: 0.3rem; flex-shrink: 0; }
+
+.ad-ibtn {
+  width: 32px; height: 32px;
+  display: grid; place-items: center;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--ad-ink-2);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+.ad-ibtn:hover { background: var(--ad-accent-soft); color: var(--ad-accent); border-color: var(--ad-line); }
+.ad-ibtn--danger:hover { background: rgba(158, 51, 36, 0.10); color: var(--ad-danger); }
+
+/* ── buttons ─────────────────────────────────────────────────────────────── */
+.ad-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: 0.4rem;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.55rem 1rem;
+  border-radius: 9px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
+  white-space: nowrap;
+}
+.ad-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.ad-btn--primary { background: var(--ad-accent); color: #FFF; }
+.ad-btn--primary:hover:not(:disabled) { background: var(--ad-ink); }
+html.dark .ad-btn--primary { color: #17100F; }
+html.dark .ad-btn--primary:hover:not(:disabled) { background: #E4C489; }
+
+.ad-btn--quiet {
+  background: var(--ad-panel);
+  color: var(--ad-ink);
+  border-color: var(--ad-line-2);
+}
+.ad-btn--quiet:hover:not(:disabled) { background: var(--ad-accent-soft); }
+
+.ad-btn--sm { padding: 0.42rem 0.7rem; font-size: 0.79rem; }
+.ad-btn--wide { width: 100%; }
+
+/* ── empty state ─────────────────────────────────────────────────────────── */
+.ad-empty {
+  border: 1px dashed var(--ad-line-2);
+  border-radius: 12px;
+  padding: 2.6rem 1.5rem;
+  text-align: center;
+  background: var(--ad-panel);
+}
+.ad-empty p { margin: 0 0 1rem; color: var(--ad-ink-2); font-size: 0.88rem; }
+
+/* ── forms ───────────────────────────────────────────────────────────────── */
+.ad-form { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.ad-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+/* a field that reads badly at half width — quotes, urls, image pickers */
+.ad-field--full { grid-column: 1 / -1; }
+
+.ad-field { display: flex; flex-direction: column; gap: 0.32rem; min-width: 0; }
+.ad-field > label {
+  font-size: 0.7rem;
+  font-weight: 650;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--ad-ink-2);
+}
+.ad-field input,
+.ad-field select,
+.ad-field textarea {
+  width: 100%;
+  font: inherit;
+  font-size: 0.88rem;
+  color: var(--ad-ink);
+  background: var(--ad-bg);
+  border: 1px solid var(--ad-line-2);
+  border-radius: 9px;
+  padding: 0.55rem 0.7rem;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.ad-field textarea { resize: vertical; min-height: 84px; line-height: 1.5; }
+.ad-field input:focus,
+.ad-field select:focus,
+.ad-field textarea:focus {
+  border-color: var(--ad-accent);
+  box-shadow: 0 0 0 3px var(--ad-accent-soft);
+}
+.ad-field input::placeholder, .ad-field textarea::placeholder { color: var(--ad-ink-2); opacity: 0.65; }
+.ad-hint { font-size: 0.73rem; color: var(--ad-ink-2); line-height: 1.45; }
+
+.ad-check { flex-direction: row; align-items: center; gap: 0.5rem; }
+.ad-check input { width: auto; }
+.ad-check > label { text-transform: none; letter-spacing: 0; font-size: 0.85rem; font-weight: 500; color: var(--ad-ink); }
+
+/* image field — url box plus an upload button and a preview */
+.ad-img { display: flex; gap: 0.6rem; align-items: flex-start; }
+.ad-img-preview {
+  width: 68px; height: 68px; flex: 0 0 68px;
+  border-radius: 9px; object-fit: cover;
+  border: 1px solid var(--ad-line-2);
+  background: var(--ad-accent-soft);
+}
+.ad-img-side { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 0.4rem; }
+
+/* ── modal ───────────────────────────────────────────────────────────────── */
+.ad-overlay {
+  position: fixed; inset: 0;
+  background: rgba(24, 16, 12, 0.42);
+  backdrop-filter: blur(3px);
+  z-index: 1200;
+  display: flex; align-items: flex-start; justify-content: center;
+  padding: clamp(1rem, 5vh, 3.5rem) 1rem;
+  overflow-y: auto;
+  animation: adFade 0.15s ease;
+}
+.ad-modal {
+  background: var(--ad-panel);
+  border: 1px solid var(--ad-line);
+  border-radius: 14px;
+  width: 100%; max-width: 560px;
+  margin: auto;
+  box-shadow: 0 24px 60px rgba(24, 16, 12, 0.24);
+  animation: adRise 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes adFade { from { opacity: 0 } to { opacity: 1 } }
+@keyframes adRise { from { opacity: 0; transform: translateY(8px) } to { opacity: 1; transform: none } }
+
+.ad-modal-head {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 1rem;
+  padding: 1.1rem 1.3rem;
+  border-bottom: 1px solid var(--ad-line);
+}
+.ad-modal-head h2 { margin: 0; font-size: 1.05rem; font-weight: 700; letter-spacing: -0.01em; text-transform: none; }
+.ad-modal-body { padding: 1.3rem; }
+.ad-modal-foot {
+  display: flex; justify-content: flex-end; gap: 0.6rem;
+  padding: 1rem 1.3rem;
+  border-top: 1px solid var(--ad-line);
+}
+
+/* ── toast ───────────────────────────────────────────────────────────────── */
+.ad-toast {
+  position: fixed;
+  right: 1.2rem;
+  bottom: 1.2rem;
+  z-index: 1300;
+  background: var(--ad-ink);
+  color: var(--ad-bg);
+  font-size: 0.85rem;
+  font-weight: 550;
+  padding: 0.7rem 1.05rem;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(24, 16, 12, 0.26);
+  animation: adRise 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  max-width: min(92vw, 30rem);
+}
+.ad-toast--warn { background: var(--ad-danger); color: #FFF; }
+
+/* ── subcategories ───────────────────────────────────────────────────────── */
+.ad-sub-group {
+  background: var(--ad-panel);
+  border: 1px solid var(--ad-line);
+  border-radius: 12px;
+  padding: 0.9rem 1rem;
+  margin-bottom: 0.55rem;
+}
+.ad-sub-head {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 0.8rem; margin-bottom: 0.6rem;
+}
+.ad-sub-head h3 { margin: 0; font-size: 0.92rem; font-weight: 650; text-transform: none; letter-spacing: -0.005em; }
+.ad-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.ad-chip {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  background: var(--ad-accent-soft);
+  color: var(--ad-ink);
+  border: 1px solid var(--ad-line);
+  border-radius: 999px;
+  padding: 0.25rem 0.35rem 0.25rem 0.7rem;
+  font-size: 0.79rem;
+  font-weight: 550;
+}
+.ad-chip button {
+  border: 0; background: none; cursor: pointer;
+  color: var(--ad-ink-2); line-height: 1;
+  font-size: 1rem; padding: 0 0.15rem;
+  border-radius: 4px;
+}
+.ad-chip button:hover { color: var(--ad-danger); }
+.ad-sub-none { font-size: 0.8rem; color: var(--ad-ink-2); margin: 0; }
+
+/* ── gate ────────────────────────────────────────────────────────────────── */
+.ad-gate {
+  min-height: 100vh;
+  display: grid; place-items: center;
+  padding: 2rem 1rem;
+  background: var(--ad-bg, #FAF8F5);
+}
+.ad-gate-card {
+  width: 100%; max-width: 340px;
+  background: var(--ad-panel, #FFF);
+  border: 1px solid var(--ad-line, rgba(36,28,20,.1));
+  border-radius: 14px;
+  padding: 1.6rem;
+}
+.ad-gate-card h1 { margin: 0 0 0.3rem; font-size: 1.15rem; font-weight: 700; text-transform: none; }
+.ad-gate-card p { margin: 0 0 1.1rem; font-size: 0.83rem; color: var(--ad-ink-2, #6B5B49); line-height: 1.5; }
+
+/* ── responsive ──────────────────────────────────────────────────────────── */
+@media (max-width: 800px) {
+  .ad { grid-template-columns: 1fr; }
+  .ad-nav {
+    position: static; height: auto;
+    flex-direction: row;
+    border-right: 0;
+    border-bottom: 1px solid var(--ad-line);
+    overflow-x: auto;
+    padding: 0.7rem 0.8rem;
+    gap: 0.35rem;
+    scrollbar-width: none;
+  }
+  .ad-nav::-webkit-scrollbar { display: none; }
+  .ad-nav-title, .ad-tab-count { display: none; }
+  .ad-tab { width: auto; white-space: nowrap; }
+  .ad-nav-foot {
+    margin-top: 0; padding-top: 0; border-top: 0;
+    flex-direction: row; flex-shrink: 0;
+  }
+  .ad-main { padding: 1.4rem 1rem 3rem; }
+  .ad-grid2 { grid-template-columns: 1fr; }
+}
+
+/* ── the publish CTA ───────────────────────────────────────────────────────
+   The one control in here that changes what the public sees, so it is the one
+   thing in the sidebar that looks like a button rather than a tab. Brass face,
+   its own footprint, a caption saying what it actually does. */
+.ad-publish-cta {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid transparent;
+  border-radius: 11px;
+  background: linear-gradient(135deg, var(--ad-accent) 0%, #6E4517 100%);
+  color: #FFF;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: 0 6px 18px -6px rgba(138, 90, 32, 0.55);
+  transition: box-shadow 0.2s ease, filter 0.2s ease;
+}
+.ad-publish-cta:hover { box-shadow: 0 10px 26px -6px rgba(138, 90, 32, 0.7); }
+.ad-publish-cta[aria-current='true'] {
+  /* the active ring reads on both grounds without repainting the face */
+  border-color: rgba(255, 255, 255, 0.55);
+  box-shadow: 0 0 0 3px var(--ad-accent-soft), 0 8px 22px -6px rgba(138, 90, 32, 0.6);
+}
+
+html.dark .ad-publish-cta {
+  background: linear-gradient(135deg, #C79A55 0%, #9A7134 100%);
+  color: #17100F;
+}
+
+.ad-publish-ico {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.2);
+}
+html.dark .ad-publish-ico { background: rgba(23, 16, 15, 0.16); }
+
+.ad-publish-text { display: flex; flex-direction: column; line-height: 1.25; min-width: 0; }
+.ad-publish-text strong { font-size: 0.85rem; font-weight: 650; letter-spacing: -0.005em; }
+.ad-publish-text em {
+  font-style: normal;
+  font-size: 0.7rem;
+  opacity: 0.82;
+}
+
+/* ── best-seller slots ─────────────────────────────────────────────────────
+   The number is the point of this row: the slots are a fixed nine, so the
+   position is what the editor is choosing against. */
+.ad-slot-no {
+  flex: 0 0 22px;
+  display: grid;
+  place-items: center;
+  height: 22px;
+  border-radius: 6px;
+  background: var(--ad-accent-soft);
+  color: var(--ad-accent);
+  font-variant-numeric: tabular-nums;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+@media (max-width: 800px) {
+  /* the sidebar is a horizontal scroller here, so the CTA must not stretch */
+  .ad-publish-cta { width: auto; white-space: nowrap; }
+  .ad-publish-text em { display: none; }
+}

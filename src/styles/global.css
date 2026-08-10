@@ -699,11 +699,6 @@ h4, h5, h6 {
   transition: color .3s;
 }
 
-.btn.primary:hover .btn-label,
-.btn.primary:focus-visible .btn-label {
-  color: var(--graphite);
-}
-
 .btn.small {
   padding: .6rem 1.25rem;
   font-size: .85rem;
@@ -733,10 +728,9 @@ h4, h5, h6 {
   background: rgba(252, 251, 248, 0.18);
 }
 
+/* the chip keeps its rest colours on hover — only the nudge is kept */
 .btn.primary:hover .btn-chip,
 .btn.primary:focus-visible .btn-chip {
-  background: rgba(66, 21, 32, 0.14);
-  color: var(--graphite);
   transform: translate(2px, -2px) scale(1.06);
 }
 
@@ -757,9 +751,6 @@ h4, h5, h6 {
   background: rgba(66, 21, 32, 0.1);
 }
 
-.deep .btn.primary:hover .btn-chip {
-  background: rgba(66, 21, 32, 0.16);
-}
 
 .deep .btn.ghost {
   background: transparent;
@@ -953,6 +944,27 @@ html.dark .nav.nav-scrolled {
 .theme-toggle-btn svg {
   stroke: #421520 !important;
   color: #421520 !important;
+}
+
+/* Dark mode: the bar is #1A090D, so the burgundy above lands at 1.25:1 — text
+   that is technically painted and effectively invisible. Everything in the bar
+   flips to white here (19.3:1).
+
+   This has to be a separate block from `.nav-item-dark` below: that class is
+   applied per element by the hero's contrast watcher, and it never fires off
+   the homepage, which is why the whole header went dark-on-dark the moment the
+   theme was switched anywhere else. */
+html.dark .nav,
+html.dark .nav a,
+html.dark .nav .brand,
+html.dark .nav .brand-mark,
+html.dark .nav .brand-suffix,
+html.dark .nav .nav-links a,
+html.dark .nav .nl-up,
+html.dark .nav .nl-in,
+html.dark .nav .burger {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
 }
 
 .nav.nav-dark-bg {
@@ -1937,8 +1949,6 @@ html.dark .header-brand-img {
 
 .rail-btn:hover {
   transform: scale(1.08);
-  border-color: var(--copper);
-  color: var(--copper);
 }
 
 .deep .rail-btn {
@@ -2450,7 +2460,9 @@ html.dark .header-brand-img {
   transition: color .3s;
 }
 
-.foot-grid a::before {
+/* text links only — .social-icon is also an <a> in here, and this dash rule
+   outranked its own ::before, flattening the hover fill to a 2px sliver */
+.foot-grid a:not(.social-icon)::before {
   content: '';
   width: 0;
   height: 2px;
@@ -2465,37 +2477,99 @@ html.dark .header-brand-img {
   color: #FFFFFF;
 }
 
+/* ── footer social icons ───────────────────────────────────────────────────
+   Brass floods the disc from below; at the same time the resting glyph rolls
+   up out of the mask and its twin rolls in from underneath, arriving in dark
+   ink so it reads against the brass.
+
+   The colour flip is the point. An earlier version rolled the glyph against an
+   identical copy of itself with only a faint ring changing — mechanically it
+   worked, but at 20px a glyph replaced by itself is invisible, so the hover
+   looked broken. The incoming glyph must differ from the one leaving.
+
+   (These are footer icons, not the site's buttons — the no-recolour-on-hover
+   rule in uiverse-buttons.css is about .btn controls and does not apply.) */
 .social-icon {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   width: 40px;
   height: 40px;
   border-radius: 50%;
+  overflow: hidden;
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.15);
   color: rgba(255, 255, 255, 0.85);
-  transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+  isolation: isolate;
+  transition: border-color 0.34s ease;
 }
 
-.social-icon {
-  transition:
-    background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease,
-    transform 0.35s var(--ease-surge, cubic-bezier(0.16, 1.1, 0.3, 1));
+/* the brass flood */
+.social-icon::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: 50%;
+  /* literal brass, not var(--brass): that token is #421520 burgundy in light
+     mode and cream in dark — an accent ramp, despite the name — so using it
+     here put a burgundy band through the middle of the gradient */
+  background: linear-gradient(160deg, #D8B071 0%, #B0894F 55%, #8A6733 100%);
+  transform: translateY(101%);
+  transition: transform 0.46s var(--ease-surge, cubic-bezier(0.16, 1.1, 0.3, 1));
+  pointer-events: none;
 }
 
-.social-icon:hover {
-  background: rgba(255, 255, 255, 0.18);
-  border-color: rgba(255, 255, 255, 0.55);
-  color: #FFFFFF;
-  transform: translateY(-3px);
+.social-icon:hover,
+.social-icon:focus-visible { border-color: #B0894F; }
+
+.social-icon:hover::before,
+.social-icon:focus-visible::before { transform: translateY(0); }
+
+.si-roll {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 20px;
+  height: 20px;
+  overflow: hidden;
 }
 
+.si-up,
+.si-in {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.44s var(--ease-surge, cubic-bezier(0.16, 1.1, 0.3, 1));
+}
+
+/* the arriving glyph is ink, so it reads against the brass it lands on
+   (5.3:1 against #b0894f) rather than white-on-brass */
+.si-in { transform: translateY(105%); color: #2A1A08; }
+
+.social-icon:hover .si-up,
+.social-icon:focus-visible .si-up { transform: translateY(-105%); }
+
+.social-icon:hover .si-in,
+.social-icon:focus-visible .si-in { transform: translateY(0); }
+
+/* Motion off: no roll and no wipe, but the state must still be obvious — the
+   disc simply becomes brass and the single glyph turns to ink. */
 @media (prefers-reduced-motion: reduce) {
-  .social-icon:hover { transform: none; }
+  .si-up, .si-in, .social-icon::before { transition: none; }
+  .si-in { display: none; }
+  .social-icon:hover .si-up,
+  .social-icon:focus-visible .si-up { transform: none; }
+  .social-icon:hover .si-up { color: #2A1A08; }
+  .social-icon::before { transform: translateY(101%); }
+  .social-icon:hover::before,
+  .social-icon:focus-visible::before { transform: translateY(0); }
 }
 
-.foot-grid a:hover::before {
+.foot-grid a:not(.social-icon):hover::before {
   width: 14px;
   margin-right: 8px;
   opacity: 1;
@@ -2697,9 +2771,6 @@ html.dark .header-brand-img {
 }
 
 .big-connect-btn:hover {
-  background: #5C1F2E !important;
-  color: #FFFFFF !important;
-  border-color: rgba(255, 255, 255, 0.5) !important;
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.32);
 }
 
@@ -3060,4 +3131,34 @@ html.dark .btn.ghost * {
     opacity: 1;
     transform: translateX(0);
   }
-}
+}
+
+/* ── footer lockup ─────────────────────────────────────────────────────────
+   The logo file is the short mark alone ("TAIF"), so INTERNATIONAL is set as
+   type beneath it, letterspaced to the mark's width. Deliberately not reusing
+   .brand-suffix: that one is display:none under 560px for the navbar's sake,
+   which would drop the word entirely on a phone footer. */
+.foot-lockup {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.6rem;
+  margin-bottom: 0.6rem;
+}
+
+/* Set beside the mark, not under it — the same horizontal lockup the navbar
+   uses. Aligned to the bottom rather than centred: the logo artwork carries
+   clear space under the glyphs, so centring floated the word visibly high. */
+.foot-lockup-suffix {
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.88);
+  white-space: nowrap;
+  /* Seats the word on the mark's own baseline. The logo file carries 21% of
+     its height as clear space under the glyphs — 9.7px at the 46px the footer
+     renders it — so flex-end alone would drop this a third of a line too low.
+     Retune if the logo height changes. */
+  padding-bottom: 0.47rem;
+}

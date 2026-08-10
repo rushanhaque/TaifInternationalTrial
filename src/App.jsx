@@ -2,7 +2,7 @@ import { Component, useEffect } from 'react'
 import { ScrollTrigger } from './lib/gsap'
 import { Router } from './lib/router'
 import { BRAND } from './data/site'
-import { bySlug } from './data/catalogue'
+import { productBySlug as bySlug } from './lib/content'
 import { productLd, breadcrumbLd, collectionLd } from './lib/seo'
 import Preloader from './components/Preloader'
 import Viscosity from './components/Viscosity'
@@ -83,7 +83,7 @@ const ROUTES = [
     desc: 'Exhibitions, international trade shows and Moradabad atelier showroom.' },
   { path: '/about', page: AboutPage, idx: '0.8', name: 'About',
     title: t('About'),
-    desc: 'Founded 1998 in Moradabad. 10-15 artisans, 600+ yearly orders, 16 export markets.' },
+    desc: 'Founded 1998 in Moradabad. 15+ artisans, 600+ yearly orders, 16 export markets.' },
   { path: '/testimonials', page: TestimonialsPage, idx: '0.85', name: 'Testimonials',
     title: t('Testimonials'),
     desc: 'Client reviews, trade partner testimonials and verified order feedback.' },
@@ -95,7 +95,7 @@ const ROUTES = [
     desc: 'Care guides for unlacquered brass, copper, sealed finishes and solid wood — plus our repair commitment.' },
   { path: '/contact', page: ContactPage, idx: '1.1', name: 'Contact',
     title: t('Contact'),
-    desc: 'Send a drawing, a photograph or a sample — a priced quote returns within five working days. Moradabad · Saharanpur · Delhi.' },
+    desc: 'Send a drawing, a photograph or a sample — a priced quote returns within five working days. Moradabad, Uttar Pradesh.' },
   { path: '/faq', page: FaqPage, idx: '1.2', name: 'FAQ',
     title: t('FAQ'),
     desc: 'MOQs, finish matching, moisture control, incoterms, packing and lead times — answered with numbers.' },

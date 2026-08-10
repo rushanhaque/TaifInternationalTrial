@@ -120,7 +120,6 @@ export default function CollectionsDolly() {
           </p>
           <div className="cd-end-ctas">
             <Button to="/contact">Connect</Button>
-            <Button to="/collections" variant="ghost">Browse all collections</Button>
           </div>
         </div>
       </div>
@@ -147,7 +146,6 @@ export default function CollectionsDolly() {
           <p className="lede">Bespoke sits past the last family — described in a drawing you send.</p>
           <div className="cd-end-ctas">
             <Button to="/contact">Connect</Button>
-            <Button to="/collections" variant="ghost">Browse all collections</Button>
           </div>
         </div>
       </div>

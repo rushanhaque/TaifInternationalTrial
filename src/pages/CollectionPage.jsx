@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useRef, useCallback } from 'react'
 import { gsap, ScrollTrigger, reduced, coarse } from '../lib/gsap'
 import { Link, navigate } from '../lib/router'
-import { CATALOGUE, CATEGORIES } from '../data/catalogue'
-import { productPlate } from '../data/images'
+import { CATEGORIES } from '../data/catalogue'
+import { getProducts, useContent } from '../lib/content'
+import { productPlate, COLLECTION_IMGS, familyPlate } from '../data/images'
 import { useCart } from '../lib/cart'
 import Button from '../components/Button'
 import ProductCard from '../components/ui/ProductCard'
@@ -90,7 +91,7 @@ export function familyPieces(name) {
   const slug = familySlug(name)
   const cat = slug in ALIAS ? ALIAS[slug] : name
   if (!cat) return []
-  return CATALOGUE.filter((p) => familySlug(p.category) === familySlug(cat))
+  return getProducts().filter((p) => familySlug(p.category) === familySlug(cat))
 }
 
 const FAMILY_NOTE = {
@@ -170,8 +171,12 @@ export default function CollectionPage({ params = {} }) {
   const rootRef = useRef(null)
   const { add, remove, has, setOpen } = useCart()
 
+  /* subscribing to products keeps the grid live when the admin edits the
+     catalogue — familyPieces() reads the same store, but only re-runs when
+     this value changes identity */
+  const products = useContent('products')
   const family = useMemo(() => resolveFamily(params.family), [params.family])
-  const pieces = useMemo(() => (family ? familyPieces(family) : []), [family])
+  const pieces = useMemo(() => (family ? familyPieces(family) : []), [family, products])
 
   /* the aggregate figures a buyer scans before opening a single plate */
   const stats = useMemo(() => {
@@ -192,12 +197,15 @@ export default function CollectionPage({ params = {} }) {
     if (!root || reduced()) return undefined
 
     const ctx = gsap.context(() => {
-      /* the ground word drifts slower than the grid — the whole depth trick */
-      const ground = root.querySelector('.pl-ground')
-      if (ground) {
-        gsap.fromTo(ground, { yPercent: -6 }, {
-          yPercent: 14, ease: 'none',
-          scrollTrigger: { trigger: root, start: 'top top', end: 'bottom bottom', scrub: 0.8 },
+      /* The cover photograph drifts slower than the page — the depth trick the
+         ground word used to carry, moved onto the image that replaced it.
+         Scoped to the masthead's own scroll range rather than the whole page,
+         since the band is only a few hundred pixels tall. */
+      const cover = root.querySelector('.pl-head-media img')
+      if (cover) {
+        gsap.fromTo(cover, { yPercent: -6 }, {
+          yPercent: 6, ease: 'none',
+          scrollTrigger: { trigger: '.pl-head', start: 'top top', end: 'bottom top', scrub: 0.8 },
         })
       }
 
@@ -249,10 +257,27 @@ export default function CollectionPage({ params = {} }) {
 
   return (
     <div className="pl" ref={rootRef}>
-      {/* the family name as the ground the pieces sit on */}
-      <span className="pl-ground" aria-hidden="true">{family}</span>
+      {/* The masthead's ground is the family's own cover photograph — the same
+          plate the collections grid uses for this family, so the page opens on
+          the picture the visitor just clicked.
 
-      <section className="pl-head">
+          It replaces the giant ghosted family name that used to sit here: two
+          full-bleed ground layers behind one title fought each other, and the
+          word only reappeared below the image band looking like a leak.
+
+          The scrim under it is what keeps the crumb and the title legible over
+          an arbitrary photograph — see .pl-head-scrim. */}
+      <section className="pl-head pl-head--shot">
+        <div className="pl-head-media" aria-hidden="true">
+          <img
+            src={COLLECTION_IMGS[family] || familyPlate(family)}
+            alt=""
+            loading="eager"
+            decoding="async"
+          />
+          <span className="pl-head-scrim" />
+        </div>
+
         <div className="wrap">
           <nav className="pl-crumb meta" aria-label="Breadcrumb">
             <Link to="/collections">Collections</Link>

@@ -25,15 +25,13 @@
          each URL form is separately indexable. -->
     <link rel="canonical" href="https://taifinternational.com/" />
     <meta name="robots" content="index,follow" />
-    <!-- The share card is brand-owned geometry, not a photograph. Every
-         photograph on the site is still a placeholder from a third-party
-         host, and shipping one of those here would put a stranger's stock
-         image under the client's name on every link anyone posts. Replace
-         public/og.png with real photography when it arrives. -->
+    <!-- The share card and the icon set are both generated from one source
+         image, assets/taif-brand.png, by scripts/gen-brand-assets.py. Re-run
+         that after replacing the source; do not hand-edit the outputs. -->
     <meta property="og:image" content="https://taifinternational.com/og.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="TAIF INTERNATIONAL — a brass form resting on a walnut ground." />
+    <meta property="og:image:alt" content="The TAIF International monogram and wordmark over a warm interior setting." />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="TAIF INTERNATIONAL — Where Metal Meets Grain" />
     <meta name="twitter:description" content="Metal and wood handicraft manufacture and export, Moradabad, India." />
@@ -44,7 +42,10 @@
          the site showed a generic globe in search results. The filesystem
          check runs before the rewrite on both Vercel and Netlify. -->
     <link rel="icon" href="/favicon.ico" sizes="any" />
-    <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+    <!-- No icon.svg: Chrome and Firefox prefer an SVG icon over the .ico when
+         both are offered, so the old drawn mark would keep winning over the
+         generated one. The brand image is a photograph and has no SVG form. -->
+    <link rel="icon" href="/icon-192.png" type="image/png" sizes="192x192" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -64,7 +65,7 @@
          only this file. Verify the phone, headcount and founding date against
          the client's real data before launch — they ship as machine-readable
          schema.org claims. -->
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"TAIF INTERNATIONAL","url":"https://taifinternational.com/","logo":{"@type":"ImageObject","url":"https://taifinternational.com/icon.svg"},"description":"Metal and wood handicraft manufacture and export — hand-hammered brass, burnished copper, seasoned hardwood and flush brass inlay.","foundingDate":"1998","email":"export@taifinternational.com","telephone":"+91 98370 42200","numberOfEmployees":{"@type":"QuantitativeValue","value":340},"address":{"@type":"PostalAddress","addressLocality":"Moradabad","addressRegion":"Uttar Pradesh","addressCountry":"IN"},"areaServed":"Worldwide","knowsAbout":["brass handicraft","copper handicraft","wood handicraft","brass inlay","contract manufacture","private label homeware"]}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"TAIF INTERNATIONAL","url":"https://taifinternational.com/","logo":{"@type":"ImageObject","url":"https://taifinternational.com/icon-512.png","width":512,"height":512},"description":"Metal and wood handicraft manufacture and export — hand-hammered brass, burnished copper, seasoned hardwood and flush brass inlay.","foundingDate":"1998","email":"internationaltaif93@gmail.com","telephone":"+91 9389686112","numberOfEmployees":{"@type":"QuantitativeValue","value":15},"address":{"@type":"PostalAddress","streetAddress":"Sarai Husaini Begum, Jhabbu Ka Nala","addressLocality":"Moradabad","addressRegion":"Uttar Pradesh","postalCode":"244001","addressCountry":"IN"},"areaServed":"Worldwide","knowsAbout":["brass handicraft","copper handicraft","wood handicraft","brass inlay","contract manufacture","private label homeware"]}</script>
     <script>
       try {
         if (localStorage.theme === 'dark') {
@@ -80,7 +81,7 @@
     <noscript>
       <p style="font-family: system-ui, sans-serif; padding: 2rem; max-width: 40rem">
         TAIF INTERNATIONAL — metal and wood handicraft manufacture and export, Moradabad, India.
-        This site needs JavaScript. Write to export@taifinternational.com or call +91 98370 42200.
+        This site needs JavaScript. Write to internationaltaif93@gmail.com or call +91 9389686112.
       </p>
     </noscript>
     <script type="module" src="/src/main.jsx"></script>

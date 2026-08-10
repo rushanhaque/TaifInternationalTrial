@@ -209,8 +209,66 @@
 .direct-link { display: block; margin-top: .25rem; border-radius: var(--r-sm); width: fit-content; }
 .direct-link:hover { color: var(--tint-deep); }
 
-.contact-map-wrap { margin-top: .8rem; overflow: hidden; border-radius: var(--r-lg); }
-.contact-map { display: block; width: 100%; height: 450px; }
+/* ---- the map panel: a static picture that links out ---- */
+.contact-map-wrap {
+  position: relative;
+  display: block;
+  margin-top: .8rem;
+  overflow: hidden;
+  border-radius: var(--r-lg);
+  border: 1px solid var(--hair);
+  text-decoration: none;
+  cursor: pointer;
+  isolation: isolate;
+}
+
+/* The line that makes the map static. With pointer-events off, the embed
+   receives no wheel, drag or click at all — so ctrl+scroll cannot zoom it and
+   scrolling the page over it just scrolls the page. Every event lands on the
+   anchor instead, which opens Google Maps. */
+.contact-map {
+  display: block;
+  width: 100%;
+  height: 450px;
+  border: 0;
+  pointer-events: none;
+  /* the embed paints its own white card behind the tiles; this keeps the
+     corners from showing square against the rounded wrapper on Safari */
+  border-radius: inherit;
+}
+
+.contact-map-cue {
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.85rem;
+  border-radius: var(--r-pill, 999px);
+  background: rgba(26, 9, 13, 0.88);
+  color: #FFFFFF;
+  font-family: var(--font-heading, 'Montserrat', sans-serif);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
+  transition: box-shadow 0.25s ease;
+}
+
+.contact-map-wrap:hover .contact-map-cue,
+.contact-map-wrap:focus-visible .contact-map-cue {
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.4);
+}
+
+.contact-map-wrap:focus-visible {
+  outline: 2px solid var(--tint, #a9762f);
+  outline-offset: 3px;
+}
+
 @media (max-width: 600px) { .contact-map { height: 300px; } }
 
 .loc-card {

@@ -1,0 +1,211 @@
+/* ============ /about — the people ============
+   Three portrait plates, each cut along a horizontal seam. At rest the halves
+   sit flush and the card reads as one uninterrupted image. On hover they draw
+   apart — the brass half up, the grain half down — a lit hairline opens along
+   the cut, and the sentence about that person surfaces in the gap.
+
+   It is the hero wordmark's own gesture (E18 · The Seam) applied to a face
+   instead of a letterform, which is why it reads as this site's card and not a
+   generic one.
+
+   FAIL-OPEN: every half rests unshifted and fully opaque in CSS, and the
+   reveal copy is in the DOM at all times. With no JS, no hover and no motion,
+   the section is still three legible portraits with names under them. */
+
+.pcx-row {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(1rem, 2.4vw, 2rem);
+}
+
+.pcx-card {
+  --pcx-split: 15px;          /* how far each half travels on hover */
+  --pcx-dur: 0.62s;
+  --pcx-ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.pcx-plate {
+  position: relative;
+  display: block;
+  aspect-ratio: 4 / 5;
+  border-radius: clamp(10px, 1.2vw, 16px);
+  overflow: hidden;
+  background: var(--graphite, #421520);
+  isolation: isolate;
+}
+
+/* Both halves carry the same photograph at full size and are clipped to
+   opposite halves of it, so the cut is invisible until they move. Clipping
+   (rather than two cropped files) is what keeps them in perfect register. */
+.pcx-half {
+  position: absolute;
+  inset: 0;
+  display: block;
+  will-change: transform;
+  transition: transform var(--pcx-dur) var(--pcx-ease);
+}
+
+.pcx-half img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.pcx-half--top { clip-path: inset(0 0 50% 0); }
+.pcx-half--bot { clip-path: inset(50% 0 0 0); }
+
+/* the lit cut — zero-height at rest, so it cannot be seen until the plate opens */
+.pcx-seam {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  transform: translateY(-0.5px) scaleX(0.2);
+  /* literal brass rather than var(--brass): that token is burgundy in light
+     mode and cream in dark, so the "lit brass" seam would have read as neither */
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #B0894F 22%,
+    #F0D9A8 50%,
+    #B0894F 78%,
+    transparent
+  );
+  opacity: 0;
+  z-index: 3;
+  transition:
+    opacity 0.34s ease,
+    transform var(--pcx-dur) var(--pcx-ease);
+  pointer-events: none;
+}
+
+/* the sentence that surfaces in the gap */
+.pcx-reveal {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  padding: 0 clamp(0.8rem, 1.6vw, 1.4rem);
+  pointer-events: none;
+}
+
+.pcx-reveal-in {
+  font-family: var(--font-body, 'Inter Tight', system-ui, sans-serif);
+  font-size: clamp(0.72rem, 0.86vw, 0.84rem);
+  line-height: 1.35;
+  text-align: center;
+  color: #FFF7EA;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.75);
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    opacity 0.3s ease 0.08s,
+    transform 0.5s var(--pcx-ease) 0.08s;
+}
+
+/* the year, stamped in the corner like a maker's mark */
+.pcx-since {
+  position: absolute;
+  right: clamp(0.6rem, 1vw, 0.9rem);
+  bottom: clamp(0.55rem, 1vw, 0.85rem);
+  z-index: 4;
+  font-family: var(--font-body, 'Inter Tight', sans-serif);
+  font-variant-numeric: tabular-nums;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: rgba(255, 255, 255, 0.82);
+  padding: 0.2rem 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 999px;
+  backdrop-filter: blur(4px);
+  transition: opacity 0.3s ease;
+}
+
+/* ── the open ────────────────────────────────────────────────────────────── */
+.pcx-card:hover .pcx-half--top,
+.pcx-card:focus-within .pcx-half--top { transform: translateY(calc(var(--pcx-split) * -1)); }
+
+.pcx-card:hover .pcx-half--bot,
+.pcx-card:focus-within .pcx-half--bot { transform: translateY(var(--pcx-split)); }
+
+.pcx-card:hover .pcx-seam,
+.pcx-card:focus-within .pcx-seam {
+  opacity: 1;
+  transform: translateY(-0.5px) scaleX(1);
+}
+
+.pcx-card:hover .pcx-reveal-in,
+.pcx-card:focus-within .pcx-reveal-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* the corner stamp would sit on top of the opening bottom half — step it out */
+.pcx-card:hover .pcx-since,
+.pcx-card:focus-within .pcx-since { opacity: 0; }
+
+/* ── the caption under the plate ─────────────────────────────────────────── */
+.pcx-foot { padding-top: 0.85rem; }
+
+.pcx-discipline {
+  display: block;
+  margin-bottom: 0.3rem;
+}
+
+.pcx-name {
+  margin: 0;
+  font-family: var(--font-display, 'Cinzel', serif);
+  font-size: clamp(1rem, 1.35vw, 1.22rem);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+  color: var(--graphite);
+}
+
+.pcx-role {
+  margin: 0.18rem 0 0;
+  font-family: var(--font-body, 'Inter Tight', sans-serif);
+  font-size: clamp(0.78rem, 0.92vw, 0.88rem);
+  color: var(--graphite-2, #5a4632);
+}
+
+html.dark .pcx-name { color: var(--on-deep, #F4EEE8); }
+html.dark .pcx-role { color: rgba(244, 238, 232, 0.72); }
+
+/* ── responsive ──────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .pcx-row { grid-template-columns: repeat(2, 1fr); }
+  /* the third card centres itself rather than stranding in a lone left column */
+  .pcx:last-child { grid-column: 1 / -1; max-width: calc(50% - 0.5rem); margin-inline: auto; }
+}
+
+@media (max-width: 560px) {
+  .pcx-row { grid-template-columns: 1fr; }
+  .pcx:last-child { grid-column: auto; max-width: none; margin-inline: 0; }
+  .pcx-card { --pcx-split: 11px; }
+}
+
+/* On a touch screen there is no hover, so the plate would never open and the
+   sentence would never be read. Hold it permanently open instead — the card
+   still reads, it just skips the reveal. */
+@media (hover: none) {
+  .pcx-half--top { transform: translateY(calc(var(--pcx-split) * -1)); }
+  .pcx-half--bot { transform: translateY(var(--pcx-split)); }
+  .pcx-seam { opacity: 1; transform: translateY(-0.5px) scaleX(1); }
+  .pcx-reveal-in { opacity: 1; transform: none; }
+  .pcx-since { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pcx-half, .pcx-seam, .pcx-reveal-in, .pcx-since { transition-duration: 0.01ms; }
+}
