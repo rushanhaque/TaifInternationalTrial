@@ -163,8 +163,14 @@ export default function App() {
       <a className="skip" href="#main">Skip to content</a>
       <Preloader />
       <Viscosity />
-      <Navbar />
-      <Router routes={ROUTES} notFound={NOT_FOUND} after={<><SectionStack /><RevealGuard /><Footer /></>} />
+      {/* the navbar goes through the router so it can read the current path —
+          as a sibling it only ever saw the context default, '/' */}
+      <Router
+        routes={ROUTES}
+        notFound={NOT_FOUND}
+        before={<Navbar />}
+        after={<><SectionStack /><RevealGuard /><Footer /></>}
+      />
       <Ambient />
       <Interactions />
       <div className="grain" aria-hidden="true" />

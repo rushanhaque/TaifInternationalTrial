@@ -96,7 +96,10 @@ const PORTRAIT_COUNT = 10
 
 
 
-export function Router({ routes, notFound, after = null }) {
+/* `before` renders inside the route context but outside #page — for chrome
+   that must know the current path (the navbar) without being caught by the
+   page-transition transforms applied to #main. */
+export function Router({ routes, notFound, before = null, after = null }) {
   const [path, setPath] = useState(window.location.pathname)
   const pathRef = useRef(path)
   const busy = useRef(false)
@@ -462,6 +465,7 @@ export function Router({ routes, notFound, after = null }) {
   const Page = route.page
   return (
     <RouteCtx.Provider value={{ path, params }}>
+      {before}
       <div id="page">
         <main id="main" tabIndex={-1}>
           <Page params={params} key={path} />

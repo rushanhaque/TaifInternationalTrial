@@ -14,7 +14,7 @@ import Button from '../components/Button'
 import Ribbon from '../components/Ribbon'
 import DragRail from '../components/DragRail'
 import FinishMorph from '../components/FinishMorph'
-import { HeroParallax } from '../components/ui/HeroParallax'
+import CollectionsMosaic from '../components/CollectionsMosaic'
 import Stepper from '../components/Stepper'
 
 import Deep from '../components/Deep'
@@ -126,10 +126,8 @@ export default function Home() {
 
       <div className="section-divider" />
 
-      {/* 0.15 · HERO PARALLAX PRODUCTS GRID */}
-      <div style={{ marginBlock: '2rem 5.5rem' }}>
-        <HeroParallax />
-      </div>
+      {/* 0.15 · THE VITRINE — nine collections on one screen */}
+      <CollectionsMosaic />
 
       <div className="section-divider" />
 

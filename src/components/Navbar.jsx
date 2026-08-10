@@ -15,6 +15,7 @@ const ALL_NAV_LINKS = [{ to: '/', label: 'Home' }, ...NAV_LINKS]
 export default function Navbar() {
   const { path } = useRoute()
   const [open, setOpen] = useState(false)
+  const [atTop, setAtTop] = useState(true)
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const dropdownTimer = useRef(null)
   const lastScrollY = useRef(0)
@@ -73,14 +74,13 @@ export default function Navbar() {
     return () => window.removeEventListener('resize', onR)
   }, [path]) // eslint-disable-line react-hooks/exhaustive-deps
 
+  /* React owns the class now rather than classList: the hero treatment below
+     re-renders the header, and an imperatively added class would be wiped by
+     that render. */
   useEffect(() => {
     const onScroll = () => {
-      if (!nav.current) return
-      if (window.scrollY > 40) {
-        nav.current.classList.add('nav-scrolled')
-      } else {
-        nav.current.classList.remove('nav-scrolled')
-      }
+      const top = window.scrollY <= 40
+      setAtTop((prev) => (prev === top ? prev : top))
     }
 
     onScroll()
@@ -93,12 +93,21 @@ export default function Navbar() {
     }
   }, [path])
 
+  /* Landing page only, and only until the header makes its transition: the
+     bar dissolves into the hero footage — no ground, white type, the white
+     wordmark the footer uses. The moment the pill takes over it is the
+     header it was before. */
+  const heroMode = path === '/' && atTop
+
   return (
     <>
-      <header className="nav" ref={nav}>
+      <header
+        className={`nav${atTop ? '' : ' nav-scrolled'}${heroMode ? ' nav-hero' : ''}`}
+        ref={nav}
+      >
         <Link to="/" className="brand" aria-label={`${BRAND.name} — home`}>
           <img
-            src="/img/taif-logo-maroon.png"
+            src={heroMode ? '/img/taif-logo-white.png' : '/img/taif-logo-maroon.png'}
             alt={BRAND.name}
             className="header-brand-img"
             style={{
@@ -108,6 +117,7 @@ export default function Navbar() {
               display: 'block'
             }}
           />
+          <span className="brand-suffix">{BRAND.suffix}</span>
         </Link>
         <nav className="nav-links" aria-label="Primary" ref={list}>
           <span className="nav-pill" ref={pillEl} aria-hidden="true" />

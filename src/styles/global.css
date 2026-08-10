@@ -856,6 +856,58 @@ h4, h5, h6 {
   display: none !important;
 }
 
+/* ── Landing page, pre-transition ──────────────────────────────────────────
+   Over the hero film the bar carries no ground at all: no fill, no rule, no
+   shadow, white type and the white wordmark. This lasts exactly as long as
+   .nav-hero does — the class comes off at 40px of scroll, the same moment
+   .nav-scrolled goes on, so the pill returns unchanged. */
+.nav.nav-hero,
+html.dark .nav.nav-hero {
+  background: transparent !important;
+  background-color: transparent !important;
+  border-bottom-color: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.nav.nav-hero,
+.nav.nav-hero a,
+.nav.nav-hero .brand,
+.nav.nav-hero .brand-mark,
+.nav.nav-hero .brand-suffix,
+.nav.nav-hero .nav-links a,
+.nav.nav-hero .nl-up,
+.nav.nav-hero .nl-in,
+.nav.nav-hero .burger,
+.nav.nav-hero .theme-toggle-btn {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-shadow: 0 1px 10px rgba(12, 5, 7, 0.45) !important;
+}
+
+.nav.nav-hero .theme-toggle-btn svg {
+  stroke: #FFFFFF !important;
+  color: #FFFFFF !important;
+}
+
+.nav.nav-hero .burger {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.32);
+}
+
+.nav.nav-hero .burger i,
+.nav.nav-hero .burger i::before,
+.nav.nav-hero .burger i::after {
+  background-color: #FFFFFF !important;
+}
+
+/* the dropdown keeps its own light panel, so its type stays ink */
+.nav.nav-hero .nav-dropdown-item {
+  color: #421520 !important;
+  -webkit-text-fill-color: #421520 !important;
+  text-shadow: none !important;
+}
+
 html.dark .nav {
   background: #1A090D !important;
   background-color: #1A090D !important;
@@ -993,6 +1045,19 @@ html.dark .header-brand-img {
   filter: brightness(1.2) contrast(1.1);
 }
 
+/* Header lockup: logo image + INTERNATIONAL suffix, optically matched */
+.nav .brand {
+  align-items: center;
+  gap: .5rem;
+}
+
+.nav .brand-suffix {
+  font-size: .74rem;
+  letter-spacing: .16em;
+  line-height: 1;
+  padding-top: .1em;
+}
+
 /* Footer logo image hover glow */
 .footer-logo-glow {
   transition: filter 0.5s var(--ease-fluid, cubic-bezier(0.65, 0, 0.35, 1));
@@ -1064,9 +1129,10 @@ html.dark .header-brand-img {
   display: block;
   padding: 0.45rem 0.85rem;
   border-radius: 8px;
-  font-family: var(--font-heading, 'Montserrat', sans-serif);
-  font-size: 0.86rem;
-  font-weight: 550;
+  font-family: var(--font-display, 'Cinzel', serif);
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  font-weight: 600;
   color: #421520 !important;
   -webkit-text-fill-color: #421520 !important;
   text-decoration: none;
@@ -1078,14 +1144,19 @@ html.dark .header-brand-img {
   padding-left: 1.05rem;
 }
 
+/* Nav labels carry the house display face (Cinzel) — the same type as the
+   wordmark beside them, so the header reads as one lockup rather than a
+   logo with a UI menu bolted on. */
 .nav-links a {
   position: relative;
   z-index: 1;
-  padding: .5rem .95rem;
+  padding: .5rem .85rem;
   border-radius: var(--r-pill);
-  font-family: var(--font-heading);
-  font-weight: 550;
-  font-size: .93rem;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: .8rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
   color: var(--graphite);
   text-shadow: none;
   transition: opacity .3s;
@@ -2632,7 +2703,6 @@ html.dark .header-brand-img {
 .sig-header-floating *,
 .cd-card *,
 .chouse *,
-.hp-card *,
 .ateliers-grid-item *,
 .card-has-img,
 .card-has-img * {

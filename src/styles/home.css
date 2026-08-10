@@ -14,9 +14,12 @@
 }
 
 /* ── hero video backdrop ──────────────────────────────────────────────────
-   Full-bleed ambient footage with a frosted scrim so the brass/walnut mark
-   and the ink tagline stay readable. The scrim is light in light mode and
-   burgundy in dark, matching whatever the wordmark is drawn against. */
+   Full-bleed ambient footage, played at full strength: the clip IS the
+   landing page, not a texture behind a frosted sheet. The white wash that
+   used to sit over it is gone — in light mode the only thing between the
+   viewer and the footage is a soft floor gradient under the tagline, which
+   is what keeps the ink type legible without greying out the picture.
+   Dark mode keeps its burgundy scrim; that one was never the white layer. */
 .hb-media {
   position: absolute;
   inset: 0;
@@ -34,17 +37,28 @@
   object-fit: cover;
   background-size: cover;
   background-position: center;
-  /* the footage is a texture, not the subject — kept quiet behind the mark */
-  opacity: 0.42;
-  filter: saturate(0.86) contrast(1.02);
+  opacity: 1;
+  filter: none;
 }
 
+/* No white wash. What is left is dark and local: a shallow darkening at the
+   top and bottom edges for the header lockup and the scroll hint, and a soft
+   pool under the tagline itself (which sits at ~60% of the hero). The clip
+   averages 15–83/255 luminance but throws highlights up to 247, so white
+   type over a bare frame would flare out where a hot spot crosses it. */
 .hb-scrim {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(120% 80% at 50% 30%, transparent 0%, rgba(255, 255, 255, 0.35) 78%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0.40) 45%, rgba(255, 255, 255, 0.62) 100%);
+    radial-gradient(58% 26% at 50% 60%, rgba(12, 5, 7, 0.44) 0%, transparent 72%),
+    linear-gradient(
+      180deg,
+      rgba(12, 5, 7, 0.34) 0%,
+      rgba(12, 5, 7, 0.08) 22%,
+      transparent 45%,
+      rgba(12, 5, 7, 0.14) 78%,
+      rgba(12, 5, 7, 0.42) 100%
+    );
 }
 
 html.dark .hb-video,
@@ -140,7 +154,14 @@ html.dark .hb-scrim {
   padding: 0;
   pointer-events: auto;
 }
-.hb-foot .meta { color: #421520; opacity: 1; text-align: center; }
+/* the scroll hint sits on the darkened floor of the clip, not on paper */
+.hb-foot .meta {
+  color: #FFFFFF;
+  -webkit-text-fill-color: #FFFFFF;
+  opacity: 1;
+  text-align: center;
+  text-shadow: 0 1px 8px rgba(12, 5, 7, 0.65);
+}
 .hb-foot > .hb-side:first-child { justify-self: start; }
 .hb-foot > .hb-side:last-child { justify-self: end; text-align: right; }
 .hb-hint {
@@ -157,12 +178,12 @@ html.dark .hb-scrim {
 }
 .hb-hint i {
   width: 2px; height: 34px; border-radius: var(--r-pill);
-  background: var(--chrome-3); position: relative; overflow: hidden;
+  background: rgba(255, 255, 255, 0.32); position: relative; overflow: hidden;
 }
 .hb-hint i::after {
   content: ''; position: absolute; left: 0; top: -45%; width: 100%; height: 45%;
   border-radius: inherit;
-  background: linear-gradient(180deg, transparent, var(--brass));
+  background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.92));
   animation: hint-drip 2.1s var(--ease-fluid) infinite;
 }
 @keyframes hint-drip { to { top: 115%; } }
@@ -399,7 +420,7 @@ html.dark .hb-scrim {
 
 .hp,
 .hero-brand,
-.hp-container,
+.cm-section,
 .ribbon,
 .czoom-section,
 #heritage,
@@ -414,7 +435,7 @@ html.dark .hb-scrim {
 
 html.dark .hp,
 html.dark .hero-brand,
-html.dark .hp-container,
+html.dark .cm-section,
 html.dark .ribbon,
 html.dark .tt,
 html.dark .czoom-section,
@@ -429,10 +450,10 @@ html.dark .bestsellers-section {
 }
 
 /* Signature Display Tagline in Hero.
-   This was cream with a heavy drop shadow, written for the photographic hero
-   plate — but .hb-bg is display:none, so the tagline was white on the white
-   hero ground and the first line of the site could not be read. It takes the
-   ink colour now, which also carries it into dark mode. */
+   It was ink-coloured because the hero ground was effectively white: the
+   still was hidden and the footage sat at 42% under a white wash. With the
+   wash gone the tagline is type over film, so it goes back to white with a
+   soft shadow — the only treatment that survives every frame of a clip. */
 .hb-tag-title {
   font-family: var(--font-display, 'Cinzel', serif);
   font-size: clamp(1.6rem, 3.8vw, 3.4rem);
@@ -440,10 +461,11 @@ html.dark .bestsellers-section {
   letter-spacing: -0.01em;
   line-height: 1.18;
   text-align: center;
-  color: var(--graphite);
-  -webkit-text-fill-color: var(--graphite);
+  color: #FFFFFF;
+  -webkit-text-fill-color: #FFFFFF;
+  text-shadow: 0 1px 2px rgba(12, 5, 7, 0.4), 0 8px 30px rgba(12, 5, 7, 0.55);
   text-wrap: balance;
-  margin-top: clamp(8rem, 18vh, 13rem);
+  margin-top: clamp(9.5rem, 21vh, 15rem);
   padding: 0 1rem;
 }
 

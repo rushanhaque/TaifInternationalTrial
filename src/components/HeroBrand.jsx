@@ -3,6 +3,9 @@ import { gsap, reduced, coarse } from '../lib/gsap'
 import { BRAND } from '../data/site'
 import { HERO_IMG } from '../data/images'
 
+/* the hero clip — swap this URL to change the landing-page backdrop */
+const HERO_VIDEO = 'https://res.cloudinary.com/djszwbnxp/video/upload/v1786354702/IMG_0217_mkksta.mp4'
+
 /* ── E18 · THE SEAM ────────────────────────────────────────────────────────
    Every glyph of the mark carries two fills: polished brass above, walnut
    grain below, blended into each other where they meet. "Where Metal Meets
@@ -145,7 +148,7 @@ export default function HeroBrand() {
             playsInline
             preload="metadata"
             poster={HERO_IMG}
-            src="https://res.cloudinary.com/djszwbnxp/video/upload/v1786264932/IMG_0205_n1mn8t.mp4"
+            src={HERO_VIDEO}
           />
         )}
         {reduced() && (
