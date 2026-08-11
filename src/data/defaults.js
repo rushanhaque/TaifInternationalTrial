@@ -124,7 +124,7 @@ export const DEFAULT_STATS = [
    NINE SLOTS, fixed: the grid is three columns by three rows beneath the
    signature plate, so nine is what fills it squarely. A slot may be empty
    (the card is simply skipped) but there is never a tenth. */
-export const BEST_SELLER_SLOTS = 9
+export const BEST_SELLER_SLOTS = 11
 
 export const DEFAULT_BEST_SELLERS = [
   'jali-lantern',
@@ -135,7 +135,9 @@ export const DEFAULT_BEST_SELLERS = [
   'brass-pooja-thali',
   'cast-brass-pull',
   'sheesham-wall-panel',
+  'copper-planter',
   'copper-skillet',
+  'copper-cocktail-shaker',
 ]
 
 /* the whole editable surface in one object — the shape the store persists and

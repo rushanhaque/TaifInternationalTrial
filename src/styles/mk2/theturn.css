@@ -12,10 +12,12 @@
 
 .tt {
   position: relative;
-  padding-top: 0;
-  padding-bottom: clamp(6rem, 12vh, 12rem) !important;
+  /* a white ground with a white card on it — the card reads through its
+     border and lift rather than through a colour change */
+  padding-top: clamp(1rem, 2.2vh, 2rem) !important;
+  padding-bottom: clamp(1rem, 2.2vh, 2rem) !important;
   background-color: #FFFFFF !important;
-  color: #1C1814 !important;
+  color: var(--graphite, #421520) !important;
   /* Diameter of the vessel circle. */
   --form: clamp(420px, min(55vw, 70svh), 720px);
   /* The strips are wider than the form so a horizontal sweep never uncovers
@@ -23,6 +25,29 @@
      the form and the fastest tween moves it 89.6%, landing at -179.6%…100.4%. */
   --strip-w: 280%;
   --strip-x: -90%;
+}
+
+/* ─── the card — the whole section on an off-white plate, inset from the
+       viewport edge so the white section ground frames it ─────────────── */
+
+.tt-card {
+  position: relative;
+  width: calc(100% - clamp(2.5rem, 7vw, 8rem));
+  max-width: 1660px;
+  margin-inline: auto;
+  padding-bottom: clamp(3rem, 6vh, 6rem);
+  border-radius: clamp(18px, 2vw, 30px);
+  background-color: var(--offwhite, #FDFCFA);
+  border: 1px solid rgba(66, 21, 32, 0.12);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.08);
+  /* the pinned stage lives inside, so this must not clip or scroll-trap */
+  overflow: visible;
+}
+
+html.dark .tt-card {
+  background-color: var(--offwhite, #2C0C14);
+  border-color: rgba(255, 255, 255, 0.16);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.42);
 }
 
 .tt h2,
@@ -39,11 +64,11 @@
 
 .tt .tt-note-tag {
   background: #421520 !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
+  color: #FFF6E0 !important;
+  -webkit-text-fill-color: #FFF6E0 !important;
   padding: 0.4rem 1.1rem !important;
   border-radius: 9999px !important;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12) !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.14) !important;
 }
 
 /* The ink above is forced with !important and was left unscoped, so it also
@@ -63,7 +88,14 @@ html.dark .tt .tt-text {
   -webkit-text-fill-color: #FFFFFF !important;
 }
 
-/* the quieter tiers keep their hierarchy rather than all going pure cream */
+/* the quieter tiers keep their hierarchy rather than all going pure ink */
+.tt .tt-caption,
+.tt .tt-hud-sub,
+.tt .ed-spec-label {
+  color: rgba(28, 24, 20, 0.62) !important;
+  -webkit-text-fill-color: rgba(28, 24, 20, 0.62) !important;
+}
+
 html.dark .tt .tt-caption,
 html.dark .tt .tt-hud-sub,
 html.dark .tt .ed-spec-label {
@@ -573,8 +605,8 @@ html.dark .tt .ed-spec-label {
   height: 9px;
   border-radius: 50%;
   background: #421520 !important;
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.9),
-    0 2px 8px rgba(66, 21, 32, 0.4) !important;
+  box-shadow: 0 0 0 2px var(--offwhite, #FDFCFA),
+    0 2px 8px rgba(66, 21, 32, 0.35) !important;
 }
 
 /* Each row's horizontal offset is cos-derived from its height on the circle

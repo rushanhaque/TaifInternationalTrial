@@ -348,11 +348,9 @@ html.dark .hb-scrim {
 .countries-card {
   margin-top: 3rem;
   padding: 4.5rem 0 2.5rem;
-  /* A faint silver wash rather than flat white — just enough cool grey to
-     separate the card from the cream page behind it and give the flags a
-     ground to sit on. Kept very light so the flag colours stay the brightest
-     thing in the band. */
-  background: linear-gradient(168deg, #FBFBFC 0%, #F1F2F4 52%, #E8EAEE 100%);
+  /* A flat warm beige rather than the old cool silver wash — the card is what
+     carries the colour here, on a white section ground. */
+  background: var(--offwhite, #FDFCFA);
   border-radius: var(--r-lg);
   box-shadow: var(--lift-2), 0 24px 48px -12px rgba(0, 0, 0,0.06);
   border: 1px solid var(--hair);
@@ -421,10 +419,9 @@ html.dark .countries-card {
 }
 
 
-.tt {
-  background-color: #1A090D !important;
-  color: #FFFFFF !important;
-}
+/* .tt owns its own ground in mk2/theturn.css — it is the maroon frame around
+   the off-white Materials card, so it is deliberately absent from the groups
+   below. Listing it here only ever fought that rule. */
 
 .hp,
 .hero-brand,
@@ -434,18 +431,26 @@ html.dark .countries-card {
 #heritage,
 #craft,
 .countries-section-wrap,
-.countries-card,
 .fs-section,
 .bestsellers-section {
   background-color: var(--white);
   transition: background-color 0.4s ease, color 0.4s ease;
 }
 
+/* the homepage review cards take the same plate. Scoped to the grid so the
+   collection page's .pl-card keeps its own ground. */
+.home-reviews-grid .tm-card {
+  background: var(--offwhite, #FDFCFA) !important;
+}
+
+html.dark .home-reviews-grid .tm-card {
+  background: #2C0C14 !important;
+}
+
 html.dark .hp,
 html.dark .hero-brand,
 html.dark .cm-section,
 html.dark .ribbon,
-html.dark .tt,
 html.dark .czoom-section,
 html.dark #heritage,
 html.dark #craft,
@@ -542,7 +547,7 @@ html.dark .section-divider::before {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03) !important;
   position: relative;
   overflow: hidden;
-  background-color: #FFFFFF;
+  background-color: var(--offwhite, #FDFCFA);
   transition: background-color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
 }
 
@@ -630,16 +635,6 @@ html.dark .white-review-card {
     top: clamp(6rem, 12vh, 9rem);
   }
 }
-
-/* the section label, left-aligned at the head of the narrative column */
-.craft-kicker {
-  display: block;
-  margin-bottom: clamp(0.9rem, 2vh, 1.4rem);
-  color: #421520;
-  opacity: 1;
-}
-
-html.dark .craft-kicker { color: var(--on-deep, #F4EEE8); }
 
 .craft-headline {
   font-family: var(--font-display);
@@ -889,8 +884,37 @@ html.dark .craft-card-spacer {
 .craft-card-wrapper .wrap {
   width: 100%;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+/* The Heritage heading opens the narrative + process section, centred above
+   the two columns. */
+.craft-sec-head {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  margin-top: clamp(1rem, 2.5vh, 2rem);
+  margin-bottom: clamp(2.4rem, 5vh, 4rem);
+}
+
+/* matched to .czoom-bestsellers-title so this and the Best Sellers plate
+   carry the same size of section heading */
+.craft-sec-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4.5vw, 3.8rem);
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  text-align: center;
+  color: var(--graphite, #421520);
+}
+
+html.dark .craft-sec-title {
+  color: var(--on-deep, #F4EEE8);
 }
 
 .craft-card-container {

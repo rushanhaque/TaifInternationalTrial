@@ -51,7 +51,9 @@ const CELLS = [
   { row: 1, col: 1 }, { row: 1, col: 3 },                    // flanking the plate
   { row: 2, col: 1 }, { row: 2, col: 2 }, { row: 2, col: 3 },
   { row: 3, col: 1 }, { row: 3, col: 2 }, { row: 3, col: 3 },
+  { row: 4, col: 1 },                                        // left of centred tail
   { row: 4, col: 2 },                                        // centred tail
+  { row: 4, col: 3 },                                        // right of centred tail
 ]
 
 function layoutFor(index) {

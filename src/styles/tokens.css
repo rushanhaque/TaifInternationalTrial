@@ -3,6 +3,10 @@
   --white:      #FFFFFF;
   --beige:      #FFFFFF;
   --bg:         #FFFFFF;
+  /* a warm off-white, one step down from pure white — the shared card ground
+     for the Materials plate, the Countries band and the review cards, so the
+     three read as the same family of surface */
+  --offwhite:   #FDFCFA;
   --chrome:     #FFFFFF;
   --chrome-2:   #F7F7F7;
   --chrome-3:   #E5E5E5;   /* dividers, rules, hints */
@@ -143,6 +147,7 @@
 /* ═══ DARK MODE (html.dark) ═══ */
 html.dark {
   --white:      #2C0C14;
+  --offwhite:   #2C0C14;
   --chrome:     #421520;
   --chrome-2:   #471823;
   --chrome-3:   #36111a;

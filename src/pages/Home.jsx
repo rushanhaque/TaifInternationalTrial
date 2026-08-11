@@ -124,21 +124,17 @@ export default function Home() {
       <section className="section clear fs-section craft-about-section" id="craft">
         <div className="wrap">
           <div className="craft-container">
+            <div className="craft-sec-head">
+              <h2 className="craft-sec-title">Heritage</h2>
+            </div>
+
             {/* Top Split: Narrative + 5-Step Process */}
             <div className="craft-main-grid">
               {/* Left Narrative Column */}
               <div className="craft-intro">
-                {/* The "Heritage" label lives inside the sticky column, not in
-                    a .sec-head above the section. That is what makes the lock
-                    begin at the heading: the label and the narrative are one
-                    sticky element, so they pin together and release together.
-
-                    Kept outside, the two sat in different containing blocks —
-                    the label in .craft-container, the column in the grid — and
-                    no offset could make them release in step. The label stayed
-                    pinned for 500px after the column had gone. */}
-                <span className="meta craft-kicker">Heritage</span>
-
+                {/* The small "Heritage" kicker that used to open this column is
+                    gone — the section now carries a full-size Heritage heading
+                    at top centre, and the two together said it twice. */}
                 <h3 className="craft-headline">
                   A hundred hammers, <span className="craft-highlight">one steady hand.</span>
                 </h3>

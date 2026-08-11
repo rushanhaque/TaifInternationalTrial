@@ -113,6 +113,9 @@ export default function TheTurn() {
 
   return (
     <section className="tt section" ref={root} aria-labelledby="tt-h">
+      {/* the off-white plate the whole section sits on — the maroon .tt ground
+          survives only as a frame around it */}
+      <div className="tt-card">
       <div className="tt-stage" ref={stage}>
         <div className="sec-head tt-sec-head"><span className="meta">Materials we use</span></div>
 
@@ -165,7 +168,7 @@ export default function TheTurn() {
             {MATERIAL_SLIDES.map((n) => (
               <div className={`tt-note a${n.a} side-${n.side}`} key={n.id} data-note data-side={n.side}>
                 <span className="tt-note-body">
-                  <span className="tt-note-tag meta" style={{ fontSize: '1.05rem', fontWeight: '700', letterSpacing: '0.12em', color: '#FFFFFF' }}>{n.tag}</span>
+                  <span className="tt-note-tag meta" style={{ fontSize: '1.05rem', fontWeight: '700', letterSpacing: '0.12em', color: '#421520' }}>{n.tag}</span>
                 </span>
                 <span className="tt-note-line" data-line />
                 <span className="tt-note-dot" />
@@ -193,6 +196,7 @@ export default function TheTurn() {
             </div>
           ))}
         </div>
+      </div>
       </div>
     </section>
   )
