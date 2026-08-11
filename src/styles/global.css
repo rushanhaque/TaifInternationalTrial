@@ -1916,6 +1916,7 @@ html.dark .header-brand-img {
 .rail.native .rail-wrap {
   overflow-x: auto;
   scroll-snap-type: x mandatory;
+  scroll-padding-left: clamp(2.5rem, 5vw, 4.5rem);
   padding-bottom: .5rem;
 }
 
@@ -3016,9 +3017,13 @@ html.dark .btn.ghost * {
   }
 
   .foot-grid {
-    grid-template-columns: 1fr !important;
-    gap: 1.8rem;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 1.8rem 1rem;
     padding-bottom: 2rem;
+  }
+
+  .foot-brand-cell, .foot-contact-cell {
+    grid-column: 1 / -1;
   }
 
   .foot-brand-cell {

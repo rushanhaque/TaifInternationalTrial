@@ -1233,6 +1233,7 @@ html.dark .czoom-bestsellers-title {
     list-style: none;
     margin: 0;
     padding: 0.25rem var(--gutter) 1.25rem;
+    scroll-padding-left: var(--gutter);
     display: flex;
     gap: 0.9rem;
     overflow-x: auto;
