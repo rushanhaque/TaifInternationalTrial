@@ -129,9 +129,41 @@ export function CardsReveal({
     /* self-heal: if the frame clock is starved and the ScrollTrigger never
        fires, force the cards visible so seeding opacity:0 can never strand
        them. Cheaper and more local than leaning on RevealGuard, which only
-       rescues elements currently on screen. */
-    const safety = setTimeout(reveal, 2600)
-    return () => { clearTimeout(safety); tw.scrollTrigger?.kill(); tw.kill() }
+       rescues elements currently on screen.
+
+       The flat timeout fires N ms after MOUNT wherever the cards happen to
+       be. On a short page that is harmless. On the homepage — ~15,000px, with
+       the review rail near the bottom — you cannot possibly have scrolled to
+       them in 2.6s, so they were force-revealed while still thousands of
+       pixels below the fold and their entrance never played. The cards read
+       as static because by the time you arrived, the reveal was long spent.
+
+       Mobile therefore polls position and only rescues cards that have
+       actually come into view. DESKTOP KEEPS THE ORIGINAL FLAT TIMEOUT
+       UNTOUCHED — the same latent issue exists there, but desktop is frozen
+       by request, so fixing it is a separate decision to make deliberately
+       rather than a side effect of a mobile change. */
+    const onMobile =
+      typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches
+
+    let safety
+    let poll
+    if (onMobile) {
+      poll = setInterval(() => {
+        if (done) { clearInterval(poll); return }
+        const r = ref.current?.getBoundingClientRect()
+        if (r && r.top < window.innerHeight * 1.15) reveal()
+      }, 900)
+    } else {
+      safety = setTimeout(reveal, 2600)
+    }
+
+    return () => {
+      clearTimeout(safety)
+      clearInterval(poll)
+      tw.scrollTrigger?.kill()
+      tw.kill()
+    }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
   return createElement(as, { ref, className, style, ...rest }, children)
 }

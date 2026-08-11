@@ -28,13 +28,44 @@ const COLS = [
 export default function TheTurn() {
   const root = useRef(null)
   const stage = useRef(null)
+  const card = useRef(null)
 
   useEffect(() => {
     const el = root.current
     if (!el) return
     const mm = gsap.matchMedia()
 
-    mm.add('(min-width: 600px) and (prefers-reduced-motion: no-preference)', () => {
+    /* One builder, two contexts. The MECHANISM is identical on both — pin,
+       scrub, cross-dissolve the six materials, turn the form — so it would be
+       wrong to write it twice. What differs is only where the lock begins and
+       how far it runs:
+
+         trigger  desktop pins off the stage, which sits inside the card and
+                  below its padding. On a phone that reads as late: the card's
+                  top edge slides under the header and the screen keeps moving
+                  for another beat before it catches. Triggering on the CARD
+                  locks the moment its top edge meets the top of the screen,
+                  which is the edge the eye is actually tracking. `pin` names
+                  the stage explicitly, so the trigger can move independently
+                  of what is pinned.
+
+         end      a phone screen is shorter and thumb-scrolled, so the same six
+                  beats want less travel; 2600px there reads as a section that
+                  will not end.
+
+       Split at 1000px to match the FLAT/PINNED boundary in theturn.css, and
+       as two separate queries so a rotate rebuilds against the right one. */
+    /* live height of the fixed masthead — the var is the authored value, the
+       rect is what it actually measures to, and they differ */
+    const navH = () => {
+      const bar = document.querySelector('header.nav')
+      const h = bar?.getBoundingClientRect().height
+      return Math.round(h || parseFloat(
+        getComputedStyle(document.documentElement).getPropertyValue('--nav-h')
+      ) || 68)
+    }
+
+    const build = ({ triggerEl, travel, start }) => () => {
       const q = (s) => gsap.utils.toArray(el.querySelectorAll(s))
       const notes = q('[data-note]')
       const lines = q('[data-line]')
@@ -43,10 +74,10 @@ export default function TheTurn() {
       const tl = gsap.timeline({
         defaults: { ease: 'none' },
         scrollTrigger: {
-          trigger: stage.current,
-          start: 'top top',
-          end: '+=2600',
-          pin: true,
+          trigger: triggerEl() || stage.current,
+          start,
+          end: '+=' + travel,
+          pin: stage.current,
           pinSpacing: true,
           scrub: 0.6,
           anticipatePin: 1,
@@ -106,7 +137,22 @@ export default function TheTurn() {
         tl.scrollTrigger?.kill()
         tl.kill()
       }
-    })
+    }
+
+    /* desktop — unchanged: stage trigger, 'top top', 2600px of travel. The
+       stage carries `padding-top: calc(var(--nav-h) + …)` there, which is what
+       keeps the label clear of the masthead while pinned at y=0. */
+    mm.add('(min-width: 1000px) and (prefers-reduced-motion: no-preference)',
+      build({ triggerEl: () => stage.current, travel: 2600, start: 'top top' }))
+
+    /* phones and tablets — the mobile stylesheet drops that nav padding to buy
+       back vertical room, so pinning at y=0 would park the card's top edge
+       UNDER the fixed masthead and hide the section label for the whole turn.
+       Starting at the masthead's own height instead fires the lock one header
+       earlier: the card comes to rest with its top edge against the bottom of
+       the header, which is the moment the eye reads as "it caught". */
+    mm.add('(max-width: 999.98px) and (prefers-reduced-motion: no-preference)',
+      build({ triggerEl: () => card.current, travel: 1800, start: () => `top ${navH()}px` }))
 
     return () => mm.revert()
   }, [])
@@ -115,7 +161,7 @@ export default function TheTurn() {
     <section className="tt section" ref={root} aria-labelledby="tt-h">
       {/* the off-white plate the whole section sits on — the maroon .tt ground
           survives only as a frame around it */}
-      <div className="tt-card">
+      <div className="tt-card" ref={card}>
       <div className="tt-stage" ref={stage}>
         <div className="sec-head tt-sec-head"><span className="meta">Materials we use</span></div>
 

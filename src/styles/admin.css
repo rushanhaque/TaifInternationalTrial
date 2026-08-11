@@ -485,3 +485,93 @@ html.dark .ad-publish-ico { background: rgba(23, 16, 15, 0.16); }
   .ad-publish-cta { width: auto; white-space: nowrap; }
   .ad-publish-text em { display: none; }
 }
+
+/* ── confirm modal sizing ───────────────────────────────────────────────── */
+.ad-confirm { max-width: 380px; }
+
+/* ── search + sort bar ──────────────────────────────────────────────────── */
+.ad-search-bar {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+.ad-search-wrap {
+  flex: 1;
+  min-width: 160px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.ad-search-wrap svg {
+  position: absolute;
+  left: 0.65rem;
+  color: var(--ad-ink-2);
+  pointer-events: none;
+  flex-shrink: 0;
+}
+.ad-search-input {
+  width: 100%;
+  font: inherit;
+  font-size: 0.86rem;
+  color: var(--ad-ink);
+  background: var(--ad-panel);
+  border: 1px solid var(--ad-line-2);
+  border-radius: 9px;
+  padding: 0.52rem 0.7rem 0.52rem 2.1rem;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.ad-search-input:focus {
+  border-color: var(--ad-accent);
+  box-shadow: 0 0 0 3px var(--ad-accent-soft);
+}
+.ad-search-input::placeholder { color: var(--ad-ink-2); opacity: 0.65; }
+.ad-search-input::-webkit-search-cancel-button { cursor: pointer; }
+.ad-sort-select {
+  font: inherit;
+  font-size: 0.83rem;
+  color: var(--ad-ink);
+  background: var(--ad-panel);
+  border: 1px solid var(--ad-line-2);
+  border-radius: 9px;
+  padding: 0.52rem 0.7rem;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+}
+.ad-sort-select:focus { border-color: var(--ad-accent); }
+
+/* ── mobile floating Save & Publish ─────────────────────────────────────── */
+.ad-mobile-publish {
+  display: none;
+}
+@media (max-width: 800px) {
+  .ad-mobile-publish {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    position: fixed;
+    bottom: 1.1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1100;
+    background: linear-gradient(135deg, var(--ad-accent) 0%, #6E4517 100%);
+    color: #FFF;
+    font: inherit;
+    font-size: 0.8rem;
+    font-weight: 650;
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 999px;
+    box-shadow: 0 8px 24px -4px rgba(138, 90, 32, 0.6);
+    cursor: pointer;
+    white-space: nowrap;
+    animation: adRise 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  html.dark .ad-mobile-publish {
+    background: linear-gradient(135deg, #C79A55 0%, #9A7134 100%);
+    color: #17100F;
+  }
+}

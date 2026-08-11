@@ -284,8 +284,18 @@
 }
 
 .prt-mag {
-  /* magnetism lives on the wrapper so the chip keeps its own hover transform */
-  transform: translate3d(var(--mx, 0px), var(--my, 0px), 0);
+  /* magnetism lives on the wrapper so the chip keeps its own hover transform.
+
+     These are --prt-mx/--prt-my, NOT --mx/--my. interactions.css registers
+     --mx and --my with `@property { syntax: '<percentage>'; inherits: true;
+     initial-value: 50% }` for the specular highlight. A registered property
+     rejects a value of the wrong type at computed-value time and falls back
+     to its initial — so the px offsets this page writes were discarded and
+     every chip resolved to translate3d(50%, 50%, 0), sitting half its own
+     width right and half its height down of where it belonged. The `0px`
+     fallback never applied either, because the property was always defined.
+     A private name keeps the two systems from sharing a channel. */
+  transform: translate3d(var(--prt-mx, 0px), var(--prt-my, 0px), 0);
   will-change: transform;
 }
 

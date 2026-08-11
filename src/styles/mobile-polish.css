@@ -132,3 +132,164 @@
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   MOBILE LAYOUT — phase 2
+
+   Everything below is layout and rhythm for phones. Motion lives in
+   mobile-motion.css; this file stays structural.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+
+  /* ── blogs and socials: two per row ───────────────────────────────────
+     .sp-2 collapses to `grid-column: 1 / -1` below 900px, so these video
+     cards were stacking one per row at a 9:16 portrait ratio — a single
+     card taller than the viewport, and four of them a very long scroll.
+     Half the measure each puts two in view and brings the height back to
+     something you can take in at a glance. */
+  #instagram .grid > .sp-2 {
+    grid-column: span 6;
+  }
+
+  #instagram .grid {
+    gap: 0.7rem;
+  }
+
+  /* the play button was sized for a full-width card and swamps a half one */
+  #instagram .hero-video-play-btn {
+    width: 46px;
+    height: 46px;
+  }
+
+  #instagram .hero-video-play-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  /* ── section rhythm ───────────────────────────────────────────────────
+     .fs-section forces every section to a full viewport minimum, which on
+     a phone leaves big empty bands between short sections. Let content set
+     the height and use consistent padding instead. */
+  .fs-section {
+    min-height: 0;
+    padding-block: clamp(2.75rem, 8vh, 4rem);
+  }
+
+  /* ── section headings ─────────────────────────────────────────────────
+     one alignment for every section label, so the page has a single left
+     edge rather than a mix of centred and flush-left heads */
+  .sec-head {
+    padding-inline: var(--gutter);
+    margin-bottom: 1.25rem;
+    text-align: left;
+    justify-content: flex-start;
+  }
+
+  /* ── consistent measure ───────────────────────────────────────────────
+     body copy was running to the full 375px edge-to-edge in places */
+  .lede,
+  .craft-body,
+  .tt-spec-text {
+    max-width: none;
+  }
+
+  /* ── tap-safe media ───────────────────────────────────────────────────
+     images inside cards were occasionally overflowing their rounded frame
+     on iOS because the frame clips but the transform layer does not */
+  .pl-card,
+  .cat-card,
+  .tm-card,
+  .mrail-card-img {
+    -webkit-transform: translateZ(0);
+  }
+}
+
+@media (max-width: 768px) {
+
+  /* ── partners: chips must not outrun the screen ───────────────────────
+     .prt-wall wraps, but an individual chip is an inline-flex row of name +
+     category that never wraps internally, so a long partner name pushed the
+     chip past the viewport (measured to 391px on a 375px screen — clipped,
+     unreadable, and untappable at the tail). Let the chip wrap and shrink. */
+  .prt-mag { max-width: 100%; }
+
+  .prt-chip {
+    max-width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .prt-chip-name {
+    overflow-wrap: anywhere;
+  }
+
+  /* ── legible small caps ───────────────────────────────────────────────
+     The tracked micro-labels sat at 9.9–11.2px. Letter-spaced uppercase at
+     that size is the first thing to fail on a phone in daylight; 11.5px is
+     the floor this pass holds to. */
+  .visco-num,
+  .cm-no,
+  .mrail-card-sub,
+  .mrail-sig-sub,
+  .ed-category,
+  .prt-cmp-pane .meta,
+  .cm-kicker {
+    font-size: 11.5px !important;
+  }
+}
+
+@media (max-width: 768px) {
+
+  /* ── the void under Best Sellers ──────────────────────────────────────
+     .craft-card-spacer carries an INLINE `margin-top: clamp(50rem, 65vh,
+     56rem)` — 800px at this height. On desktop that is load-bearing: the
+     Sampler pins and scrubs through a tall scroll, and the margin is what
+     stops Heritage colliding with it mid-transition.
+
+     On mobile the Sampler renders its static rail branch instead — no pin,
+     no sticky, no extra scroll height — so nothing needs clearing and the
+     margin was 800px of blank screen below the Schedule a Discussion
+     button. `!important` because the declaration is inline. */
+  .craft-card-spacer {
+    margin-top: 0 !important;
+  }
+
+  /* which leaves the two sections meeting on the section's own padding —
+     enough to separate them, not enough to read as a gap */
+  .czoom-section.is-mobile {
+    padding-bottom: clamp(1.75rem, 4vh, 2.5rem);
+  }
+}
+
+@media (max-width: 768px) {
+
+  /* ── the wave ribbon — bigger type, nudged up ─────────────────────────
+     The terms are vector text drawn along an SVG path (Ribbon.jsx), not
+     regular flow text: font-size:30px is SVG user-space against a fixed
+     1600×280 viewBox, and the whole thing scales uniformly with the SVG's
+     rendered width (`width: 100%; height: auto`). Raising that number would
+     also re-space and re-wrap the two rows against their paths — the curves,
+     the overlap, the count of repeats visible — which is a rebuild, not a
+     resize.
+
+     Scaling the rendered SVG instead gets a pure zoom with none of that: the
+     paths, the counter-motion, the mirror symmetry all stay exactly as
+     authored, just bigger. `.ribbon` already clips (`overflow: hidden`), so
+     the zoom has a lane to bleed into without pushing the page wider. */
+  .ribbon svg {
+    transform: scale(1.28);
+    transform-origin: center center;
+  }
+
+  /* shifted up a touch, independent of the scale above.
+     .cm-section + .ribbon in collections-mosaic.css zeroes this ribbon's
+     margin-top at (0,3,0) specificity — it sits right after the homepage
+     mosaic and needed no extra lift there. A bare `.ribbon` rule (0,1,0)
+     loses to that regardless of file order, so the shift has to match its
+     selector shape to land. */
+  .cm-section + .section-divider + .ribbon,
+  .cm-section + .ribbon,
+  .ribbon {
+    margin-top: -0.6rem;
+  }
+}

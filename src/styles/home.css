@@ -60,13 +60,20 @@
     );
 }
 
-html.dark .hb-video { opacity: 0.5; }
+/* Dark mode shows the SAME footage, at the same strength, behind the same
+   neutral scrim as light — it does not tint the hero.
 
-html.dark .hb-scrim {
-  background:
-    radial-gradient(120% 80% at 50% 30%, rgba(26, 9, 13, 0.30) 0%, rgba(26, 9, 13, 0.62) 82%),
-    linear-gradient(180deg, rgba(26, 9, 13, 0.55) 0%, rgba(26, 9, 13, 0.42) 45%, rgba(26, 9, 13, 0.72) 100%);
-}
+   Two things used to put a burgundy wash over the clip. The video was held at
+   0.5 opacity, which is not a dimmer: the #1A090D ground behind it showed
+   through every frame, so the footage was literally half page-colour. And the
+   scrim swapped its near-black for rgba(26, 9, 13) — the same burgundy — at up
+   to 0.72 alpha across the whole frame, covering the picture rather than
+   pooling under the type. Together they read as a maroon sheet over the video.
+
+   So: full-strength footage, and the base .hb-scrim is left to do its job.
+   That scrim is already local and near-neutral — a pool under the tagline and
+   a darkening at the two edges — which is all the type needs, in either mode. */
+html.dark .hb-video { opacity: 1; }
 
 /* content sits above the media layer */
 .hero-brand > :not(.hb-media) { position: relative; z-index: 1; }

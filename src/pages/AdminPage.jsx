@@ -41,8 +41,7 @@ const Ico = ({ d, ...rest }) => (
 )
 const EditIco = () => <Ico d={<><path d="M12 20h9" /><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" /></>} />
 const TrashIco = () => <Ico d={<><path d="M3 6h18" /><path d="M8 6V4h8v2" /><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" /></>} />
-const UpIco = () => <Ico d={<><path d="m18 15-6-6-6 6" /></>} />
-const DownIco = () => <Ico d={<><path d="m6 9 6 6 6-6" /></>} />
+const SearchIco = () => <Ico d={<><circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" /></>} />
 
 /* ── schemas ─────────────────────────────────────────────────────────────── */
 const slugify = (s) => String(s).toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
@@ -92,7 +91,7 @@ const SECTIONS = [
       { key: 'suffix', label: 'After the number', placeholder: '+' },
       { key: 'label', label: 'Label', required: true, full: true, placeholder: 'Pieces delivered per year' },
       { key: 'sub', label: 'Caption', full: true, placeholder: 'Each piece finished by hand' },
-      { key: 'unit', label: 'Reference key', hint: 'Other pages look a figure up by this. Leave “countries” alone unless you also change the Partners page.' },
+      { key: 'unit', label: 'Reference key', masterKey: true },
     ],
     normalise: (d) => ({ ...d, value: Number(d.value) || 0 }),
   },
@@ -192,8 +191,37 @@ const SECTIONS = [
   },
 ]
 
+/* ── confirm dialog ──────────────────────────────────────────────────────── */
+function ConfirmModal({ message, confirmLabel = 'Delete', onConfirm, onClose }) {
+  useEffect(() => {
+    const onKey = (e) => { if (e.key === 'Escape') onClose() }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [onClose])
+  return (
+    <div className="ad-overlay" onMouseDown={onClose}>
+      <div className="ad-modal ad-confirm" role="dialog" aria-modal="true" onMouseDown={(e) => e.stopPropagation()}>
+        <div className="ad-modal-head">
+          <h2>Are you sure?</h2>
+          <button type="button" className="ad-ibtn" onClick={onClose} aria-label="Close">✕</button>
+        </div>
+        <div className="ad-modal-body">
+          <p style={{ margin: 0, fontSize: '0.88rem', color: 'var(--ad-ink-2)', lineHeight: 1.55 }}>{message}</p>
+        </div>
+        <div className="ad-modal-foot">
+          <button type="button" className="ad-btn ad-btn--quiet" onClick={onClose}>Cancel</button>
+          <button type="button" className="ad-btn" style={{ background: 'var(--ad-danger)', color: '#FFF' }} onClick={onConfirm}>{confirmLabel}</button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 /* ── field renderer ──────────────────────────────────────────────────────── */
 function Field({ f, draft, content, onChange, onFile }) {
+  /* master-key fields are machine identifiers that other pages depend on —
+     showing them as editable text would invite breaking changes */
+  if (f.masterKey) return null
   const v = draft[f.key] ?? ''
   const cls = `ad-field${f.full ? ' ad-field--full' : ''}`
   const id = `ad-f-${f.key}`
@@ -229,7 +257,7 @@ function Field({ f, draft, content, onChange, onFile }) {
             ? <img className="ad-img-preview" src={v} alt="" />
             : <div className="ad-img-preview ad-thumb--empty">None</div>}
           <div className="ad-img-side">
-            <input id={id} value={v} placeholder="https://… or upload" onChange={(e) => onChange(f.key, e.target.value)} />
+            <input id={id} value={v} placeholder="https://... or upload" onChange={(e) => onChange(f.key, e.target.value)} />
             <label className="ad-btn ad-btn--quiet ad-btn--sm" style={{ alignSelf: 'flex-start', cursor: 'pointer' }}>
               Upload file
               <input type="file" accept="image/*" hidden onChange={(e) => onFile(f.key, e)} />
@@ -326,11 +354,37 @@ function RecordModal({ section, record, content, onSave, onClose, notify }) {
 }
 
 /* ── generic list section ────────────────────────────────────────────────── */
-function ListSection({ section, notify }) {
+function ListSection({ section, notify, onDirty }) {
   const content = useContent()
   const items = content[section.key] || []
-  const [editing, setEditing] = useState(null)   // record being edited
+  const [editing, setEditing] = useState(null)
   const [adding, setAdding] = useState(false)
+  const [confirmItem, setConfirmItem] = useState(null)
+
+  /* search + sort — only surfaced for Products */
+  const [search, setSearch] = useState('')
+  const [sortBy, setSortBy] = useState('default')
+
+  const isProducts = section.key === 'products'
+
+  const visibleItems = useMemo(() => {
+    let list = items
+    if (isProducts && search.trim()) {
+      const q = search.trim().toLowerCase()
+      list = list.filter((p) =>
+        (p.name || '').toLowerCase().includes(q) ||
+        (p.category || '').toLowerCase().includes(q) ||
+        (p.subcategory || '').toLowerCase().includes(q)
+      )
+    }
+    if (isProducts) {
+      list = [...list]
+      if (sortBy === 'name-az') list.sort((a, b) => (a.name || '').localeCompare(b.name || ''))
+      else if (sortBy === 'name-za') list.sort((a, b) => (b.name || '').localeCompare(a.name || ''))
+      else if (sortBy === 'category') list.sort((a, b) => (a.category || '').localeCompare(b.category || ''))
+    }
+    return list
+  }, [items, isProducts, search, sortBy])
 
   const save = (draft) => {
     if (editing) {
@@ -340,24 +394,20 @@ function ListSection({ section, notify }) {
       setSection(section.key, [...items, { ...draft, id: nextId(items) }])
       notify(`${section.singular[0].toUpperCase()}${section.singular.slice(1)} added.`)
     }
+    onDirty?.()
     setEditing(null)
     setAdding(false)
   }
 
-  const remove = (item) => {
-    const name = section.rowTitle(item) || `this ${section.singular}`
-    if (!window.confirm(`Delete “${name}”? This cannot be undone.`)) return
-    setSection(section.key, items.filter((i) => i.id !== item.id))
-    notify(`Deleted “${name}”.`)
-  }
+  const remove = (item) => setConfirmItem(item)
 
-  /* order is meaningful for atelier slides, blog cards and exhibition rows */
-  const move = (idx, dir) => {
-    const to = idx + dir
-    if (to < 0 || to >= items.length) return
-    const next = items.slice()
-    ;[next[idx], next[to]] = [next[to], next[idx]]
-    setSection(section.key, next)
+  const confirmRemove = () => {
+    if (!confirmItem) return
+    const name = section.rowTitle(confirmItem) || `this ${section.singular}`
+    setSection(section.key, items.filter((i) => i.id !== confirmItem.id))
+    notify(`Deleted "${name}".`)
+    onDirty?.()
+    setConfirmItem(null)
   }
 
   return (
@@ -374,16 +424,47 @@ function ListSection({ section, notify }) {
         )}
       </div>
 
-      {items.length === 0 ? (
+      {isProducts && items.length > 0 && (
+        <div className="ad-search-bar">
+          <div className="ad-search-wrap">
+            <SearchIco />
+            <input
+              type="search"
+              className="ad-search-input"
+              placeholder="Search by name, category..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </div>
+          <select
+            className="ad-sort-select"
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+          >
+            <option value="default">Order: default</option>
+            <option value="name-az">Name A → Z</option>
+            <option value="name-za">Name Z → A</option>
+            <option value="category">Category</option>
+          </select>
+        </div>
+      )}
+
+      {visibleItems.length === 0 ? (
         <div className="ad-empty">
-          <p>Nothing here yet.</p>
-          {!section.fixed && (
-            <button className="ad-btn ad-btn--primary" onClick={() => setAdding(true)}>Add the first {section.singular}</button>
+          {search ? (
+            <p>No products match &ldquo;{search}&rdquo;.</p>
+          ) : (
+            <>
+              <p>Nothing here yet.</p>
+              {!section.fixed && (
+                <button className="ad-btn ad-btn--primary" onClick={() => setAdding(true)}>Add the first {section.singular}</button>
+              )}
+            </>
           )}
         </div>
       ) : (
         <div className="ad-list">
-          {items.map((item, i) => {
+          {visibleItems.map((item) => {
             const img = section.rowImg?.(item)
             return (
               <div className="ad-row" key={item.id}>
@@ -397,12 +478,6 @@ function ListSection({ section, notify }) {
                 </div>
 
                 <div className="ad-row-acts">
-                  {!section.fixed && (
-                    <>
-                      <button className="ad-ibtn" onClick={() => move(i, -1)} disabled={i === 0} aria-label="Move up"><UpIco /></button>
-                      <button className="ad-ibtn" onClick={() => move(i, 1)} disabled={i === items.length - 1} aria-label="Move down"><DownIco /></button>
-                    </>
-                  )}
                   <button className="ad-ibtn" onClick={() => { setAdding(false); setEditing(item) }} aria-label={`Edit ${section.rowTitle(item)}`}><EditIco /></button>
                   {!section.fixed && (
                     <button className="ad-ibtn ad-ibtn--danger" onClick={() => remove(item)} aria-label={`Delete ${section.rowTitle(item)}`}><TrashIco /></button>
@@ -424,12 +499,20 @@ function ListSection({ section, notify }) {
           onClose={() => { setAdding(false); setEditing(null) }}
         />
       )}
+
+      {confirmItem && (
+        <ConfirmModal
+          message={`Delete "${section.rowTitle(confirmItem)}"? This cannot be undone.`}
+          onConfirm={confirmRemove}
+          onClose={() => setConfirmItem(null)}
+        />
+      )}
     </>
   )
 }
 
 /* ── best sellers ────────────────────────────────────────────────────────── */
-function BestSellersSection({ notify }) {
+function BestSellersSection({ notify, onDirty }) {
   const chosen = useContent('bestSellers') || []
   const products = useContent('products')
 
@@ -446,7 +529,8 @@ function BestSellersSection({ notify }) {
        blanks are kept — clearing slot 2 should not shuffle slot 3 upward */
     while (next.length && !next[next.length - 1]) next.pop()
     setSection('bestSellers', next)
-    notify(slug ? `Slot ${i + 1} set to “${products.find((p) => p.slug === slug)?.name}”.` : `Slot ${i + 1} cleared.`)
+    onDirty?.()
+    notify(slug ? `Slot ${i + 1} set to "${products.find((p) => p.slug === slug)?.name}".` : `Slot ${i + 1} cleared.`)
   }
 
   const filled = slots.filter(Boolean).length
@@ -515,39 +599,40 @@ function BestSellersSection({ notify }) {
 }
 
 /* ── subcategories ───────────────────────────────────────────────────────── */
-function SubcategoriesSection({ notify }) {
+function SubcategoriesSection({ notify, onDirty }) {
   const subs = useContent('subcategories')
   const products = useContent('products')
   const [drafts, setDrafts] = useState({})
+  const [confirmSub, setConfirmSub] = useState(null) // { cat, name }
 
   const add = (cat) => {
     const name = (drafts[cat] || '').trim()
     if (!name) return
     if ((subs[cat] || []).some((s) => s.toLowerCase() === name.toLowerCase())) {
-      notify(`“${name}” is already under ${cat}.`, true)
+      notify(`"${name}" is already under ${cat}.`, true)
       return
     }
     setSection('subcategories', { ...subs, [cat]: [...(subs[cat] || []), name] })
     setDrafts((d) => ({ ...d, [cat]: '' }))
-    notify(`Added “${name}” to ${cat}.`)
+    onDirty?.()
+    notify(`Added "${name}" to ${cat}.`)
   }
 
-  const remove = (cat, name) => {
-    /* a subcategory in use would leave those products pointing at a label that
-       no longer exists, so clear it off them in the same write */
-    const used = products.filter((p) => p.category === cat && p.subcategory === name)
-    const msg = used.length
-      ? `Delete “${name}”? ${used.length} product${used.length === 1 ? '' : 's'} will lose this subcategory.`
-      : `Delete “${name}”?`
-    if (!window.confirm(msg)) return
+  const remove = (cat, name) => setConfirmSub({ cat, name })
 
+  const confirmRemoveSub = () => {
+    if (!confirmSub) return
+    const { cat, name } = confirmSub
+    const used = products.filter((p) => p.category === cat && p.subcategory === name)
     setSection('subcategories', { ...subs, [cat]: (subs[cat] || []).filter((s) => s !== name) })
     if (used.length) {
       setSection('products', products.map((p) => (
         p.category === cat && p.subcategory === name ? { ...p, subcategory: '' } : p
       )))
     }
-    notify(`Deleted “${name}”.`)
+    onDirty?.()
+    notify(`Deleted "${name}".`)
+    setConfirmSub(null)
   }
 
   return (
@@ -600,6 +685,19 @@ function SubcategoriesSection({ notify }) {
           </div>
         )
       })}
+
+      {confirmSub && (
+        <ConfirmModal
+          message={(() => {
+            const used = products.filter((p) => p.category === confirmSub.cat && p.subcategory === confirmSub.name)
+            return used.length
+              ? `Delete "${confirmSub.name}"? ${used.length} product${used.length === 1 ? '' : 's'} will lose this subcategory.`
+              : `Delete "${confirmSub.name}"?`
+          })()}
+          onConfirm={confirmRemoveSub}
+          onClose={() => setConfirmSub(null)}
+        />
+      )}
     </>
   )
 }
@@ -667,7 +765,7 @@ function PublishToGitHub({ notify }) {
             type="password"
             autoComplete="off"
             value={token}
-            placeholder="github_pat_…"
+            placeholder="github_pat_..."
             onChange={(e) => onToken(e.target.value)}
           />
           <span className="ad-hint">Not saved to disk. You will need to paste it again next session.</span>
@@ -824,9 +922,11 @@ export default function AdminPage() {
   })
   const [tab, setTab] = useState('products')
   const [toast, setToast] = useState(null)
+  const [dirty, setDirty] = useState(false)
   const content = useContent()
 
   const notify = (msg, warn = false) => setToast({ msg, warn })
+  const markDirty = () => setDirty(true)
 
   useEffect(() => {
     if (!toast) return
@@ -898,14 +998,28 @@ export default function AdminPage() {
       </aside>
 
       <main className="ad-main">
-        {section && <ListSection key={section.key} section={section} notify={notify} />}
-        {tab === 'subcategories' && <SubcategoriesSection notify={notify} />}
-        {tab === 'bestsellers' && <BestSellersSection notify={notify} />}
+        {section && <ListSection key={section.key} section={section} notify={notify} onDirty={markDirty} />}
+        {tab === 'subcategories' && <SubcategoriesSection notify={notify} onDirty={markDirty} />}
+        {tab === 'bestsellers' && <BestSellersSection notify={notify} onDirty={markDirty} />}
         {tab === 'settings' && <SettingsSection notify={notify} />}
       </main>
 
       {toast && (
         <div className={`ad-toast${toast.warn ? ' ad-toast--warn' : ''}`} role="status">{toast.msg}</div>
+      )}
+
+      {dirty && (
+        <button
+          className="ad-mobile-publish"
+          onClick={() => setTab('settings')}
+          aria-label="Save and publish"
+        >
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M12 19V5" /><path d="m5 12 7-7 7 7" />
+          </svg>
+          Save &amp; publish
+        </button>
       )}
     </div>
   )

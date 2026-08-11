@@ -12,6 +12,8 @@ import './styles/mk2/index.css'
 import './styles/interactions-premium.css'
 /* mobile-only refinements, last so its media query wins */
 import './styles/mobile-polish.css'
+/* mobile-only: hover switched off, entrance animations in its place */
+import './styles/mobile-motion.css'
 
 initLenis()
 startPointer()

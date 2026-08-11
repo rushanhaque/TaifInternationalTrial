@@ -78,14 +78,23 @@ export default function Footer() {
               <div key={l.to}><Link to={l.to}>{l.label}</Link></div>
             ))}
           </nav>
-          <div>
-            <h3 className="meta">Contact</h3>
-            <div><a href={`mailto:${BRAND.email}`}>{BRAND.email}</a></div>
-            <div><a href={`tel:${BRAND.phone.replace(/\s/g, '')}`}>{BRAND.phone}</a></div>
-            <p style={{ marginTop: '.6rem', color: 'rgba(255, 255, 255, 0.78)', fontSize: '.9rem' }}>
-              Mon–Sat, 09:00–18:00 IST
-            </p>
-            <SocialLinks />
+          <div className="foot-contact-cell">
+            {/* .foot-contact-text wraps the written-out details — the heading,
+                the two full addresses, the hours. On mobile this group is
+                swapped for the icon row alone: instagram / whatsapp / email
+                already ARE phone and mail, just as taps rather than reading
+                matter, so nothing is lost, only compacted. Desktop keeps the
+                full text; the class carries no styling until the mobile
+                stylesheet claims it. */}
+            <div className="foot-contact-text">
+              <h3 className="meta">Contact</h3>
+              <div><a href={`mailto:${BRAND.email}`}>{BRAND.email}</a></div>
+              <div><a href={`tel:${BRAND.phone.replace(/\s/g, '')}`}>{BRAND.phone}</a></div>
+              <p style={{ marginTop: '.6rem', color: 'rgba(255, 255, 255, 0.78)', fontSize: '.9rem' }}>
+                Mon–Sat, 09:00–18:00 IST
+              </p>
+            </div>
+            <SocialLinks className="foot-contact-icons" />
           </div>
         </div>
 

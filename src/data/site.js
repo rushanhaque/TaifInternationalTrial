@@ -319,6 +319,14 @@ export const LOCATIONS = [
     name: 'Moradabad Works',
     lines: ['Sarai Husaini Begum, Jhabbu Ka Nala', 'Moradabad 244001, Uttar Pradesh'],
     meta: 'Metal & Wood · HQ',
+    /* The surveyed pin, from the Google Maps listing for Taif International.
+       Geocoding the address text landed near enough to be plausible and wrong;
+       these are the listing's own marker coordinates, so the embed centres on
+       the works itself rather than on whatever the address string resolves to.
+       `share` is the canonical short link — it opens the real listing, with
+       the name, photographs and reviews attached. */
+    coords: { lat: 28.8433785, lng: 78.7761936 },
+    share: 'https://maps.app.goo.gl/YT9Lk9AvQiLiCqiy8',
   },
 ]
 

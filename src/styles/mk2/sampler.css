@@ -1095,3 +1095,209 @@ html.dark .czoom-bestsellers-title {
    clickable and hoverable */
 .sig-header-floating { z-index: 5; }
 .sig-card-content { z-index: 5; }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   MOBILE — the rail
+
+   Sampler.jsx renders a different tree under 768px: no pin, no sticky, no
+   scroll-scrubbed zoom. The signature plate sits still and the best sellers
+   become a horizontal snap rail. Everything here is scoped to .is-mobile,
+   which only that branch emits, so the desktop instrument above is untouched.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+  .czoom-section.is-mobile {
+    height: auto;
+    min-height: 0;
+    padding-block: clamp(2.5rem, 7vh, 4rem);
+    background-color: var(--white);
+  }
+
+  .mrail-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-inline: var(--gutter);
+    margin-bottom: 1.1rem;
+  }
+
+  .mrail-head-sub { margin-top: 2.6rem; }
+
+  .mrail-title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(1.7rem, 8vw, 2.4rem);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--graphite, #421520);
+  }
+
+  .mrail-hint {
+    flex: none;
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  /* ── the still signature plate ─────────────────────────────────────── */
+  .mrail-sig {
+    position: relative;
+    margin-inline: var(--gutter);
+    aspect-ratio: 4 / 5;
+    border-radius: 18px;
+    overflow: hidden;
+    isolation: isolate;
+    background: #121212;
+    box-shadow: 0 18px 44px -20px rgba(0, 0, 0, 0.55);
+  }
+
+  .mrail-sig-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .mrail-sig-scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 42%, rgba(0, 0, 0, 0.72) 100%);
+  }
+
+  .mrail-sig-meta {
+    position: absolute;
+    left: 1.1rem;
+    right: 1.1rem;
+    bottom: 1.1rem;
+    z-index: 2;
+  }
+
+  .mrail-sig-sub {
+    display: block;
+    font-family: var(--font-body);
+    font-size: 0.68rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.78);
+    margin-bottom: 0.3rem;
+  }
+
+  .mrail-sig-name {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 600;
+    line-height: 1.15;
+    color: #FFFFFF;
+  }
+
+  /* ── thumbnails ────────────────────────────────────────────────────── */
+  .mrail-thumbs {
+    display: flex;
+    gap: 0.6rem;
+    padding-inline: var(--gutter);
+    margin-top: 0.85rem;
+  }
+
+  .mrail-thumb {
+    flex: 1 1 0;
+    aspect-ratio: 1;
+    padding: 0;
+    border: 1px solid rgba(66, 21, 32, 0.14);
+    border-radius: 10px;
+    overflow: hidden;
+    background: none;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: opacity 0.25s ease, border-color 0.25s ease;
+  }
+
+  .mrail-thumb.is-active {
+    opacity: 1;
+    border-color: var(--graphite, #421520);
+  }
+
+  .mrail-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* ── the rail ──────────────────────────────────────────────────────── */
+  .mrail {
+    list-style: none;
+    margin: 0;
+    padding: 0.25rem var(--gutter) 1.25rem;
+    display: flex;
+    gap: 0.9rem;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .mrail::-webkit-scrollbar { display: none; }
+
+  .mrail-item {
+    flex: 0 0 auto;
+    /* two-and-a-bit cards in view, so the rail visibly continues past the
+       edge and reads as scrollable without needing the hint */
+    width: min(62vw, 260px);
+    scroll-snap-align: start;
+  }
+
+  .mrail-card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .mrail-card-img {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    display: block;
+    border-radius: 14px;
+    background: var(--chrome-2);
+    box-shadow: 0 12px 28px -16px rgba(0, 0, 0, 0.45);
+  }
+
+  .mrail-card-meta { padding-top: 0.6rem; }
+
+  .mrail-card-sub {
+    display: block;
+    font-family: var(--font-body);
+    font-size: 0.66rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin-bottom: 0.2rem;
+  }
+
+  .mrail-card-name {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 0.98rem;
+    font-weight: 600;
+    line-height: 1.25;
+    color: var(--graphite, #421520);
+  }
+
+  .mrail-cta {
+    display: flex;
+    justify-content: center;
+    padding-inline: var(--gutter);
+    margin-top: 1.4rem;
+  }
+
+  html.dark .czoom-section.is-mobile { background-color: #1A090D; }
+  html.dark .mrail-title,
+  html.dark .mrail-card-name { color: #FFFFFF; }
+  html.dark .mrail-thumb.is-active { border-color: rgba(255, 255, 255, 0.7); }
+}

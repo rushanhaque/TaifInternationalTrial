@@ -68,6 +68,32 @@ function layoutFor(index) {
   }
 }
 
+/* The pinned zoom is a desktop instrument. It needs a viewport wide enough to
+   hold a 2.25× signature plate AND three columns of cards flying in from
+   ±125px; at 375px those columns land at -83px and +458px, i.e. off both
+   edges, and the plate fills the screen before the transition has begun. It
+   cannot be tuned into that space — it has to become a different thing.
+
+   So on a phone the section keeps its content and drops its mechanism: the
+   signature plate sits still at the top, and the best sellers become a
+   horizontal rail you flick through. Explicitly the fallback the brief asked
+   for. Desktop is untouched — everything below branches on a media query. */
+const MOBILE = '(max-width: 768px)'
+
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia(MOBILE).matches
+  )
+  useEffect(() => {
+    const mq = window.matchMedia(MOBILE)
+    const sync = () => setIsMobile(mq.matches)
+    sync()
+    mq.addEventListener('change', sync)
+    return () => mq.removeEventListener('change', sync)
+  }, [])
+  return isMobile
+}
+
 export default function Sampler() {
   const [activeIdx, setActiveIdx] = useState(0)
   const [progress, setProgress] = useState(0)
@@ -75,6 +101,7 @@ export default function Sampler() {
   const targetPRef = useRef(0)
   const currentPRef = useRef(0)
   const rafRef = useRef(null)
+  const isMobile = useIsMobile()
 
   const activeItem = SIGNATURE_ITEMS[activeIdx]
 
@@ -108,6 +135,10 @@ export default function Sampler() {
   }
 
   useEffect(() => {
+    /* no pin, no scrub, no rAF loop on a phone — the mobile branch renders a
+       static plate and a rail, so this machinery would only burn frames */
+    if (isMobile) return
+
     const handleScroll = () => {
       const sec = sectionRef.current
       if (!sec) return
@@ -137,7 +168,7 @@ export default function Sampler() {
       window.removeEventListener('resize', handleScroll)
       if (rafRef.current) cancelAnimationFrame(rafRef.current)
     }
-  }, [])
+  }, [isMobile])
 
   // heroScale shrinks from 2.25x down to 1.0x as user scrolls
   const p = progress
@@ -154,6 +185,76 @@ export default function Sampler() {
   // finalNameOpacity: Atelier's Lamp title fades in when scroll transition completes
   const initialContentOpacity = Math.max(0, 1 - p * 1.8)
   const finalNameOpacity = Math.min(1, Math.max(0, (p - 0.45) * 2.2))
+
+  if (isMobile) {
+    return (
+      <section className="czoom-section is-mobile" ref={sectionRef}>
+        <div className="mrail-head">
+          <h2 className="mrail-title">Signature Piece</h2>
+        </div>
+
+        {/* the plate, still — tap a thumbnail to change it */}
+        <div className="mrail-sig">
+          <img src={activeItem.image} alt={activeItem.title} className="mrail-sig-img" />
+          <div className="mrail-sig-scrim" />
+          <div className="mrail-sig-meta">
+            <span className="mrail-sig-sub">{activeItem.subtitle}</span>
+            <h3 className="mrail-sig-name">{activeItem.title}</h3>
+          </div>
+        </div>
+
+        <div className="mrail-thumbs">
+          {SIGNATURE_ITEMS.map((item, idx) => (
+            <button
+              type="button"
+              key={item.id}
+              className={`mrail-thumb ${idx === activeIdx ? 'is-active' : ''}`}
+              onClick={() => setActiveIdx(idx)}
+              aria-label={`View ${item.title}`}
+              aria-pressed={idx === activeIdx}
+            >
+              <img src={item.image} alt="" />
+            </button>
+          ))}
+        </div>
+
+        <div className="mrail-head mrail-head-sub">
+          <h2 className="mrail-title">Best Sellers</h2>
+          <span className="mrail-hint" aria-hidden="true">Swipe →</span>
+        </div>
+
+        {/* the grid becomes a rail: one row, flicked sideways, snapping */}
+        <ul className="mrail" role="list">
+          {pieces.map((item) => (
+            <li className="mrail-item" key={item.slug}>
+              <Link to={`/catalogue/${item.slug}`} className="mrail-card">
+                <img
+                  src={item.image || productImg(item.slug)}
+                  alt={item.name}
+                  className="mrail-card-img"
+                  loading="lazy"
+                />
+                <div className="mrail-card-meta">
+                  <span className="mrail-card-sub">{item.material}</span>
+                  <h3 className="mrail-card-name">{item.name}</h3>
+                </div>
+              </Link>
+            </li>
+          ))}
+        </ul>
+
+        <div className="mrail-cta">
+          <Link to="/contact" className="czoom-schedule-btn">
+            <span>Schedule a Discussion</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </Link>
+        </div>
+      </section>
+    )
+  }
 
   return (
     <section className="czoom-section" ref={sectionRef}>

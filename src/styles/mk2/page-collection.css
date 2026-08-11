@@ -42,6 +42,19 @@
   object-fit: cover;
   object-position: center;
   display: block;
+  /* The cover photograph is a GROUND, not a subject — these are client-
+     supplied and can be pale, busy or blown out (see the scrim note below),
+     and a busy one competes with the title sitting on top of it. Blurring it
+     settles it into a field of colour and takes the pressure off the scrim.
+
+     The scale is not decoration: a blur samples beyond the element's box, so
+     at exactly 100% the outer ~1 blur-radius of the image resolves against
+     nothing and the edges go soft and semi-transparent — a pale halo inside
+     all four sides of the band. Oversizing by 8% pushes that fringe outside
+     the overflow:hidden parent, so every visible pixel is fully sampled. */
+  filter: blur(3px);
+  transform: scale(1.03);
+  transform-origin: center center;
 }
 
 /* Two layers, each with a job, sized against the worst case: a blown-out
@@ -135,8 +148,8 @@ html.dark .pl-head-scrim {
   font-family: var(--font-display);
   font-stretch: 125%;
   font-weight: 700;
-  font-size: clamp(2rem, 4.2vw, 3.8rem);
-  line-height: 1.1;
+  font-size: clamp(2.4rem, 5.6vw, 5.2rem);
+  line-height: 1.08;
   letter-spacing: -0.02em;
   /* was a literal #421520, which left the family masthead burgundy-on-burgundy
      in dark mode — the title of every collection page was unreadable */
@@ -188,7 +201,15 @@ html.dark .pl-head-scrim {
 /* ---- the grid ----
    This was declared twice, the first set (600/990 breakpoints) fully dead
    under the second. One definition now, keeping the surviving breakpoints. */
-.pl-grid-wrap { position: relative; z-index: 1; padding-bottom: clamp(5rem, 11vw, 9rem); }
+/* The plates used to butt straight up against the masthead band, so the first
+   row read as a continuation of the photograph rather than the start of the
+   grid. A little air lets the band close before the listing opens. */
+.pl-grid-wrap {
+  position: relative;
+  z-index: 1;
+  padding-top: clamp(1.75rem, 3.4vw, 3.25rem);
+  padding-bottom: clamp(5rem, 11vw, 9rem);
+}
 
 .pl-grid {
   display: grid;
@@ -620,5 +641,16 @@ html.dark .pl-family-pill-btn {
 @media (max-width: 768px) {
   .pl-head {
     padding-top: calc(var(--nav-h) + clamp(2rem, 7vw, 3.2rem));
+  }
+
+  /* .pl-title is `white-space: nowrap` so the masthead reads as one line and
+     the mask reveal has a single band to lift. At the larger size above, the
+     longest family names — "Bathroom Accessories", "Religious Supplies" —
+     no longer fit one phone-width line and would run off the right edge
+     rather than wrap. Narrow screens let it break instead; .pl-mast-line
+     clips by overflow, not by height, so a second line is safe. */
+  .pl-title {
+    white-space: normal;
+    text-wrap: balance;
   }
 }

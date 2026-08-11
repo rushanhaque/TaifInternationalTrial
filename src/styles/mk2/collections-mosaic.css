@@ -335,6 +335,12 @@ html.dark .cm-kicker { color: rgba(255, 255, 255, 0.68); }
 
 @media (max-width: 560px) {
   .cm-card { flex: 1 1 100% !important; aspect-ratio: 16 / 10; }
+
+  /* The banner proportion above exists because at two columns the third plate
+     is left spanning the full measure on its own. At ONE column every plate
+     already spans the measure, so that rule only made every third card short —
+     nine plates in a stack read as three ratios instead of one. Reset it. */
+  .cm-card:nth-child(3) { aspect-ratio: 16 / 10; }
 }
 
 /* ── Reduced motion: a still mosaic, nothing swells ───────────────────── */

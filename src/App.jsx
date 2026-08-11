@@ -13,6 +13,7 @@ import ClickSpark from './components/ClickSpark'
 import Ambient from './components/mk2/Ambient'
 import RevealGuard from './components/mk2/RevealGuard'
 import Interactions from './components/mk2/Interactions'
+import MobileReveal from './components/MobileReveal'
 import Cart from './components/mk2/Cart'
 import { CartProvider } from './lib/cart'
 
@@ -169,7 +170,7 @@ export default function App() {
         routes={ROUTES}
         notFound={NOT_FOUND}
         before={<Navbar />}
-        after={<><SectionStack /><RevealGuard /><Footer /></>}
+        after={<><SectionStack /><RevealGuard /><MobileReveal /><Footer /></>}
       />
       <Ambient />
       <Interactions />

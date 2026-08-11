@@ -138,8 +138,8 @@ function PartnerWall({ cat, setCat, partners }) {
         it.x += (dx * f * 0.32 - it.x) * 0.15
         it.y += (dy * f * 0.32 - it.y) * 0.15
         const s = it.el.style
-        s.setProperty('--mx', `${it.x.toFixed(2)}px`)
-        s.setProperty('--my', `${it.y.toFixed(2)}px`)
+        s.setProperty('--prt-mx', `${it.x.toFixed(2)}px`)
+        s.setProperty('--prt-my', `${it.y.toFixed(2)}px`)
         s.setProperty('--mg', f.toFixed(3))
       }
     })
@@ -149,8 +149,8 @@ function PartnerWall({ cat, setCat, partners }) {
       window.removeEventListener('resize', mark)
       window.removeEventListener('scroll', mark)
       for (const it of items) {
-        it.el.style.removeProperty('--mx')
-        it.el.style.removeProperty('--my')
+        it.el.style.removeProperty('--prt-mx')
+        it.el.style.removeProperty('--prt-my')
         it.el.style.removeProperty('--mg')
       }
     }

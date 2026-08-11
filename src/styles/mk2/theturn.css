@@ -837,3 +837,147 @@ html.dark .tt-sec-head .meta {
     margin-bottom: clamp(1.6rem, 3.2vh, 2.5rem);
   }
 }
+
+/* ═══ PINNED — MOBILE ═══════════════════════════════════════════════════════
+   The Turn now runs its scroll timeline on phones too (the width floor came
+   off the matchMedia in TheTurn.jsx). The MECHANISM is identical to desktop:
+   pinned stage, scrubbed scrub, six materials cross-dissolving inside the
+   form, the form turning through 180°.
+
+   What cannot survive the width is the callout LAYOUT. Each leader line is
+   positioned off the circle's radius — `right: calc(50% + var(--form) * .438
+   + 10px)` — and with a 148px label hung off that, a note's left edge lands
+   near -170px on a 375px screen. There is no offset that fixes it; the
+   geometry needs a wider room than a phone has.
+
+   So on mobile the six notes stack in ONE place, centred beneath the form,
+   and the leader line and dot are dropped. Only ever one is visible at a
+   time — the timeline already fades each in at m.in and out at m.out — so
+   six stacked notes read as a single caption that changes as you scroll.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 999.98px) and (prefers-reduced-motion: no-preference) {
+  /* the stage becomes a room again so there is something to pin */
+  .tt-stage {
+    min-height: 86svh;
+    justify-content: flex-start;
+    padding-block: clamp(1.2rem, 4vh, 2.4rem) clamp(2rem, 6vh, 3.5rem) !important;
+  }
+
+  .tt-rig {
+    margin-bottom: clamp(7rem, 22vw, 10rem) !important;
+  }
+
+  .tt-notes {
+    display: block;
+  }
+
+  /* every note to the same spot, centred under the form. The radius-derived
+     offsets from the desktop plate are overridden wholesale. */
+  .tt-note.a1,
+  .tt-note.a2,
+  .tt-note.a3,
+  .tt-note.a4,
+  .tt-note.a5,
+  .tt-note.a6 {
+    top: calc(100% + clamp(1.4rem, 5vw, 2.4rem));
+    left: 50%;
+    right: auto;
+    translate: -50% 0;
+    justify-content: center;
+    width: max-content;
+    max-width: calc(100vw - 2 * var(--gutter));
+  }
+
+  /* the leader line and its dot have nothing to point at once the label is
+     centred — they would read as decoration pinned to nowhere */
+  .tt-note-line,
+  .tt-note-dot {
+    display: none;
+  }
+
+  .tt-note-body {
+    max-width: none;
+    text-align: center;
+  }
+
+  .tt .tt-note-tag {
+    font-size: 0.95rem !important;
+    white-space: nowrap;
+  }
+
+  /* The spec list is the callouts' accessible twin — on desktop it is
+     visually hidden but reachable (position:absolute, 1px box, clip-path),
+     because the plate there carries the same six materials as leader-line
+     callouts. On mobile it was left in normal flow instead, reasoning that a
+     narrow screen has no leader lines to stand in for — but the plate's
+     single stacked caption already IS that prose, one line at a time as you
+     scroll. Left visible, the spec list re-showed all six as a second, static
+     copy directly under the animated one: two rows of the same six materials,
+     one card grid a phone-screen's height in itself. Same treatment as
+     desktop closes the gap between them.
+
+     The element also carries `.wrap`, whose `padding-inline: var(--gutter)`
+     survives the `padding: 0` below and leaves the box ~2×gutter wide rather
+     than 1px. That is deliberate to leave alone: `clip-path: inset(50%)`
+     clips the element to zero painted area regardless of its box, and
+     `position: absolute` keeps it out of flow, so the residual width costs
+     nothing visually and is not worth an !important to chase. */
+  .tt .tt-specs {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    clip-path: inset(50%);
+  }
+}
+
+/* The circle's downward shift on mobile (--tt-drop) has been reverted — the
+   form is back to the same top: -36px it inherits from the base .tt-form
+   rule, matching where it always sat. */
+
+/* ═══ MOBILE — the form sits a little lower in its room ═════════════════════
+   .tt-form parks at top: -36px so the circle breaks up out of the rig. With
+   room above it that reads as deliberate; on a phone, where the label, the
+   circle and the caption are stacked in one narrow column, it sits too high.
+
+   SCOPING NOTE — why literals and not a custom property. The obvious form is
+   `top: calc(-36px + var(--tt-drop))` with --tt-drop set only under a mobile
+   query. That works, but it puts a var() on the shared .tt-form rule, and if
+   the variable ever fails to resolve at a desktop width the whole `top`
+   declaration is invalid at computed-value time and the circle falls back to
+   `top: auto` — a desktop break, caused by a mobile edit. Plain values inside
+   the query cannot reach desktop at all: above 1000px these rules simply do
+   not exist and the base `top: -36px` is the only declaration in play.
+
+   The caption is positioned off the BOTTOM of the rig, not off the circle, so
+   it has to move by the same 40px or the circle's lower edge closes on it.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 999.98px) {
+  /* -36px + 40px */
+  .tt-form {
+    top: 4px;
+  }
+}
+
+@media (max-width: 999.98px) and (prefers-reduced-motion: no-preference) {
+  .tt-note.a1,
+  .tt-note.a2,
+  .tt-note.a3,
+  .tt-note.a4,
+  .tt-note.a5,
+  .tt-note.a6 {
+    top: calc(100% + 40px + clamp(1.4rem, 5vw, 2.4rem));
+  }
+
+  /* and the rig carries that much more beneath it, so the caption still has
+     its own air at the bottom of the turn */
+  .tt-rig {
+    margin-bottom: calc(clamp(7rem, 22vw, 10rem) + 40px) !important;
+  }
+}

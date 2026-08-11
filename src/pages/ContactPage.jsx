@@ -4,14 +4,21 @@ import { CharCascade } from '../components/Reveal'
 import Field from '../components/Field'
 import Button from '../components/Button'
 
-/* Both the embed and the link are built from the one real address in
-   LOCATIONS, so the pin follows a change there. The old embed used a `pb=`
-   blob that resolved to "Moradabad, Uttar Pradesh" — the city, not the works;
-   the `q=` form needs no API key and centres on the address given. */
-const addressLine = [LOCATIONS[0].name, ...LOCATIONS[0].lines].join(', ')
-const mapQuery = encodeURIComponent(LOCATIONS[0].lines.join(', '))
-const mapEmbedSrc = `https://www.google.com/maps?q=${mapQuery}&output=embed`
-const mapsHref = `https://www.google.com/maps/search/?api=1&query=${mapQuery}`
+/* Both the embed and the link are built from the one real location in
+   LOCATIONS, so the pin follows a change there. The embed is driven by the
+   listing's COORDINATES rather than by its address text: `q=<address>` hands
+   Google a geocoding problem and takes whatever it returns — an earlier `pb=`
+   blob resolved to "Moradabad, Uttar Pradesh", the city rather than the works.
+   `q=<lat>,<lng>` has nothing to resolve, so the pin lands exactly.
+
+   The surrounding link uses the canonical share URL instead, because that
+   opens the actual Taif International listing — name, photographs, reviews,
+   directions — which a bare coordinate pair does not. */
+const site = LOCATIONS[0]
+const addressLine = [site.name, ...site.lines].join(', ')
+const mapPin = `${site.coords.lat},${site.coords.lng}`
+const mapEmbedSrc = `https://www.google.com/maps?q=${mapPin}&z=17&output=embed`
+const mapsHref = site.share
 
 export default function ContactPage() {
   const [sent, setSent] = useState(false)
