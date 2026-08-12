@@ -56,6 +56,7 @@ export const COLLECTIONS = [
 ]
 
 export const MORE_LINKS = [
+  { to: '/catalogue', label: 'Catalogue' },
   { to: '/testimonials', label: 'Testimonials' },
   { to: '/care', label: 'Care' },
   { to: '/faq', label: 'FAQ' },
@@ -77,32 +78,32 @@ export const FINISHES = [
     care: 'Dry cloth. Left raw it will darken; a lemon-and-salt rub takes it straight back.',
   },
   {
-    key: 'antique', name: 'Antique Patina', tone: 'antique',
+    key: 'antique', name: 'Polished', tone: 'antique',
+    substrates: ['Brass', 'Copper', 'Steel'],
+    character: 'Buffed to a mirror shine on the wheel, then sealed — the brightest, most reflective finish on the floor.',
+    durability: 'Multi-stage buffing to a true mirror face, then clear-lacquered to hold the shine without fogging over.',
+    care: 'Soft dry cloth. A quick wipe keeps the mirror; fingerprints lift straight off unlacquered pieces.',
+  },
+  {
+    key: 'burnished', name: 'Antique', tone: 'copper',
     substrates: ['Brass', 'Copper', 'Iron'],
-    character: 'Brass aged forward by hand until it reads a century old, then stopped exactly where we want it.',
+    character: 'Aged forward by hand until it reads a century old, then stopped exactly where we want it.',
     durability: 'Chemically aged, relieved on the high points, sealed under matte lacquer. Colour is held to a physical master swatch, batch to batch.',
     care: 'Dust only. Polishing removes the age you paid for.',
   },
   {
-    key: 'burnished', name: 'Burnished Copper', tone: 'copper',
-    substrates: ['Copper', 'Brass'],
-    character: 'Worked to a low, warm shine with a steel burnisher rather than a buffing mop, so the surface keeps its depth.',
-    durability: 'Sealed with food-safe wax or clear lacquer. Left unsealed it travels from rose to umber over about eighteen months.',
-    care: 'Rinse and dry at once. Never leave anything acidic standing in it.',
+    key: 'natural', name: 'Nickel', tone: 'wood',
+    substrates: ['Brass', 'Steel', 'Zinc Alloy'],
+    character: 'Plated in a cool, bright nickel that resists tarnish and fingerprints far longer than raw brass.',
+    durability: 'Electroplated to a controlled micron thickness over a brass or steel base, then buffed level.',
+    care: 'Wipe with a soft cloth. No polish needed — nickel holds its shine without upkeep.',
   },
   {
-    key: 'natural', name: 'Natural Wood', tone: 'wood',
-    substrates: ['Sheesham', 'Mango', 'Acacia', 'Teak'],
-    character: 'Sanded to 400 grit and finished in oil. Copper, Brass, Aluminium, Sheesham, Mango Wood, and Reclaimed Teak.',
-    durability: 'Kiln-dried to 8–10% moisture before a single cut, then three coats of hard-wax oil cured over 48 hours.',
-    care: 'A barely damp cloth. Re-oil once a year; it takes ten minutes.',
-  },
-  {
-    key: 'inlay', name: 'Brass Inlay', tone: 'walnut',
-    substrates: ['Sheesham', 'Teak', 'Mango'],
-    character: 'Brass wire and sheet set into dark hardwood by hand, then levelled flush. Run a finger across the joint and you will not find it.',
-    durability: 'Cut, seated and hammered tight — no filler, no adhesive line. The inlay moves with the wood through every season.',
-    care: 'Dry cloth on the wood, dry cloth on the brass. Never a solvent.',
+    key: 'inlay', name: 'Oil-Rubbed Bronze', tone: 'walnut',
+    substrates: ['Brass', 'Zinc Alloy'],
+    character: 'A dark, worked bronze with warm highlights left standing on the raised detail — hand-rubbed, not sprayed flat.',
+    durability: 'Oxidised and oil-rubbed in stages so the high points stay bright against the darkened field, then sealed.',
+    care: 'Dry cloth only. The finish deepens gently with handling rather than wearing away.',
   },
 ]
 

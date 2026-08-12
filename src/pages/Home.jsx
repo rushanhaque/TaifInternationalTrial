@@ -28,6 +28,9 @@ import { productImg } from '../data/images'
 import { familySlug } from './CollectionPage'
 import TheTurn from '../components/mk2/TheTurn'
 import Sampler from '../components/mk2/Sampler'
+import Philosophy from '../components/mk2/Philosophy'
+import MaterialGuidance from '../components/mk2/MaterialGuidance'
+import FinishesShowcase from '../components/mk2/FinishesShowcase'
 import MaskedHeading from '../components/MaskedHeading'
 
 import LogoLoop from '../components/reactbits/LogoLoop'
@@ -117,6 +120,13 @@ export default function Home() {
       {/* 0.4 · THE TURN (Materials We Use) — moved below Heritage */}
       <div id="the-turn" style={{ position: 'absolute', visibility: 'hidden' }} />
       <TheTurn />
+
+      {/* 0.41 · PERSONAL GUIDANCE — a consultation CTA directly under Materials */}
+      <MaterialGuidance />
+
+      {/* 0.42 · FINISHES, AT A GLANCE — below the guidance CTA: pick a
+          metal, get pointed to a person, then see what it can look like */}
+      <FinishesShowcase />
 
       <div className="section-divider" />
 
@@ -259,6 +269,11 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <div className="section-divider" />
+
+      {/* 0.95 · OUR CORE PHILOSOPHY — three commitments, ahead of reviews */}
+      <Philosophy />
 
       <div className="section-divider" />
 

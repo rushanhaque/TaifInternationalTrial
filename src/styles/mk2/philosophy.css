@@ -1,0 +1,256 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   THE THREE MARKS — Our Core Philosophy
+
+   Set on the house off-white (--offwhite, the same warm-paper tone the
+   Personal Guidance band above it uses) rather than the burgundy it opened
+   on — this section sits between white sections on both sides, so an
+   inverted band read as an interruption rather than a pause. Off-white
+   keeps the page as one continuous paper while the icon badges and brass
+   rules still give the three commitments their own weight.
+
+   THE RULES, NOT BOXES. Every divider here is a gradient hairline that fades
+   to nothing at both ends. A border-box would have drawn four hard edges
+   around each statement and turned an inscription into a pricing table; a
+   fading rule reads as the page being divided rather than the content being
+   packaged, which is what a printed page does.
+
+   THE ICON IS A BADGE, NOT A RING. On the old burgundy ground a thin cream
+   ring around the glyph carried enough contrast on its own; on off-white the
+   same treatment nearly disappears. Each glyph now sits inside a filled
+   burgundy-tint circle, so it reads as an icon at a glance instead of a
+   watermark.
+
+   Fail-open: every mark renders complete at rest — numeral, badge, name,
+   body. Hover only deepens the badge, lifts the icon and grows the rule
+   under the name. The entrance stagger belongs to the site-wide SceneReveal,
+   which is opt-in and cannot leave anything hidden.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.phil {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--offwhite);
+  padding-block: clamp(3.6rem, 7.5vw, 7rem);
+}
+
+/* one quiet pool of warmth, high and off-centre, so the ground is not a
+   flat rectangle of off-white */
+.phil-glow {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(56% 68% at 80% -8%, rgba(66, 21, 32, 0.045), transparent 62%),
+    radial-gradient(44% 56% at 8% 106%, rgba(66, 21, 32, 0.03), transparent 64%);
+}
+
+/* ── the header ───────────────────────────────────────────────────────── */
+.phil-head {
+  display: grid;
+  justify-items: center;
+  text-align: center;
+  max-width: 46ch;
+  margin: 0 auto clamp(2.6rem, 5vw, 4.6rem);
+}
+
+/* the title is a one-line mark, not a wrapped headline — it opts out of the
+   head's 46ch measure (sized for the lede paragraph, not for a 20-character
+   display line) and holds its own width instead. text-wrap: balance was
+   splitting it into two visually even but unwanted lines at exactly the
+   widths where 46ch fell short of what the display face needed at its own
+   font-size.
+
+   The font-size floor is tuned down further than a typical d1/mega step so
+   the line still clears a 375px screen without wrapping: 7.6vw closes the
+   gap fast at phone widths, the 1.6rem floor is the narrowest this string
+   can go before the letterforms themselves start to suffer. */
+.phil-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.6rem, 7.6vw, 3.6rem);
+  line-height: 1.06;
+  letter-spacing: -0.02em;
+  color: var(--graphite);
+  white-space: nowrap;
+  max-width: none;
+}
+
+/* the brass rule between the title and its standfirst */
+.phil-rule {
+  display: block;
+  width: clamp(48px, 6vw, 78px);
+  height: 1px;
+  margin: clamp(1.1rem, 2vw, 1.6rem) 0;
+  background: var(--metal);
+  opacity: 0.9;
+}
+
+.phil-lede {
+  margin: 0;
+  font-family: var(--font-body);
+  font-weight: 350;
+  font-size: clamp(1rem, 1.25vw, 1.18rem);
+  line-height: 1.6;
+  color: var(--dim);
+  text-wrap: pretty;
+}
+
+/* ── the three ────────────────────────────────────────────────────────── */
+.phil-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(2.4rem, 4vw, 3.4rem);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.phil-mark {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  text-align: center;
+  padding-inline: clamp(0.5rem, 2vw, 2.2rem);
+}
+
+.phil-no {
+  font-family: var(--font-accent);
+  font-size: 0.66rem;
+  letter-spacing: 0.26em;
+  color: var(--brass);
+  opacity: 0.85;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── the icon badge ───────────────────────────────────────────────────── */
+.phil-emblem {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: clamp(64px, 5.8vw, 82px);
+  height: clamp(64px, 5.8vw, 82px);
+  margin-block: clamp(1.1rem, 2vw, 1.6rem) clamp(1rem, 1.8vw, 1.4rem);
+  color: var(--brass);
+  transition: transform 0.7s var(--ease-surge);
+}
+
+.phil-badge {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: rgba(66, 21, 32, 0.055);
+  border: 1px solid rgba(66, 21, 32, 0.12);
+  transition:
+    background 0.5s var(--ease-fluid),
+    border-color 0.5s var(--ease-fluid),
+    transform 0.7s var(--ease-surge);
+}
+
+.phil-emblem svg {
+  position: relative;
+  width: 27px;
+  height: 27px;
+}
+
+.phil-mark:hover .phil-emblem,
+.phil-mark:focus-within .phil-emblem {
+  transform: translateY(-3px);
+}
+
+.phil-mark:hover .phil-badge,
+.phil-mark:focus-within .phil-badge {
+  background: rgba(66, 21, 32, 0.1);
+  border-color: rgba(66, 21, 32, 0.24);
+  transform: scale(1.06);
+}
+
+html.dark .phil-badge {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+html.dark .phil-mark:hover .phil-badge,
+html.dark .phil-mark:focus-within .phil-badge {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.28);
+}
+
+/* ── the words ────────────────────────────────────────────────────────── */
+.phil-name {
+  position: relative;
+  margin: 0;
+  padding-bottom: 0.7rem;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.22rem, 1.7vw, 1.62rem);
+  line-height: 1.14;
+  letter-spacing: 0.01em;
+  color: var(--graphite);
+}
+
+/* a brass rule that grows out from the centre under the name */
+.phil-name::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 0;
+  height: 1px;
+  background: var(--metal);
+  transform: translateX(-50%);
+  transition: width 0.65s var(--ease-fluid);
+}
+
+.phil-mark:hover .phil-name::after,
+.phil-mark:focus-within .phil-name::after {
+  width: clamp(34px, 4vw, 52px);
+}
+
+.phil-body {
+  margin: clamp(0.7rem, 1.2vw, 1rem) 0 0;
+  font-family: var(--font-body);
+  font-weight: 350;
+  font-size: 0.95rem;
+  line-height: 1.66;
+  color: var(--graphite-2);
+  max-width: 34ch;
+  text-wrap: pretty;
+}
+
+/* ── three up, divided by rules ───────────────────────────────────────────
+   The dividers are drawn on the marks themselves rather than as grid items,
+   so they cannot fall out of step with the columns. The first mark carries
+   no rule; every later one draws its own left edge. */
+@media (min-width: 860px) {
+  .phil-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+  }
+
+  .phil-mark + .phil-mark::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 4%;
+    bottom: 4%;
+    width: 1px;
+    background: linear-gradient(
+      180deg,
+      transparent 0%,
+      var(--hair-strong) 22%,
+      var(--hair-strong) 78%,
+      transparent 100%
+    );
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .phil-emblem,
+  .phil-badge,
+  .phil-name::after {
+    transition-duration: 0.01ms !important;
+  }
+}

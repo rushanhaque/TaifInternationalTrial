@@ -157,7 +157,13 @@
   object-fit: cover;
   object-position: center;
   transform: scale(1.04);
-  filter: saturate(0.72) brightness(0.82) contrast(1.04);
+  /* photographs read true-colour at rest now — this used to match the
+     idle .cm-duotone below (saturate .72 brightness .82), which is what
+     made every plate look dim and desaturated before you ever touched one.
+     The wall still goes quiet around a hovered card: .cm-wall.is-hot
+     .cm-card:not(.is-live) further down applies the darkened filter to
+     whichever plates are NOT the one you're reading. */
+  filter: saturate(1) brightness(1) contrast(1.02);
   transition:
     transform var(--cm-dur) var(--cm-ease),
     filter var(--cm-dur) var(--cm-ease);
@@ -168,14 +174,19 @@
   background: linear-gradient(140deg, #421520 0%, #5A1D2C 45%, #2C0C14 100%);
 }
 
-/* burgundy duotone — the house colour lies over every idle plate and
-   lifts away from the one you are reading */
+/* burgundy duotone — used to sit over every idle plate at full strength
+   (opacity 1), which was the dark layer the photographs sat under before
+   any interaction. Now it only appears once something on the wall IS
+   hovered, as the dimming treatment for the plates you are not reading —
+   see .cm-wall.is-hot .cm-card:not(.is-live) .cm-duotone below, which sets
+   the opacity that actually shows. Idle and lit share this same near-zero
+   value, so lighting one card is the only thing that changes anything. */
 .cm-duotone {
   position: absolute;
   inset: 0;
   background: linear-gradient(150deg, rgba(66, 21, 32, 0.72), rgba(23, 10, 14, 0.62));
   mix-blend-mode: multiply;
-  opacity: 1;
+  opacity: 0.14;
   transition: opacity var(--cm-dur) var(--cm-ease);
 }
 
@@ -328,8 +339,11 @@ html.dark .cm-kicker { color: rgba(255, 255, 255, 0.68); }
   .cm-card:nth-child(3) { aspect-ratio: 16 / 7; }
 
   .cm-link { position: relative; height: 100%; }
-  .cm-img { transform: scale(1.02); filter: saturate(0.9) brightness(0.92); }
-  .cm-duotone { opacity: 0.4; }
+  /* touch has no hover to lift this darkening back off, so it used to sit
+     permanently on every plate rather than just "before hover" — same
+     complaint, this width just never got to the "after" */
+  .cm-img { transform: scale(1.02); filter: saturate(1) brightness(1); }
+  .cm-duotone { opacity: 0.14; }
   .cm-detail { display: none; }
 }
 

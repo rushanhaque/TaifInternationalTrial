@@ -186,6 +186,33 @@
     justify-content: flex-start;
   }
 
+  /* .sec-head .meta (global.css) carries its own text-align: center and
+     margin-inline: auto, and two classes beat the one class above on
+     specificity regardless of source order — so the rule above never
+     actually reached the heading text. That was invisible almost
+     everywhere because most .sec-head labels sit alone in a centred
+     block anyway, but the product page's "More X" rail sits its DRAG ·
+     FLING hint flush left right underneath, so the mismatch showed. */
+  .rail-sec-head.sec-head {
+    /* matches .rail-head's own inset (global.css) rather than the page
+       gutter, so the title sits flush with "Drag · fling" and the cards
+       directly beneath it instead of drifting from a slightly different
+       left edge */
+    padding-inline: clamp(2.5rem, 5vw, 4.5rem);
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+
+  .rail-sec-head .meta {
+    text-align: left;
+    margin-inline: 0;
+  }
+
+  .rail-sec-head + .rail .rail-head {
+    justify-content: flex-start;
+    text-align: left;
+  }
+
   /* ── consistent measure ───────────────────────────────────────────────
      body copy was running to the full 375px edge-to-edge in places */
   .lede,

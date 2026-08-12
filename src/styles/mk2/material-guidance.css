@@ -1,0 +1,78 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   PERSONAL GUIDANCE — the consultation band under Materials
+
+   Quiet on purpose: an off-white ground one shade different from pure white,
+   a centred column, and nothing wider than a headline needs to be. The band
+   exists to be read in five seconds and acted on, not browsed.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.mg {
+  position: relative;
+  background: var(--offwhite);
+  padding-block: clamp(3.4rem, 7vw, 6.5rem);
+}
+
+.mg-in {
+  display: grid;
+  justify-items: center;
+  text-align: center;
+  /* was 46ch, capping the whole band to a narrow column — the title now
+     carries its own manual break, so this only needs to give the kicker
+     and lede room; widened so the band reads as a full-width statement
+     rather than a boxed-in paragraph. */
+  max-width: 60ch;
+  margin-inline: auto;
+}
+
+/* less side gutter than the site default — this band is meant to expand
+   edge to edge rather than sit in the same measure as body copy, so the
+   title's two lines get real width to spread across.
+
+   !important: global.css's sitewide "MOBILE RESPONSIVENESS" block sets
+   .wrap { padding-inline: ... !important } at <=768px, which otherwise
+   beats this regardless of the extra .mg-in/.mg selector weight — !important
+   ignores specificity entirely, so only another !important can win. */
+.mg .wrap.mg-in {
+  padding-inline: clamp(1rem, 5vw, 2.5rem) !important;
+}
+
+.mg-kicker {
+  display: block;
+  color: var(--brass);
+}
+
+/* the two lines are a deliberate manual break (the <br/> in the JSX), not a
+   soft wrap — white-space: nowrap stops each half from ALSO wrapping on
+   its own at narrow widths. max-width: none opts the title out of .mg-in's
+   column width so nowrap has room to work with.
+
+   nowrap alone is not enough, though: inheriting .d1's font-size clamp
+   (floor 2.1rem, or 2rem !important under global.css's sitewide <=768px
+   block below) rendered "Not sure which metal" at ~421px wide, wider than
+   a 375px phone has room for even after the reduced side padding — and
+   because a page-level wrapper six levels up carries overflow-x: hidden (a
+   sitewide horizontal-scroll guard), the overflow does not show as a
+   scrollbar, it just silently CLIPS the end of the line. The title's own
+   floor has to be low enough that nowrap never needs that clip — and its
+   font-size needs !important for the same reason the padding above does. */
+.mg-title {
+  margin: clamp(0.9rem, 1.8vw, 1.4rem) 0 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  color: var(--graphite);
+  font-size: clamp(1.3rem, 6.5vw, 3.6rem) !important;
+  white-space: nowrap;
+  max-width: none;
+}
+
+.mg-lede {
+  margin: clamp(1.1rem, 2vw, 1.6rem) auto 0;
+  max-width: 42ch;
+  text-align: center;
+}
+
+.mg-cta {
+  margin-top: clamp(1.6rem, 2.8vw, 2.2rem);
+}

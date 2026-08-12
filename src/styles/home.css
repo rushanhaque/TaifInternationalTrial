@@ -665,6 +665,12 @@ html.dark .white-review-card {
   margin-bottom: 2rem;
 }
 
+@media (max-width: 989.98px) {
+  .craft-cta {
+    text-align: center;
+  }
+}
+
 .craft-process-list {
   list-style: none;
   padding: 0;

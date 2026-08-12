@@ -1,7 +1,7 @@
 /* Generates public/sitemap.xml from the real route + catalogue data.
    Runs as part of `npm run build`, so the sitemap can never drift from the
-   routes again — the previous hand-maintained file advertised /materials and
-   /catalogue (neither is a route) and every product slug in it was stale. */
+   routes again — the previous hand-maintained file advertised /materials
+   (never a route) and every product slug in it was stale. */
 
 import { writeFileSync, readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
@@ -50,6 +50,7 @@ if (declared) {
 const staticPages = [
   ['/', '1.0', 'weekly'],
   ['/collections', '0.9', 'weekly'],
+  ['/catalogue', '0.8', 'weekly'],
   ['/about', '0.7', 'monthly'],
   ['/shows', '0.7', 'monthly'],
   ['/testimonials', '0.6', 'monthly'],

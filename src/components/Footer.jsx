@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { gsap, ScrollTrigger, reduced } from '../lib/gsap'
 import { Link } from '../lib/router'
-import { scrollTop } from '../lib/useLenis'
 import { BRAND, NAV_LINKS, MORE_LINKS } from '../data/site'
 import SocialLinks from './SocialLinks'
 
@@ -95,28 +94,6 @@ export default function Footer() {
               </p>
             </div>
             <SocialLinks className="foot-contact-icons" />
-          </div>
-        </div>
-
-        {/* Giant TAIF Logo Image */}
-        <div className="footer-brand foot-brand group" aria-hidden="true" onClick={scrollTop} style={{ cursor: 'pointer', textAlign: 'center', paddingTop: '0', marginTop: '-1.5rem', paddingBottom: '0', marginBottom: '0' }}>
-          <img
-            src="/img/taif-logo-white.png"
-            alt={BRAND.name}
-            className="footer-logo-glow"
-            style={{ maxWidth: 'min(85vw, 680px)', height: 'auto', objectFit: 'contain', display: 'block', margin: '0 auto' }}
-          />
-          <div className="mark-suffix meta" style={{
-            letterSpacing: '0.65em',
-            color: '#FFFFFF',
-            fontSize: 'clamp(0.75rem, 1.6vw, 1.25rem)',
-            marginTop: '-1.2rem',
-            paddingBottom: '0.1rem',
-            textTransform: 'uppercase',
-            fontWeight: 600,
-            textAlign: 'center'
-          }}>
-            {BRAND.suffix}
           </div>
         </div>
       </div>

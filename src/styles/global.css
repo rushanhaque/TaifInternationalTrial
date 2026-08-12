@@ -3167,3 +3167,20 @@ html.dark .btn.ghost * {
      Retune if the logo height changes. */
   padding-bottom: 0.47rem;
 }
+
+/* Typographic centering fix MK2: 
+   Negative letter-spacing reduces the bounding box on the right side, 
+   which pushes the visual center of the text to the right in centered layouts. 
+   Adding padding-right restores the bounding box width symmetrically without 
+   breaking margin-inline: auto or flexbox layouts. */
+.section-title,
+.sec-head .meta,
+.craft-sec-title,
+.cm-title,
+.tt-h,
+.fs-sec-title,
+.mg-sec-title,
+.mrail-title,
+.phil-title {
+  padding-right: 0.02em;
+}

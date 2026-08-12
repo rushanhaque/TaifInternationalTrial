@@ -1,0 +1,193 @@
+/* ══════════════════════════════════════════════════════════════════════════
+   SCENE MOTION — how things arrive, at every width
+
+   Five gestures, one ramp. The vocabulary is deliberately small: a page
+   where six different things happen is not richer than one where two do, it
+   is noisier. What varies is which gesture a thing gets, not how many
+   gestures exist.
+
+     media   settles and resolves — a frame coming to rest
+     card    rises, drifts in from its own side of the fold, tips level
+     btn     swells, with the one overshoot in the file
+     head    wipes open left to right
+     text    lifts and unmasks from under its own baseline
+
+   TRANSITIONS, NOT KEYFRAMES — and the distinction is load-bearing.
+
+   With `animation`, the landed state exists only inside the keyframes: an
+   element that never receives frames (a backgrounded tab, a throttled or
+   non-compositing view, a device under load) sits at the `from` state
+   FOREVER, because nothing in the cascade says otherwise. With a transition
+   the landed state is a DECLARED value on `.is-in`. If the transition cannot
+   run, the element simply arrives there instantly. Worst case is an
+   un-animated page; it is never an invisible one.
+
+   Gated behind `html.sr-anim`, which SceneReveal.jsx stamps on only after it
+   has mounted and confirmed it can observe. Script absent, thrown or
+   unsupported → class absent → everything is plainly visible.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* THE TRANSITION LIVES ON `.is-in`, NOT ON THE RESTING STATE — and that is
+   not a tidiness choice.
+
+   `data-sr` and `sr-anim` are both stamped on from JavaScript, after the
+   element has already painted visible. With the transition declared on the
+   base rule, that stamp starts an animated 1 → 0 fade: the reader watches
+   the content fade OUT, then fade back in when it is scrolled to. A flash of
+   content, then a dip, then a reveal.
+
+   Declared on `.is-in` instead, the hide is an instant, untransitioned jump
+   that lands within the same frame as the mark, and only the entrance is
+   animated — which is the one direction anybody should ever see. */
+html.sr-anim [data-sr] {
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+/* Components declare their own transitions for hover and state work —
+   `.czoom-schedule-btn` carries `transition: all 0.35s`, for one — and any of
+   those will happily animate the 1 → 0 hide the moment this system marks the
+   element, reintroducing the fade-out flash the note above describes. Forcing
+   `none` while hidden makes the hide unconditionally instant, whatever a
+   component asked for. The entrance is unaffected: it is declared on
+   `.is-in`, which this cannot match. */
+html.sr-anim [data-sr]:not(.is-in) {
+  transition: none !important;
+}
+
+/* Every gesture lands on the same resting state — this one rule is what
+   guarantees content ends up visible whatever happens to the motion. */
+html.sr-anim [data-sr].is-in {
+  opacity: 1;
+  transform: none;
+  clip-path: none;
+  /* trimmed from 0.78s/0.78s/0.86s — combined with the IO's old negative
+     rootMargin (see SceneReveal.jsx), a tall section-height element like the
+     Heritage masthead needed to scroll most of the way into view before this
+     even started, then paid the full duration on top. The margin fix moves
+     the start earlier; this shortens the run itself so headings and media
+     resolve quickly rather than drifting in over most of a second. */
+  transition:
+    opacity 0.56s cubic-bezier(0.22, 1, 0.28, 1),
+    transform 0.56s cubic-bezier(0.16, 1, 0.3, 1),
+    clip-path 0.6s cubic-bezier(0.22, 1, 0.28, 1);
+  /* the index is stamped per container by SceneReveal, capped so a long
+     cascade never leaves the reader waiting on the tail */
+  transition-delay: calc(var(--sr-i, 0) * 60ms);
+}
+
+/* ── card ─────────────────────────────────────────────────────────────────
+   Three things at once, and they are one gesture rather than three: it rises,
+   it drifts in from whichever side of the fold it occupies (--sr-x, written
+   per element by SceneReveal — zero for anything full-width), and it tips
+   level out of a slight backward lean.
+
+   The lean is what separates this from every other card animation. A plain
+   translate reads as a slide; a few degrees of rotateX with perspective baked
+   into the same transform reads as a plate being laid down flat onto the
+   page, which is the right verb for a workshop. Perspective is inside the
+   transform on purpose — no parent needs to know about it. */
+html.sr-anim [data-sr='card'] {
+  transform:
+    perspective(1100px)
+    translate3d(var(--sr-x, 0px), 38px, 0)
+    rotateX(5.5deg)
+    scale(0.965);
+  transform-origin: 50% 0%;
+}
+
+/* ── media ────────────────────────────────────────────────────────────────
+   A plain rise and resolve, held a little longer. No clip wipe and no tilt:
+   these frames hold video, and both are fragile on a compositing video
+   layer. */
+html.sr-anim [data-sr='media'] {
+  transform: translate3d(0, 30px, 0) scale(1.035);
+}
+
+html.sr-anim [data-sr='media'].is-in {
+  /* trimmed from 0.95s — this is the gesture the Heritage video/heading
+     block uses (.craft-card-container), so it was the single slowest
+     entrance on the page */
+  transition-duration: 0.68s;
+}
+
+/* ── head ─────────────────────────────────────────────────────────────────
+   Wipes open left to right, on the same curve as everything else, so it
+   reads as the same hand. The 12px lift keeps it from being a pure wipe,
+   which on its own looks mechanical. */
+html.sr-anim [data-sr='head'] {
+  transform: translate3d(0, 12px, 0);
+  clip-path: inset(0 100% 0 0);
+}
+
+html.sr-anim [data-sr='head'].is-in {
+  /* trimmed from 0.9s — this is what carries the "Heritage" section heading
+     itself (.craft-sec-title) */
+  transition-duration: 0.6s;
+}
+
+/* ── text ─────────────────────────────────────────────────────────────────
+   Lifts from beneath its own baseline. The mask is partial, not full: a
+   100% inset makes short paragraphs pop rather than rise, and the difference
+   between the two is the whole character of the gesture. */
+html.sr-anim [data-sr='text'] {
+  transform: translate3d(0, 22px, 0);
+  clip-path: inset(0 0 46% 0);
+}
+
+/* ── btn ──────────────────────────────────────────────────────────────────
+   The one gesture with overshoot, because a control should feel sprung. The
+   timing override rides on `.is-in`, since that is where the transition is
+   declared. */
+html.sr-anim [data-sr='btn'] {
+  transform: translate3d(0, 14px, 0) scale(0.9);
+}
+
+html.sr-anim [data-sr='btn'].is-in {
+  transition-timing-function: cubic-bezier(0.18, 1.28, 0.4, 1);
+  transition-duration: 0.62s;
+}
+
+/* ── the wide view ────────────────────────────────────────────────────────
+   A desktop viewport is roughly three times the area of a phone's, so the
+   same travel distance covers a third of the visual angle and the motion
+   reads as a twitch. Everything is scaled up, and the cascade is opened out
+   to match — on a wide grid you see four cards at once, and 78ms between
+   them is too tight to register as a cascade at all. */
+@media (min-width: 1000px) {
+  html.sr-anim [data-sr].is-in {
+    /* trimmed from 92ms */
+    transition-delay: calc(var(--sr-i, 0) * 70ms);
+  }
+
+  html.sr-anim [data-sr='card'] {
+    transform:
+      perspective(1400px)
+      translate3d(var(--sr-x, 0px), 54px, 0)
+      rotateX(6.5deg)
+      scale(0.955);
+  }
+
+  html.sr-anim [data-sr='media'] {
+    transform: translate3d(0, 44px, 0) scale(1.045);
+  }
+
+  html.sr-anim [data-sr='head'] {
+    transform: translate3d(0, 18px, 0);
+  }
+
+  html.sr-anim [data-sr='text'] {
+    transform: translate3d(0, 30px, 0);
+  }
+}
+
+/* Anyone who asked for less motion gets the content, statically. */
+@media (prefers-reduced-motion: reduce) {
+  html.sr-anim [data-sr],
+  html.sr-anim [data-sr].is-in {
+    opacity: 1 !important;
+    clip-path: none !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}

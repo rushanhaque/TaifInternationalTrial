@@ -1,30 +1,28 @@
-import { CharCascade, Dilate } from '../components/Reveal'
-import CollectionsDolly from '../components/CollectionsDolly'
-import Seam from '../components/mk2/Seam'
-import { FAMILIES } from './CollectionPage'
+import CollectionsWall from '../components/CollectionsWall'
+import Button from '../components/Button'
 
-/* /collections — a single, cinematic pinned scroll: the camera pushes
-   through the collection families and lands on the Bespoke wall.
-   No navigation chrome on the way in — just the alley, the haze, and the
-   end of it. */
+/* /collections — THE INDEX. All nine families as large plates, captions
+   underneath, in a plain three-up grid. */
 export default function CollectionsPage() {
   return (
     <>
-      {/* the brass spine — this page only */}
-      <Seam />
+      <CollectionsWall />
 
-      <section className="page-hero wrap">
-        <div className="hero-kicker">
-          <span className="meta">The collections</span>
+      {/* what sits past the ninth bay */}
+      <section className="cw-close">
+        <div className="wrap">
+          <div className="cw-close-in">
+            <span className="meta">Past the ninth bay</span>
+            <h2 className="d1">The wall has a door in it.</h2>
+            <p>
+              Bespoke is not a tenth family — it is the bench itself. Send a
+              drawing, a photograph or a sample and a priced quote returns in
+              five working days.
+            </p>
+            <Button to="/contact">Connect</Button>
+          </div>
         </div>
-        {/* counted from FAMILIES rather than written into the copy — the
-            headline read "Five families" long after the ninth was added */}
-        <CharCascade as="h1" className="mega">
-          {`${FAMILIES.length} families, one bench.`}
-        </CharCascade>
       </section>
-
-      <CollectionsDolly />
     </>
   )
 }

@@ -3,12 +3,12 @@ import { gsap } from '../../lib/gsap'
 import { EditorialReveal } from '../Reveal'
 
 const MATERIAL_SLIDES = [
-  { id: 'b1', key: 'brass', name: 'Brass', tag: 'Brass', in: 0.05, out: 0.18, side: 'l', a: 1, text: 'Unlacquered & Polished Brass' },
-  { id: 'b2', key: 'aluminium', name: 'Aluminium', tag: 'Aluminium', in: 0.20, out: 0.35, side: 'r', a: 2, text: 'Cast & Brushed Aluminium' },
-  { id: 'b3', key: 'iron', name: 'Iron', tag: 'Iron', in: 0.37, out: 0.50, side: 'l', a: 3, text: 'Hand-Forged Wrought Iron' },
-  { id: 'w1', key: 'copper', name: 'Copper', tag: 'Copper', in: 0.52, out: 0.65, side: 'r', a: 4, text: 'Hand-Hammered Raw Copper' },
-  { id: 'w2', key: 'steel', name: 'Steel', tag: 'Steel', in: 0.67, out: 0.80, side: 'l', a: 5, text: 'Stainless & Carbon Steel' },
-  { id: 'w3', key: 'wood', name: 'Wood', tag: 'Wood', in: 0.82, out: 1.00, side: 'r', a: 6, text: 'Kiln-Dried Hardwood & Teak' },
+  { id: 'b1', key: 'brass', name: 'Brass', tag: 'Brass', in: 0.05, out: 0.18, side: 'l', a: 1, text: 'Unlacquered & Polished Brass', sym: 'Cu', cls: 'copper', desc: 'An alloy of copper and zinc, chosen for its malleability and acoustic resonance. Patinas beautifully over time.' },
+  { id: 'b2', key: 'aluminium', name: 'Aluminium', tag: 'Aluminium', in: 0.20, out: 0.35, side: 'r', a: 2, text: 'Cast & Brushed Aluminium', sym: 'Al', cls: 'aluminum', desc: 'Lightweight and deeply structurally stable. Cast in sand molds and brushed to a soft, matte luster.' },
+  { id: 'b3', key: 'iron', name: 'Iron', tag: 'Iron', in: 0.37, out: 0.50, side: 'l', a: 3, text: 'Hand-Forged Wrought Iron', sym: 'Fe', cls: 'iron', desc: 'Forged under extreme heat. Bears the raw, heavy texture of the hammer and anvil, blackened to prevent oxidation.' },
+  { id: 'w1', key: 'copper', name: 'Copper', tag: 'Copper', in: 0.52, out: 0.65, side: 'r', a: 4, text: 'Hand-Hammered Raw Copper', sym: 'Cu', cls: 'copper', desc: 'Pure elemental copper, worked cold. Its surface is raised by thousands of overlapping hammer strikes.' },
+  { id: 'w2', key: 'steel', name: 'Steel', tag: 'Steel', in: 0.67, out: 0.80, side: 'l', a: 5, text: 'Stainless & Carbon Steel', sym: 'Fe', cls: 'iron', desc: 'Carbon steel for sharp architectural lines; stainless for enduring brightwork. Finished with a precise linear brush.' },
+  { id: 'w3', key: 'wood', name: 'Wood', tag: 'Wood', in: 0.82, out: 1.00, side: 'r', a: 6, text: 'Kiln-Dried Hardwood & Teak', sym: 'Wd', cls: 'wood', desc: 'Sustainably harvested hardwoods, carefully dried to prevent warping, and oiled to draw out the natural grain.' },
 ]
 
 const MATERIAL_IMAGES = {
@@ -211,10 +211,20 @@ export default function TheTurn() {
 
           {/* Decorative Callouts for Material Names */}
           <div className="tt-notes" aria-hidden="true">
-            {MATERIAL_SLIDES.map((n) => (
+            {MATERIAL_SLIDES.map((n, i) => (
               <div className={`tt-note a${n.a} side-${n.side}`} key={n.id} data-note data-side={n.side}>
                 <span className="tt-note-body">
-                  <span className="tt-note-tag meta" style={{ fontSize: '1.05rem', fontWeight: '700', letterSpacing: '0.12em', color: '#421520' }}>{n.tag}</span>
+                  {/* Desktop pill */}
+                  <span className="tt-note-tag meta">{n.tag}</span>
+                  {/* Mobile card */}
+                  <span className="tt-note-card">
+                    <span className="tt-note-head">
+                      <span className={`tt-note-sym ${n.cls}`}>{n.sym}</span>
+                      <span className="tt-note-count">0{i + 1}</span>
+                    </span>
+                    <span className="tt-note-name">{n.name}</span>
+                    <span className="tt-note-text">{n.desc}</span>
+                  </span>
                 </span>
                 <span className="tt-note-line" data-line />
                 <span className="tt-note-dot" />

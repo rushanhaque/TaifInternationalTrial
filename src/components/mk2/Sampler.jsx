@@ -10,25 +10,21 @@ const SIGNATURE_ITEMS = [
     id: 1,
     title: 'Lotus Wall Sconce',
     subtitle: 'Hand-Hammered Brass',
-    image: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=1200&auto=format&fit=crop',
   },
   {
     id: 2,
     title: 'Minimalist Pedestal',
     subtitle: 'Solid Sheesham & Copper',
-    image: 'https://images.unsplash.com/photo-1538688525198-9b88f6f53126?q=80&w=1200&auto=format&fit=crop',
   },
   {
     id: 3,
     title: 'Sculptural Vessel',
     subtitle: 'Burnished Bronze',
-    image: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=1200&auto=format&fit=crop',
   },
   {
     id: 4,
     title: 'Geometric Tray',
     subtitle: 'Antique Patina',
-    image: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?q=80&w=1200&auto=format&fit=crop',
   }
 ]
 
@@ -203,6 +199,7 @@ export default function Sampler() {
           </div>
         </div>
 
+        <div className="mrail-thumbs-head">Best Sellers</div>
         <div className="mrail-thumbs">
           {SIGNATURE_ITEMS.map((item, idx) => (
             <button
@@ -218,30 +215,7 @@ export default function Sampler() {
           ))}
         </div>
 
-        <div className="mrail-head mrail-head-sub">
-          <h2 className="mrail-title">Best Sellers</h2>
-          <span className="mrail-hint" aria-hidden="true">Swipe →</span>
-        </div>
 
-        {/* the grid becomes a rail: one row, flicked sideways, snapping */}
-        <ul className="mrail" role="list">
-          {pieces.map((item) => (
-            <li className="mrail-item" key={item.slug}>
-              <Link to={`/catalogue/${item.slug}`} className="mrail-card">
-                <img
-                  src={item.image || productImg(item.slug)}
-                  alt={item.name}
-                  className="mrail-card-img"
-                  loading="lazy"
-                />
-                <div className="mrail-card-meta">
-                  <span className="mrail-card-sub">{item.material}</span>
-                  <h3 className="mrail-card-name">{item.name}</h3>
-                </div>
-              </Link>
-            </li>
-          ))}
-        </ul>
 
         <div className="mrail-cta">
           <Link to="/contact" className="czoom-schedule-btn">
@@ -330,13 +304,7 @@ export default function Sampler() {
                   aria-label="Skip to the best sellers"
                 />
               )}
-              {/* Full Card Big Image */}
-              <img
-                key={activeItem.id}
-                src={activeItem.image}
-                alt={activeItem.title}
-                className="sig-card-bg-img"
-              />
+              {/* Removed signature piece cover image */}
 
               {/* Vignette Overlay */}
               <div className="sig-card-overlay" />
@@ -352,33 +320,7 @@ export default function Sampler() {
                 <h2 className="sig-title">Signature Piece</h2>
               </div>
 
-              {/* 4 Tiny Cards Floating at Bottom (Fades out after scroll transition) */}
-              <div
-                className="sig-card-content"
-                style={{
-                  opacity: initialContentOpacity,
-                  pointerEvents: p > 0.5 ? 'none' : 'auto'
-                }}
-              >
-                <div className="sig-thumb-row-floating">
-                  {SIGNATURE_ITEMS.map((item, idx) => (
-                    <div
-                      key={item.id}
-                      className={`sig-thumb-card-floating ${idx === activeIdx ? 'is-active' : ''}`}
-                      onMouseEnter={() => setActiveIdx(idx)}
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        setActiveIdx(idx)
-                      }}
-                      tabIndex="0"
-                      role="button"
-                      aria-label={`View ${item.title}`}
-                    >
-                      <img src={item.image} alt={item.title} className="sig-thumb-img-floating" />
-                    </div>
-                  ))}
-                </div>
-              </div>
+
 
               {/* Actual Product Name "Atelier's Lamp" (Fades in when scroll transition is done) */}
               <div

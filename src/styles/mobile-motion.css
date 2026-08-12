@@ -1,25 +1,18 @@
 /* ══════════════════════════════════════════════════════════════════════════
-   MOBILE MOTION — no hover, real entrances
+   MOBILE MOTION — hover, switched off
 
-   Loaded last of all. Everything is inside a max-width query, so the desktop
+   Loaded late. Everything is inside a max-width query, so the desktop
    interaction language is untouched.
 
-   Two jobs, in order:
+   ONE JOB. A phone has no cursor, so every hover effect on this site is
+   either dead weight or — worse — a state that STICKS after a tap and has no
+   way to clear. All of them are switched off below.
 
-   1. STILL ON TOUCH. A phone has no cursor, so every hover effect on this
-      site is either dead weight or — worse — a state that STICKS after a tap
-      and has no way to clear. All of them are switched off below.
-
-   2. ENTRANCES INSTEAD. What hover was doing on desktop (telling you a thing
-      is an object you can pick up) is done on mobile by how the thing
-      ARRIVES. Cards rise and settle, text unmasks from beneath its own
-      baseline, buttons swell into place. One ramp, three gestures.
-
-   The hidden state is gated behind `html.m-anim`, which the MobileReveal
-   component sets only after it has mounted and confirmed it can observe.
-   If the script never runs, never mounts, or throws, the class is absent and
-   every element is simply visible — the animation is additive, never load-
-   bearing. Same principle as RevealGuard.
+   This file used to have a second job: entrance animations, to give touch
+   back what hover gives a mouse. Those are now site-wide rather than
+   phone-only and live in scene-motion.css, driven by SceneReveal.jsx. A
+   desktop reader deserves the same arrivals a phone reader gets, and keeping
+   two vocabularies in two files guaranteed they would drift apart.
    ══════════════════════════════════════════════════════════════════════════ */
 
 @media (max-width: 768px) {
@@ -43,7 +36,6 @@
   .slab:hover,
   .infinite-card:hover,
   .care-panel:hover,
-  .cd-fallback-cell:hover,
   .chip:hover,
   .ct-btn:hover,
   .ct-tab:hover,
@@ -94,106 +86,8 @@
     transition: none !important;
   }
 
-  /* ── 2 · entrances ────────────────────────────────────────────────────
-     TRANSITIONS, NOT KEYFRAMES — and the distinction is load-bearing.
-
-     With `animation`, the landed state exists only inside the keyframes: an
-     element that never receives frames (a backgrounded tab, a throttled or
-     non-compositing view, a device under load) sits at the `from` state
-     FOREVER, because there is nothing in the cascade that says otherwise.
-     That is exactly how the Craft video card went blank — opacity 0 was the
-     computed truth, and the animation that would have undone it never ran.
-
-     With a transition the landed state is a DECLARED value on `.is-in`. If
-     the transition cannot run, the element simply arrives there instantly.
-     Worst case is an un-animated page; it is never an invisible one. */
-
-  /* THE TRANSITION LIVES ON `.is-in`, NOT ON THE RESTING STATE — and that is
-     not a tidiness choice.
-
-     `data-mr` and `m-anim` are both stamped on from JavaScript, after the
-     element has already painted visible. With the transition declared here on
-     the base rule, that stamp starts an animated 1 → 0 fade: the reader
-     watches the content fade OUT over 0.7s, then fade back in when it is
-     scrolled to. A flash of content, then a dip, then a reveal.
-
-     Declared on `.is-in` instead, the hide is an instant, untransitioned jump
-     that lands within the same frame as the mark, and only the entrance is
-     animated — which is the one direction anybody should ever see. */
-  html.m-anim [data-mr] {
-    opacity: 0;
-    will-change: transform, opacity;
-  }
-
-  /* Components declare their own transitions for hover and state work —
-     `.czoom-schedule-btn` carries `transition: all 0.35s`, for one — and any
-     of those will happily animate the 1 → 0 hide the moment this system marks
-     the element, reintroducing the fade-out flash the note above describes.
-     Forcing `none` while hidden makes the hide unconditionally instant, no
-     matter what a component asked for. The entrance is unaffected: it is
-     declared on `.is-in`, which this cannot match. */
-  html.m-anim [data-mr]:not(.is-in) {
-    transition: none !important;
-  }
-
-  /* every gesture lands on the same resting state — this one rule is what
-     guarantees content ends up visible whatever happens to the motion */
-  html.m-anim [data-mr].is-in {
-    opacity: 1;
-    transform: none;
-    clip-path: none;
-    transition:
-      opacity 0.7s cubic-bezier(0.22, 1, 0.28, 1),
-      transform 0.7s cubic-bezier(0.16, 1.02, 0.3, 1),
-      clip-path 0.7s cubic-bezier(0.22, 1, 0.28, 1);
-    /* the index is stamped per container by MobileReveal, capped so a long
-       cascade never leaves the reader waiting on the tail */
-    transition-delay: calc(var(--mr-i, 0) * 70ms);
-  }
-
-  /* cards rise, with a hair of scale so they read as coming toward you
-     rather than merely sliding */
-  html.m-anim [data-mr='card'] {
-    transform: translate3d(0, 34px, 0) scale(0.965);
-  }
-
-  /* text lifts from under its own baseline */
-  html.m-anim [data-mr='text'] {
-    transform: translate3d(0, 20px, 0);
-    clip-path: inset(0 0 42% 0);
-  }
-
-  /* buttons swell into place — the one gesture with overshoot, because a
-     control should feel sprung. The timing override rides on `.is-in`, since
-     that is where the transition is now declared. */
-  html.m-anim [data-mr='btn'] {
-    transform: translate3d(0, 14px, 0) scale(0.9);
-  }
-
-  html.m-anim [data-mr='btn'].is-in {
-    transition-timing-function: cubic-bezier(0.18, 1.28, 0.4, 1);
-    transition-duration: 0.6s;
-  }
-
-  /* media panels settle in place — a plain rise and fade. No clip wipe here:
-     these frames hold video, and a clip-path on a compositing video layer is
-     the most fragile thing in this file. */
-  html.m-anim [data-mr='media'] {
-    transform: translate3d(0, 26px, 0);
-  }
-
-  html.m-anim [data-mr='media'].is-in {
-    transition-duration: 0.85s;
-  }
-}
-
-/* Anyone who asked for less motion gets the content, statically. */
-@media (max-width: 768px) and (prefers-reduced-motion: reduce) {
-  html.m-anim [data-mr],
-  html.m-anim [data-mr].is-in {
-    opacity: 1 !important;
-    clip-path: none !important;
-    transform: none !important;
-    transition: none !important;
-  }
+  /* Entrances used to live here, mobile-only. They are now site-wide and
+     have moved to scene-motion.css — one entrance vocabulary for every
+     width, rather than a phone that animates and a desktop that does not.
+     What stays here is section 1: hover, switched off for touch. */
 }

@@ -90,7 +90,7 @@ export default function ProductPage({ params }) {
       {related.length > 0 && (
         <section className="section alt">
           <div className="wrap">
-            <div className="sec-head"><span className="idx">0.3</span><span className="meta">More {p.category.toLowerCase()}</span></div>
+            <div className="sec-head rail-sec-head"><span className="idx">0.3</span><span className="meta">More {p.category.toLowerCase()}</span></div>
             <DragRail label={`More ${p.category}`} hint="Drag · fling" showNav={false}>
               {related.map((r) => (
                 <Link key={r.slug} to={`/catalogue/${r.slug}`} className="rail-card">

@@ -18,8 +18,8 @@
   padding-bottom: clamp(1rem, 2.2vh, 2rem) !important;
   background-color: #FFFFFF !important;
   color: var(--graphite, #421520) !important;
-  /* Diameter of the vessel circle. */
-  --form: clamp(420px, min(55vw, 70svh), 720px);
+  /* Diameter of the vessel circle. Shrunk slightly to accommodate the detailed info cards on desktop. */
+  --form: clamp(320px, min(38vw, 60svh), 560px);
   /* The strips are wider than the form so a horizontal sweep never uncovers
      an edge. Geometry: left -90%, width 280% → the strip spans -90%…190% of
      the form and the fastest tween moves it 89.6%, landing at -179.6%…100.4%. */
@@ -565,10 +565,7 @@ html.dark .tt .ed-spec-label {
 }
 
 .tt .tt-note-tag {
-  display: block;
-  margin-bottom: 0;
-  font-size: 0.625rem;
-  color: var(--tint-on-deep);
+  display: none !important;
 }
 
 .tt-note-text {
@@ -577,9 +574,83 @@ html.dark .tt .ed-spec-label {
   font-size: clamp(0.82rem, 1.02vw, 0.98rem);
   line-height: 1.36;
   letter-spacing: -0.005em;
-  color: var(--on-deep);
+  color: var(--graphite-2, #6C5D60);
   text-wrap: balance;
 }
+html.dark .tt-note-text {
+  color: #B8B0B2;
+}
+
+.tt-note-card {
+  display: block;
+  position: relative;
+  padding: clamp(0.8rem, 1.05vw, 1rem) clamp(0.95rem, 1.25vw, 1.2rem);
+  border-radius: 14px;
+  text-align: left;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.97), rgba(253, 252, 251, 0.94));
+  box-shadow:
+    0 8px 32px rgba(66, 21, 32, 0.05),
+    0 2px 8px rgba(66, 21, 32, 0.03),
+    inset 0 1px 0 rgba(255, 255, 255, 1);
+  border: 1px solid rgba(66, 21, 32, 0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  margin-top: 0.4rem;
+}
+html.dark .tt-note-card {
+  background: linear-gradient(180deg, rgba(26, 9, 13, 0.85), rgba(18, 5, 8, 0.95));
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+.tt-note-card::before {
+  content: '';
+  position: absolute;
+  top: 1rem;
+  bottom: 1rem;
+  width: 3px;
+  border-radius: 4px;
+  background: #421520;
+}
+.tt-note.side-l .tt-note-card::before,
+.tt-note.side-r .tt-note-card::before {
+  left: -1px;
+  right: auto;
+}
+.tt-note-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 0.35rem;
+}
+.tt-note-sym {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.85rem;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  letter-spacing: 0.04em;
+}
+.tt-note-sym.copper { background: rgba(184, 115, 51, 0.15); color: #B87333; }
+.tt-note-sym.aluminum { background: rgba(160, 164, 168, 0.15); color: #7A8086; }
+.tt-note-sym.iron { background: rgba(80, 80, 80, 0.15); color: #3A3A3A; }
+html.dark .tt-note-sym.iron { color: #A0A0A0; background: rgba(180, 180, 180, 0.15); }
+.tt-note-sym.wood { background: rgba(139, 90, 43, 0.15); color: #8B5A2B; }
+.tt-note-count {
+  font-size: 0.75rem;
+  color: var(--dim, #888);
+  font-weight: 500;
+}
+.tt-note-name {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1.24rem;
+  font-weight: 600;
+  color: var(--graphite, #421520);
+  margin-bottom: 0.2rem;
+  letter-spacing: -0.01em;
+}
+html.dark .tt-note-name { color: #F4EEE8; }
 
 .tt-note-line {
   flex: none;
@@ -794,16 +865,18 @@ html.dark .tt .ed-spec-label {
    columns keep their air instead of crowding the silhouette. */
 @media (min-width: 1000px) and (max-width: 1240px) {
   .tt {
-    --form: clamp(240px, min(28vw, 42svh), 380px);
+    /* Make the circle smaller so the large info cards fit without going off screen */
+    --form: clamp(180px, 20vw, 240px);
   }
 
   .tt-note-body {
-    max-width: clamp(132px, 13vw, 190px);
+    /* Give the cards enough room to be readable */
+    max-width: clamp(210px, 22vw, 250px);
   }
 
   .tt-note-line {
-    width: clamp(28px, 3.4vw, 52px);
-    margin-inline: 0.5rem;
+    width: clamp(20px, 2.5vw, 40px);
+    margin-inline: 0.3rem;
   }
 }
 
@@ -885,7 +958,7 @@ html.dark .tt-sec-head .meta {
     right: auto;
     translate: -50% 0;
     justify-content: center;
-    width: max-content;
+    width: min(30rem, calc(100vw - 2 * var(--gutter)));
     max-width: calc(100vw - 2 * var(--gutter));
   }
 
@@ -898,12 +971,7 @@ html.dark .tt-sec-head .meta {
 
   .tt-note-body {
     max-width: none;
-    text-align: center;
-  }
-
-  .tt .tt-note-tag {
-    font-size: 0.95rem !important;
-    white-space: nowrap;
+    width: 100%;
   }
 
   /* The spec list is the callouts' accessible twin — on desktop it is
@@ -959,9 +1027,11 @@ html.dark .tt-sec-head .meta {
    ═══════════════════════════════════════════════════════════════════════════ */
 
 @media (max-width: 999.98px) {
-  /* -36px + 40px */
+  /* 44px + 40px, then nudged up 12px more so the circle and the identity
+     card underneath it read as two distinct things with a touch more air
+     between them, mobile only — the desktop plate never used this rule. */
   .tt-form {
-    top: 4px;
+    top: 72px;
   }
 }
 
@@ -972,12 +1042,13 @@ html.dark .tt-sec-head .meta {
   .tt-note.a4,
   .tt-note.a5,
   .tt-note.a6 {
-    top: calc(100% + 40px + clamp(1.4rem, 5vw, 2.4rem));
+    /* Push the card down enough to completely clear the circle, which is itself pushed down 72px */
+    top: calc(100% + 72px + clamp(1.5rem, 5vw, 2.4rem));
   }
 
   /* and the rig carries that much more beneath it, so the caption still has
-     its own air at the bottom of the turn */
+     its own air at the bottom of the turn. */
   .tt-rig {
-    margin-bottom: calc(clamp(7rem, 22vw, 10rem) + 40px) !important;
+    margin-bottom: calc(clamp(9.5rem, 30vw, 13rem) + 72px) !important;
   }
 }

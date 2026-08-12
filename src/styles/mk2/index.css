@@ -22,6 +22,9 @@
 @import './sampler.css';
 @import './twofloors.css';
 @import './craftindex.css';
+@import './philosophy.css';
+@import './material-guidance.css';
+@import './finishes-showcase.css';
 @import './requestcatalogue.css';
 
 @import './materialrig.css';
@@ -42,4 +45,5 @@
 @import './page-prt.css';
 @import './cart.css';
 @import './page-collection.css';
+@import './collections-wall.css';
 

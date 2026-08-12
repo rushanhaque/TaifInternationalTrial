@@ -1,0 +1,146 @@
+/* ══════════════════════════════════════════════════════════════════════════
+   PAGE TRANSITION — THE MITRE
+
+   One transition for the whole site, and it is the workshop's own gesture:
+   two panels close on the viewport and meet along a SCARF JOINT — the long
+   shallow diagonal a joiner cuts when two lengths have to read as one. The
+   page swaps inside the closed joint, the destination is named on the face
+   of it, and the joint opens again.
+
+   Why a diagonal and not a straight line: a butt joint closing is a garage
+   door. A scarf joint closing is two worked faces mating, and the eye reads
+   the difference immediately even if it cannot name it. The two clip-paths
+   below are exact complements — where the top panel's face ends, the bottom
+   panel's begins — so the seam is a line, never a gap and never an overlap.
+
+   GEOMETRY. Each panel is 55vh tall and travels 101% of itself, so the pair
+   overlaps by 10vh in the middle and the mitre is cut across that overlap:
+
+     top    face runs from 45vh at x=0  →  55vh at x=100%   (81.8% → 100%)
+     bottom face runs from 45vh at x=0  →  55vh at x=100%   (0%   → 18.2%)
+
+   FAIL-OPEN. Everything here is decoration over a router that has already
+   swapped the page. The panels start off-screen and `visibility: hidden`;
+   if the tween never runs, nothing is ever drawn over the content. And the
+   whole transition is skipped outright under prefers-reduced-motion.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.mitre {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  visibility: hidden;
+  /* isolate so the panels' drop-shadow cannot bleed into page compositing */
+  isolation: isolate;
+}
+
+.mitre.is-active {
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.mitre__panel {
+  position: absolute;
+  left: -1px;
+  right: -1px;
+  height: 55vh;
+  /* the site's own maroon tokens (tokens.css), not a one-off hex ramp — the
+     old #4E1A27 top stop had a warm brownish-gold cast that read as an
+     off-brand colour rather than the house burgundy used everywhere else */
+  background:
+    linear-gradient(180deg, var(--graphite-2, #5A1D2C) 0%, var(--graphite, #421520) 42%, var(--walnut, #2C0C14) 100%);
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+/* The hairline along the joint. drop-shadow — not a border — because the
+   face is cut by a clip-path, and only a filter follows the CLIPPED
+   silhouette. A border would be cut off with everything else.
+   Cream, not brass: the site's accent spectrum (--brass, --copper, --tint)
+   all resolve to the same maroon (#421520) as the panel itself in this
+   rebrand, so a maroon hairline on a maroon panel would vanish. Cream is
+   this panel's --on-deep — the same role white/cream plays against every
+   other dark-maroon surface on the site (the footer, the nav's deep state). */
+.mitre__panel.is-top {
+  top: 0;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 81.8%);
+  transform: translate3d(0, -101%, 0);
+  filter: drop-shadow(0 1px 0 rgba(255, 246, 224, 0.4));
+}
+
+.mitre__panel.is-bot {
+  bottom: 0;
+  clip-path: polygon(0 0, 100% 18.2%, 100% 100%, 0 100%);
+  transform: translate3d(0, 101%, 0);
+}
+
+/* ── the plate ────────────────────────────────────────────────────────────
+   Named destination, struck on the closed joint like a stamped maker's
+   plate. It exists for the ~160ms the joint is shut; long enough to read a
+   word, short enough that it never becomes a loading screen. */
+
+.mitre__plate {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  opacity: 0;
+  will-change: opacity, transform;
+}
+
+.mitre__idx {
+  font-family: var(--font-body);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.42em;
+  text-indent: 0.42em;
+  text-transform: uppercase;
+  /* house maroon, not cream — cream was tuned for the dark panel gradient
+     above and read as barely-there on the light ground the plate actually
+     appears over */
+  color: rgba(66, 21, 32, 0.72);
+}
+
+.mitre__name {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(1.5rem, 4.2vw, 2.9rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--graphite, #421520);
+}
+
+.mitre__keyline {
+  width: clamp(34px, 5vw, 62px);
+  height: 1px;
+  background: linear-gradient(90deg,
+    rgba(66, 21, 32, 0), rgba(66, 21, 32, 0.7), rgba(66, 21, 32, 0));
+}
+
+/* On a phone the joint is proportionally much steeper (the same 10vh cut
+   across a third of the width), which pushes the plate off the mated face.
+   Nudging it up keeps the type centred on the joint rather than on the
+   viewport.
+
+   PADDING, NOT TRANSFORM: the router tweens the plate's `y`, and GSAP writes
+   that as `transform` — a transform declared here would be overwritten the
+   moment the transition ran, so the nudge would silently do nothing. */
+@media (max-width: 640px) {
+  .mitre__plate {
+    padding-bottom: 4vh;
+  }
+}
+
+/* Nobody who asked for less motion should ever see this. The router already
+   returns early under the same query — this is the belt to that brace, so a
+   stale `is-active` class can never leave a panel parked over the page. */
+@media (prefers-reduced-motion: reduce) {
+  .mitre,
+  .mitre.is-active {
+    display: none !important;
+  }
+}

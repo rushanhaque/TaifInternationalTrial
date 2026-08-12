@@ -1,0 +1,201 @@
+﻿diff --git a/src/components/mk2/TheTurn.jsx b/src/components/mk2/TheTurn.jsx
+index 644844a..1c94f6d 100644
+--- a/src/components/mk2/TheTurn.jsx
++++ b/src/components/mk2/TheTurn.jsx
+@@ -2,13 +2,49 @@ import { useEffect, useRef } from 'react'
+ import { gsap } from '../../lib/gsap'
+ import { EditorialReveal } from '../Reveal'
+ 
++/* Each material now carries its own identity card rather than a bare name:
++   the chemical symbol, what that symbol actually is (element or alloy), the
++   trade description we sell it under, and a line on how it behaves in the
++   hand. `sym` and `cls` are the premium tell ΓÇö a buyer reading "Cu ┬╖ Pure
++   Element" beside hand-raised copper is being told the stock is honest.
++   `text` stays the short trade line and feeds the screen-reader spec list. */
+ const MATERIAL_SLIDES = [
+-  { id: 'b1', key: 'brass', name: 'Brass', tag: 'Brass', in: 0.05, out: 0.18, side: 'l', a: 1, text: 'Unlacquered & Polished Brass' },
+-  { id: 'b2', key: 'aluminium', name: 'Aluminium', tag: 'Aluminium', in: 0.20, out: 0.35, side: 'r', a: 2, text: 'Cast & Brushed Aluminium' },
+-  { id: 'b3', key: 'iron', name: 'Iron', tag: 'Iron', in: 0.37, out: 0.50, side: 'l', a: 3, text: 'Hand-Forged Wrought Iron' },
+-  { id: 'w1', key: 'copper', name: 'Copper', tag: 'Copper', in: 0.52, out: 0.65, side: 'r', a: 4, text: 'Hand-Hammered Raw Copper' },
+-  { id: 'w2', key: 'steel', name: 'Steel', tag: 'Steel', in: 0.67, out: 0.80, side: 'l', a: 5, text: 'Stainless & Carbon Steel' },
+-  { id: 'w3', key: 'wood', name: 'Wood', tag: 'Wood', in: 0.82, out: 1.00, side: 'r', a: 6, text: 'Kiln-Dried Hardwood & Teak' },
++  {
++    id: 'b1', key: 'brass', name: 'Brass', tag: 'Brass', in: 0.05, out: 0.18, side: 'l', a: 1,
++    sym: 'Cu┬╖Zn', cls: 'CopperΓÇôZinc Alloy',
++    text: 'Unlacquered & Polished Brass',
++    desc: 'Spun on the lathe and struck by hand ΓÇö brass takes a mirror polish and holds it, warming from bright gold to deep amber as the years settle into the surface.',
++  },
++  {
++    id: 'b2', key: 'aluminium', name: 'Aluminium', tag: 'Aluminium', in: 0.20, out: 0.35, side: 'r', a: 2,
++    sym: 'Al', cls: 'Pure Element',
++    text: 'Cast & Brushed Aluminium',
++    desc: 'Light in the hand and unyielding in the form ΓÇö sand-cast, then brushed to a soft matte sheen that will not tarnish or stain with age.',
++  },
++  {
++    id: 'b3', key: 'iron', name: 'Iron', tag: 'Iron', in: 0.37, out: 0.50, side: 'l', a: 3,
++    sym: 'Fe', cls: 'Pure Element',
++    text: 'Hand-Forged Wrought Iron',
++    desc: 'Drawn from the forge and worked while still red ΓÇö wrought iron keeps every hammer mark it is given, so no two pieces ever leave the floor alike.',
++  },
++  {
++    id: 'w1', key: 'copper', name: 'Copper', tag: 'Copper', in: 0.52, out: 0.65, side: 'r', a: 4,
++    sym: 'Cu', cls: 'Pure Element',
++    text: 'Hand-Hammered Raw Copper',
++    desc: 'Hand-raised and ever-changing ΓÇö copper develops a living patina that deepens with every passing year, the warmest and most characterful of metals.',
++  },
++  {
++    id: 'w2', key: 'steel', name: 'Steel', tag: 'Steel', in: 0.67, out: 0.80, side: 'l', a: 5,
++    sym: 'Fe┬╖C', cls: 'IronΓÇôCarbon Alloy',
++    text: 'Stainless & Carbon Steel',
++    desc: 'The quiet workhorse of the floor ΓÇö stainless keeps its edge and its shine through decades of daily use, while carbon steel darkens slowly into character.',
++  },
++  {
++    id: 'w3', key: 'wood', name: 'Wood', tag: 'Wood', in: 0.82, out: 1.00, side: 'r', a: 6,
++    sym: 'Lignum', cls: 'Natural Hardwood',
++    text: 'Kiln-Dried Hardwood & Teak',
++    desc: 'Seasoned over weeks and never rushed ΓÇö kiln-dried sheesham and teak move gently with the room and take an oil finish that only improves with handling.',
++  },
+ ]
+ 
+ const MATERIAL_IMAGES = {
+@@ -65,7 +101,7 @@ export default function TheTurn() {
+       ) || 68)
+     }
+ 
+-    const build = ({ triggerEl, travel, start }) => () => {
++    const build = ({ triggerEl, travel, start, mobile = false }) => () => {
+       const q = (s) => gsap.utils.toArray(el.querySelectorAll(s))
+       const notes = q('[data-note]')
+       const lines = q('[data-line]')
+@@ -99,10 +135,22 @@ export default function TheTurn() {
+ 
+         const dir = m.side === 'l' ? -1 : 1
+ 
+-        // Show callout note
++        /* Show callout note. The x nudge (┬▒26px, in from whichever side the
++           leader line points) is a DESKTOP-only detail ΓÇö it exists because
++           the desktop note sits directly beside the circle with a line
++           pointing at it, so a small "in from the edge" motion reads as the
++           label arriving at the thing it's labelling. On mobile the note is
++           re-centred under the form with no leader line (see theturn.css),
++           so that offset has nothing to relate to ΓÇö it just shifted the
++           whole card sideways for the ~150ms scrub takes to settle, and
++           because ScrollTrigger's scrub SMOOTHS position over ~0.6s, that
++           shift could sit there, visibly, for a beat any time the reader
++           paused mid-scroll: the card overlapping the circle and running off
++           the right edge of the screen. Skipped outright on mobile ΓÇö only
++           the fade remains. */
+         if (note) {
+           tl.fromTo(note,
+-            { autoAlpha: 0, x: dir * 26 },
++            { autoAlpha: 0, x: mobile ? 0 : dir * 26 },
+             { autoAlpha: 1, x: 0, duration: 0.085, ease: 'surge' }, m.in)
+         }
+         if (line) {
+@@ -129,7 +177,7 @@ export default function TheTurn() {
+         }
+ 
+         if (m.out == null) return
+-        if (note) tl.to(note, { autoAlpha: 0, x: dir * -12, duration: 0.05, ease: 'power1.in' }, m.out)
++        if (note) tl.to(note, { autoAlpha: 0, x: mobile ? 0 : dir * -12, duration: 0.05, ease: 'power1.in' }, m.out)
+         if (line) tl.to(line, { scaleX: 0, duration: 0.05 }, m.out)
+       })
+ 
+@@ -146,13 +194,19 @@ export default function TheTurn() {
+       build({ triggerEl: () => stage.current, travel: 2600, start: 'top top' }))
+ 
+     /* phones and tablets ΓÇö the mobile stylesheet drops that nav padding to buy
+-       back vertical room, so pinning at y=0 would park the card's top edge
+-       UNDER the fixed masthead and hide the section label for the whole turn.
+-       Starting at the masthead's own height instead fires the lock one header
+-       earlier: the card comes to rest with its top edge against the bottom of
+-       the header, which is the moment the eye reads as "it caught". */
++       back vertical room, so pinning at y=0 would park the pinned element's
++       top edge UNDER the fixed masthead. Starting at the masthead's own height
++       instead fires the lock one header earlier: the stage comes to rest with
++       its top edge against the bottom of the header, which is the moment the
++       eye reads as "it caught".
++
++       The trigger used to be the CARD, back when the card's top edge and the
++       stage's top edge were effectively the same line. They no longer are ΓÇö
++       .tt-head now sits between them ΓÇö so triggering on the card would fire
++       the pin a whole heading-block early and freeze the stage mid-screen.
++       Trigger and pin are the same element again. */
+     mm.add('(max-width: 999.98px) and (prefers-reduced-motion: no-preference)',
+-      build({ triggerEl: () => card.current, travel: 1800, start: () => `top ${navH()}px` }))
++      build({ triggerEl: () => stage.current, travel: 1800, start: () => `top ${navH()}px`, mobile: true }))
+ 
+     return () => mm.revert()
+   }, [])
+@@ -162,9 +216,24 @@ export default function TheTurn() {
+       {/* the off-white plate the whole section sits on ΓÇö the maroon .tt ground
+           survives only as a frame around it */}
+       <div className="tt-card" ref={card}>
+-      <div className="tt-stage" ref={stage}>
+-        <div className="sec-head tt-sec-head"><span className="meta">Materials we use</span></div>
++      {/* The masthead of the section, and deliberately OUTSIDE the pinned
++          stage: the stage is height-constrained (92svh on desktop, 86svh on
++          phones) and already spends nearly all of it on the form, so a
++          heading placed inside would push the circle past the bottom of the
++          pinned frame. Out here it simply scrolls away before the lock. */}
++      <header className="tt-head">
++        <span className="tt-head-eyebrow meta">Materials we use</span>
++        <h2 className="tt-h" id="tt-h">Six materials, and what each one becomes.</h2>
++        <p className="tt-h-lede">
++          Every piece that leaves our floor begins as one of six stocks ΓÇö three
++          worked hot in the metal quarter of Moradabad, one raised by hand, one
++          milled for edge and endurance, and one seasoned slowly in Saharanpur.
++          Turn through them.
++        </p>
++        <span className="tt-head-rule" aria-hidden="true" />
++      </header>
+ 
++      <div className="tt-stage" ref={stage}>
+         <div className="tt-rig">
+           {/* Proper Circle Container holding material close-up macro texture images */}
+           <div
+@@ -209,12 +278,30 @@ export default function TheTurn() {
+             ))}
+           </div>
+ 
+-          {/* Decorative Callouts for Material Names */}
++          {/* The callouts. Each is a small identity card ΓÇö symbol tile,
++              classification, name, and the line on how the material behaves ΓÇö
++              rather than the bare name pill it used to be, which left the
++              plate reading as an unlabelled circle with a badge beside it.
++              aria-hidden because .tt-specs below carries the same six
++              materials as real prose for assistive tech. */}
+           <div className="tt-notes" aria-hidden="true">
+-            {MATERIAL_SLIDES.map((n) => (
++            {MATERIAL_SLIDES.map((n, i) => (
+               <div className={`tt-note a${n.a} side-${n.side}`} key={n.id} data-note data-side={n.side}>
+                 <span className="tt-note-body">
+-                  <span className="tt-note-tag meta" style={{ fontSize: '1.05rem', fontWeight: '700', letterSpacing: '0.12em', color: '#421520' }}>{n.tag}</span>
++                  <span className="tt-note-card">
++                    <span className="tt-note-head">
++                      <span className="tt-note-sym">{n.sym}</span>
++                      <span className="tt-note-ident">
++                        <span className="tt-note-cls">{n.cls}</span>
++                        <span className="tt-note-name">{n.name}</span>
++                      </span>
++                      <span className="tt-note-no">
++                        {String(i + 1).padStart(2, '0')}<i>/{String(MATERIAL_SLIDES.length).padStart(2, '0')}</i>
++                      </span>
++                    </span>
++                    <span className="tt-note-rule" />
++                    <span className="tt-note-text">{n.desc}</span>
++                  </span>
+                 </span>
+                 <span className="tt-note-line" data-line />
+                 <span className="tt-note-dot" />
+@@ -234,8 +321,8 @@ export default function TheTurn() {
+                 category={`${c.mat.toUpperCase()} SPECIFICATION`}
+                 title={c.head}
+                 specs={MATERIAL_SLIDES.filter((n) => (c.mat === 'wood' ? n.key === 'wood' : n.key !== 'wood')).map((n) => ({
+-                  label: n.tag,
+-                  value: n.text
++                  label: `${n.name} ΓÇö ${n.sym}, ${n.cls}`,
++                  value: `${n.text}. ${n.desc}`
+                 }))}
+                 staggerMs={100}
+               />

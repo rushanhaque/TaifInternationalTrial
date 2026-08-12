@@ -3,16 +3,19 @@ import { gsap, ScrollTrigger, reduced } from './gsap'
 import { getLenis } from './useLenis'
 import { applyMeta } from './seo'
 
-/* Custom pushState router with TWO transition modes:
-   1. Strip curtain  — vertical-strips wipe, used for navbar navigation
-   2. Iris reveal    — a circular/diamond mask that opens from the click point,
-                        used for in-page links (collections, catalogue, etc.)
+/* Custom pushState router with ONE transition: THE MITRE.
+
+   There used to be four — strips, iris, slide, wipe — of which two were
+   reachable and two were dead code. Four transitions is not four times the
+   craft; it is a site that behaves differently depending on which link you
+   happened to click, which is the opposite of a considered one. A house has
+   a single way of turning a page. See page-transition.css for the geometry.
+
    Routes: [{ path, page, idx, name, title, desc, ok?, jsonLd? }] */
 
 const RouteCtx = createContext({ path: '/', params: {} })
 export const useRoute = () => useContext(RouteCtx)
 
-/* transition hint: 'strips' (navbar) or 'iris' (default for in-page links) */
 let navigateFn = (to) => { window.location.href = to }
 export const navigate = (to, opts = {}) => navigateFn(to, opts)
 
@@ -33,7 +36,9 @@ export function Link({ to, children, onClick, transition, ...rest }) {
   )
 }
 
-/* NavLink is identical to Link but forces the strip curtain transition */
+/* NavLink used to force a different transition from Link. There is only one
+   transition now, so it survives purely as the named export the navbar and
+   the mobile menu already import. */
 export function NavLink({ to, children, onClick, ...rest }) {
   return (
     <a
@@ -43,7 +48,7 @@ export function NavLink({ to, children, onClick, ...rest }) {
         if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.defaultPrevented) return
         e.preventDefault()
         if (onClick) onClick(e)
-        navigate(to, { transition: 'strips' })
+        navigate(to)
       }}
     >
       {children}
@@ -73,39 +78,33 @@ export function matchRoutes(routes, path) {
 
 const resolve = (v, params) => (typeof v === 'function' ? v(params) : v)
 
-/* ─────────────────────────────────────────────────────────────────────────
-   TRANSITION 1 · Strip curtain (navbar only)
-   ─────────────────────────────────────────────────────────────────────────
-   Phase 1 – strips rise bottom-up (scaleY 0→1), staggered left-to-right
-   Phase 2 – page is swapped while the curtain is opaque
-   Phase 3 – strips collapse top-down (scaleY 1→0), staggered left-to-right
-   Landscape: 20 vertical columns · Portrait: 10 horizontal rows            */
+/* ── the timing sheet ──────────────────────────────────────────────────────
+   Close and open are NOT symmetrical, and that asymmetry is the whole feel.
+   Closing is quick and decisive — you asked to leave, so leaving should not
+   be negotiated. Opening is slower, with a long tail, because that is the
+   half you are actually looking at: the new page resolving.
 
-const LANDSCAPE_COUNT = 20
-const PORTRAIT_COUNT = 10
-
-/* ─────────────────────────────────────────────────────────────────────────
-   TRANSITION 2 · Iris reveal (in-page links)
-   ─────────────────────────────────────────────────────────────────────────
-   A warm brass-tinted overlay sweeps across the viewport as a soft diagonal
-   wipe: the leading edge enters from the bottom-left, crosses to the
-   top-right, covers the page, swaps the content, then the trailing edge
-   continues off-screen in the same direction. The motion is continuous —
-   not a separate in/out — which makes it feel like a single confident
-   gesture rather than an open-then-close.                                   */
-
-
+   The two panels are also offset by a hair (CLASP) so the joint mates with a
+   slight roll rather than a slap. Below ~30ms the offset stops reading;
+   above ~90ms it reads as one panel simply being late. */
+const T = {
+  CLOSE: 0.46,
+  CLASP: 0.055,
+  HOLD: 0.16,   // the joint sits shut, plate legible
+  OPEN: 0.52,
+  SETTLE: 0.72, // the new page's own resolve, overlapping OPEN
+}
 
 /* `before` renders inside the route context but outside #page — for chrome
    that must know the current path (the navbar) without being caught by the
    page-transition transforms applied to #main. */
 export function Router({ routes, notFound, before = null, after = null }) {
   const [path, setPath] = useState(window.location.pathname)
+  const [plateLabel, setPlateLabel] = useState({ idx: '', name: '' })
   const pathRef = useRef(path)
   const busy = useRef(false)
-  const stripsRef = useRef(null)
-  const irisRef = useRef(null)
-  const wipeRef = useRef(null)
+  const mitreRef = useRef(null)
+  const plateRef = useRef(null)
 
   const matched = matchRoutes(routes, path)
   const route = matched ? matched.route : notFound
@@ -142,7 +141,7 @@ export function Router({ routes, notFound, before = null, after = null }) {
     }
     if (push) window.history.pushState({}, '', to)
 
-    if (reduced() || (!stripsRef.current && !irisRef.current && !wipeRef.current)) {
+    if (reduced() || !mitreRef.current) {
       settle(to)
       requestAnimationFrame(() => ScrollTrigger.refresh())
       document.getElementById('main')?.focus({ preventScroll: true })
@@ -152,34 +151,62 @@ export function Router({ routes, notFound, before = null, after = null }) {
     busy.current = true
     try { getLenis()?.stop() } catch (_) {}
 
-    const mode = opts.transition === 'strips' ? 'strips' : 'smooth'
-
-    if (mode === 'strips') {
-      playStrips(to)
-    } else {
-      playSmoothFade(to)
-    }
+    playMitre(to)
   }
 
-  /* ── MINIMAL DISSOLVE — opening & closing a collection or product ─────────
-     The premium version of "just go there": the current page recedes a hair
-     and dissolves, the new one settles in from a whisper larger. Pure opacity
-     and a sub-percent scale — no veils, wipes or slides — so it reads as a
-     soft focus-pull rather than a panel swap. Transform-origin is the top so
-     the motion is felt at the masthead, where the eye already is. */
-  function playSmoothFade(to) {
+  /* the destination, named on the plate. Falls back to the notFound route so
+     a bad URL still gets a struck plate rather than a blank one. */
+  function labelFor(to) {
+    const m = matchRoutes(routes, to)
+    const r = m ? m.route : notFound
+    const p = m ? m.params : {}
+    const real = r.ok ? r.ok(p) : r !== notFound
+    const src = real ? r : notFound
+    return { idx: src.idx, name: resolve(src.name, p) }
+  }
+
+  /* ── THE MITRE ────────────────────────────────────────────────────────────
+     Close the joint, swap the page behind it, strike the plate, open the
+     joint. The page itself is never the thing that animates out — it recedes
+     a hair and dims while the panels do the work, so what you watch is the
+     joint, not a page being taken away from you.
+
+     EVERY EXIT ROUTES THROUGH teardown(), including a 2.4s safety timer. A
+     transition that can strand the viewport behind an opaque panel is worse
+     than no transition at all, so there is no path out of this function that
+     leaves the overlay standing. */
+  function playMitre(to) {
+    const veil = mitreRef.current
+    const plate = plateRef.current
     const mainEl = document.getElementById('main')
-    if (!mainEl) {
+    const top = veil?.querySelector('.is-top')
+    const bot = veil?.querySelector('.is-bot')
+
+    if (!veil || !top || !bot) {
       settle(to)
       busy.current = false
       try { getLenis()?.start() } catch (_) {}
       return
     }
 
-    const safety = setTimeout(teardown, 1400)
+    setPlateLabel(labelFor(to))
+    veil.classList.add('is-active')
+
+    gsap.set(top, { yPercent: -101 })
+    gsap.set(bot, { yPercent: 101 })
+    gsap.set(plate, { opacity: 0, y: 10 })
+    if (mainEl) gsap.set(mainEl, { transformOrigin: '50% 0%', willChange: 'opacity, transform' })
+
+    let done = false
+    const safety = setTimeout(teardown, 2400)
 
     function teardown() {
+      if (done) return
+      done = true
       clearTimeout(safety)
+      veil.classList.remove('is-active')
+      gsap.set([top, bot], { clearProps: 'all' })
+      if (plate) gsap.set(plate, { clearProps: 'all' })
       if (mainEl) gsap.set(mainEl, { clearProps: 'all' })
       busy.current = false
       try { getLenis()?.start() } catch (_) {}
@@ -188,263 +215,45 @@ export function Router({ routes, notFound, before = null, after = null }) {
       if (window.location.pathname !== to) go(window.location.pathname, false)
     }
 
-    gsap.set(mainEl, { transformOrigin: '50% 0%', willChange: 'opacity, transform' })
+    const tl = gsap.timeline({ onComplete: teardown })
 
-    // Phase 1 — recede & dissolve (0.30s)
-    gsap.to(mainEl, {
-      opacity: 0,
-      scale: 0.988,
-      y: -6,
-      duration: 0.3,
-      ease: 'power2.in',
-      onComplete() {
-        settle(to)
-        try { ScrollTrigger.refresh() } catch (_) {}
-
-        // Phase 2 — settle in from a whisper larger (0.5s, long premium tail)
-        gsap.set(mainEl, { opacity: 0, scale: 1.012, y: 8, transformOrigin: '50% 0%' })
-        requestAnimationFrame(() => {
-          gsap.to(mainEl, {
-            opacity: 1,
-            scale: 1,
-            y: 0,
-            duration: 0.5,
-            ease: 'expo.out',
-            onComplete: teardown,
-          })
-        })
-      },
-    })
-  }
-
-  /* ── STRIPS CURTAIN ─────────────────────────────────────────────────── */
-  function playStrips(to) {
-    const veil = stripsRef.current
-    if (!veil) { playIris(to); return }
-
-    const isPortrait = window.matchMedia('(orientation: portrait)').matches
-    const linesWrap = isPortrait
-      ? veil.querySelector('.strips__portrait')
-      : veil.querySelector('.strips__landscape')
-    const lines = Array.from(linesWrap.querySelectorAll('.strips__line'))
-
-    veil.classList.add('is-active')
-
-    if (isPortrait) {
-      gsap.set(lines, { scaleX: 0, scaleY: 1.03, transformOrigin: '100% 50%' })
-    } else {
-      gsap.set(lines, { scaleY: 0, scaleX: 1.03, transformOrigin: '50% 100%' })
-    }
-
-    const safety = setTimeout(teardown, 2000)
-
-    function teardown() {
-      clearTimeout(safety)
-      veil.classList.remove('is-active')
-      gsap.set(lines, { clearProps: 'all' })
-      busy.current = false
-      try { getLenis()?.start() } catch (_) { }
-      document.getElementById('main')?.focus({ preventScroll: true })
-      if (pathRef.current !== to) { settle(to); return }
-      if (window.location.pathname !== to) go(window.location.pathname, false)
-    }
-
-    const STAGGER = 0.035
-    const IN_DUR = 0.35
-    const OUT_DUR = 0.3
-    const EASE_IN = 'power3.inOut'
-    const EASE_OUT = 'power3.inOut'
-
-    const prop = isPortrait ? 'scaleX' : 'scaleY'
-
-    gsap.to(lines, {
-      [prop]: 1,
-      duration: IN_DUR,
-      ease: EASE_IN,
-      stagger: STAGGER,
-      transformOrigin: isPortrait ? '100% 50%' : '50% 100%',
-      onComplete() {
-        settle(to)
-        try { ScrollTrigger.refresh() } catch (_) { }
-
-        requestAnimationFrame(() => requestAnimationFrame(() => {
-          gsap.to(lines, {
-            [prop]: 0,
-            duration: OUT_DUR,
-            ease: EASE_OUT,
-            stagger: STAGGER,
-            transformOrigin: isPortrait ? '0% 50%' : '50% 0%',
-            onComplete: teardown,
-          })
-        }))
-      },
-    })
-  }
-
-  /* ── IRIS REVEAL ────────────────────────────────────────────────────── */
-  function playIris(to) {
-    const iris = irisRef.current
-    if (!iris) { settle(to); busy.current = false; try { getLenis()?.start() } catch(_){} return }
-
-    iris.classList.add('is-active')
-
-    /* The overlay enters from bottom-left (translate 0%,100%) and exits
-       toward top-right (translate 100%,-100%). The page swap happens at
-       the midpoint when the overlay fully covers the viewport. Using a
-       skewX gives the leading edge a diagonal angle for a premium feel. */
-
-    gsap.set(iris, { xPercent: 0, yPercent: 110, skewY: -4, opacity: 1 })
-
-    const safety = setTimeout(teardown, 2200)
-
-    function teardown() {
-      clearTimeout(safety)
-      iris.classList.remove('is-active')
-      gsap.set(iris, { clearProps: 'all' })
-      busy.current = false
-      try { getLenis()?.start() } catch (_) { }
-      document.getElementById('main')?.focus({ preventScroll: true })
-      if (pathRef.current !== to) { settle(to); return }
-      if (window.location.pathname !== to) go(window.location.pathname, false)
-    }
-
-    /* Phase 1 — sweep in from bottom */
-    gsap.to(iris, {
-      xPercent: 0,
-      yPercent: 0,
-      skewY: 0,
-      duration: 0.45,
-      ease: 'power4.inOut',
-      onComplete() {
-        settle(to)
-        try { ScrollTrigger.refresh() } catch (_) { }
-
-        requestAnimationFrame(() => requestAnimationFrame(() => {
-          /* Phase 2 — sweep out to top */
-          gsap.to(iris, {
-            xPercent: 0,
-            yPercent: -110,
-            skewY: 4,
-            duration: 0.45,
-            ease: 'power4.inOut',
-            onComplete: teardown,
-          })
-        }))
-      },
-    })
-  }
-
-  /* ── SLIDE REVEAL ────────────────────────────────────────────────────── */
-  function playSlide(to, dir) {
-    const iris = irisRef.current
-    if (!iris) { settle(to); busy.current = false; try { getLenis()?.start() } catch(_){} return }
-
-    iris.classList.add('is-active')
-
-    const isRight = dir === 'right'
-    const startX = isRight ? 100 : 0
-    const startY = isRight ? 0 : 100
-    const endX = isRight ? -100 : 0
-    const endY = isRight ? 0 : -100
-
-    gsap.set(iris, { xPercent: startX, yPercent: startY, skewY: 0, opacity: 1 })
-
-    const safety = setTimeout(teardown, 2200)
-
-    function teardown() {
-      clearTimeout(safety)
-      iris.classList.remove('is-active')
-      gsap.set(iris, { clearProps: 'all' })
-      busy.current = false
-      try { getLenis()?.start() } catch (_) { }
-      document.getElementById('main')?.focus({ preventScroll: true })
-      if (pathRef.current !== to) { settle(to); return }
-      if (window.location.pathname !== to) go(window.location.pathname, false)
-    }
-
-    gsap.to(iris, {
-      xPercent: 0,
-      yPercent: 0,
-      duration: 0.45,
-      ease: 'power4.inOut',
-      onComplete() {
-        settle(to)
-        try { ScrollTrigger.refresh() } catch (_) { }
-
-        requestAnimationFrame(() => requestAnimationFrame(() => {
-          gsap.to(iris, {
-            xPercent: endX,
-            yPercent: endY,
-            duration: 0.45,
-            ease: 'power4.inOut',
-            onComplete: teardown,
-          })
-        }))
-      },
-    })
-  }
-
-  /* ── WHITE SMOOTH NORTH-WEST TO SOUTH-EAST DIAGONAL WIPE (collections & products) ── */
-  function playWipe(to) {
-    const veil = wipeRef.current || irisRef.current
-    const mainEl = document.getElementById('main')
-    if (!veil) { settle(to); busy.current = false; try { getLenis()?.start() } catch(_){} return }
-
-    veil.classList.add('is-active')
-
-    // Initial state: veil at left edge with North-West to South-East tilted edge
-    gsap.set(veil, {
-      opacity: 1,
-      clipPath: 'polygon(-30% 0%, -30% 0%, -10% 100%, -10% 100%)'
-    })
+    /* ─ close ─ the bottom panel leads by CLASP so the faces roll together */
+    tl.to(bot, { yPercent: 0, duration: T.CLOSE, ease: 'expo.inOut' }, 0)
+      .to(top, { yPercent: 0, duration: T.CLOSE, ease: 'expo.inOut' }, T.CLASP)
 
     if (mainEl) {
-      gsap.set(mainEl, { transformOrigin: '50% 50%' })
+      tl.to(mainEl, {
+        opacity: 0.35, scale: 0.986, y: -8,
+        duration: T.CLOSE, ease: 'power2.in',
+      }, 0)
     }
 
-    const safety = setTimeout(teardown, 2400)
-
-    function teardown() {
-      clearTimeout(safety)
-      veil.classList.remove('is-active')
-      gsap.set(veil, { clearProps: 'all' })
-      if (mainEl) gsap.set(mainEl, { clearProps: 'all' })
-      busy.current = false
-      try { getLenis()?.start() } catch (_) { }
-      document.getElementById('main')?.focus({ preventScroll: true })
-      if (pathRef.current !== to) { settle(to); return }
-      if (window.location.pathname !== to) go(window.location.pathname, false)
-    }
-
-    // Phase 1: Main content recedes gracefully while white NW-SE diagonal veil sweeps in from left to right
-    if (mainEl) {
-      gsap.to(mainEl, {
-        scale: 0.985,
-        opacity: 0.6,
-        duration: 0.68,
-        ease: 'power3.inOut',
-      })
-    }
-
-    gsap.to(veil, {
-      clipPath: 'polygon(-30% 0%, 130% 0%, 110% 100%, -10% 100%)',
-      duration: 0.68,
-      ease: 'power3.inOut',
-      onComplete() {
-        settle(to)
-        try { ScrollTrigger.refresh() } catch (_) { }
-
-        requestAnimationFrame(() => requestAnimationFrame(() => {
-          // Phase 2: White veil sweeps off-screen to the right
-          gsap.to(veil, {
-            clipPath: 'polygon(130% 0%, 130% 0%, 110% 100%, 110% 100%)',
-            duration: 0.68,
-            ease: 'power3.inOut',
-            onComplete: teardown,
-          })
-        }))
-      },
+    /* ─ swap ─ behind a shut joint, so none of it is ever seen */
+    tl.call(() => {
+      settle(to)
+      try { ScrollTrigger.refresh() } catch (_) {}
+      if (mainEl) gsap.set(mainEl, { opacity: 0, scale: 1.014, y: 14, transformOrigin: '50% 0%' })
     })
+
+    /* ─ the plate ─ struck, held, released */
+    if (plate) {
+      tl.to(plate, { opacity: 1, y: 0, duration: 0.22, ease: 'power2.out' })
+        .to(plate, { opacity: 0, y: -8, duration: 0.2, ease: 'power2.in' }, `+=${T.HOLD}`)
+    }
+
+    /* ─ open ─ the top panel leads out, mirroring how the joint came shut */
+    tl.to(top, { yPercent: -101, duration: T.OPEN, ease: 'expo.inOut' })
+      .to(bot, { yPercent: 101, duration: T.OPEN, ease: 'expo.inOut' }, `<+=${T.CLASP}`)
+
+    /* the new page resolves UNDER the opening joint rather than after it — by
+       the time the panels clear the frame the content has already arrived,
+       which is what keeps a ~1.1s transition from reading as a wait */
+    if (mainEl) {
+      tl.to(mainEl, {
+        opacity: 1, scale: 1, y: 0,
+        duration: T.SETTLE, ease: 'expo.out',
+      }, '<')
+    }
   }
 
   navigateFn = (to, opts = {}) => go(to, true, opts)
@@ -454,13 +263,6 @@ export function Router({ routes, notFound, before = null, after = null }) {
     window.addEventListener('popstate', onPop)
     return () => window.removeEventListener('popstate', onPop)
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
-
-  const landscapeLines = Array.from({ length: LANDSCAPE_COUNT }, (_, i) => (
-    <div key={i} className="strips__line" />
-  ))
-  const portraitLines = Array.from({ length: PORTRAIT_COUNT }, (_, i) => (
-    <div key={i} className="strips__line" />
-  ))
 
   const Page = route.page
   return (
@@ -473,19 +275,15 @@ export function Router({ routes, notFound, before = null, after = null }) {
         {after}
       </div>
 
-      {/* Casa & Crop diagonal wipe overlay — collections & products */}
-      <div className="wipe-overlay" ref={wipeRef} aria-hidden="true" />
-
-      {/* Iris reveal overlay — diagonal sweep for in-page links */}
-      <div className="iris-overlay" ref={irisRef} aria-hidden="true" />
-
-      {/* SteviaPlease-style curtain overlay — navbar only */}
-      <div className="strips" ref={stripsRef} aria-hidden="true">
-        <div className="strips__landscape">
-          {landscapeLines}
-        </div>
-        <div className="strips__portrait">
-          {portraitLines}
+      {/* THE MITRE — two panels closing on a scarf joint. See
+          page-transition.css; the clip-paths there are exact complements. */}
+      <div className="mitre" ref={mitreRef} aria-hidden="true">
+        <div className="mitre__panel is-top" />
+        <div className="mitre__panel is-bot" />
+        <div className="mitre__plate" ref={plateRef}>
+          <span className="mitre__idx">{plateLabel.idx}</span>
+          <span className="mitre__name">{plateLabel.name}</span>
+          <span className="mitre__keyline" />
         </div>
       </div>
     </RouteCtx.Provider>

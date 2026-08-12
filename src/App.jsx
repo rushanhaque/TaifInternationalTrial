@@ -13,7 +13,7 @@ import ClickSpark from './components/ClickSpark'
 import Ambient from './components/mk2/Ambient'
 import RevealGuard from './components/mk2/RevealGuard'
 import Interactions from './components/mk2/Interactions'
-import MobileReveal from './components/MobileReveal'
+import SceneReveal from './components/SceneReveal'
 import Cart from './components/mk2/Cart'
 import { CartProvider } from './lib/cart'
 
@@ -21,6 +21,7 @@ import Home from './pages/Home'
 import CollectionsPage from './pages/CollectionsPage'
 import CollectionPage, { resolveFamily, familyPieces, canonicalFamilySlug } from './pages/CollectionPage'
 import ProductPage from './pages/ProductPage'
+import CataloguePage from './pages/CataloguePage'
 import ShowsPage from './pages/ShowsPage'
 import AboutPage from './pages/AboutPage'
 import PartnersPage from './pages/PartnersPage'
@@ -60,6 +61,9 @@ const ROUTES = [
       if (!fam) return null
       return collectionLd(fam, familyPieces(fam), `/collections/${canonicalFamilySlug(fam)}`)
     } },
+  { path: '/catalogue', page: CataloguePage, idx: '0.25', name: 'Catalogue',
+    title: t('Catalogue'),
+    desc: 'Every piece TAIF makes, filed under one list — dimensions, MOQ and lead times.' },
   { path: '/catalogue/:slug', page: ProductPage, idx: '0.3', transition: 'slide',
     name: (p) => bySlug(p.slug)?.name || 'Product',
     title: (p) => t(bySlug(p.slug)?.name || 'Product'),
@@ -170,7 +174,7 @@ export default function App() {
         routes={ROUTES}
         notFound={NOT_FOUND}
         before={<Navbar />}
-        after={<><SectionStack /><RevealGuard /><MobileReveal /><Footer /></>}
+        after={<><SectionStack /><RevealGuard /><SceneReveal /><Footer /></>}
       />
       <Ambient />
       <Interactions />

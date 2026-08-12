@@ -14,16 +14,24 @@ const pic = (seed, w = 1200, h = 900) =>
 /* hero — the full-bleed backdrop behind the TAIF wordmark */
 export const HERO_IMG = pic('taif-workshop-hero', 1920, 1200)
 
+/* the six real cover photographs supplied for the collection grid — dropped
+   in `public/img/collections/`. There are nine families and six photos, so
+   two photos are used twice; the assignment below was shuffled once and
+   fixed in place, rather than randomised at runtime, for the same reason
+   `pic()` uses a stable seed above: a random pick per page load would
+   reshuffle every family's cover on every visit. */
+const COVER = (name) => `/img/collections/${name}.png`
+
 export const COLLECTION_IMGS = {
-  'Wooden Products': pic('taif-wooden-products', 1000, 700),
-  'Copper Products': pic('taif-copper-products', 1000, 700),
-  'Home Decor': pic('taif-home-decor', 1000, 700),
-  'Hardware Supplies': pic('taif-hardware-supplies', 1000, 700),
-  'Corporate Gifting': pic('taif-corporate-gifting', 1000, 700),
-  'Religious Supplies': pic('taif-religious-supplies', 1000, 700),
-  'Bathroom Accessories': pic('taif-bathroom-accessories', 1000, 700),
-  'Kitchenware': pic('taif-kitchenware', 1000, 700),
-  'Barware': pic('taif-barware', 1000, 700),
+  'Wooden Products': COVER('DecorCover'),
+  'Copper Products': COVER('KitchenwareCover'),
+  'Home Decor': COVER('AccessoriesCover'),
+  'Hardware Supplies': COVER('ClocksCover'),
+  'Corporate Gifting': COVER('WeddingCover'),
+  'Religious Supplies': COVER('LightingCover'),
+  'Bathroom Accessories': COVER('AccessoriesCover'),
+  'Kitchenware': COVER('KitchenwareCover'),
+  'Barware': COVER('DecorCover'),
 }
 
 /* materials (/materials) */
