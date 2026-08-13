@@ -22,20 +22,29 @@ const mapsHref = site.share
 
 export default function ContactPage() {
   const [sent, setSent] = useState(false)
+  const [error, setError] = useState(false)
+  const [busy, setBusy] = useState(false)
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault()
-    const fd = new FormData(e.target)
-    const name = fd.get('name') || ''
-    const email = fd.get('email') || ''
-    const message = fd.get('message') || ''
-
-    const subject = encodeURIComponent(`Enquiry from ${name}`)
-    const body = encodeURIComponent(
-      `Name: ${name}\nEmail: ${email}\n\n${message}`
-    )
-    window.location.href = `mailto:${BRAND.email}?subject=${subject}&body=${body}`
-    setSent(true)
+    setBusy(true)
+    setError(false)
+    try {
+      const res = await fetch('https://formspree.io/f/xdenzbon', {
+        method: 'POST',
+        body: new FormData(e.target),
+        headers: { Accept: 'application/json' },
+      })
+      if (res.ok) {
+        setSent(true)
+      } else {
+        setError(true)
+      }
+    } catch {
+      setError(true)
+    } finally {
+      setBusy(false)
+    }
   }
 
   return (
@@ -58,14 +67,20 @@ export default function ContactPage() {
                   <Field label="Name" name="name" autoComplete="name" required />
                   <Field label="Email" name="email" type="email" autoComplete="email" required />
                   <Field label="Message" name="message" textarea required />
-                  <Button type="submit">Send message</Button>
+                  {error && (
+                    <p className="body" style={{ color: 'var(--c-err, #c0392b)', marginBottom: '.8rem' }}>
+                      Something went wrong — please try again or email us at{' '}
+                      <a href={`mailto:${BRAND.email}`}>{BRAND.email}</a>.
+                    </p>
+                  )}
+                  <Button type="submit" disabled={busy}>{busy ? 'Sending…' : 'Send message'}</Button>
                 </form>
               ) : (
                 <div className="sent-card">
-                  <h2 className="d3">Message composed.</h2>
+                  <h2 className="d3">Message sent.</h2>
                   <p className="body" style={{ marginTop: '.6rem' }}>
-                    Your mail client should have opened with the message ready to send.
-                    If it didn't, write to us directly at{' '}
+                    We'll get back to you within two working days. If it's urgent,
+                    reach us at{' '}
                     <a href={`mailto:${BRAND.email}`}>{BRAND.email}</a>.
                   </p>
                   <div style={{ marginTop: '1.2rem' }}>

@@ -28,6 +28,11 @@ export default function RequestCatalogue() {
 
   function onSubmit(e) {
     e.preventDefault()
+    fetch('https://formspree.io/f/xdenzbon', {
+      method: 'POST',
+      body: new FormData(e.target),
+      headers: { Accept: 'application/json' },
+    }).catch(() => {/* fail-open */})
     setSent(true)
     if (reduced()) return
     /* strike on the next frame, once the stamp is actually in the DOM */

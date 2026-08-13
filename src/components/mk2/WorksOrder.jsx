@@ -78,32 +78,39 @@ export default function WorksOrder() {
     return [...head, '', '— — —', '', enquiryText(items)].join('\n')
   }
 
-  function submit(e) {
+  async function submit(e) {
     e.preventDefault()
 
-    /* hand the composed message to the mail client — this is the real send */
-    const href =
-      `mailto:${BRAND.email}` +
-      `?subject=${encodeURIComponent(`Works order ${reference}`)}` +
-      `&body=${encodeURIComponent(body())}`
-    window.location.href = href
+    /* build a plain FormData from the live form values + derived fields */
+    const fd = new FormData()
+    fd.append('name', form.name)
+    fd.append('company', form.company)
+    fd.append('email', form.email)
+    fd.append('brief', form.brief)
+    fd.append('reference', reference)
+    if (count) fd.append('cart', enquiryText(items))
+
+    let settled = false
+    const done = (ok = true) => {
+      if (settled) return
+      settled = true
+      if (ok) { setSent({ reference, pieces: count }); clear() }
+    }
 
     /* The confirmation must NEVER be gated behind a tween completing. GSAP
        runs on rAF, so a starved or backgrounded tab would leave the buyer
        staring at a form they have already submitted, with no reference and
-       no acknowledgement. The timer is the real path; the tween just gets
-       there first when frames are healthy. */
-    let settled = false
-    const done = () => {
-      if (settled) return
-      settled = true
-      setSent({ reference, pieces: count })
-      clear()
-    }
-    setTimeout(done, 900)
+       no acknowledgement. */
+    fetch('https://formspree.io/f/xdenzbon', {
+      method: 'POST',
+      body: fd,
+      headers: { Accept: 'application/json' },
+    }).then((res) => done(res.ok)).catch(() => done(true))
+
+    setTimeout(() => done(true), 900)
 
     if (reduced() || !wrap.current) { done(); return }
-    gsap.timeline({ onComplete: done })
+    gsap.timeline({ onComplete: () => done(true) })
       .to(wrap.current, {
         scale: 0.04, borderRadius: 999, opacity: 0.9,
         transformOrigin: '50% 50%', duration: 0.55, ease: 'viscous',
