@@ -4,11 +4,7 @@ import { SOCIAL_PLATFORMS, BEST_SELLER_SLOTS } from '../data/defaults'
 import {
   useContent, getContent, setSection, resetContent, exportContent, importContent, nextId, hasStorage,
 } from '../lib/content'
-import {
-  getToken as getGhToken, setToken as setGhToken,
-  getConfig as getGhConfig, setConfig as setGhConfig,
-  verifyAccess, publishSnapshot,
-} from '../lib/publish'
+import { publishSnapshot } from '../lib/publish'
 import { getLenis } from '../lib/useLenis'
 import '../styles/admin.css'
 
@@ -703,32 +699,12 @@ function SubHead({ children }) {
 }
 
 function PublishToGitHub({ notify }) {
-  const [cfg, setCfg] = useState(() => getGhConfig())
-  const [token, setTokenState] = useState(() => getGhToken())
   const [busy, setBusy] = useState(false)
-  const [checked, setChecked] = useState(null)   // { ok, fullName } | null
-
-  const saveCfg = (next) => { setCfg(next); setGhConfig(next) }
-  const onToken = (v) => { setTokenState(v); setGhToken(v); setChecked(null) }
-
-  const test = async () => {
-    setBusy(true)
-    try {
-      const r = await verifyAccess()
-      setChecked(r)
-      notify(`Connected — write access confirmed on ${r.fullName}.`)
-    } catch (err) {
-      setChecked(null)
-      notify(err.message, true)
-    } finally {
-      setBusy(false)
-    }
-  }
 
   const publish = async () => {
     if (!window.confirm(
-      `Commit the current content to ${cfg.owner}/${cfg.repo} (${cfg.branch})?\n\n`
-      + 'This triggers a real deploy — every visitor will see these edits once it finishes.'
+      'Publish your edits to the live site?\n\n'
+      + 'Every visitor will see these changes once the deploy finishes (usually 1–3 min).'
     )) return
     setBusy(true)
     try {
@@ -743,60 +719,14 @@ function PublishToGitHub({ notify }) {
 
   return (
     <div className="ad-sub-group">
-      <SubHead>Publish directly (optional)</SubHead>
+      <SubHead>Publish to the live site</SubHead>
       <p className="ad-hint" style={{ marginBottom: '0.9rem' }}>
-        Commits the content shown above straight to the repo using a GitHub token, which redeploys the site
-        automatically. The token is pasted here each session — it is held only in this browser tab&rsquo;s
-        memory (<code>sessionStorage</code>), never written to a file, and gone when the tab closes.
-        Use a fine-grained token scoped to <strong>this repo only</strong>, with{' '}
-        <strong>Contents: Read and write</strong> and nothing else.
+        Commits the content shown above to the repo and triggers a redeploy automatically.
+        Every visitor will see the changes once it finishes — usually within 1–3 minutes.
       </p>
-
-      <div className="ad-form" style={{ marginBottom: '0.9rem' }}>
-        <div className="ad-field ad-field--full">
-          <label htmlFor="gh-token">GitHub token</label>
-          <input
-            id="gh-token"
-            type="password"
-            autoComplete="off"
-            value={token}
-            placeholder="github_pat_..."
-            onChange={(e) => onToken(e.target.value)}
-          />
-          <span className="ad-hint">Not saved to disk. You will need to paste it again next session.</span>
-        </div>
-        <div className="ad-field">
-          <label htmlFor="gh-owner">Repo owner</label>
-          <input id="gh-owner" value={cfg.owner} onChange={(e) => saveCfg({ ...cfg, owner: e.target.value })} />
-        </div>
-        <div className="ad-field">
-          <label htmlFor="gh-repo">Repo name</label>
-          <input id="gh-repo" value={cfg.repo} onChange={(e) => saveCfg({ ...cfg, repo: e.target.value })} />
-        </div>
-        <div className="ad-field">
-          <label htmlFor="gh-branch">Branch</label>
-          <input id="gh-branch" value={cfg.branch} onChange={(e) => saveCfg({ ...cfg, branch: e.target.value })} />
-        </div>
-        <div className="ad-field">
-          <label htmlFor="gh-path">File path</label>
-          <input id="gh-path" value={cfg.path} onChange={(e) => saveCfg({ ...cfg, path: e.target.value })} />
-        </div>
-      </div>
-
-      <div style={{ display: 'flex', gap: '0.6rem', flexWrap: 'wrap', alignItems: 'center' }}>
-        <button className="ad-btn ad-btn--quiet" onClick={test} disabled={busy || !token}>
-          {busy ? 'Checking…' : 'Test connection'}
-        </button>
-        <button className="ad-btn ad-btn--primary" onClick={publish} disabled={busy || !token}>
-          {busy ? 'Publishing…' : 'Publish now'}
-        </button>
-        {checked?.ok && <span className="ad-hint" style={{ color: 'var(--ad-accent)' }}>✓ Write access confirmed</span>}
-        {token && (
-          <button className="ad-btn ad-btn--quiet ad-btn--sm" onClick={() => onToken('')}>
-            Forget token
-          </button>
-        )}
-      </div>
+      <button className="ad-btn ad-btn--primary" onClick={publish} disabled={busy}>
+        {busy ? 'Publishing…' : 'Publish now'}
+      </button>
     </div>
   )
 }
