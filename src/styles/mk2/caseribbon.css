@@ -40,7 +40,7 @@
   --acc: var(--brass);
   --acc-lt: var(--brass-lt);
   --acc-dk: var(--brass-dk);
-  --acc-wash: rgba(66, 21, 32, 0.07);
+  --acc-wash: rgba(122, 59, 29, 0.07);
 
   position: relative;
   border: 1px solid var(--hair);
@@ -61,14 +61,14 @@
   --acc: var(--copper);
   --acc-lt: var(--copper-lt);
   --acc-dk: var(--copper-dk);
-  --acc-wash: rgba(66, 21, 32, 0.07);
+  --acc-wash: rgba(122, 59, 29, 0.07);
 }
 
 .cr-card[data-tone='walnut'] {
   --acc: var(--oak);
   --acc-lt: var(--oak-lt);
   --acc-dk: var(--walnut);
-  --acc-wash: rgba(66, 21, 32, 0.07);
+  --acc-wash: rgba(122, 59, 29, 0.07);
 }
 
 /* a warm wash rakes in from the top-left corner as the card opens */

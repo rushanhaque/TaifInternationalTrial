@@ -31,12 +31,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(66, 21, 32, 0.1);
+  background: rgba(122, 59, 29, 0.1);
   transition: background 0.3s;
 }
 
 .hero-video-thumbnail-container:hover .hero-video-play-overlay {
-  background: rgba(66, 21, 32, 0.2);
+  background: rgba(122, 59, 29, 0.2);
 }
 
 .hero-video-play-btn {
@@ -162,7 +162,7 @@
   background: rgba(255, 255, 255, 0.95);
   color: #1e1710;
   border-radius: var(--r-pill, 9999px);
-  border: 1px solid rgba(66, 21, 32, 0.12);
+  border: 1px solid rgba(122, 59, 29, 0.12);
   font-family: var(--font-body);
   font-size: 0.88rem;
   font-weight: 600;
@@ -173,7 +173,7 @@
 
 .hero-video-close-btn-fixed:hover {
   transform: scale(1.05);
-  background: #FFFFFF;
+  background: var(--offwhite);
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
 }
 

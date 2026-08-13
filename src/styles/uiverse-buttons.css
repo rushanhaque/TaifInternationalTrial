@@ -1,6 +1,6 @@
 /* =========================================
    TAIF INTERNATIONAL — LUXURY BUTTON SYSTEM
-   Static, crisp, professional site-wide button hover styling
+   Premium site-wide button styling with hover sheen and lift
    ========================================= */
 
 /* Base styling for all buttons */
@@ -55,7 +55,7 @@
 /* ── Primary Solid Button ── */
 .btn.primary,
 .btn:not(.ghost) {
-  background-color: #421520;
+  background-color: #7A3B1D;
   color: #FFFFFF !important;
   border: 1px solid rgba(255, 255, 255, 0.15);
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
@@ -73,17 +73,17 @@
 /* ── Ghost Outline Button ── */
 .btn.ghost {
   background-color: transparent;
-  color: #421520 !important;
-  border: 1.5px solid #421520;
+  color: #7A3B1D !important;
+  border: 1.5px solid #7A3B1D;
   box-shadow: none;
 }
 
 .btn.ghost .btn-label {
-  color: #421520 !important;
+  color: #7A3B1D !important;
 }
 
 .btn.ghost:hover {
-  box-shadow: 0 10px 24px -8px rgba(66, 21, 32, 0.3);
+  box-shadow: 0 10px 24px -8px rgba(122, 59, 29, 0.3);
 }
 
 .btn.ghost:active {
@@ -104,7 +104,7 @@
 }
 
 .btn.ghost .btn-chip svg path {
-  stroke: #421520 !important;
+  stroke: #7A3B1D !important;
 }
 
 .btn:hover .btn-chip {
@@ -132,19 +132,19 @@
    is the whole affordance, and it does apply. */
 .btn.primary:hover,
 .btn:not(.ghost):hover {
-  box-shadow: 0 14px 30px -8px rgba(66, 21, 32, 0.45);
+  box-shadow: 0 14px 30px -8px rgba(122, 59, 29, 0.45);
 }
 
 @media (prefers-reduced-motion: reduce) {
   .btn { transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease; }
-  .btn:hover { transform: none; }
+  .btn:hover { transform: none; box-shadow: none; }
   .btn.primary::before, .btn:not(.ghost)::before,
   .btn.ghost::after { transition: none; }
 }
 
 /* ── Buttons on the inverted ground ────────────────────────────────────────
    .deep sections are burgundy with cream type. The rules above paint every
-   primary label #FFFFFF !important and every ghost label #421520 !important,
+   primary label #FFFFFF !important and every ghost label #7A3B1D !important,
    which on that ground gives cream-on-cream and burgundy-on-burgundy — the
    "Join them." CTA on /partners had a completely invisible button face.
    These restate both faces for the inverted case at higher specificity. */
@@ -153,7 +153,7 @@
 .deep .btn:not(.ghost) {
   background-color: var(--white) !important;
   color: var(--graphite) !important;
-  border-color: rgba(66, 21, 32, 0.15) !important;
+  border-color: rgba(122, 59, 29, 0.15) !important;
 }
 
 .deep .btn.primary .btn-label,

@@ -51,34 +51,12 @@ export default function ProductPage({ params }) {
                   enquiry docket was reachable from every grid on the site
                   except the page that actually argues for the piece */}
               <div className="hero-cta">
-                <SpecularButton
-                  size="md"
-                  radius={999}
-                  tint="var(--chrome)"
-                  tintOpacity={1}
-                  textColor="var(--graphite)"
-                  lineColor="#421520"
-                  baseColor="var(--hair-strong)"
-                  intensity={1.2}
-                  thickness={1.5}
-                  onClick={() => (has(p.slug) ? remove(p.slug) : add(p))}
-                >
+                <Button small onClick={() => (has(p.slug) ? remove(p.slug) : add(p))}>
                   {has(p.slug) ? 'In your cart' : 'Add to cart'}
-                </SpecularButton>
-                <SpecularButton
-                  size="md"
-                  radius={999}
-                  tint="transparent"
-                  tintOpacity={0}
-                  textColor="var(--graphite)"
-                  lineColor="#421520"
-                  baseColor="var(--hair-strong)"
-                  intensity={1}
-                  thickness={1}
-                  onClick={() => navigate('/contact')}
-                >
+                </Button>
+                <Button small variant="ghost" onClick={() => navigate('/contact')}>
                   Request a quote
-                </SpecularButton>
+                </Button>
               </div>
             </Dilate>
           </div>

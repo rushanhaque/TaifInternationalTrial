@@ -202,15 +202,15 @@ export default function Seam() {
       >
         <defs>
           <linearGradient id={gradId} gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="100">
-            <stop offset="0" stopColor="#8C3247" />
+            <stop offset="0" stopColor="#C0824F" />
             <stop offset="0.25" stopColor="#5C1F2E" />
             <stop offset="0.5" stopColor="#A83B55" />
             <stop offset="0.75" stopColor="#5C1F2E" />
-            <stop offset="1" stopColor="#8C3247" />
+            <stop offset="1" stopColor="#C0824F" />
           </linearGradient>
           <radialGradient id={bloomId}>
             <stop offset="0" stopColor="#A83B55" stopOpacity="0.95" />
-            <stop offset="0.45" stopColor="#8C3247" stopOpacity="0.5" />
+            <stop offset="0.45" stopColor="#C0824F" stopOpacity="0.5" />
             <stop offset="1" stopColor="#5C1F2E" stopOpacity="0" />
           </radialGradient>
         </defs>

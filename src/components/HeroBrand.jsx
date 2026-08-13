@@ -1,58 +1,68 @@
 import { useEffect, useRef } from 'react'
-import { gsap, reduced, coarse } from '../lib/gsap'
+import { gsap, reduced } from '../lib/gsap'
 import { BRAND } from '../data/site'
 
 /* the hero clip — swap this URL to change the landing-page backdrop */
 const HERO_VIDEO = 'https://res.cloudinary.com/djszwbnxp/video/upload/v1786354702/IMG_0217_mkksta.mp4'
 
-/* ── E18 · THE SEAM ────────────────────────────────────────────────────────
-   Every glyph of the mark carries two fills: polished brass above, walnut
-   grain below, blended into each other where they meet. "Where Metal Meets
-   Grain", rendered literally inside the wordmark.
+/* ── E19 · THE WELCOME ────────────────────────────────────────────────────
+   Three lines over the ambient footage — a small kicker, the big brand
+   lockup, and the tagline — each fading up in its own beat, one after
+   another, on load.
 
-   LOAD    The letters seat themselves like inlay pieces being tapped home,
-           then INTERNATIONAL tracks open beneath.
-   SCROLL  The name shears apart along the seam — brass halves slide left,
-           grain halves slide right, tapering and softening as they go, like
-           an inlay being slid open — and the tagline surfaces in the gap.
+   LOAD    Welcome to → TAIF INTERNATIONAL → the tagline, each rising in
+           with a slight overlap so the sequence reads as one continuous
+           gesture rather than three separate cues.
+   SCROLL  The whole stack fades and lifts away together as the hero leaves
+           the top of the viewport, then restores if the visitor scrolls
+           back up.
 
-   FAIL-OPEN: both halves rest fully opaque and unshifted in CSS, so with no
-   JS the wordmark is simply whole. Motion only ever takes it apart. */
-
-const MARK_CHARS = BRAND.mark.split('')
+   FAIL-OPEN: all three lines rest fully opaque and in place in CSS, so with
+   no JS the welcome is simply there. Motion only ever brings it in. */
 
 export default function HeroBrand() {
   const root = useRef(null)
   const stage = useRef(null)
+  const welcome = useRef(null)
   const mark = useRef(null)
-  const intl = useRef(null)
   const tag = useRef(null)
   const foot = useRef(null)
 
-  /* let the pour begin as the preloader drains on a cold load */
-  const introDelay = performance.now() < 3500 && !reduced() ? 1.45 : 0.1
+  /* No held pause before the welcome. The lines begin rising while the
+     preloader curtain is still travelling up, so the text is already in
+     motion at the moment it is uncovered — one continuous arrival rather
+     than a curtain, a gap, and then a separate animation. */
+  const introDelay = performance.now() < 3500 && !reduced() ? 1.5 : 0.1
 
   /* ── the pour ─────────────────────────────────────────────────────────── */
   useEffect(() => {
     if (reduced()) return undefined
-    const chars = mark.current ? gsap.utils.toArray(mark.current.querySelectorAll('.hb-ch')) : []
-
     const tl = gsap.timeline({ delay: introDelay })
 
-    if (chars.length) {
-      tl.fromTo(chars,
-        { y: 24, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.85, ease: 'power3.out', stagger: 0.08 })
+    /* Absolute start times rather than relative offsets: the three lines
+       overlap heavily and deliberately, so the stack reads as one slow
+       swell lifting into place instead of three separate cues firing in
+       turn. Each line only fades up — opacity and a long, soft rise on a
+       single long-tail curve, nothing else. */
+    if (welcome.current) {
+      tl.fromTo(welcome.current,
+        { y: 30, opacity: 0 },
+        { y: 0, opacity: 1, duration: 2.1, ease: 'atelys' }, 0)
     }
-    if (intl.current) {
-      tl.fromTo(intl.current,
-        { opacity: 0, y: 15, letterSpacing: '0.2em' },
-        { opacity: 1, y: 0, letterSpacing: '0.58em', duration: 0.9, ease: 'power3.out' }, '-=0.45')
+    if (mark.current) {
+      tl.fromTo(mark.current,
+        { y: 44, opacity: 0 },
+        { y: 0, opacity: 1, duration: 2.4, ease: 'atelys' }, 0.25)
+    }
+    if (tag.current) {
+      tl.fromTo(tag.current,
+        { y: 30, opacity: 0 },
+        { y: 0, opacity: 1, duration: 2.2, ease: 'atelys' }, 0.5)
     }
     if (foot.current) {
       tl.fromTo(foot.current,
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.75, ease: 'power3.out' }, '-=0.55')
+        { opacity: 0, y: 22 },
+        { opacity: 1, y: 0, duration: 1.85, ease: 'atelys' }, 0.78)
     }
 
     return () => tl.kill()
@@ -60,68 +70,38 @@ export default function HeroBrand() {
 
   /* ── the drain ────────────────────────────────────────────────────────── */
   useEffect(() => {
+    if (reduced()) return undefined
     const mm = gsap.matchMedia()
 
-    const resetMark = () => {
-      const metals = root.current?.querySelectorAll('.hb-ch-metal')
-      const woods = root.current?.querySelectorAll('.hb-ch-wood')
-      if (metals?.length) gsap.set(metals, { clearProps: 'all' })
-      if (woods?.length) gsap.set(woods, { clearProps: 'all' })
-      if (intl.current) gsap.set(intl.current, { clearProps: 'all' })
-      if (foot.current) gsap.set(foot.current, { clearProps: 'all' })
+    const resetStage = () => {
       if (stage.current) gsap.set(stage.current, { clearProps: 'all' })
-      const bg = root.current?.querySelector('.hb-bg')
-      if (bg) gsap.set(bg, { clearProps: 'yPercent,scale,transform' })
-      if (tag.current) gsap.set(tag.current, { autoAlpha: 1, y: 0 })
+      if (foot.current) gsap.set(foot.current, { clearProps: 'all' })
     }
 
-    mm.add('(min-width: 900px) and (prefers-reduced-motion: no-preference)', () => {
-      const metals = root.current?.querySelectorAll('.hb-ch-metal')
-      const woods = root.current?.querySelectorAll('.hb-ch-wood')
-      const shift = () => window.innerWidth * 0.34
-      if (tag.current) gsap.set(tag.current, { autoAlpha: 1, y: 0 })
-
+    mm.add('(prefers-reduced-motion: no-preference)', () => {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: root.current,
           start: 'top top',
           end: 'bottom top',
-          scrub: 1.1,
+          scrub: 1,
           invalidateOnRefresh: true,
-          onLeaveBack: resetMark,
+          onLeaveBack: resetStage,
         },
       })
 
-      if (metals?.length) {
-        tl.fromTo(metals,
-          { x: 0, scaleX: 1, scaleY: 1, filter: 'blur(0px)', opacity: 1, transformOrigin: '100% 50%' },
-          {
-            x: () => -shift(), scaleX: 1.28, scaleY: 0.92,
-            filter: 'blur(2px)', opacity: 0, transformOrigin: '100% 50%',
-            duration: 1, ease: 'power2.out', immediateRender: false,
-          }, 0)
-      }
-      if (woods?.length) {
-        tl.fromTo(woods,
-          { x: 0, scaleX: 1, scaleY: 1, filter: 'blur(0px)', opacity: 1, transformOrigin: '0% 50%' },
-          {
-            x: () => shift(), scaleX: 1.28, scaleY: 0.92,
-            filter: 'blur(2px)', opacity: 0, transformOrigin: '0% 50%',
-            duration: 1, ease: 'power2.out', immediateRender: false,
-          }, 0)
-      }
-      if (tag.current) {
-        tl.fromTo(tag.current,
+      if (stage.current) {
+        tl.fromTo(stage.current,
           { autoAlpha: 1, y: 0 },
-          { autoAlpha: 1, y: 0, duration: 0.36, ease: 'fluid', immediateRender: false }, 0.22)
+          { autoAlpha: 0, y: -40, duration: 1, ease: 'power2.out', immediateRender: false }, 0)
       }
       if (foot.current) {
         tl.fromTo(foot.current,
           { opacity: 1 },
-          { opacity: 0, duration: 0.26, ease: 'power2.out', immediateRender: false }, 0.1)
+          { opacity: 0, duration: 0.4, ease: 'power2.out', immediateRender: false }, 0)
       }
 
-      return () => { tl.scrollTrigger?.kill(); tl.kill(); resetMark() }
+      return () => { tl.scrollTrigger?.kill(); tl.kill(); resetStage() }
     })
 
     return () => mm.revert()
@@ -151,6 +131,8 @@ export default function HeroBrand() {
         <div className="hb-scrim" />
       </div>
       <div className="hb-stage" ref={stage}>
+        <p className="hb-welcome" ref={welcome}>Welcome to</p>
+        <p className="hb-brand-name" ref={mark}>{BRAND.mark} {BRAND.suffix}</p>
         {/* the visible tagline repeats the line already inside the sr-only h1
             above, so it is a paragraph — three competing h1s on the homepage
             left the document with no single title */}

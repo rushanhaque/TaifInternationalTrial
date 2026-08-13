@@ -25,9 +25,9 @@
   pointer-events: none;
   background: linear-gradient(90deg,
     transparent,
-    rgba(66, 21, 32, .45) 18%,
-    rgba(90, 29, 44, .8) 50%,
-    rgba(66, 21, 32, .45) 82%,
+    rgba(122, 59, 29, .45) 18%,
+    rgba(156, 85, 48, .8) 50%,
+    rgba(122, 59, 29, .45) 82%,
     transparent);
 }
 
@@ -137,8 +137,8 @@
   pointer-events: none;
   user-select: none;
   background-image: linear-gradient(158deg,
-    rgba(90, 29, 44, .30),
-    rgba(66, 21, 32, .17) 46%,
+    rgba(156, 85, 48, .30),
+    rgba(122, 59, 29, .17) 46%,
     rgba(138, 103, 51, .05));
   -webkit-background-clip: text;
   background-clip: text;

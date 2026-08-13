@@ -80,8 +80,10 @@ export const SOCIAL_PLATFORMS = ['instagram', 'whatsapp', 'email', 'facebook', '
 
 export const DEFAULT_SOCIALS = [
   { id: 1, platform: 'instagram', label: 'Instagram', url: 'https://instagram.com/taif_internaitonal93' },
-  { id: 2, platform: 'whatsapp', label: 'WhatsApp', url: '' },   // empty ⇒ built from BRAND.phone
+  { id: 2, platform: 'whatsapp', label: 'WhatsApp', url: 'https://wa.me/919389682282' },
   { id: 3, platform: 'email', label: 'Email', url: '' },         // empty ⇒ built from BRAND.email
+  { id: 4, platform: 'linkedin', label: 'LinkedIn', url: 'https://www.linkedin.com/in/taif-international-8372b540a?utm_source=share_via&utm_content=profile&utm_medium=member_android' },
+  { id: 5, platform: 'facebook', label: 'Facebook', url: 'https://www.facebook.com/share/1BWf7o3JsS/' },
 ]
 
 /* atelier — the wiping plate reel on /shows. `src`/`alt` is the shape

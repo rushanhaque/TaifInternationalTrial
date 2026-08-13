@@ -42,8 +42,8 @@
   z-index: -1;
   pointer-events: none;
   background:
-    radial-gradient(56% 68% at 80% -8%, rgba(66, 21, 32, 0.045), transparent 62%),
-    radial-gradient(44% 56% at 8% 106%, rgba(66, 21, 32, 0.03), transparent 64%);
+    radial-gradient(56% 68% at 80% -8%, rgba(122, 59, 29, 0.045), transparent 62%),
+    radial-gradient(44% 56% at 8% 106%, rgba(122, 59, 29, 0.03), transparent 64%);
 }
 
 /* ── the header ───────────────────────────────────────────────────────── */
@@ -141,8 +141,8 @@
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  background: rgba(66, 21, 32, 0.055);
-  border: 1px solid rgba(66, 21, 32, 0.12);
+  background: rgba(122, 59, 29, 0.055);
+  border: 1px solid rgba(122, 59, 29, 0.12);
   transition:
     background 0.5s var(--ease-fluid),
     border-color 0.5s var(--ease-fluid),
@@ -162,8 +162,8 @@
 
 .phil-mark:hover .phil-badge,
 .phil-mark:focus-within .phil-badge {
-  background: rgba(66, 21, 32, 0.1);
-  border-color: rgba(66, 21, 32, 0.24);
+  background: rgba(122, 59, 29, 0.1);
+  border-color: rgba(122, 59, 29, 0.24);
   transform: scale(1.06);
 }
 

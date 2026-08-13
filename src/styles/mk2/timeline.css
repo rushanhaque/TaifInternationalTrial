@@ -57,7 +57,7 @@
   height: 13px;
   margin: -6.5px 0 0 -6.5px;
   border-radius: 50%;
-  background: radial-gradient(circle at 38% 34%, #fff6e0, #5A1D2C 38%, var(--brass) 70%, var(--brass-dk));
+  background: radial-gradient(circle at 38% 34%, #fff6e0, #9C5530 38%, var(--brass) 70%, var(--brass-dk));
   box-shadow: var(--glow-brass-hot);
 }
 

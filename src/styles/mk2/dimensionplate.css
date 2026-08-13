@@ -24,7 +24,7 @@
 
 /* ── the envelope ── */
 .dp-shell {
-  fill: rgba(66, 21, 32, 0.07);
+  fill: rgba(122, 59, 29, 0.07);
   stroke: var(--graphite);
   stroke-width: 1.6;
   vector-effect: non-scaling-stroke;

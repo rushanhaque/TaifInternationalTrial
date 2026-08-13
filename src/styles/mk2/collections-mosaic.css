@@ -55,6 +55,16 @@
   margin-top: 0;
 }
 
+/* One quiet way out of the wall — not a card, not a headline, just the
+   next thing to do once the nine plates have been looked at. */
+.vitrine-cta {
+  display: flex;
+  justify-content: center;
+  padding: 0 var(--gutter) clamp(3rem, 6vh, 5rem);
+  margin-top: clamp(-4.5rem, -8vh, -3rem);
+  background-color: var(--white);
+}
+
 /* ── Masthead ─────────────────────────────────────────────────────────── */
 
 .cm-head {
@@ -171,7 +181,7 @@
 
 .cm-img-fallback {
   display: block;
-  background: linear-gradient(140deg, #421520 0%, #5A1D2C 45%, #2C0C14 100%);
+  background: linear-gradient(140deg, #7A3B1D 0%, #9C5530 45%, #4A2410 100%);
 }
 
 /* burgundy duotone — used to sit over every idle plate at full strength
@@ -184,7 +194,7 @@
 .cm-duotone {
   position: absolute;
   inset: 0;
-  background: linear-gradient(150deg, rgba(66, 21, 32, 0.72), rgba(23, 10, 14, 0.62));
+  background: linear-gradient(150deg, rgba(122, 59, 29, 0.72), rgba(23, 10, 14, 0.62));
   mix-blend-mode: multiply;
   opacity: 0.14;
   transition: opacity var(--cm-dur) var(--cm-ease);
@@ -311,7 +321,7 @@
 
 /* ── Dark ground ──────────────────────────────────────────────────────── */
 
-html.dark .cm-section { background-color: #1A090D; }
+html.dark .cm-section { background-color: #170D05; }
 html.dark .cm-title { color: #FFFFFF; }
 html.dark .cm-kicker { color: rgba(255, 255, 255, 0.68); }
 

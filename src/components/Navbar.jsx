@@ -118,14 +118,10 @@ export default function Navbar() {
           {/* Three grounds, three marks. Hero is the transparent bar over the
               video, so the white mark reads on it in either theme. Off the
               hero the bar is solid: cream in light mode (burgundy mark) and
-              #1A090D in dark (white mark) — the burgundy one was being used
+              #170D05 in dark (white mark) — the burgundy one was being used
               there too, at 1.25:1 against the dark bar, i.e. invisible. */}
           <img
-            src={
-              heroMode ? '/img/taif-logo-white.png'
-                : dark ? '/img/taif-logo-darkmode.png'
-                  : '/img/taif-logo-maroon.png'
-            }
+            src="/img/taif-logo-header.png"
             alt={BRAND.name}
             className="header-brand-img"
             style={{

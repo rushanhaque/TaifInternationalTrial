@@ -66,7 +66,7 @@ export default function CataloguePage() {
                   text: p.name.toUpperCase()
                 }))}
                 bend={1.5}
-                textColor="#421520"
+                textColor="#7A3B1D"
                 borderRadius={0.05}
                 scrollSpeed={0.3}
                 scrollEase={0.08}

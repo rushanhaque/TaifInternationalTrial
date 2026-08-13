@@ -64,9 +64,9 @@
    neutral scrim as light — it does not tint the hero.
 
    Two things used to put a burgundy wash over the clip. The video was held at
-   0.5 opacity, which is not a dimmer: the #1A090D ground behind it showed
+   0.5 opacity, which is not a dimmer: the #170D05 ground behind it showed
    through every frame, so the footage was literally half page-colour. And the
-   scrim swapped its near-black for rgba(26, 9, 13) — the same burgundy — at up
+   scrim swapped its near-black for rgba(23, 13, 5) — the same burgundy — at up
    to 0.72 alpha across the whole frame, covering the picture rather than
    pooling under the type. Together they read as a maroon sheet over the video.
 
@@ -87,61 +87,37 @@ html.dark .hb-video { opacity: 1; }
   justify-content: center;
 }
 
-/* ── THE SEAM ──────────────────────────────────────────────────────────────
-   Each glyph carries two fills — polished brass above, walnut grain below —
-   blended into one another by a pair of soft gradient masks meeting at
-   --seam. "Where metal meets grain", rendered inside the letterforms.
-   On scroll the two halves shear apart. */
-
-.hb-mark {
-  --seam: 0.52;
-  position: relative; display: inline-block; white-space: nowrap;
-  font-family: var(--font-display); font-stretch: 125%; font-weight: 600;
-  font-size: clamp(5rem, 23vw, 21rem); line-height: 0.84; letter-spacing: -0.045em;
+/* ── WELCOME / BRAND / TAGLINE ────────────────────────────────────────────
+   The hero's three-line reveal: a small kicker, the big brand lockup, and
+   the tagline, all set in white over the ambient footage so every line
+   survives every frame of the clip — the same fix already proven on the
+   tagline below. Each line fades up in its own beat on load (see
+   HeroBrand's "the pour"). */
+.hb-welcome {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(0.72rem, 1.3vw, 0.92rem);
+  letter-spacing: 0.5em;
+  padding-left: 0.5em; /* optical centring against the trailing letter-spacing */
+  text-transform: uppercase;
+  color: #FFFFFF;
+  -webkit-text-fill-color: #FFFFFF;
+  text-shadow: 0 1px 8px rgba(12, 5, 7, 0.55);
 }
 
-.hb-ch { position: relative; display: inline-block; }
-
-.hb-ch-wood, .hb-ch-metal {
-  display: inline-block; color: transparent;
-  background-clip: text; -webkit-background-clip: text;
-  will-change: transform;
-}
-
-/* grain below the seam — the mask fades out just past the join so the two
-   materials blend rather than meeting at a hard line */
-.hb-ch-wood {
-  background-image: linear-gradient(165deg,
-    #4a4a48 0%, #2a2927 34%, #3a3936 58%, #421520 82%, #2C0C14 100%);
-  -webkit-mask-image: linear-gradient(to top,
-    #000 0%, #000 calc(var(--seam) * 100% - 18%), transparent calc(var(--seam) * 100% + 6%));
-  mask-image: linear-gradient(to top,
-    #000 0%, #000 calc(var(--seam) * 100% - 18%), transparent calc(var(--seam) * 100% + 6%));
-}
-
-/* polished brass above, blending down into the grain */
-.hb-ch-metal {
-  position: absolute; left: 0; top: 0; width: 100%;
-  background-image: linear-gradient(100deg,
-    #2C0C14 0%, #421520 22%, #5A1D2C 40%, #5A1D2C 55%, #421520 74%, #5A1D2C 90%, #2C0C14 100%);
-  -webkit-mask-image: linear-gradient(to bottom,
-    #000 0%, #000 calc((1 - var(--seam)) * 100% - 18%), transparent calc((1 - var(--seam)) * 100% + 6%));
-  mask-image: linear-gradient(to bottom,
-    #000 0%, #000 calc((1 - var(--seam)) * 100% - 18%), transparent calc((1 - var(--seam)) * 100% + 6%));
-}
-
-.hb-seam { display: none; }
-.hb-intl {
-  margin-top: clamp(1.1rem, 2.6vw, 2rem);
-  font-family: var(--font-accent); font-weight: 500; font-size: clamp(0.7rem, 1.55vw, 1.02rem);
-  letter-spacing: 0.58em; padding-left: 0.58em; /* optical centring */
-  text-transform: uppercase; color: var(--graphite-2);
-}
-.hb-tag {
-  margin-top: clamp(1.4rem, 3vw, 2.4rem);
-  font-family: var(--font-accent); font-weight: 500;
-  color: var(--tint-deep); letter-spacing: 0.34em; padding-left: 0.34em;
-  font-size: 0.78rem;
+.hb-brand-name {
+  margin: clamp(0.6rem, 1.6vw, 1rem) 0 0;
+  font-family: var(--font-display);
+  font-stretch: 125%;
+  font-weight: 700;
+  font-size: clamp(2.6rem, 7.4vw, 5.6rem);
+  line-height: 1.02;
+  letter-spacing: -0.01em;
+  color: #FFFFFF;
+  -webkit-text-fill-color: #FFFFFF;
+  text-shadow: 0 1px 2px rgba(12, 5, 7, 0.4), 0 8px 30px rgba(12, 5, 7, 0.55);
+  text-wrap: balance;
 }
 .hb-foot {
   position: absolute !important;
@@ -377,21 +353,15 @@ html.dark .countries-card {
     padding: calc(var(--nav-h) + 1.5rem) 1rem 3rem;
   }
 
-  .hb-mark {
-    font-size: clamp(3.2rem, 18vw, 6.5rem);
-    letter-spacing: -0.035em;
-  }
-
-  .hb-intl {
+  .hb-welcome {
     letter-spacing: 0.3em;
     padding-left: 0.3em;
-    font-size: 0.72rem;
+    font-size: 0.68rem;
   }
 
-  .hb-tag {
-    letter-spacing: 0.18em;
-    padding-left: 0.18em;
-    font-size: 0.72rem;
+  .hb-brand-name {
+    font-size: clamp(2.1rem, 10vw, 3.2rem);
+    letter-spacing: 0;
   }
 
   .hb-foot {
@@ -451,7 +421,7 @@ html.dark .countries-card {
 }
 
 html.dark .home-reviews-grid .tm-card {
-  background: #2C0C14 !important;
+  background: #4A2410 !important;
 }
 
 html.dark .hp,
@@ -465,7 +435,7 @@ html.dark .countries-section-wrap,
 html.dark .countries-card,
 html.dark .fs-section,
 html.dark .bestsellers-section {
-  background-color: #1A090D !important;
+  background-color: #170D05 !important;
   color: #FFFFFF !important;
 }
 
@@ -473,19 +443,23 @@ html.dark .bestsellers-section {
    It was ink-coloured because the hero ground was effectively white: the
    still was hidden and the footage sat at 42% under a white wash. With the
    wash gone the tagline is type over film, so it goes back to white with a
-   soft shadow — the only treatment that survives every frame of a clip. */
+   soft shadow — the only treatment that survives every frame of a clip.
+
+   Now the third line of the welcome/brand/tagline stack rather than the
+   hero's lone headline, so it reads as a subordinate line: smaller, lighter,
+   and set close under the brand name instead of pushed toward the fold. */
 .hb-tag-title {
   font-family: var(--font-display, 'Cinzel', serif);
-  font-size: clamp(1.6rem, 3.8vw, 3.4rem);
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  line-height: 1.18;
+  font-size: clamp(0.85rem, 1.6vw, 1.15rem);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  line-height: 1.4;
   text-align: center;
   color: #FFFFFF;
   -webkit-text-fill-color: #FFFFFF;
-  text-shadow: 0 1px 2px rgba(12, 5, 7, 0.4), 0 8px 30px rgba(12, 5, 7, 0.55);
+  text-shadow: 0 1px 8px rgba(12, 5, 7, 0.55);
   text-wrap: balance;
-  margin-top: clamp(9.5rem, 21vh, 15rem);
+  margin-top: clamp(1rem, 2.4vw, 1.6rem);
   padding: 0 1rem;
 }
 
@@ -497,7 +471,7 @@ html.dark .bestsellers-section {
   width: min(88%, 1000px);
   height: 1px;
   margin: 0 auto;
-  background: linear-gradient(90deg, transparent 0%, rgba(66, 21, 32, 0.28) 50%, transparent 100%);
+  background: linear-gradient(90deg, transparent 0%, rgba(122, 59, 29, 0.28) 50%, transparent 100%);
   pointer-events: none;
 }
 
@@ -509,8 +483,8 @@ html.dark .bestsellers-section {
   left: 50%;
   transform: translate(-50%, -50%);
   font-size: 6px;
-  color: rgba(66, 21, 32, 0.32);
-  background: #FFFFFF;
+  color: rgba(122, 59, 29, 0.32);
+  background: var(--white);
   padding: 0 10px;
   letter-spacing: 0;
   line-height: 1;
@@ -521,7 +495,7 @@ html.dark .section-divider {
 }
 
 html.dark .section-divider::before {
-  background: #1A090D !important;
+  background: #170D05 !important;
   color: #FFFFFF !important;
 }
 
@@ -550,7 +524,7 @@ html.dark .section-divider::before {
   width: 100%;
   padding: 4.5rem 0 2.5rem;
   border-radius: clamp(16px, 2vw, 24px) !important;
-  border: 1px solid rgba(66, 21, 32, 0.12) !important;
+  border: 1px solid rgba(122, 59, 29, 0.12) !important;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03) !important;
   position: relative;
   overflow: hidden;
@@ -559,7 +533,7 @@ html.dark .section-divider::before {
 }
 
 html.dark .countries-card {
-  background-color: #2C0C14 !important;
+  background-color: #4A2410 !important;
   border: 1px solid rgba(255, 255, 255, 0.4) !important;
   box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4) !important;
 }
@@ -572,7 +546,7 @@ html.dark .countries-card span {
 
 /* Section 9: Blogs and Socials */
 #instagram {
-  background-color: #FFFFFF !important;
+  background-color: var(--white) !important;
   margin-top: 0;
   padding-top: clamp(2.5rem, 5vh, 4rem);
 }
@@ -594,18 +568,18 @@ html.dark #craft,
 html.dark .fs-section,
 html.dark .bestsellers-section,
 html.dark .craft-about-section {
-  background-color: #1A090D !important;
+  background-color: #170D05 !important;
   color: #FFFFFF !important;
 }
 
 .white-review-card {
-  background-color: #FFFFFF;
-  border: 1px solid rgba(66, 21, 32, 0.10);
+  background-color: var(--offwhite);
+  border: 1px solid rgba(122, 59, 29, 0.10);
   transition: background-color 0.4s ease, border-color 0.4s ease;
 }
 
 html.dark .white-review-card {
-  background-color: #2C0C14 !important;
+  background-color: #4A2410 !important;
   border-color: rgba(255, 255, 255, 0.15) !important;
   color: #FFFFFF !important;
 }
@@ -648,20 +622,20 @@ html.dark .white-review-card {
   font-size: clamp(1.8rem, 3.5vw, 2.8rem);
   font-weight: 600;
   line-height: 1.15;
-  color: var(--graphite, #421520);
+  color: var(--graphite, #7A3B1D);
   margin-bottom: 1.25rem;
 }
 
 .craft-highlight {
   font-style: italic;
-  color: var(--brass-dk, #2C0C14);
+  color: var(--brass-dk, #4A2410);
 }
 
 .craft-body {
   font-family: var(--font-body);
   font-size: clamp(0.95rem, 1.15vw, 1.1rem);
   line-height: 1.65;
-  color: rgba(66, 21, 32, 0.82);
+  color: rgba(122, 59, 29, 0.82);
   margin-bottom: 2rem;
 }
 
@@ -684,36 +658,36 @@ html.dark .white-review-card {
   grid-template-columns: auto 1fr;
   gap: clamp(1.2rem, 2vw, 1.8rem);
   padding-block: 1.4rem;
-  border-top: 1px solid rgba(66, 21, 32, 0.12);
+  border-top: 1px solid rgba(122, 59, 29, 0.12);
   transition: border-color 0.35s ease;
 }
 
 .craft-process-item:last-child {
-  border-bottom: 1px solid rgba(66, 21, 32, 0.12);
+  border-bottom: 1px solid rgba(122, 59, 29, 0.12);
 }
 
 .craft-process-item:hover {
-  border-color: rgba(66, 21, 32, 0.5);
+  border-color: rgba(122, 59, 29, 0.5);
 }
 
 .craft-process-num {
   font-family: var(--font-display);
   font-size: clamp(1.6rem, 2.5vw, 2.2rem);
   font-weight: 600;
-  color: rgba(44, 12, 20, 0.45);
+  color: rgba(74, 36, 16, 0.45);
   line-height: 1;
   transition: color 0.35s ease;
 }
 
 .craft-process-item:hover .craft-process-num {
-  color: var(--brass-dk, #2C0C14);
+  color: var(--brass-dk, #4A2410);
 }
 
 .craft-process-title {
   font-family: var(--font-heading);
   font-size: clamp(1.1rem, 1.4vw, 1.35rem);
   font-weight: 600;
-  color: var(--graphite, #421520);
+  color: var(--graphite, #7A3B1D);
   margin: 0 0 0.35rem 0;
 }
 
@@ -721,7 +695,7 @@ html.dark .white-review-card {
   font-family: var(--font-body);
   font-size: clamp(0.88rem, 1.05vw, 0.98rem);
   line-height: 1.55;
-  color: rgba(66, 21, 32, 0.72);
+  color: rgba(122, 59, 29, 0.72);
   margin: 0;
 }
 
@@ -733,9 +707,9 @@ html.dark .white-review-card {
 }
 
 .about-stat-card {
-  background: #FFFFFF;
+  background: var(--offwhite);
   border-radius: clamp(14px, 1.6vw, 22px);
-  border: 1px solid rgba(66, 21, 32, 0.1);
+  border: 1px solid rgba(122, 59, 29, 0.1);
   padding: clamp(1.8rem, 3vw, 2.5rem) clamp(1.2rem, 2vw, 1.8rem);
   text-align: center;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
@@ -747,14 +721,14 @@ html.dark .white-review-card {
 .about-stat-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.09);
-  border-color: rgba(66, 21, 32, 0.4);
+  border-color: rgba(122, 59, 29, 0.4);
 }
 
 .about-stat-number {
   font-family: var(--font-display);
   font-size: clamp(2.8rem, 5vw, 4.2rem);
   font-weight: 700;
-  color: var(--brass-dk, #2C0C14);
+  color: var(--brass-dk, #4A2410);
   line-height: 1;
   margin-bottom: 0.75rem;
   letter-spacing: -0.02em;
@@ -764,7 +738,7 @@ html.dark .white-review-card {
   font-family: var(--font-heading);
   font-size: clamp(0.85rem, 1.1vw, 1rem);
   font-weight: 600;
-  color: var(--graphite, #421520);
+  color: var(--graphite, #7A3B1D);
   letter-spacing: 0.02em;
 }
 
@@ -773,7 +747,7 @@ html.dark .white-review-card {
   font-size: 0.72rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: rgba(66, 21, 32, 0.55);
+  color: rgba(122, 59, 29, 0.55);
   margin-top: 0.35rem;
 }
 
@@ -805,7 +779,7 @@ html.dark .craft-process-item:hover .craft-process-num {
 }
 
 html.dark .about-stat-card {
-  background-color: #2C0C14 !important;
+  background-color: #4A2410 !important;
   border-color: rgba(255, 255, 255, 0.15) !important;
 }
 
@@ -825,9 +799,9 @@ html.dark .about-stat-card {
   position: relative;
   width: clamp(280px, 28vw, 360px);
   aspect-ratio: 16 / 10;
-  background: #FFFFFF;
+  background: var(--offwhite);
   border-radius: clamp(14px, 1.6vw, 22px);
-  border: 1px solid rgba(66, 21, 32, 0.12);
+  border: 1px solid rgba(122, 59, 29, 0.12);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
   padding: clamp(1.4rem, 2vw, 1.8rem);
   display: flex;
@@ -840,7 +814,7 @@ html.dark .about-stat-card {
 .white-review-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
-  border-color: rgba(66, 21, 32, 0.4);
+  border-color: rgba(122, 59, 29, 0.4);
 }
 
 .white-review-inner {
@@ -854,7 +828,7 @@ html.dark .about-stat-card {
   font-family: var(--font-body);
   font-size: clamp(0.9rem, 1.1vw, 1.05rem);
   line-height: 1.5;
-  color: #421520;
+  color: #7A3B1D;
   margin: 0;
   font-weight: 450;
 }
@@ -863,7 +837,7 @@ html.dark .about-stat-card {
   font-family: var(--font-heading);
   font-size: 0.95rem;
   font-weight: 700;
-  color: var(--brass-dk, #2C0C14);
+  color: var(--brass-dk, #4A2410);
   letter-spacing: 0.02em;
 }
 
@@ -872,10 +846,10 @@ html.dark .about-stat-card {
 /* Opaque spacer that sits between the sticky Sampler and the craft card,
    preventing the Best Sellers grid from bleeding through the gap. */
 .craft-card-spacer {
-  background-color: #FFFFFF;
+  background-color: var(--white);
 }
 html.dark .craft-card-spacer {
-  background-color: #1A090D !important;
+  background-color: #170D05 !important;
 }
 
 .craft-card-wrapper {
@@ -923,7 +897,7 @@ html.dark .craft-card-spacer {
   line-height: 1.08;
   letter-spacing: -0.02em;
   text-align: center;
-  color: var(--graphite, #421520);
+  color: var(--graphite, #7A3B1D);
 }
 
 html.dark .craft-sec-title {
@@ -938,10 +912,10 @@ html.dark .craft-sec-title {
   aspect-ratio: 16 / 9;
   border-radius: clamp(20px, 2.5vw, 32px);
   overflow: hidden;
-  background: #2C0C14;
+  background: #4A2410;
   box-shadow: 0 24px 70px rgba(0, 0, 0, 0.12),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(66, 21, 32, 0.12);
+  border: 1px solid rgba(122, 59, 29, 0.12);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -969,7 +943,7 @@ html.dark .craft-sec-title {
 .craft-card__overlay {
   position: absolute;
   inset: 0;
-  background: none 0%, rgba(66, 21, 32, 0.45) 100%);
+  background: none 0%, rgba(122, 59, 29, 0.45) 100%);
   pointer-events: none;
   z-index: 2;
 }
@@ -993,10 +967,10 @@ html.dark .craft-sec-title {
   min-height: 480px;
   border-radius: clamp(20px, 2.5vw, 32px);
   overflow: hidden;
-  background: #2C0C14;
+  background: #4A2410;
   box-shadow: 0 30px 90px rgba(0, 0, 0, 0.22),
     inset 0 1px 0 rgba(255, 255, 255, 0.25);
-  border: 1px solid rgba(66, 21, 32, 0.3);
+  border: 1px solid rgba(122, 59, 29, 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1008,7 +982,7 @@ html.dark .craft-sec-title {
 .heritage-video-card:hover {
   /* No scale, border, or shadow change on hover */
   transform: none !important;
-  border-color: rgba(66, 21, 32, 0.3) !important;
+  border-color: rgba(122, 59, 29, 0.3) !important;
   box-shadow: 0 30px 90px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
 }
 
@@ -1032,7 +1006,7 @@ html.dark .craft-sec-title {
   position: absolute;
   inset: 0;
   z-index: 2;
-  background: radial-gradient(ellipse 85% 85% at 50% 50%, rgba(44, 12, 20, 0.15) 0%, rgba(44, 12, 20, 0.55) 100%);
+  background: radial-gradient(ellipse 85% 85% at 50% 50%, rgba(74, 36, 16, 0.15) 0%, rgba(74, 36, 16, 0.55) 100%);
   pointer-events: none;
 }
 

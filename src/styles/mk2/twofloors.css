@@ -200,7 +200,7 @@
   font-size: clamp(7rem, 15vw, 15rem);
   line-height: 0.76;
   letter-spacing: -0.05em;
-  color: rgba(90, 29, 44, 0.085);
+  color: rgba(156, 85, 48, 0.085);
   pointer-events: none;
 }
 
@@ -332,7 +332,7 @@
 .tf-spec {
   margin: 0;
   padding: 0.5rem 1rem 0.55rem;
-  border: 1px solid rgba(90, 29, 44, 0.3);
+  border: 1px solid rgba(156, 85, 48, 0.3);
   border-radius: var(--r-pill);
   background: rgba(20, 13, 6, 0.42);
   backdrop-filter: blur(6px);
@@ -385,7 +385,7 @@
   left: 0;
   width: 260px;
   margin-left: -130px;
-  background: none, rgba(90, 29, 44, 0.06) 55%, transparent 78%);
+  background: none, rgba(156, 85, 48, 0.06) 55%, transparent 78%);
   filter: blur(6px);
   opacity: 0.72;
   transition: opacity 0.4s var(--ease-fluid);
@@ -405,13 +405,13 @@
   margin-left: -1px;
   transform-origin: 50% 0;
   background: linear-gradient(180deg,
-    rgba(90, 29, 44, 0) 0%,
+    rgba(156, 85, 48, 0) 0%,
     var(--brass-dk) 5%,
     var(--brass) 22%,
     #f6e6c2 50%,
     var(--brass) 78%,
     var(--brass-dk) 95%,
-    rgba(90, 29, 44, 0) 100%);
+    rgba(156, 85, 48, 0) 100%);
   box-shadow: 0 0 14px rgba(0, 0, 0, 0.55),
     0 0 44px rgba(0, 0, 0, 0.3);
 }
@@ -446,9 +446,9 @@
     #6d4f24 0%,
     #c9a15c 14%,
     #f7ecd2 34%,
-    #421520 56%,
-    #2C0C14 74%,
-    #5A1D2C 100%);
+    #7A3B1D 56%,
+    #4A2410 74%,
+    #9C5530 100%);
   box-shadow: 0 14px 34px rgba(0, 0, 0, 0.52),
     0 2px 6px rgba(0, 0, 0, 0.38),
     inset 0 1px 0 rgba(255, 252, 240, 0.72),
@@ -503,12 +503,12 @@
 
 .tf-arrow-l {
   right: calc(50% + 30px);
-  border-right: 7px solid rgba(90, 29, 44, 0.75);
+  border-right: 7px solid rgba(156, 85, 48, 0.75);
 }
 
 .tf-arrow-r {
   left: calc(50% + 30px);
-  border-left: 7px solid rgba(90, 29, 44, 0.75);
+  border-left: 7px solid rgba(156, 85, 48, 0.75);
 }
 
 .tf-hit:hover .tf-arrow-l { transform: translateX(-4px); }
@@ -528,7 +528,7 @@
   gap: 0.85rem;
   white-space: nowrap;
   padding: 0.62rem 1.15rem 0.68rem;
-  border: 1px solid rgba(90, 29, 44, 0.32);
+  border: 1px solid rgba(156, 85, 48, 0.32);
   border-radius: var(--r-pill);
   background: rgba(16, 10, 4, 0.62);
   backdrop-filter: blur(12px);
@@ -551,7 +551,7 @@
 }
 
 .tf-slash {
-  color: rgba(90, 29, 44, 0.42);
+  color: rgba(156, 85, 48, 0.42);
   font-weight: 400;
 }
 

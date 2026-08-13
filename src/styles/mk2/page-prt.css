@@ -157,7 +157,7 @@
   flex: none;
   border-radius: 1.5px;
   transform: rotate(45deg);
-  background: linear-gradient(135deg, #5A1D2C, #421520 60%, #2C0C14);
+  background: linear-gradient(135deg, #9C5530, #7A3B1D 60%, #4A2410);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
   transition: transform 0.45s var(--ease-surge), filter 0.45s var(--ease-fluid);
 }
@@ -336,7 +336,7 @@
 }
 
 .prt-chip:hover .prt-chip-punch {
-  background: linear-gradient(135deg, #5A1D2C, #421520 60%, #2C0C14);
+  background: linear-gradient(135deg, #9C5530, #7A3B1D 60%, #4A2410);
   transform: rotate(225deg) scale(1.2);
 }
 
@@ -366,7 +366,7 @@
   position: absolute;
   inset: -40% -10%;
   pointer-events: none;
-  background: linear-gradient(105deg, transparent 36%, rgba(255, 249, 236, 0.9) 48%, rgba(90, 29, 44, 0.5) 54%, transparent 66%);
+  background: linear-gradient(105deg, transparent 36%, rgba(255, 249, 236, 0.9) 48%, rgba(156, 85, 48, 0.5) 54%, transparent 66%);
   opacity: 0;
   transform: translateX(-60%);
   transition: transform 0.85s var(--ease-viscous), opacity 0.4s var(--ease-fluid);
@@ -394,12 +394,12 @@
   --prt-acc: var(--brass);
   --prt-acc-lt: var(--brass-lt);
   --prt-acc-dk: var(--brass-dk);
-  --prt-wash: rgba(66, 21, 32, 0.13);
-  --prt-wash-2: rgba(90, 29, 44, 0.18);
+  --prt-wash: rgba(122, 59, 29, 0.13);
+  --prt-wash-2: rgba(156, 85, 48, 0.18);
   --prt-line: var(--hair);
   --prt-line-2: var(--chrome-3);
-  --prt-ghost-fill: rgba(66, 21, 32, 0.028);
-  --prt-ghost-stroke: rgba(66, 21, 32, 0.07);
+  --prt-ghost-fill: rgba(122, 59, 29, 0.028);
+  --prt-ghost-stroke: rgba(122, 59, 29, 0.07);
   --prt-key: var(--dim);
   --prt-num: var(--tint-deep);
   --prt-metal: var(--metal);
@@ -416,9 +416,9 @@
   --prt-acc: var(--copper);
   --prt-acc-lt: var(--copper-lt);
   --prt-acc-dk: var(--copper-dk);
-  --prt-wash: rgba(66, 21, 32, 0.13);
+  --prt-wash: rgba(122, 59, 29, 0.13);
   --prt-wash-2: rgba(224, 162, 117, 0.18);
-  --prt-metal: linear-gradient(100deg, #2C0C14 0%, #c9793f 18%, #f0cfae 36%, #c07d47 52%, #a3572a 68%, #e5b287 84%, #8f5327 100%);
+  --prt-metal: linear-gradient(100deg, #4A2410 0%, #c9793f 18%, #f0cfae 36%, #c07d47 52%, #a3572a 68%, #e5b287 84%, #8f5327 100%);
 }
 
 .prt-case[data-tone='inlay'] {
@@ -517,7 +517,7 @@
 .prt-strip-sheen {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(255, 252, 245, 0.5) 0%, transparent 26%, transparent 68%, rgba(66, 21, 32, 0.18) 100%);
+  background: linear-gradient(180deg, rgba(255, 252, 245, 0.5) 0%, transparent 26%, transparent 68%, rgba(122, 59, 29, 0.18) 100%);
 }
 
 .prt-strip::after {
@@ -677,7 +677,7 @@
   }
 
   .prt-case.deep .prt-stat-num {
-    background-image: linear-gradient(100deg, #b98c4e 0%, #5A1D2C 22%, #fff2d6 42%, #d3a865 60%, #ab7f42 78%, #efdcb4 100%);
+    background-image: linear-gradient(100deg, #b98c4e 0%, #9C5530 22%, #fff2d6 42%, #d3a865 60%, #ab7f42 78%, #efdcb4 100%);
   }
 }
 

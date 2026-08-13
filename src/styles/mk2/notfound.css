@@ -5,81 +5,11 @@
 
 .nf-lede { margin: 1rem auto 0; max-width: 46ch; }
 
-.nf-card {
-  position: relative;
-  width: min(520px, 100%);
-  margin: clamp(1.8rem, 4vw, 2.8rem) auto 0;
-  padding: clamp(1.2rem, 2.6vw, 1.7rem);
-  text-align: left;
-  border-radius: var(--r-md);
-  background: var(--white);
-  background-image: var(--paper);
-  box-shadow: var(--lift-2), var(--edge-hair);
-}
-
-.nf-card-head {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 1rem;
-  padding-bottom: 0.7rem;
-  border-bottom: 1px solid var(--hair-strong);
-  color: var(--dim);
-}
-
-.nf-ref {
-  font-family: ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, monospace;
-  font-size: 0.76rem;
-  letter-spacing: 0.06em;
-  color: var(--tint-deep);
-}
-
-.nf-rows { margin: 0.9rem 0 0; display: grid; gap: 0.6rem; }
-
-.nf-rows > div {
-  display: grid;
-  grid-template-columns: 6.5rem 1fr;
-  gap: 0.7rem;
-  align-items: baseline;
-}
-
-.nf-rows dt { color: var(--dim); }
-.nf-rows dd { margin: 0; color: var(--graphite); font-size: 0.94rem; }
-
-/* the path they asked for — wraps rather than stretching the card */
-.nf-path {
-  font-family: ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, monospace;
-  font-size: 0.86rem;
-  overflow-wrap: anywhere;
-  color: var(--graphite-2);
-}
-
-.nf-stamp {
-  position: absolute;
-  right: clamp(0.8rem, 2vw, 1.4rem);
-  bottom: clamp(0.7rem, 2vw, 1.1rem);
-  transform: rotate(-8deg);
-  padding: 0.34rem 0.8rem;
-  border: 2.5px solid var(--tint-deep);
-  border-radius: 5px;
-  color: var(--tint-deep);
-  opacity: 0.85;
-  font-family: var(--font-display);
-  font-stretch: 125%;
-  font-weight: 500;
-  font-size: clamp(0.82rem, 1.8vw, 1.05rem);
-  line-height: 1;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  box-shadow: 0 0 0 3px rgba(138, 90, 32, 0.06);
-  pointer-events: none;
-}
-
 .nf-say { margin-top: clamp(1.8rem, 4vw, 2.6rem); color: var(--dim); }
 
 .nf-families {
   list-style: none;
-  margin: 0.8rem 0 0;
+  margin: 0.8rem auto 0;
   padding: 0;
   display: flex;
   flex-wrap: wrap;
@@ -119,5 +49,4 @@
 
 @media (prefers-reduced-motion: reduce) {
   .nf-families a { transition: none; }
-  .nf-stamp { opacity: 0.85; transform: rotate(-8deg); }
 }

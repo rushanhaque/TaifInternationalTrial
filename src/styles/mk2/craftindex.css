@@ -21,7 +21,7 @@
 .cix {
   --cix-size: clamp(1.8rem, 5.5vw, 4.5rem);   /* the term */
   --cix-gut: clamp(2.2rem, 5.2vw, 4.4rem);    /* numeral column / hanging indent */
-  --cix-rest: rgba(66, 21, 32, .5);           /* resting ink — see note above */
+  --cix-rest: rgba(122, 59, 29, .5);           /* resting ink — see note above */
   --cix-nudge: 10px;
   /* the definition parks 38px right of home before it slides in; clip rather
      than hidden so no scroll container is created and nothing sticky breaks */
@@ -145,9 +145,9 @@
   inset: 0 -1.1rem;
   z-index: 0;
   background: linear-gradient(90deg,
-      rgba(66, 21, 32, .14) 0%,
-      rgba(66, 21, 32, .05) 46%,
-      rgba(66, 21, 32, 0) 84%);
+      rgba(122, 59, 29, .14) 0%,
+      rgba(122, 59, 29, .05) 46%,
+      rgba(122, 59, 29, 0) 84%);
   transform: scaleX(0);
   transform-origin: right center;   /* retracts to the right on exit … */
   transition: transform .4s var(--ease-fluid);
@@ -168,7 +168,7 @@
       var(--brass) 24%,
       var(--brass-lt) 56%,
       var(--brass) 76%,
-      rgba(66, 21, 32, 0) 100%);
+      rgba(122, 59, 29, 0) 100%);
   box-shadow: var(--glow-brass);
   transform: scaleX(0);
   transform-origin: right center;

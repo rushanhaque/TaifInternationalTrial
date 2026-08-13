@@ -1,72 +1,72 @@
 :root {
-  /* ═══ ground — Warm Sand / Cream Beige (#FFFFFF) everywhere ═══ */
-  --white:      #FFFFFF;
-  --beige:      #FFFFFF;
-  --bg:         #FFFFFF;
-  /* a warm off-white, one step down from pure white — the shared card ground
-     for the Materials plate, the Countries band and the review cards, so the
-     three read as the same family of surface */
-  --offwhite:   #FDFCFA;
-  --chrome:     #FFFFFF;
-  --chrome-2:   #F7F7F7;
-  --chrome-3:   #E5E5E5;   /* dividers, rules, hints */
+  /* ═══ ground — Umber & Linen: every section sits on the linen ground ═══ */
+  --white:      #F5EFE4;
+  --beige:      #F5EFE4;
+  --bg:         #F5EFE4;
+  /* the card/surface ground — a deeper warm tan, so cards (reviews, the
+     connect card, countries served, and similar) read as a distinct,
+     lifted plane against the lighter linen sections */
+  --offwhite:   #E9DDCF;
+  --chrome:     #F5EFE4;
+  --chrome-2:   #EFE7D6;
+  --chrome-3:   #E3D7BF;   /* dividers, rules, hints */
   --shadow-soft: rgba(0, 0, 0, 0.05);
 
-  /* ═══ ink — Rich Deep Burgundy (#421520) ═══ */
-  --graphite:   #421520;
-  --graphite-2: #5A1D2C;
-  --dim:        rgba(66, 21, 32, 0.72);
-  --faint:      rgba(66, 21, 32, 0.28);
-  --hair:       rgba(66, 21, 32, 0.14);
-  --hair-strong: rgba(66, 21, 32, 0.30);
-  --nav-bg:     linear-gradient(135deg, rgba(255, 255, 255, 0.94) 0%, rgba(245, 245, 245, 0.88) 100%);
+  /* ═══ ink — Umber (#7A3B1D) ═══ */
+  --graphite:   #7A3B1D;
+  --graphite-2: #9C5530;
+  --dim:        rgba(122, 59, 29, 0.72);
+  --faint:      rgba(122, 59, 29, 0.28);
+  --hair:       rgba(122, 59, 29, 0.14);
+  --hair-strong: rgba(122, 59, 29, 0.30);
+  --nav-bg:     linear-gradient(135deg, rgba(253, 251, 247, 0.94) 0%, rgba(245, 239, 228, 0.88) 100%);
 
-  /* ═══ deep surfaces → Deep Burgundy (#421520) ═══ */
-  --deep:       #421520;
-  --on-deep:    #FFFFFF;
-  --dim-on-deep: rgba(255, 255, 255, 0.78);
-  --hair-on-deep: rgba(255, 255, 255, 0.16);
+  /* ═══ deep surfaces → Deep Umber (#4A2410) ═══ */
+  --deep:       #4A2410;
+  --on-deep:    #FDFBF7;
+  --dim-on-deep: rgba(253, 251, 247, 0.78);
+  --hair-on-deep: rgba(253, 251, 247, 0.16);
 
-  /* ═══ section divider — subtle burgundy hairline ═══ */
+  /* ═══ section divider — subtle umber hairline ═══ */
   --section-divider: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(66, 21, 32, 0.08) 8%,
-    rgba(66, 21, 32, 0.22) 25%,
-    rgba(66, 21, 32, 0.40) 50%,
-    rgba(66, 21, 32, 0.22) 75%,
-    rgba(66, 21, 32, 0.08) 92%,
+    rgba(122, 59, 29, 0.08) 8%,
+    rgba(122, 59, 29, 0.22) 25%,
+    rgba(122, 59, 29, 0.40) 50%,
+    rgba(122, 59, 29, 0.22) 75%,
+    rgba(122, 59, 29, 0.08) 92%,
     transparent 100%
   );
 
-  /* ═══ house accents — rich burgundy spectrum ═══ */
-  --brass:      #421520;
-  --brass-lt:   #5A1D2C;
-  --brass-dk:   #2C0C14;
-  --copper:     #421520;
-  --copper-lt:  #5A1D2C;
-  --copper-dk:  #2C0C14;
+  /* ═══ house accents — rich umber spectrum ═══ */
+  --brass:      #7A3B1D;
+  --brass-lt:   #9C5530;
+  --brass-dk:   #4A2410;
+  --copper:     #7A3B1D;
+  --copper-lt:  #9C5530;
+  --copper-dk:  #4A2410;
 
   /* ═══ deep tones ═══ */
-  --walnut:     #2C0C14;
-  --walnut-dk:  #421520;
-  --oak:        #F7F7F7;
-  --oak-lt:     #FFFFFF;
+  --walnut:     #4A2410;
+  --walnut-dk:  #7A3B1D;
+  --oak:        #EFE7D6;
+  --oak-lt:     #FDFBF7;
 
-  /* ═══ accent — rich burgundy sweep ═══ */
+  /* ═══ accent — rich umber sweep ═══ */
   --metal: linear-gradient(100deg,
-    #421520 0%, #2C0C14 20%, #5A1D2C 40%, #421520 60%, #8C3247 80%, #421520 100%);
+    #7A3B1D 0%, #4A2410 20%, #9C5530 40%, #7A3B1D 60%, #C0824F 80%, #7A3B1D 100%);
   --metal-soft: linear-gradient(100deg,
-    rgba(66, 21, 32, .24), rgba(44, 12, 20, .20), rgba(90, 29, 44, .24));
+    rgba(122, 59, 29, .24), rgba(74, 36, 16, .20), rgba(156, 85, 48, .24));
 
   /* solid accents — contrast elements */
-  --tint:       #421520;   /* focus rings, active borders */
-  --tint-deep:  #421520;   /* vibrant burgundy accent type on light */
-  --tint-on-deep: #FFFFFF; /* cream accent type on dark burgundy */
+  --tint:       #7A3B1D;   /* focus rings, active borders */
+  --tint-deep:  #7A3B1D;   /* vibrant umber accent type on linen */
+  --tint-on-deep: #FDFBF7; /* linen accent type on deep umber */
 
-  /* alert — deep crimson burgundy */
-  --alert:      #781A28;
-  --alert-soft: rgba(120, 26, 40, 0.25);
+  /* alert — deep terracotta, kept distinct from the umber accent ramp */
+  --alert:      #B23A2E;
+  --alert-soft: rgba(178, 58, 46, 0.25);
 
   /* ═══ laid paper ═══ */
   --paper: none;
@@ -74,10 +74,10 @@
   /* paperlike texture for beige sections */
   --paper-beige:
     repeating-linear-gradient(0deg,
-      rgba(66, 21, 32, 0.008) 0px, rgba(66, 21, 32, 0.008) 1px,
+      rgba(122, 59, 29, 0.008) 0px, rgba(122, 59, 29, 0.008) 1px,
       transparent 1px, transparent 4px),
     repeating-linear-gradient(90deg,
-      rgba(66, 21, 32, 0.010) 0px, rgba(66, 21, 32, 0.010) 1px,
+      rgba(122, 59, 29, 0.010) 0px, rgba(122, 59, 29, 0.010) 1px,
       transparent 1px, transparent 58px);
 
   --paper-deep:
@@ -90,7 +90,7 @@
 
   /* neutral clean placeholder frames */
   --sheen: linear-gradient(160deg,
-    #FFFFFF 0%, #F7F7F7 50%, #E5E5E5 100%);
+    #FDFBF7 0%, #EFE7D6 50%, #E3D7BF 100%);
 
   --font-display: 'Cinzel', serif;
   --font-section: 'Cormorant Garamond', 'Cinzel', serif;
@@ -146,34 +146,34 @@
 
 /* ═══ DARK MODE (html.dark) ═══ */
 html.dark {
-  --white:      #2C0C14;
-  --offwhite:   #2C0C14;
-  --chrome:     #421520;
-  --chrome-2:   #471823;
-  --chrome-3:   #36111a;
-  --shadow-soft: rgba(66, 21, 32, 0.50);
+  --white:      #3D1E0D;
+  --offwhite:   #4A2410;
+  --chrome:     #4A2410;
+  --chrome-2:   #331808;
+  --chrome-3:   #2A1306;
+  --shadow-soft: rgba(0, 0, 0, 0.50);
 
-  --graphite:   #FFFFFF;
-  --graphite-2: #F7F7F7;
-  --dim:        rgba(255, 255, 255, 0.72);
-  --faint:      rgba(255, 255, 255, 0.28);
-  --hair:       rgba(255, 255, 255, 0.16);
-  --hair-strong: rgba(255, 255, 255, 0.30);
-  --nav-bg:     linear-gradient(135deg, rgba(66, 21, 32, 0.95) 0%, rgba(44, 12, 20, 0.88) 100%);
+  --graphite:   #F5EFE4;
+  --graphite-2: #EFE7D6;
+  --dim:        rgba(245, 239, 228, 0.72);
+  --faint:      rgba(245, 239, 228, 0.28);
+  --hair:       rgba(245, 239, 228, 0.16);
+  --hair-strong: rgba(245, 239, 228, 0.30);
+  --nav-bg:     linear-gradient(135deg, rgba(74, 36, 16, 0.95) 0%, rgba(61, 30, 13, 0.88) 100%);
 
-  --deep:       #421520;
-  --on-deep:    #FFFFFF;
-  --dim-on-deep: rgba(255, 255, 255, 0.72);
-  --hair-on-deep: rgba(255, 255, 255, 0.16);
+  --deep:       #2A1306;
+  --on-deep:    #F5EFE4;
+  --dim-on-deep: rgba(245, 239, 228, 0.72);
+  --hair-on-deep: rgba(245, 239, 228, 0.16);
 
-  --tint:       #FFFFFF;
-  --tint-deep:  #FFFFFF;
-  --tint-on-deep: #FFFFFF;
+  --tint:       #F5EFE4;
+  --tint-deep:  #F5EFE4;
+  --tint-on-deep: #F5EFE4;
 
   /* The accent ramp had no dark-mode form, so every rule reading --brass kept
-     painting #421520 on the burgundy ground — kickers, rating marks, small
+     painting #7A3B1D on the deep umber ground — kickers, rating marks, small
      caps labels and the masthead numeral all disappeared. These are warm
-     off-whites: they read as brass against burgundy without introducing a
+     off-whites: they read as brass against umber without introducing a
      saturated gold the palette does not contain. */
   --brass:      #EFE2D2;
   --brass-lt:   #FFFFFF;
@@ -198,17 +198,17 @@ html.dark {
       transparent 1px, transparent 58px);
 
   --lift-1:
-    0 2px 6px -2px rgba(66, 21, 32, 0.50),
-    0 14px 34px -14px rgba(66, 21, 32, 0.55);
+    0 2px 6px -2px rgba(0, 0, 0, 0.50),
+    0 14px 34px -14px rgba(0, 0, 0, 0.55);
   --lift-2:
-    0 4px 10px -4px rgba(66, 21, 32, 0.55),
-    0 30px 64px -26px rgba(66, 21, 32, 0.65);
+    0 4px 10px -4px rgba(0, 0, 0, 0.55),
+    0 30px 64px -26px rgba(0, 0, 0, 0.65);
   --lift-3:
-    0 4px 8px -4px rgba(66, 21, 32, 0.60),
-    0 26px 56px -24px rgba(66, 21, 32, 0.80);
+    0 4px 8px -4px rgba(0, 0, 0, 0.60),
+    0 26px 56px -24px rgba(0, 0, 0, 0.80);
   --lift-4:
-    0 6px 12px -6px rgba(66, 21, 32, 0.65),
-    0 48px 96px -40px rgba(66, 21, 32, 0.90);
+    0 6px 12px -6px rgba(0, 0, 0, 0.65),
+    0 48px 96px -40px rgba(0, 0, 0, 0.90);
 
   --edge-lit:   inset 0 1px 0 rgba(255, 255, 255, 0.12);
   --edge-hair:  inset 0 0 0 1px rgba(255, 255, 255, 0.16);

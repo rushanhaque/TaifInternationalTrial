@@ -27,21 +27,21 @@ import { reduced } from '../../lib/gsap'
 const SURFACES = {
   brass: {
     label: 'Unlacquered brass',
-    young: 'linear-gradient(135deg,#f4e3bd 0%,#5A1D2C 28%,#421520 62%,#2C0C14 100%)',
+    young: 'linear-gradient(135deg,#f4e3bd 0%,#9C5530 28%,#7A3B1D 62%,#4A2410 100%)',
     old: 'linear-gradient(135deg,#a8905e 0%,#8a6d3e 30%,#6b5228 64%,#4a3a1e 100%)',
     rate: 0.85,
     reads: ['Bright, day one', 'Warming', 'Umber', 'Deep umber'],
   },
   copper: {
     label: 'Copper',
-    young: 'linear-gradient(135deg,#f0b48a 0%,#5A1D2C 26%,#421520 64%,#2C0C14 100%)',
+    young: 'linear-gradient(135deg,#f0b48a 0%,#9C5530 26%,#7A3B1D 64%,#4A2410 100%)',
     old: 'linear-gradient(135deg,#8d6a4e 0%,#6f6a4a 34%,#4f6f5c 68%,#3d5f52 100%)',
     rate: 1,
     reads: ['Rose', 'Russet', 'Umber', 'Verdigris edge'],
   },
   sealed: {
     label: 'Sealed & lacquered',
-    young: 'linear-gradient(135deg,#f6e6c2 0%,#5A1D2C 30%,#5A1D2C 66%,#a8823f 100%)',
+    young: 'linear-gradient(135deg,#f6e6c2 0%,#9C5530 30%,#9C5530 66%,#a8823f 100%)',
     old: 'linear-gradient(135deg,#eddcb8 0%,#dcc086 30%,#c19a55 66%,#9e7a3a 100%)',
     rate: 0.18,
     reads: ['As shipped', 'As shipped', 'A shade softer', 'A shade softer'],

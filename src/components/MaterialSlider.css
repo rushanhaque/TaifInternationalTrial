@@ -209,7 +209,7 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  background: linear-gradient(to top, rgba(66, 21, 32, 0.88) 0%, transparent 55%);
+  background: linear-gradient(to top, rgba(122, 59, 29, 0.88) 0%, transparent 55%);
 }
 
 .t-title-xl-en {

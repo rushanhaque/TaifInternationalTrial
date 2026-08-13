@@ -88,7 +88,7 @@
 /* ---- the card ---- */
 .rq-card {
   position: relative;
-  background: var(--chrome);
+  background: var(--offwhite);
   border-radius: var(--r-lg);
   padding: clamp(1.6rem, 2.6vw, 2.2rem);
   box-shadow: var(--lift-4);

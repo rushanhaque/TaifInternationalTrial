@@ -94,6 +94,10 @@ export default function Home() {
       {/* 0.15 · THE VITRINE — nine collections on one screen */}
       <CollectionsMosaic />
 
+      <div className="vitrine-cta">
+        <Button to="/contact" variant="ghost" small>Begin a bespoke commission</Button>
+      </div>
+
       <div className="section-divider" />
 
       {/* 0.3 · wave ribbon */}
@@ -294,7 +298,7 @@ function ReviewsSection() {
     <section className="section alt fs-section bestsellers-section" id="reviews" style={{ paddingBlock: '4rem 3rem' }}>
       <div className="wrap">
         <div className="sec-head" style={{ marginBottom: '2.5rem' }}>
-          <CharCascade as="span" className="meta">Reviews and testimonials</CharCascade>
+          <CharCascade as="span" className="meta">What our clients say</CharCascade>
         </div>
 
         <CardsReveal className="home-reviews-grid" selector=":scope > .tm-card" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.8rem' }}>

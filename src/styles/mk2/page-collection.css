@@ -151,7 +151,7 @@ html.dark .pl-head-scrim {
   font-size: clamp(2.4rem, 5.6vw, 5.2rem);
   line-height: 1.08;
   letter-spacing: -0.02em;
-  /* was a literal #421520, which left the family masthead burgundy-on-burgundy
+  /* was a literal #7A3B1D, which left the family masthead burgundy-on-burgundy
      in dark mode — the title of every collection page was unreadable */
   color: var(--graphite);
   white-space: nowrap;
@@ -234,7 +234,7 @@ html.dark .pl-head-scrim {
   height: 100%;
   border-radius: 1.25rem;
   overflow: hidden;
-  background: #F4F0E8;
+  background: var(--offwhite);
   isolation: isolate;
   border: 1px solid rgba(0, 0, 0, 0.06);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
@@ -248,7 +248,7 @@ html.dark .pl-head-scrim {
 }
 
 html.dark .pl-card {
-  background: #2C0C14 !important;
+  background: #4A2410 !important;
   border-color: rgba(255, 255, 255, 0.12) !important;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4) !important;
 }
@@ -276,7 +276,7 @@ html.dark .pl-card:hover {
 }
 
 html.dark .pl-shot {
-  background: radial-gradient(120% 90% at 50% 18%, #2C0C14 0%, #1A090D 100%);
+  background: radial-gradient(120% 90% at 50% 18%, #4A2410 0%, #170D05 100%);
 }
 
 .pl-img {
@@ -333,8 +333,8 @@ html.dark .pl-ref-tag {
 }
 
 .pl-toggle-btn.is-in {
-  background: #421520 !important;
-  border-color: #421520 !important;
+  background: #7A3B1D !important;
+  border-color: #7A3B1D !important;
   color: #FFFFFF !important;
 }
 
@@ -392,7 +392,7 @@ html.dark .pl-mat {
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(90, 29, 44, 0.4) 50%,
+    rgba(156, 85, 48, 0.4) 50%,
     transparent 100%
   );
   transform: skewX(-20deg);
@@ -410,8 +410,8 @@ html.dark .pl-mat {
 
 /* Direct button hover state */
 .pl-add:hover {
-  background: #FFFFFF;
-  border-color: rgba(66, 21, 32, 0.75);
+  background: var(--offwhite);
+  border-color: rgba(122, 59, 29, 0.75);
   color: var(--tint-deep);
   transform: translateY(-2px) scale(1.04);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25),
@@ -496,9 +496,9 @@ html.dark .pl-mat {
   padding: 0.85rem 1.6rem;
   border-radius: var(--r-pill);
   background: rgba(255, 255, 255, 0.95);
-  border: 1px solid rgba(66, 21, 32, 0.18);
+  border: 1px solid rgba(122, 59, 29, 0.18);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
-  color: #421520;
+  color: #7A3B1D;
   font-family: var(--font-heading);
   font-size: clamp(0.9rem, 1.1vw, 1.05rem);
   font-weight: 600;
@@ -508,7 +508,7 @@ html.dark .pl-mat {
 
 .pl-family-pill-btn:hover {
   transform: translateY(-3px);
-  box-shadow: 0 10px 25px rgba(66, 21, 32, 0.25);
+  box-shadow: 0 10px 25px rgba(122, 59, 29, 0.25);
 }
 
 html.dark .pl-family-pill-btn {

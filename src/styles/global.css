@@ -32,7 +32,7 @@ body {
   font-family: var(--font-body);
   font-size: 1.0625rem;
   line-height: 1.62;
-  color: #421520;
+  color: #7A3B1D;
   background-color: var(--white);
   background-image: var(--paper);
   -webkit-font-smoothing: antialiased;
@@ -43,12 +43,12 @@ body {
 
 /* ── Dark Mode Text Contrast System ── */
 html.dark {
-  background-color: #1A090D !important;
+  background-color: #170D05 !important;
   color: #FFFFFF !important;
 }
 
 html.dark body {
-  background-color: #1A090D !important;
+  background-color: #170D05 !important;
   color: #FFFFFF !important;
 }
 
@@ -78,8 +78,8 @@ html.dark .light-card,
 html.dark .bg-light,
 html.dark .nav-dropdown-menu,
 html.dark .nav-dropdown-item {
-  color: #421520 !important;
-  -webkit-text-fill-color: #421520 !important;
+  color: #7A3B1D !important;
+  -webkit-text-fill-color: #7A3B1D !important;
 }
 
 img,
@@ -104,7 +104,7 @@ ol {
 }
 
 ::selection {
-  background: #5A1D2C;
+  background: #9C5530;
   color: var(--graphite);
 }
 
@@ -447,7 +447,7 @@ h4, h5, h6 {
 }
 
 .sec-head .meta {
-  color: #421520 !important;
+  color: #7A3B1D !important;
   opacity: 1 !important;
   white-space: normal;
   text-align: center;
@@ -462,7 +462,7 @@ h4, h5, h6 {
 }
 
 .deep .sec-head .meta {
-  color: #421520 !important;
+  color: #7A3B1D !important;
   opacity: 1 !important;
 }
 
@@ -520,7 +520,7 @@ h4, h5, h6 {
   inset: 0;
   z-index: 6;
   pointer-events: none;
-  background: #421520;
+  background: #7A3B1D;
   opacity: var(--stack-dim, 0);
 }
 
@@ -554,7 +554,7 @@ h4, h5, h6 {
   height: 5px;
   border-radius: 1px;
   opacity: 0;
-  background: linear-gradient(135deg, #5A1D2C, #421520);
+  background: linear-gradient(135deg, #9C5530, #7A3B1D);
   box-shadow: 0 0 6px rgba(0, 0, 0, 0.7);
   will-change: transform, opacity;
 }
@@ -735,7 +735,7 @@ h4, h5, h6 {
 }
 
 .btn.ghost .btn-chip {
-  background: rgba(66, 21, 32, 0.14);
+  background: rgba(122, 59, 29, 0.14);
 }
 
 .btn.ghost:hover .btn-chip {
@@ -748,7 +748,7 @@ h4, h5, h6 {
 }
 
 .deep .btn.primary .btn-chip {
-  background: rgba(66, 21, 32, 0.1);
+  background: rgba(122, 59, 29, 0.1);
 }
 
 
@@ -759,7 +759,7 @@ h4, h5, h6 {
 }
 
 .deep .btn.ghost .btn-chip {
-  background: rgba(90, 29, 44, 0.14);
+  background: rgba(156, 85, 48, 0.14);
 }
 
 /* ============ viscosity bar (E4) ============ */
@@ -783,7 +783,7 @@ h4, h5, h6 {
   width: 100%;
   transform-origin: 0 50%;
   transform: scaleX(0);
-  background: linear-gradient(90deg, #2C0C14, #421520 22%, #5A1D2C 44%, #5A1D2C 68%, #421520);
+  background: linear-gradient(90deg, #4A2410, #7A3B1D 22%, #9C5530 44%, #9C5530 68%, #7A3B1D);
   will-change: transform;
   border-radius: 0 var(--r-pill) var(--r-pill) 0;
 }
@@ -815,9 +815,9 @@ h4, h5, h6 {
   gap: 0.8rem;
   padding: 10px var(--gutter);
   border-radius: 0;
-  background: #F5F5F5 !important;
-  background-color: #F5F5F5 !important;
-  border-bottom: 1px solid rgba(66, 21, 32, 0.1);
+  background: var(--offwhite) !important;
+  background-color: var(--offwhite) !important;
+  border-bottom: 1px solid rgba(122, 59, 29, 0.1);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
   transition: 
     top 0.45s cubic-bezier(0.16, 1, 0.3, 1),
@@ -837,9 +837,9 @@ h4, h5, h6 {
   width: min(calc(100% - 2 * var(--gutter)), 1280px);
   padding: 8px 14px 8px 24px;
   border-radius: 9999px;
-  background: #F5F5F5 !important;
-  background-color: #F5F5F5 !important;
-  border: 1px solid rgba(66, 21, 32, 0.12);
+  background: var(--offwhite) !important;
+  background-color: var(--offwhite) !important;
+  border: 1px solid rgba(122, 59, 29, 0.12);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
 }
 
@@ -912,19 +912,19 @@ html.dark .nav.nav-hero {
 }
 
 html.dark .nav {
-  background: #1A090D !important;
-  background-color: #1A090D !important;
+  background: #170D05 !important;
+  background-color: #170D05 !important;
   border-color: rgba(255, 255, 255, 0.15) !important;
 }
 
 html.dark .nav.nav-scrolled {
-  background: #1A090D !important;
-  background-color: #1A090D !important;
+  background: #170D05 !important;
+  background-color: #170D05 !important;
   border-color: rgba(255, 255, 255, 0.25) !important;
   box-shadow: 0 16px 40px -8px rgba(0, 0, 0, 0.5) !important;
 }
 
-/* Header Text & Controls — Maroon #421520 on light, White #FFFFFF on dark */
+/* Header Text & Controls — Maroon #7A3B1D on light, White #FFFFFF on dark */
 .nav,
 .nav a,
 .nav .brand,
@@ -935,18 +935,18 @@ html.dark .nav.nav-scrolled {
 .nav .nl-in,
 .nav .burger,
 .theme-toggle-btn {
-  color: #421520 !important;
-  -webkit-text-fill-color: #421520 !important;
+  color: #7A3B1D !important;
+  -webkit-text-fill-color: #7A3B1D !important;
   opacity: 1 !important;
   text-shadow: none !important;
 }
 
 .theme-toggle-btn svg {
-  stroke: #421520 !important;
-  color: #421520 !important;
+  stroke: #7A3B1D !important;
+  color: #7A3B1D !important;
 }
 
-/* Dark mode: the bar is #1A090D, so the burgundy above lands at 1.25:1 — text
+/* Dark mode: the bar is #170D05, so the burgundy above lands at 1.25:1 — text
    that is technically painted and effectively invisible. Everything in the bar
    flips to white here (19.3:1).
 
@@ -1122,8 +1122,8 @@ html.dark .header-brand-img {
   left: 50%;
   transform: translateX(-50%) translateY(10px);
   width: 220px;
-  background: #FFFFFF;
-  border: 1px solid rgba(66, 21, 32, 0.12);
+  background: var(--offwhite);
+  border: 1px solid rgba(122, 59, 29, 0.12);
   border-radius: 14px;
   box-shadow: 0 12px 35px rgba(0, 0, 0, 0.1);
   padding: 0.5rem 0.35rem;
@@ -1157,14 +1157,14 @@ html.dark .header-brand-img {
   font-size: 0.78rem;
   letter-spacing: 0.06em;
   font-weight: 600;
-  color: #421520 !important;
-  -webkit-text-fill-color: #421520 !important;
+  color: #7A3B1D !important;
+  -webkit-text-fill-color: #7A3B1D !important;
   text-decoration: none;
   transition: background-color 0.2s ease, padding-left 0.2s ease;
 }
 
 .nav-dropdown-item:hover {
-  background-color: #F7F7F7;
+  background-color: var(--chrome-2);
   padding-left: 1.05rem;
 }
 
@@ -1342,64 +1342,93 @@ html.dark .header-brand-img {
   width: 130px;
   height: 130px;
   border-radius: 50%;
-  background: none, rgba(66, 21, 32, .12) 45%, transparent 70%);
+  background: none, rgba(122, 59, 29, .12) 45%, transparent 70%);
   filter: blur(8px);
   opacity: 0;
   pointer-events: none;
   transform: translate(-50%, -50%);
 }
 
-/* ============ preloader (E5) ============ */
+/* ============ preloader (E6 — the rising curtain) ============
+   A linen panel holding the full wordmark — TAIF INTERNATIONAL, one line,
+   one font, one size — with the tagline centred cleanly beneath it, then
+   lifting clean off the top of the viewport to unveil the page. A soft
+   shadow trails its departing edge so the lift reads with real depth
+   rather than a flat wipe. */
 .preload {
   position: fixed;
   inset: 0;
   z-index: 130;
-  background: var(--chrome);
-  display: grid;
-  place-items: center;
+  overflow: hidden;
+  background: var(--white);
+  background-image: var(--paper-beige);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: clamp(0.9rem, 2.2vw, 1.4rem);
 }
 
-.pre-stack {
-  position: relative;
-  width: 320px;
-  height: 320px;
-  display: grid;
-  place-items: center;
+.preload::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -48px;
+  height: 48px;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.18), transparent);
+  pointer-events: none;
 }
 
-.pre-stack svg {
+.preload-glow {
   position: absolute;
   inset: 0;
-}
-
-.pre-stack circle {
-  fill: var(--graphite);
-}
-
-.pre-pill {
-  position: absolute;
-  inset: 0;
-  margin: auto;
-  height: 54px;
-  width: 54px;
-  border-radius: var(--r-pill);
-  background: var(--sheen);
+  background: radial-gradient(ellipse 60% 50% at 50% 46%, rgba(122, 59, 29, 0.12), transparent 68%);
   opacity: 0;
-  box-shadow: var(--lift-3);
+  pointer-events: none;
 }
 
-.pre-word {
+/* one line, one font, one size — TAIF and INTERNATIONAL read as a single
+   wordmark rather than a mark-plus-suffix lockup */
+.preload-word {
   position: relative;
   z-index: 1;
+  margin: 0;
+  max-width: min(90vw, 640px);
   font-family: var(--font-display);
   font-stretch: 125%;
   font-weight: 700;
-  font-size: clamp(2.2rem, 6vw, 3.4rem);
-  letter-spacing: -0.04em;
+  font-size: clamp(1.3rem, 4.6vw, 2.5rem);
+  letter-spacing: 0.02em;
+  line-height: 1.15;
+  background: var(--metal);
+  -webkit-background-clip: text;
+  background-clip: text;
   color: var(--graphite);
   opacity: 0;
-  filter: blur(10px);
-  white-space: nowrap;
+}
+
+.preload-rule {
+  position: relative;
+  z-index: 1;
+  width: min(200px, 40vw);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--brass-lt), var(--brass), transparent);
+  transform: scaleX(0);
+}
+
+.preload-tag {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  font-family: var(--font-accent);
+  font-size: 0.72rem;
+  letter-spacing: 0.38em;
+  text-indent: 0.38em;
+  text-transform: uppercase;
+  color: var(--dim);
+  opacity: 0;
 }
 
 /* ============ page transition — vertical strips ============
@@ -1508,11 +1537,11 @@ html.dark .header-brand-img {
   position: fixed;
   inset: 0;
   z-index: 4000;
-  background: linear-gradient(100deg, rgba(252, 251, 248, 0.72) 0%, rgba(90, 29, 44, 0.35) 100%); /* chrome fading into transparent copper-lt */
+  background: linear-gradient(100deg, rgba(252, 251, 248, 0.72) 0%, rgba(156, 85, 48, 0.35) 100%); /* chrome fading into transparent copper-lt */
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
-  border-right: 1px solid rgba(66, 21, 32, 0.15); /* copper-tinted edge */
-  border-left: 1px solid rgba(66, 21, 32, 0.15);
+  border-right: 1px solid rgba(122, 59, 29, 0.15); /* copper-tinted edge */
+  border-left: 1px solid rgba(122, 59, 29, 0.15);
   box-shadow: 0 0 40px rgba(0, 0, 0, 0.08); /* soft warm shadow */
   pointer-events: none;
   visibility: hidden;
@@ -1571,7 +1600,7 @@ html.dark .header-brand-img {
   z-index: 1;
   pointer-events: none;
   background:
-    linear-gradient(180deg, rgba(66, 21, 32, 0.06), rgba(66, 21, 32, 0.34)),
+    linear-gradient(180deg, rgba(122, 59, 29, 0.06), rgba(122, 59, 29, 0.34)),
     var(--tone-bg, transparent);
   mix-blend-mode: multiply;
   opacity: 0.5;
@@ -1602,17 +1631,17 @@ html.dark .header-brand-img {
    are kept as aliases so catalogue data can migrate at its own pace. */
 .tone-brass,
 .tone-mirror {
-  --tone-bg: linear-gradient(160deg, #FFFFFF 0%, #5A1D2C 20%, #FFFFFF 38%, #421520 60%, #F7F7F7 78%, #2C0C14 100%);
+  --tone-bg: linear-gradient(160deg, #FFFFFF 0%, #9C5530 20%, #FFFFFF 38%, #7A3B1D 60%, #F7F7F7 78%, #4A2410 100%);
 }
 
 .tone-antique,
 .tone-pewter {
-  --tone-bg: linear-gradient(160deg, #F7F7F7, #421520 38%, #F7F7F7 58%, #2C0C14 100%);
+  --tone-bg: linear-gradient(160deg, #F7F7F7, #7A3B1D 38%, #F7F7F7 58%, #4A2410 100%);
 }
 
 .tone-copper,
 .tone-steel {
-  --tone-bg: linear-gradient(160deg, #f9e8d8, #421520 34%, #f2d6bb 56%, #2C0C14 100%);
+  --tone-bg: linear-gradient(160deg, #f9e8d8, #7A3B1D 34%, #f2d6bb 56%, #4A2410 100%);
 }
 
 .tone-wood,
@@ -1622,14 +1651,14 @@ html.dark .header-brand-img {
 
 .tone-walnut,
 .tone-graphite {
-  --tone-bg: linear-gradient(160deg, #3a3936, #421520 42%, #4a4a48 70%, #2a2927 100%);
+  --tone-bg: linear-gradient(160deg, #3a3936, #7A3B1D 42%, #4a4a48 70%, #2a2927 100%);
   --tone-ink: var(--on-deep);
   --tone-dim: var(--dim-on-deep);
 }
 
 .tone-inlay,
 .tone-iris {
-  --tone-bg: linear-gradient(140deg, #FFFFFF 0%, #5A1D2C 24%, #421520 48%, #421520 70%, #5A1D2C 100%);
+  --tone-bg: linear-gradient(140deg, #FFFFFF 0%, #9C5530 24%, #7A3B1D 48%, #7A3B1D 70%, #9C5530 100%);
 }
 
 .slab-sheen {
@@ -1700,7 +1729,7 @@ html.dark .header-brand-img {
   top: 14px;
   left: 14px;
   z-index: 2;
-  background: linear-gradient(140deg, #5A1D2C, #421520);
+  background: linear-gradient(140deg, #9C5530, #7A3B1D);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.30);
   pointer-events: none;
   will-change: transform;
@@ -1740,7 +1769,7 @@ html.dark .header-brand-img {
   border-radius: var(--r-md);
   opacity: 0;
   pointer-events: none;
-  background: linear-gradient(100deg, rgba(66, 21, 32, .08), rgba(66, 21, 32, .10), rgba(90, 29, 44, .12));
+  background: linear-gradient(100deg, rgba(122, 59, 29, .08), rgba(122, 59, 29, .10), rgba(156, 85, 48, .12));
   will-change: transform, width;
 }
 
@@ -2116,7 +2145,7 @@ html.dark .header-brand-img {
   inset: 0;
   transform-origin: 50% 0;
   transform: scaleY(0);
-  background: linear-gradient(175deg, #2C0C14, #421520 26%, #421520 52%, #5A1D2C 78%, #5A1D2C);
+  background: linear-gradient(175deg, #4A2410, #7A3B1D 26%, #7A3B1D 52%, #9C5530 78%, #9C5530);
   will-change: transform;
 }
 
@@ -2140,7 +2169,7 @@ html.dark .header-brand-img {
 
 .step-row.passed .step-node {
   border-color: var(--copper);
-  background: #FFFFFF;
+  background: var(--offwhite);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
 }
 
@@ -2210,7 +2239,12 @@ html.dark .header-brand-img {
    `padding-bottom: 0 !important`, so the 2rem the mobile block tries to give
    it never applied and the last row sat hard against the bottom of the page. */
 .footer {
-  background: #1A090D !important;
+  /* the footer is a fixed plate, independent of light/dark mode (like the
+     white text below), so it takes a literal ink hex rather than
+     var(--graphite) — that token flips to cream in dark mode. Deeper than
+     the text ink itself, same umber family, so the footer reads as the
+     darkest plate on the page. */
+  background: #4A2410 !important;
   color: #FFFFFF !important;
   padding-top: clamp(4rem, 8vw, 7rem);
   padding-bottom: clamp(3rem, 6vw, 4.5rem);
@@ -2472,7 +2506,7 @@ html.dark .header-brand-img {
   width: 0;
   height: 2px;
   border-radius: var(--r-pill);
-  background: linear-gradient(90deg, #5A1D2C, var(--brass));
+  background: linear-gradient(90deg, #9C5530, var(--brass));
   margin-right: 0;
   opacity: 0;
   transition: width .38s var(--ease-surge), margin-right .38s var(--ease-surge), opacity .25s;
@@ -2506,74 +2540,87 @@ a.social-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 42px;
+  height: 42px;
   border-radius: 12px;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.7);
   isolation: isolate;
-  /* the tile itself moves on a long, settled curve — the lift is what makes
-     the thing feel like an object rather than a rectangle changing colour */
   transition:
-    transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
-    border-color 0.45s ease,
-    box-shadow 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+    transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.4s ease,
+    background 0.4s ease,
+    color 0.35s ease,
+    box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* the brass flood */
+/* warm glow fill on hover */
 .social-icon::before {
   content: '';
   position: absolute;
   inset: 0;
   z-index: 0;
   border-radius: inherit;
-  /* literal brass, not var(--brass): that token is #421520 burgundy in light
-     mode and cream in dark — an accent ramp, despite the name — so using it
-     here put a burgundy band through the middle of the gradient */
-  background: linear-gradient(160deg, #D8B071 0%, #B0894F 55%, #8A6733 100%);
-  transform: translateY(101%);
-  transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+  background: radial-gradient(
+    circle at 50% 110%,
+    rgba(200, 160, 90, 0.35) 0%,
+    rgba(176, 137, 79, 0.12) 50%,
+    transparent 80%
+  );
+  opacity: 0;
+  transform: scale(0.8);
+  transition:
+    opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   pointer-events: none;
 }
 
-/* the specular sweep — a single pass of light across the brass once it has
-   landed, which is the detail that reads as polished metal rather than a
-   coloured swatch. Delayed so it travels over the fill, not with it. */
+/* specular shimmer sweep */
 .social-icon::after {
   content: '';
   position: absolute;
-  inset: 0;
+  inset: -2px;
   z-index: 2;
   border-radius: inherit;
   pointer-events: none;
-  background: linear-gradient(100deg,
-      rgba(255, 255, 255, 0) 38%,
-      rgba(255, 255, 255, 0.42) 50%,
-      rgba(255, 255, 255, 0) 62%);
-  transform: translateX(-130%);
+  background: linear-gradient(105deg,
+      rgba(255, 255, 255, 0) 35%,
+      rgba(255, 255, 255, 0.18) 48%,
+      rgba(255, 255, 255, 0.35) 50%,
+      rgba(255, 255, 255, 0.18) 52%,
+      rgba(255, 255, 255, 0) 65%);
+  transform: translateX(-160%);
   opacity: 0;
-  transition: transform 0.75s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s ease;
+  transition:
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.25s ease;
 }
 
 .social-icon:hover,
 .social-icon:focus-visible {
-  transform: translateY(-3px);
-  border-color: #B0894F;
+  transform: translateY(-3px) scale(1.08);
+  background: rgba(255, 255, 255, 0.10);
+  border-color: rgba(216, 176, 113, 0.55);
+  color: #FFFFFF;
   box-shadow:
-    0 12px 26px -12px rgba(0, 0, 0, 0.75),
-    0 3px 10px -4px rgba(176, 137, 79, 0.45);
+    0 0 0 1px rgba(216, 176, 113, 0.15),
+    0 4px 16px -4px rgba(176, 137, 79, 0.35),
+    0 16px 32px -12px rgba(0, 0, 0, 0.50);
 }
 
 .social-icon:hover::before,
-.social-icon:focus-visible::before { transform: translateY(0); }
+.social-icon:focus-visible::before {
+  opacity: 1;
+  transform: scale(1);
+}
 
 .social-icon:hover::after,
 .social-icon:focus-visible::after {
-  transform: translateX(130%);
+  transform: translateX(160%);
   opacity: 1;
-  transition-delay: 0.18s, 0.18s;
+  transition-delay: 0.12s, 0.12s;
 }
 
 .si-roll {
@@ -2592,12 +2639,10 @@ a.social-icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* the arriving glyph is ink, so it reads against the brass it lands on
-   (5.3:1 against #b0894f) rather than white-on-brass */
-.si-in { transform: translateY(105%); color: #2A1A08; }
+.si-in { transform: translateY(105%); color: #FFFFFF; }
 
 .social-icon:hover .si-up,
 .social-icon:focus-visible .si-up { transform: translateY(-105%); }
@@ -2605,21 +2650,18 @@ a.social-icon {
 .social-icon:hover .si-in,
 .social-icon:focus-visible .si-in { transform: translateY(0); }
 
-/* Motion off: no roll, no wipe, no lift and no sheen — but the state must
-   still be obvious, so the tile simply becomes brass and the single glyph
-   turns to ink. */
 @media (prefers-reduced-motion: reduce) {
   .si-up, .si-in, .social-icon::before { transition: none; }
   .si-in { display: none; }
   .social-icon::after { display: none; }
   .social-icon:hover .si-up,
   .social-icon:focus-visible .si-up { transform: none; }
-  .social-icon:hover .si-up { color: #2A1A08; }
-  .social-icon::before { transform: translateY(101%); }
+  .social-icon:hover .si-up { color: #FFFFFF; }
+  .social-icon::before { opacity: 0; }
   .social-icon:hover,
   .social-icon:focus-visible { transform: none; box-shadow: none; }
   .social-icon:hover::before,
-  .social-icon:focus-visible::before { transform: translateY(0); }
+  .social-icon:focus-visible::before { opacity: 1; transform: scale(1); }
 }
 
 .foot-grid a:not(.social-icon):hover::before {
@@ -2733,7 +2775,7 @@ a.social-icon {
   position: fixed;
   inset: -10vh -10vw;
   z-index: 99999;
-  background-color: #FFFFFF;
+  background-color: var(--white);
   pointer-events: none;
   opacity: 0;
   visibility: hidden;
@@ -2795,7 +2837,7 @@ a.social-icon {
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: #FFFFFF !important;
-  background: #421520 !important;
+  background: #7A3B1D !important;
   border: 1px solid rgba(255, 255, 255, 0.25) !important;
   border-radius: var(--r-pill, 999px);
   text-decoration: none;
@@ -2850,8 +2892,8 @@ a.social-icon {
 .pl-card .pl-say,
 .pl-card .pl-name,
 .pl-card .pl-mat {
-  color: #421520 !important;
-  -webkit-text-fill-color: #421520 !important;
+  color: #7A3B1D !important;
+  -webkit-text-fill-color: #7A3B1D !important;
   text-shadow: none !important;
 }
 
@@ -2879,7 +2921,7 @@ html.dark .czoom-schedule-btn,
 html.dark .big-connect-btn,
 html.dark .btn.primary,
 html.dark .btn:not(.ghost) {
-  background: #421520 !important;
+  background: #7A3B1D !important;
   color: #FFFFFF !important;
   border: 1px solid rgba(255, 255, 255, 0.3) !important;
 }
@@ -2944,7 +2986,7 @@ html.dark .btn.ghost * {
 }
 
 ::view-transition {
-  background: #421520;
+  background: #7A3B1D;
 }
 
 /* ==========================================================================

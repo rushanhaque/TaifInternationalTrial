@@ -33,7 +33,7 @@
   aspect-ratio: 4 / 5;
   border-radius: clamp(10px, 1.2vw, 16px);
   overflow: hidden;
-  background: var(--graphite, #421520);
+  background: var(--graphite, #7A3B1D);
   isolation: isolate;
 }
 

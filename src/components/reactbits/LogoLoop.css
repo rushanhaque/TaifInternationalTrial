@@ -18,7 +18,7 @@
 
 @media (prefers-color-scheme: dark) {
   .logoloop {
-    --logoloop-fadeColorAuto: #421520;
+    --logoloop-fadeColorAuto: #7A3B1D;
   }
 }
 
@@ -133,14 +133,14 @@
   left: 0;
   background: linear-gradient(to right,
       var(--logoloop-fadeColor, var(--logoloop-fadeColorAuto)) 0%,
-      rgba(66, 21, 32, 0) 100%);
+      rgba(122, 59, 29, 0) 100%);
 }
 
 .logoloop--fade::after {
   right: 0;
   background: linear-gradient(to left,
       var(--logoloop-fadeColor, var(--logoloop-fadeColorAuto)) 0%,
-      rgba(66, 21, 32, 0) 100%);
+      rgba(122, 59, 29, 0) 100%);
 }
 
 .logoloop--vertical.logoloop--fade::before,
@@ -156,7 +156,7 @@
   bottom: auto;
   background: linear-gradient(to bottom,
       var(--logoloop-fadeColor, var(--logoloop-fadeColorAuto)) 0%,
-      rgba(66, 21, 32, 0) 100%);
+      rgba(122, 59, 29, 0) 100%);
 }
 
 .logoloop--vertical.logoloop--fade::after {
@@ -164,7 +164,7 @@
   top: auto;
   background: linear-gradient(to top,
       var(--logoloop-fadeColor, var(--logoloop-fadeColorAuto)) 0%,
-      rgba(66, 21, 32, 0) 100%);
+      rgba(122, 59, 29, 0) 100%);
 }
 
 @media (prefers-reduced-motion: reduce) {

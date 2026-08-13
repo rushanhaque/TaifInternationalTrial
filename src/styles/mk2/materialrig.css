@@ -132,7 +132,7 @@
 /* the lit row's bars gain the specular sweep */
 .rig-row.is-lit .rig-fill {
   background: linear-gradient(90deg,
-    #2C0C14 0%, #421520 22%, #5A1D2C 44%, #5A1D2C 62%, #421520 82%, #5A1D2C 100%);
+    #4A2410 0%, #7A3B1D 22%, #9C5530 44%, #9C5530 62%, #7A3B1D 82%, #9C5530 100%);
   box-shadow: var(--glow-brass);
 }
 

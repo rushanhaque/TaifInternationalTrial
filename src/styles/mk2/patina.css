@@ -60,7 +60,7 @@
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  background: radial-gradient(circle at 36% 32%, #fffaf0, #5A1D2C 34%, var(--brass) 68%, var(--brass-dk));
+  background: radial-gradient(circle at 36% 32%, #fffaf0, #9C5530 34%, var(--brass) 68%, var(--brass-dk));
   box-shadow: var(--lift-2), inset 0 0 0 1px rgba(0, 0, 0, 0.25);
   cursor: grab;
   transition: transform var(--t-base) var(--ease-surge);
@@ -73,7 +73,7 @@
   height: 30px;
   border: 0;
   border-radius: 50%;
-  background: radial-gradient(circle at 36% 32%, #fffaf0, #5A1D2C 34%, var(--brass) 68%, var(--brass-dk));
+  background: radial-gradient(circle at 36% 32%, #fffaf0, #9C5530 34%, var(--brass) 68%, var(--brass-dk));
   box-shadow: var(--lift-2);
   cursor: grab;
 }

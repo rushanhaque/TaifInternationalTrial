@@ -7,8 +7,8 @@
   letter-spacing: 0.02em;
   border-radius: var(--r-pill, 999px);
   cursor: pointer;
-  border: 1px solid var(--copper, #421520);
-  background: #421520;
+  border: 1px solid var(--copper, #7A3B1D);
+  background: #7A3B1D;
   color: #FFFFFF !important;
   overflow: hidden;
   height: 32px;
@@ -29,7 +29,7 @@
   align-items: center;
   justify-content: center;
   padding: 0 1.1em;
-  color: #421520;
+  color: #7A3B1D;
 }
 
 .cssbuttons-io::before,
@@ -52,8 +52,8 @@
 }
 
 .cssbuttons-io:hover {
-  background: #5C1F2E !important;
-  border-color: #5C1F2E !important;
+  background: #7A3B1D !important;
+  border-color: #7A3B1D !important;
 }
 
 .cssbuttons-io:hover::before {

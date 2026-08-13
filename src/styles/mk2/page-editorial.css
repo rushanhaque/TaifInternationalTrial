@@ -2,7 +2,7 @@
    EDITORIAL PAGES — Shows · Testimonials · Care
 
    These three pages were built with inline styles and literal hex values
-   (#FFFFFF grounds, #421520 type, a stray #9C7A44 gold that exists nowhere
+   (#FFFFFF grounds, #7A3B1D type, a stray #9C7A44 gold that exists nowhere
    in the palette). The result: they ignored the design system, and /shows
    was unreadable in dark mode — a white page painted over a near-black body.
 
@@ -317,9 +317,9 @@
   gap: 1.5rem;
   padding: clamp(1.6rem, 3vw, 2rem);
   border-radius: var(--r-md);
-  background: #FFFFFF !important;
-  background-color: #FFFFFF !important;
-  border: 1px solid rgba(66, 21, 32, 0.1);
+  background: var(--offwhite) !important;
+  background-color: var(--offwhite) !important;
+  border: 1px solid rgba(122, 59, 29, 0.1);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
 }
 

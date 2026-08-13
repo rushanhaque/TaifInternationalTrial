@@ -39,7 +39,7 @@
   border-radius: var(--r-pill);
   pointer-events: none;
   background:
-    none 0%, rgba(66, 21, 32, 0.10) 42%, transparent 72%);
+    none 0%, rgba(122, 59, 29, 0.10) 42%, transparent 72%);
   opacity: 0;
   transform: scale(0.82);
   transition:
@@ -210,15 +210,15 @@
 
 /* ── tones ── */
 .leak-brass {
-  --leak-core: rgba(90, 29, 44, 0.44);
-  --leak-mid:  rgba(66, 21, 32, 0.21);
+  --leak-core: rgba(156, 85, 48, 0.44);
+  --leak-mid:  rgba(122, 59, 29, 0.21);
   --leak-edge: rgba(240, 222, 180, 0.22);
   opacity: 0.92;
 }
 
 .leak-copper {
   --leak-core: rgba(224, 162, 117, 0.42);
-  --leak-mid:  rgba(66, 21, 32, 0.22);
+  --leak-mid:  rgba(122, 59, 29, 0.22);
   --leak-edge: rgba(240, 200, 162, 0.19);
   opacity: 0.92;
 }

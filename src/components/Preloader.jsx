@@ -3,24 +3,23 @@ import { gsap, ScrollTrigger, reduced } from '../lib/gsap'
 import { getLenis } from '../lib/useLenis'
 import { BRAND } from '../data/site'
 
-/* E5 Coalesce — five beads of metal slide to centre, merge through the goo
-   filter, stretch into the wordmark's box and resolve as the letters snap
-   sharp. No counting number, no accent sweep, no split. ~2.2s. */
-const SPOTS = [
-  [46, 84], [274, 62], [62, 252], [252, 240], [160, 36],
-]
-
+/* E6 The Rising Curtain — a linen panel holding the wordmark, one line, one
+   size, one font, and the tagline centred cleanly beneath it. It settles,
+   holds, then lifts clean off the top of the viewport to unveil the page —
+   the hero wordmark already timed to start its own pour right as the
+   curtain departs (see HeroBrand's introDelay). ~2.3s, one held breath then
+   gone. */
 export default function Preloader() {
   const [gone, setGone] = useState(reduced())
   const root = useRef(null)
-  const pillEl = useRef(null)
   const word = useRef(null)
-  const circles = useRef([])
+  const rule = useRef(null)
+  const tag = useRef(null)
+  const glow = useRef(null)
 
   useEffect(() => {
     if (reduced()) return
     getLenis()?.stop()
-    const wordW = word.current.offsetWidth + 48
     const tl = gsap.timeline({
       onComplete() {
         setGone(true)
@@ -28,41 +27,28 @@ export default function Preloader() {
         ScrollTrigger.refresh()
       },
     })
-    tl.to(circles.current, {
-      attr: { cx: 160, cy: 160 },
-      duration: 0.95, ease: 'viscous', stagger: 0.06,
-    })
-      .to(circles.current, { attr: { r: 26 }, duration: 0.4, ease: 'surge' }, '-=0.3')
-      .to(pillEl.current, { opacity: 1, duration: 0.18 }, '-=0.1')
-      .to(circles.current, { opacity: 0, duration: 0.2 }, '<')
-      .to(pillEl.current, { width: wordW, duration: 0.5, ease: 'surge' }, '<')
-      .to(word.current, { opacity: 1, filter: 'blur(0px)', duration: 0.45, ease: 'fluid' }, '-=0.25')
-      .to(pillEl.current, { opacity: 0, duration: 0.35 }, '-=0.1')
-      .to(root.current, { opacity: 0, duration: 0.45, ease: 'fluid' }, '+=0.25')
+    tl.fromTo(glow.current, { opacity: 0 }, { opacity: 1, duration: 1.1, ease: 'fluid' }, 0)
+      .fromTo(word.current,
+        { y: 22, opacity: 0, letterSpacing: '0.02em' },
+        { y: 0, opacity: 1, letterSpacing: '0.12em', duration: 0.85, ease: 'power3.out' }, 0.12)
+      .fromTo(rule.current, { scaleX: 0 }, { scaleX: 1, duration: 0.55, ease: 'surge' }, 0.68)
+      .fromTo(tag.current,
+        { y: 14, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.6, ease: 'power3.out' }, 0.82)
+      // a held breath, then everything settles half a step before the lift
+      .to([word.current, rule.current, tag.current, glow.current],
+        { scale: 0.98, opacity: (i) => (i === 3 ? 0 : 0.82), duration: 0.35, ease: 'fluid' }, 1.38)
+      .to(root.current, { yPercent: -100, duration: 0.92, ease: 'viscous' }, 1.48)
     return () => tl.kill()
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   if (gone) return null
   return (
     <div className="preload" ref={root} aria-hidden="true">
-      <div className="pre-stack">
-        <svg width="320" height="320">
-          <defs>
-            <filter id="goo-pre">
-              <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="b" />
-              <feColorMatrix in="b" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -10" result="g" />
-              <feComposite in="SourceGraphic" in2="g" operator="atop" />
-            </filter>
-          </defs>
-          <g filter="url(#goo-pre)">
-            {SPOTS.map((s, i) => (
-              <circle key={i} ref={(el) => (circles.current[i] = el)} cx={s[0]} cy={s[1]} r={i === 4 ? 10 : 14} />
-            ))}
-          </g>
-        </svg>
-        <div className="pre-pill" ref={pillEl} />
-        <div className="pre-word" ref={word}>{BRAND.mark}</div>
-      </div>
+      <div className="preload-glow" ref={glow} />
+      <p className="preload-word" ref={word}>{BRAND.mark} {BRAND.suffix}</p>
+      <span className="preload-rule" ref={rule} />
+      <p className="preload-tag" ref={tag}>{BRAND.line}</p>
     </div>
   )
 }

@@ -292,9 +292,9 @@
 /* ── the closing band ─────────────────────────────────────────────────── */
 .cw-close {
   position: relative;
-  background: var(--deep);
-  background-image: var(--paper-deep);
-  color: var(--on-deep);
+  background: var(--offwhite);
+  background-image: var(--paper-beige);
+  color: var(--graphite);
   padding-block: clamp(3.4rem, 7vw, 6.5rem);
   overflow: hidden;
 }
@@ -313,12 +313,12 @@
 
 .cw-close h2 {
   margin: 0;
-  color: var(--on-deep);
+  color: var(--graphite);
 }
 
 .cw-close p {
   margin: 0 auto;
-  color: var(--dim-on-deep);
+  color: var(--dim);
   font-family: var(--font-body);
   font-weight: 350;
   line-height: 1.62;

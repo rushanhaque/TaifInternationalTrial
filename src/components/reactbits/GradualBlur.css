@@ -15,7 +15,7 @@
 
 @supports not (backdrop-filter: blur(1px)) {
   .gradual-blur-inner > div {
-    background: rgba(66, 21, 32, 0.3);
+    background: rgba(122, 59, 29, 0.3);
     opacity: 0.5;
   }
 }

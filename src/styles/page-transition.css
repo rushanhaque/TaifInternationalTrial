@@ -49,7 +49,7 @@
      old #4E1A27 top stop had a warm brownish-gold cast that read as an
      off-brand colour rather than the house burgundy used everywhere else */
   background:
-    linear-gradient(180deg, var(--graphite-2, #5A1D2C) 0%, var(--graphite, #421520) 42%, var(--walnut, #2C0C14) 100%);
+    linear-gradient(180deg, var(--graphite-2, #9C5530) 0%, var(--graphite, #7A3B1D) 42%, var(--walnut, #4A2410) 100%);
   will-change: transform;
   backface-visibility: hidden;
 }
@@ -58,7 +58,7 @@
    face is cut by a clip-path, and only a filter follows the CLIPPED
    silhouette. A border would be cut off with everything else.
    Cream, not brass: the site's accent spectrum (--brass, --copper, --tint)
-   all resolve to the same maroon (#421520) as the panel itself in this
+   all resolve to the same maroon (#7A3B1D) as the panel itself in this
    rebrand, so a maroon hairline on a maroon panel would vanish. Cream is
    this panel's --on-deep — the same role white/cream plays against every
    other dark-maroon surface on the site (the footer, the nav's deep state). */
@@ -102,7 +102,7 @@
   /* house maroon, not cream — cream was tuned for the dark panel gradient
      above and read as barely-there on the light ground the plate actually
      appears over */
-  color: rgba(66, 21, 32, 0.72);
+  color: rgba(122, 59, 29, 0.72);
 }
 
 .mitre__name {
@@ -111,14 +111,14 @@
   font-size: clamp(1.5rem, 4.2vw, 2.9rem);
   line-height: 1;
   letter-spacing: -0.02em;
-  color: var(--graphite, #421520);
+  color: var(--graphite, #7A3B1D);
 }
 
 .mitre__keyline {
   width: clamp(34px, 5vw, 62px);
   height: 1px;
   background: linear-gradient(90deg,
-    rgba(66, 21, 32, 0), rgba(66, 21, 32, 0.7), rgba(66, 21, 32, 0));
+    rgba(122, 59, 29, 0), rgba(122, 59, 29, 0.7), rgba(122, 59, 29, 0));
 }
 
 /* On a phone the joint is proportionally much steeper (the same 10vh cut

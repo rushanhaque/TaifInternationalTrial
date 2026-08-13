@@ -16,8 +16,8 @@
      border and lift rather than through a colour change */
   padding-top: clamp(1rem, 2.2vh, 2rem) !important;
   padding-bottom: clamp(1rem, 2.2vh, 2rem) !important;
-  background-color: #FFFFFF !important;
-  color: var(--graphite, #421520) !important;
+  background-color: var(--white) !important;
+  color: var(--graphite, #7A3B1D) !important;
   /* Diameter of the vessel circle. Shrunk slightly to accommodate the detailed info cards on desktop. */
   --form: clamp(320px, min(38vw, 60svh), 560px);
   /* The strips are wider than the form so a horizontal sweep never uncovers
@@ -37,15 +37,15 @@
   margin-inline: auto;
   padding-bottom: clamp(3rem, 6vh, 6rem);
   border-radius: clamp(18px, 2vw, 30px);
-  background-color: var(--offwhite, #FDFCFA);
-  border: 1px solid rgba(66, 21, 32, 0.12);
+  background-color: var(--white);
+  border: 1px solid rgba(122, 59, 29, 0.12);
   box-shadow: 0 18px 50px rgba(0, 0, 0, 0.08);
   /* the pinned stage lives inside, so this must not clip or scroll-trap */
   overflow: visible;
 }
 
 html.dark .tt-card {
-  background-color: var(--offwhite, #2C0C14);
+  background-color: var(--white, #4A2410);
   border-color: rgba(255, 255, 255, 0.16);
   box-shadow: 0 24px 70px rgba(0, 0, 0, 0.42);
 }
@@ -63,7 +63,7 @@ html.dark .tt-card {
 }
 
 .tt .tt-note-tag {
-  background: #421520 !important;
+  background: #7A3B1D !important;
   color: #FFF6E0 !important;
   -webkit-text-fill-color: #FFF6E0 !important;
   padding: 0.4rem 1.1rem !important;
@@ -72,7 +72,7 @@ html.dark .tt-card {
 }
 
 /* The ink above is forced with !important and was left unscoped, so it also
-   applied in dark mode — where home.css drops this section onto a #1A090D
+   applied in dark mode — where home.css drops this section onto a #170D05
    ground. The whole Turn (headings, captions, the metal and wood spec lists)
    was rendering near-black on near-black. Reasserted for the dark ground at
    matching specificity. */
@@ -307,7 +307,7 @@ html.dark .tt .ed-spec-label {
 .tt-skin.is-brass .tt-base {
   background:
     radial-gradient(142% 120% at 30% 13%,
-      #fff4da 0%, #f1d9a8 8%, #d7b073 20%, #421520 38%,
+      #fff4da 0%, #f1d9a8 8%, #d7b073 20%, #7A3B1D 38%,
       #94703a 54%, #6b4e26 72%, #3f2d12 90%, #241804 100%);
 }
 
@@ -335,7 +335,7 @@ html.dark .tt .ed-spec-label {
     rgba(255, 255, 255, 0) 0%,
     rgba(255, 246, 218, 0.34) 0.42%,
     rgba(255, 255, 255, 0) 0.9%,
-    rgba(66, 21, 32, 0.24) 1.28%,
+    rgba(122, 59, 29, 0.24) 1.28%,
     rgba(255, 255, 255, 0) 1.75%);
 }
 
@@ -349,7 +349,7 @@ html.dark .tt .ed-spec-label {
     radial-gradient(circle at 74% 72%, rgba(24, 14, 3, 0.30) 0 15%, rgba(24, 14, 3, 0) 44%),
     repeating-radial-gradient(circle at 50% 50%,
       rgba(255, 248, 226, 0.09) 0 1px,
-      rgba(66, 21, 32, 0.07) 1px 2px,
+      rgba(122, 59, 29, 0.07) 1px 2px,
       rgba(255, 255, 255, 0) 2px 7px);
   background-size: 3.6% 3.6%, 3.6% 3.6%, auto;
   background-position: 0 0, 1.8% 1.8%, 0 0;
@@ -361,7 +361,7 @@ html.dark .tt .ed-spec-label {
   background:
     radial-gradient(142% 120% at 30% 13%,
       #e0c096 0%, #c49a68 9%, #a37a4d 22%, #7d573a 42%,
-      #2C0C14 58%, #4d3220 76%, #33210f 92%, #241505 100%);
+      #4A2410 58%, #4d3220 76%, #33210f 92%, #241505 100%);
 }
 
 /* three co-prime line periods stacked = grain that never visibly repeats,
@@ -394,7 +394,7 @@ html.dark .tt .ed-spec-label {
   background-image:
     repeating-linear-gradient(91.2deg,
       rgba(255, 236, 204, 0.16) 0 0.18%,
-      rgba(66, 21, 32, 0.16) 0.18% 0.42%,
+      rgba(122, 59, 29, 0.16) 0.18% 0.42%,
       rgba(255, 255, 255, 0) 0.42% 1.05%),
     repeating-linear-gradient(89deg,
       rgba(255, 255, 255, 0) 0 2.2%,
@@ -530,7 +530,7 @@ html.dark .tt .ed-spec-label {
   pointer-events: none;
   filter: blur(9px);
   background:
-    none 0%, rgba(66, 21, 32, 0.42) 54%, rgba(66, 21, 32, 0) 78%);
+    none 0%, rgba(122, 59, 29, 0.42) 54%, rgba(122, 59, 29, 0) 78%);
 }
 
 /* ─── callouts ──────────────────────────────────────────────────────── */
@@ -587,19 +587,18 @@ html.dark .tt-note-text {
   padding: clamp(0.8rem, 1.05vw, 1rem) clamp(0.95rem, 1.25vw, 1.2rem);
   border-radius: 14px;
   text-align: left;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.97), rgba(253, 252, 251, 0.94));
+  background: var(--offwhite);
   box-shadow:
-    0 8px 32px rgba(66, 21, 32, 0.05),
-    0 2px 8px rgba(66, 21, 32, 0.03),
-    inset 0 1px 0 rgba(255, 255, 255, 1);
-  border: 1px solid rgba(66, 21, 32, 0.08);
+    0 8px 32px rgba(122, 59, 29, 0.05),
+    0 2px 8px rgba(122, 59, 29, 0.03),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(122, 59, 29, 0.10);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   margin-top: 0.4rem;
 }
 html.dark .tt-note-card {
-  background: linear-gradient(180deg, rgba(26, 9, 13, 0.85), rgba(18, 5, 8, 0.95));
+  background: var(--offwhite);
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
@@ -610,7 +609,7 @@ html.dark .tt-note-card {
   bottom: 1rem;
   width: 3px;
   border-radius: 4px;
-  background: #421520;
+  background: #7A3B1D;
 }
 .tt-note.side-l .tt-note-card::before,
 .tt-note.side-r .tt-note-card::before {
@@ -646,7 +645,7 @@ html.dark .tt-note-sym.iron { color: #A0A0A0; background: rgba(180, 180, 180, 0.
   font-family: var(--font-display);
   font-size: 1.24rem;
   font-weight: 600;
-  color: var(--graphite, #421520);
+  color: var(--graphite, #7A3B1D);
   margin-bottom: 0.2rem;
   letter-spacing: -0.01em;
 }
@@ -657,17 +656,17 @@ html.dark .tt-note-name { color: #F4EEE8; }
   width: clamp(38px, 5vw, 78px);
   height: 2px;
   margin-inline: 0.7rem;
-  background: #421520 !important;
+  background: #7A3B1D !important;
 }
 
 .tt-note.side-l .tt-note-line {
   transform-origin: right center;
-  background: linear-gradient(90deg, rgba(66, 21, 32, 0.2), rgba(66, 21, 32, 0.95)) !important;
+  background: linear-gradient(90deg, rgba(122, 59, 29, 0.2), rgba(122, 59, 29, 0.95)) !important;
 }
 
 .tt-note.side-r .tt-note-line {
   transform-origin: left center;
-  background: linear-gradient(270deg, rgba(66, 21, 32, 0.2), rgba(66, 21, 32, 0.95)) !important;
+  background: linear-gradient(270deg, rgba(122, 59, 29, 0.2), rgba(122, 59, 29, 0.95)) !important;
 }
 
 .tt-note-dot {
@@ -675,9 +674,9 @@ html.dark .tt-note-name { color: #F4EEE8; }
   width: 9px;
   height: 9px;
   border-radius: 50%;
-  background: #421520 !important;
+  background: #7A3B1D !important;
   box-shadow: 0 0 0 2px var(--offwhite, #FDFCFA),
-    0 2px 8px rgba(66, 21, 32, 0.35) !important;
+    0 2px 8px rgba(122, 59, 29, 0.35) !important;
 }
 
 /* Each row's horizontal offset is cos-derived from its height on the circle
@@ -894,8 +893,8 @@ html.dark .tt-note-name { color: #F4EEE8; }
   margin-bottom: clamp(2rem, 4vh, 3.2rem);
 }
 .tt-sec-head .meta {
-  color: #421520 !important;
-  -webkit-text-fill-color: #421520 !important;
+  color: #7A3B1D !important;
+  -webkit-text-fill-color: #7A3B1D !important;
 }
 html.dark .tt-sec-head .meta {
   color: #FFFFFF !important;

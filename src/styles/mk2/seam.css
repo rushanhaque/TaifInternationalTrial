@@ -56,7 +56,7 @@
 
 /* the atmosphere the seam sits in — glowing maroon halo */
 .seam-halo {
-  stroke: #8C3247;
+  stroke: #C0824F;
   stroke-width: 18;
   opacity: 0.45;
   filter: blur(8px);
@@ -74,7 +74,7 @@
 .seam-line {
   stroke-width: 2.4;
   opacity: 1;
-  filter: drop-shadow(0 0 6px #8C3247) drop-shadow(0 0 14px rgba(168, 59, 85, 0.8));
+  filter: drop-shadow(0 0 6px #C0824F) drop-shadow(0 0 14px rgba(168, 59, 85, 0.8));
 }
 
 /* ─────────────────────────────────────────────────────────────────────────
@@ -87,7 +87,7 @@
 
 .seam-ring {
   fill: none;
-  stroke: rgba(140, 50, 71, 0.45);
+  stroke: rgba(192, 130, 79, 0.45);
   stroke-width: 1.5;
   opacity: 0.8;
   transform-box: fill-box;
@@ -97,7 +97,7 @@
 
 .seam-hot {
   fill: #FFFFFF;
-  filter: drop-shadow(0 0 3px #FFFFFF) drop-shadow(0 0 6px #8C3247);
+  filter: drop-shadow(0 0 3px #FFFFFF) drop-shadow(0 0 6px #C0824F);
 }
 
 @keyframes seam-breathe {
