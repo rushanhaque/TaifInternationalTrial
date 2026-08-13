@@ -1052,3 +1052,64 @@ html.dark .tt-sec-head .meta {
     margin-bottom: calc(clamp(9.5rem, 30vw, 13rem) + 72px) !important;
   }
 }
+
+/* ═══ MOBILE — the identity card, smaller and dead-centre ═══════════════════
+   The card was running the full width the notes column allows, which on a
+   phone put its edges level with the screen gutters and made it read as a
+   panel rather than as a caption belonging to the circle above it. Narrowing
+   it and centring it under the circle restores that relationship.
+
+   `side-l` / `side-r` set `flex-direction: row` / `row-reverse` on the note,
+   which is what decides where a narrower body lands inside the centred wrapper
+   — so the body is centred explicitly rather than left to the flex direction,
+   otherwise alternate materials would sit off-centre on opposite sides.
+
+   Everything here lives inside a max-width query, so the desktop plate — where
+   these cards hang off leader lines at radius offsets — never sees it. */
+@media (max-width: 999.98px) {
+  .tt-note.a1,
+  .tt-note.a2,
+  .tt-note.a3,
+  .tt-note.a4,
+  .tt-note.a5,
+  .tt-note.a6 {
+    width: min(19rem, calc(100vw - 2 * var(--gutter) - 2rem));
+  }
+
+  .tt-note-body {
+    margin-inline: auto;
+  }
+
+  .tt-note-card {
+    padding: 0.7rem 0.85rem;
+    border-radius: 12px;
+  }
+
+  .tt-note-card::before {
+    top: 0.8rem;
+    bottom: 0.8rem;
+  }
+
+  .tt-note-head {
+    margin-bottom: 0.28rem;
+  }
+
+  .tt-note-sym {
+    font-size: 0.76rem;
+    padding: 0.12rem 0.34rem;
+  }
+
+  .tt-note-count {
+    font-size: 0.68rem;
+  }
+
+  .tt-note-name {
+    font-size: 1.05rem;
+    margin-bottom: 0.15rem;
+  }
+
+  .tt-note-text {
+    font-size: 0.76rem;
+    line-height: 1.42;
+  }
+}

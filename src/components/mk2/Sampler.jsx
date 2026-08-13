@@ -5,29 +5,6 @@ import { reduced } from '../../lib/gsap'
 import { useContent } from '../../lib/content'
 import { productImg } from '../../data/images'
 
-const SIGNATURE_ITEMS = [
-  {
-    id: 1,
-    title: 'Lotus Wall Sconce',
-    subtitle: 'Hand-Hammered Brass',
-  },
-  {
-    id: 2,
-    title: 'Minimalist Pedestal',
-    subtitle: 'Solid Sheesham & Copper',
-  },
-  {
-    id: 3,
-    title: 'Sculptural Vessel',
-    subtitle: 'Burnished Bronze',
-  },
-  {
-    id: 4,
-    title: 'Geometric Tray',
-    subtitle: 'Antique Patina',
-  }
-]
-
 /* The best-sellers grid is now a selection of real catalogue products, chosen
    in /admin → Best sellers and stored as slugs. Positions are derived rather
    than authored: the nine cells sit in three rows beneath the signature plate,
@@ -91,15 +68,12 @@ function useIsMobile() {
 }
 
 export default function Sampler() {
-  const [activeIdx, setActiveIdx] = useState(0)
   const [progress, setProgress] = useState(0)
   const sectionRef = useRef(null)
   const targetPRef = useRef(0)
   const currentPRef = useRef(0)
   const rafRef = useRef(null)
   const isMobile = useIsMobile()
-
-  const activeItem = SIGNATURE_ITEMS[activeIdx]
 
   /* Resolve the chosen slugs against the live catalogue. A slug that no longer
      matches a product — deleted, or renamed in the Products tab — is dropped
@@ -110,6 +84,7 @@ export default function Sampler() {
   const pieces = (bestSellers || [])
     .map((slug) => products.find((pr) => pr.slug === slug))
     .filter(Boolean)
+  const signature = pieces[0]
 
   /* Clicking the signature plate runs the whole transition for you: it scrolls
      to the exact offset where p reaches 1, which is the end of the section's
@@ -189,33 +164,38 @@ export default function Sampler() {
           <h2 className="mrail-title">Signature Piece</h2>
         </div>
 
-        {/* the plate, still — tap a thumbnail to change it */}
-        <div className="mrail-sig">
-          <img src={activeItem.image} alt={activeItem.title} className="mrail-sig-img" />
-          <div className="mrail-sig-scrim" />
-          <div className="mrail-sig-meta">
-            <span className="mrail-sig-sub">{activeItem.subtitle}</span>
-            <h3 className="mrail-sig-name">{activeItem.title}</h3>
-          </div>
-        </div>
+        {/* The plate shows the first selected best seller. SIGNATURE_ITEMS
+            carries no image, so driving it from that list rendered an empty
+            black box under a name that is not in the catalogue. */}
+        {signature && (
+          <Link to={`/catalogue/${signature.slug}`} className="mrail-sig">
+            <img
+              src={signature.image || productImg(signature.slug)}
+              alt={signature.name}
+              className="mrail-sig-img"
+            />
+            <div className="mrail-sig-scrim" />
+            <div className="mrail-sig-meta">
+              <span className="mrail-sig-sub">{signature.material}</span>
+              <h3 className="mrail-sig-name">{signature.name}</h3>
+            </div>
+          </Link>
+        )}
 
         <div className="mrail-thumbs-head">Best Sellers</div>
         <div className="mrail-thumbs">
-          {SIGNATURE_ITEMS.map((item, idx) => (
-            <button
-              type="button"
-              key={item.id}
-              className={`mrail-thumb ${idx === activeIdx ? 'is-active' : ''}`}
-              onClick={() => setActiveIdx(idx)}
-              aria-label={`View ${item.title}`}
-              aria-pressed={idx === activeIdx}
+          {pieces.map((item) => (
+            <Link
+              key={item.slug}
+              to={`/catalogue/${item.slug}`}
+              className="mrail-thumb"
+              aria-label={item.name}
             >
-              <img src={item.image} alt="" />
-            </button>
+              <img src={item.image || productImg(item.slug)} alt={item.name} />
+              <span className="mrail-thumb-name">{item.name}</span>
+            </Link>
           ))}
         </div>
-
-
 
         <div className="mrail-cta">
           <Link to="/contact" className="czoom-schedule-btn">

@@ -2206,10 +2206,14 @@ html.dark .header-brand-img {
 }
 
 /* ============ footer (E17 · Aeris-style stencil wordmark) ============ */
+/* The bottom space belongs to .footer, not to .foot-grid: that grid carries
+   `padding-bottom: 0 !important`, so the 2rem the mobile block tries to give
+   it never applied and the last row sat hard against the bottom of the page. */
 .footer {
   background: #1A090D !important;
   color: #FFFFFF !important;
   padding-top: clamp(4rem, 8vw, 7rem);
+  padding-bottom: clamp(3rem, 6vw, 4.5rem);
   position: relative;
   overflow: hidden;
 }
@@ -2490,20 +2494,32 @@ html.dark .header-brand-img {
 
    (These are footer icons, not the site's buttons — the no-recolour-on-hover
    rule in uiverse-buttons.css is about .btn controls and does not apply.) */
-.social-icon {
+/* SHAPE — `a.social-icon`, not `.social-icon`. `.foot-grid a` above sets
+   border-radius: 4px and, at one class + one type, outweighs a lone class
+   selector: the 50% here never actually applied and these rendered as sharp
+   4px squares with a CIRCULAR brass flood clipped inside them. Matching that
+   rule's weight is what lets the tile own its own shape, and every layer then
+   takes `border-radius: inherit` so the flood, the sheen and the tile can
+   never disagree again. */
+a.social-icon {
   position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   width: 40px;
   height: 40px;
-  border-radius: 50%;
+  border-radius: 12px;
   overflow: hidden;
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.15);
   color: rgba(255, 255, 255, 0.85);
   isolation: isolate;
-  transition: border-color 0.34s ease;
+  /* the tile itself moves on a long, settled curve — the lift is what makes
+     the thing feel like an object rather than a rectangle changing colour */
+  transition:
+    transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.45s ease,
+    box-shadow 0.55s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* the brass flood */
@@ -2512,21 +2528,53 @@ html.dark .header-brand-img {
   position: absolute;
   inset: 0;
   z-index: 0;
-  border-radius: 50%;
+  border-radius: inherit;
   /* literal brass, not var(--brass): that token is #421520 burgundy in light
      mode and cream in dark — an accent ramp, despite the name — so using it
      here put a burgundy band through the middle of the gradient */
   background: linear-gradient(160deg, #D8B071 0%, #B0894F 55%, #8A6733 100%);
   transform: translateY(101%);
-  transition: transform 0.46s var(--ease-surge, cubic-bezier(0.16, 1.1, 0.3, 1));
+  transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
   pointer-events: none;
 }
 
+/* the specular sweep — a single pass of light across the brass once it has
+   landed, which is the detail that reads as polished metal rather than a
+   coloured swatch. Delayed so it travels over the fill, not with it. */
+.social-icon::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(100deg,
+      rgba(255, 255, 255, 0) 38%,
+      rgba(255, 255, 255, 0.42) 50%,
+      rgba(255, 255, 255, 0) 62%);
+  transform: translateX(-130%);
+  opacity: 0;
+  transition: transform 0.75s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s ease;
+}
+
 .social-icon:hover,
-.social-icon:focus-visible { border-color: #B0894F; }
+.social-icon:focus-visible {
+  transform: translateY(-3px);
+  border-color: #B0894F;
+  box-shadow:
+    0 12px 26px -12px rgba(0, 0, 0, 0.75),
+    0 3px 10px -4px rgba(176, 137, 79, 0.45);
+}
 
 .social-icon:hover::before,
 .social-icon:focus-visible::before { transform: translateY(0); }
+
+.social-icon:hover::after,
+.social-icon:focus-visible::after {
+  transform: translateX(130%);
+  opacity: 1;
+  transition-delay: 0.18s, 0.18s;
+}
 
 .si-roll {
   position: relative;
@@ -2544,7 +2592,7 @@ html.dark .header-brand-img {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.44s var(--ease-surge, cubic-bezier(0.16, 1.1, 0.3, 1));
+  transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* the arriving glyph is ink, so it reads against the brass it lands on
@@ -2557,15 +2605,19 @@ html.dark .header-brand-img {
 .social-icon:hover .si-in,
 .social-icon:focus-visible .si-in { transform: translateY(0); }
 
-/* Motion off: no roll and no wipe, but the state must still be obvious — the
-   disc simply becomes brass and the single glyph turns to ink. */
+/* Motion off: no roll, no wipe, no lift and no sheen — but the state must
+   still be obvious, so the tile simply becomes brass and the single glyph
+   turns to ink. */
 @media (prefers-reduced-motion: reduce) {
   .si-up, .si-in, .social-icon::before { transition: none; }
   .si-in { display: none; }
+  .social-icon::after { display: none; }
   .social-icon:hover .si-up,
   .social-icon:focus-visible .si-up { transform: none; }
   .social-icon:hover .si-up { color: #2A1A08; }
   .social-icon::before { transform: translateY(101%); }
+  .social-icon:hover,
+  .social-icon:focus-visible { transform: none; box-shadow: none; }
   .social-icon:hover::before,
   .social-icon:focus-visible::before { transform: translateY(0); }
 }

@@ -27,8 +27,10 @@
     height: 42px;
   }
 
-  /* footer social icons up to a full touch target */
-  .social-icon {
+  /* footer social icons up to a full touch target. Written as `a.social-icon`
+     to match the weight the base rule needs in global.css (see the shape note
+     there) — as a lone class this lost and the tiles dropped back to 40px. */
+  a.social-icon {
     width: 44px;
     height: 44px;
   }
@@ -193,12 +195,18 @@
      everywhere because most .sec-head labels sit alone in a centred
      block anyway, but the product page's "More X" rail sits its DRAG ·
      FLING hint flush left right underneath, so the mismatch showed. */
+  /* The rail's own inset — clamp(2.5rem, 5vw, 4.5rem), i.e. 40px on a phone —
+     is a DESKTOP measure: there it buys the fling rail room to bleed past the
+     grid. Inside .wrap, which already carries the page gutter, it stacks on
+     top of that and pushed the whole block to 59px while the h1 above it sat
+     at 19px. The section read as indented rather than aligned.
+
+     On mobile the inset goes to zero for all three parts — title, hint and
+     track — so they inherit the one gutter .wrap already applies and share the
+     page's single left edge. Desktop keeps the clamp untouched; every rule
+     here is inside the max-width query. */
   .rail-sec-head.sec-head {
-    /* matches .rail-head's own inset (global.css) rather than the page
-       gutter, so the title sits flush with "Drag · fling" and the cards
-       directly beneath it instead of drifting from a slightly different
-       left edge */
-    padding-inline: clamp(2.5rem, 5vw, 4.5rem);
+    padding-inline: 0;
     justify-content: flex-start;
     align-items: flex-start;
   }
@@ -211,6 +219,32 @@
   .rail-sec-head + .rail .rail-head {
     justify-content: flex-start;
     text-align: left;
+    padding-inline: 0;
+  }
+
+  /* `.rail.native .rail-wrap` in global.css is three classes, so the snap
+     reset has to be written at that weight or the 40px scroll-padding wins
+     and a snapped card lands 40px in from where it is painted. */
+  .rail .rail-wrap,
+  .rail.native .rail-wrap {
+    padding-left: 0;
+    scroll-padding-left: 0;
+  }
+
+  /* touch scrolling has to be allowed on the axis the rail moves. The base
+     rule sets `touch-action: pan-y`, which lets the page scroll vertically
+     but tells the browser to swallow horizontal gestures — on a phone that
+     is exactly the swipe this rail needs. */
+  .rail.native .rail-wrap {
+    touch-action: pan-x pan-y;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+  }
+
+  /* the last card needs its own trailing air, otherwise the track can be
+     scrolled to an edge that touches the screen */
+  .rail .rail-track {
+    padding-right: var(--gutter);
   }
 
   /* ── consistent measure ───────────────────────────────────────────────

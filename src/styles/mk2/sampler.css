@@ -1145,6 +1145,8 @@ html.dark .czoom-bestsellers-title {
 
   /* ── the still signature plate ─────────────────────────────────────── */
   .mrail-sig {
+    display: block;
+    text-decoration: none;
     position: relative;
     margin-inline: var(--gutter);
     aspect-ratio: 4 / 5;
@@ -1211,10 +1213,18 @@ html.dark .czoom-bestsellers-title {
   .mrail-thumbs {
     display: flex;
     gap: 0.8rem;
-    padding-inline: var(--gutter);
+    /* a touch more room on the left than the right, so the row visibly sits
+       off the screen edge instead of butting against it */
+    padding-inline: calc(var(--gutter) + 0.5rem) var(--gutter);
     margin-top: 0.6rem;
     overflow-x: auto;
     overscroll-behavior-x: contain;
+    /* The snapport, NOT the padding, is what decides where a snapped card
+       comes to rest. Without this the mandatory snap drags the first card's
+       start edge onto the padding edge — the browser scrolls the rail by
+       exactly padding-inline-start on load — and the row reads as flush left
+       no matter how much padding is set. */
+    scroll-padding-inline-start: calc(var(--gutter) + 0.5rem);
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
@@ -1227,28 +1237,28 @@ html.dark .czoom-bestsellers-title {
   .mrail-thumb {
     flex: 0 0 auto;
     width: 35vw;
-    aspect-ratio: 1;
+    display: block;
+    text-decoration: none;
     scroll-snap-align: start;
-    padding: 0;
-    border: 1px solid rgba(66, 21, 32, 0.14);
-    border-radius: 10px;
-    overflow: hidden;
-    background: none;
-    cursor: pointer;
-    opacity: 0.5;
-    transition: opacity 0.25s ease, border-color 0.25s ease;
-  }
-
-  .mrail-thumb.is-active {
-    opacity: 1;
-    border-color: var(--graphite, #421520);
   }
 
   .mrail-thumb img {
     width: 100%;
-    height: 100%;
+    aspect-ratio: 1;
     object-fit: cover;
     display: block;
+    border: 1px solid rgba(66, 21, 32, 0.14);
+    border-radius: 10px;
+    background: var(--chrome-2);
+  }
+
+  .mrail-thumb-name {
+    display: block;
+    margin-top: 0.4rem;
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    line-height: 1.3;
+    color: var(--graphite, #421520);
   }
 
   /* ── the rail ──────────────────────────────────────────────────────── */
@@ -1311,6 +1321,7 @@ html.dark .czoom-bestsellers-title {
 
   html.dark .czoom-section.is-mobile { background-color: #1A090D; }
   html.dark .mrail-title,
-  html.dark .mrail-card-name { color: #FFFFFF; }
-  html.dark .mrail-thumb.is-active { border-color: rgba(255, 255, 255, 0.7); }
+  html.dark .mrail-card-name,
+  html.dark .mrail-thumb-name { color: #FFFFFF; }
+  html.dark .mrail-thumb img { border-color: rgba(255, 255, 255, 0.16); }
 }
