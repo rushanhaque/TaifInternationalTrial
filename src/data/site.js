@@ -19,6 +19,7 @@ export const BRAND = {
      them here and every enquiry route follows. */
   email: 'internationaltaif93@gmail.com',
   phone: '+91 9389686112',
+  phone2: '+91 9389682282',
   instagram: 'https://instagram.com/taif_internaitonal93',
   /* The canonical production origin, no trailing slash. Every canonical URL,
      og:url and structured-data URL derives from this. Leave it empty and the

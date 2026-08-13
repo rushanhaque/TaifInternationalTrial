@@ -121,14 +121,15 @@ export default function Navbar() {
               #170D05 in dark (white mark) — the burgundy one was being used
               there too, at 1.25:1 against the dark bar, i.e. invisible. */}
           <img
-            src="/img/taif-logo-header.png"
+            src={atTop ? "/img/taif-logo-white.png" : "/img/taif-logo-navbar.png"}
             alt={BRAND.name}
             className="header-brand-img"
             style={{
-              height: '36px',
+              height: atTop ? '36px' : '32px',
               width: 'auto',
               objectFit: 'contain',
-              display: 'block'
+              display: 'block',
+              transition: 'height 0.3s ease'
             }}
           />
           <span className="brand-suffix">{BRAND.suffix}</span>
