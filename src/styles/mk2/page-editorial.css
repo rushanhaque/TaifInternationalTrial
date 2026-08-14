@@ -289,6 +289,15 @@
   box-shadow: var(--lift-1);
 }
 
+html.dark .shows-cta {
+  background: #4A2410;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+html.dark .shows-cta h2 { color: #FFFFFF; }
+
+html.dark .shows-cta .lede { color: rgba(255, 255, 255, 0.72); }
+
 .shows-cta h2 {
   font-family: var(--font-display);
   font-size: clamp(1.5rem, 2.5vw, 2.2rem);

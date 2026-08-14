@@ -325,6 +325,17 @@
   max-width: 50ch;
 }
 
+html.dark .cw-close {
+  background: #4A2410;
+  background-image: none;
+  color: #FFFFFF;
+}
+
+html.dark .cw-close .meta,
+html.dark .cw-close h2 { color: #FFFFFF; }
+
+html.dark .cw-close p { color: rgba(255, 255, 255, 0.72); }
+
 /* ── two up ───────────────────────────────────────────────────────────── */
 @media (min-width: 620px) {
   .cw-grid { grid-template-columns: repeat(2, 1fr); }
