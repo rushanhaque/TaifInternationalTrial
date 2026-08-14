@@ -41,18 +41,17 @@ body {
   overflow-x: clip;
 }
 
-/* ── Dark Mode Text Contrast System ── */
+/* ── Dark Mode ── */
 html.dark {
-  background-color: #170D05 !important;
+  background-color: #2A1306 !important;
   color: #FFFFFF !important;
 }
 
 html.dark body {
-  background-color: #170D05 !important;
+  background-color: #2A1306 !important;
   color: #FFFFFF !important;
 }
 
-/* Text on dark elements becomes crisp white */
 html.dark .dark,
 html.dark .deep,
 html.dark .black,
@@ -66,20 +65,15 @@ html.dark .czoom-section,
 html.dark .pl-rail,
 html.dark .mark-ch-fill,
 html.dark .mark-suffix,
-html.dark [data-theme="dark"] {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-}
-
-/* Text on light elements becomes rich dark maroon */
+html.dark [data-theme="dark"],
 html.dark .light,
 html.dark .card-light,
 html.dark .light-card,
 html.dark .bg-light,
 html.dark .nav-dropdown-menu,
 html.dark .nav-dropdown-item {
-  color: #7A3B1D !important;
-  -webkit-text-fill-color: #7A3B1D !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
 }
 
 img,
@@ -398,6 +392,10 @@ h4, h5, h6 {
 .section.alt {
   background-color: var(--chrome);
   background-image: none;
+}
+
+html.dark .section.alt {
+  background-color: #2A1306 !important;
 }
 
 /* opt-out for a section that should let the ground below show through */
@@ -916,14 +914,14 @@ html.dark .nav.nav-hero {
 }
 
 html.dark .nav {
-  background: #170D05 !important;
-  background-color: #170D05 !important;
+  background: #4A2410 !important;
+  background-color: #4A2410 !important;
   border-color: rgba(255, 255, 255, 0.15) !important;
 }
 
 html.dark .nav.nav-scrolled {
-  background: #170D05 !important;
-  background-color: #170D05 !important;
+  background: #4A2410 !important;
+  background-color: #4A2410 !important;
   border-color: rgba(255, 255, 255, 0.25) !important;
   box-shadow: 0 16px 40px -8px rgba(0, 0, 0, 0.5) !important;
 }
@@ -943,6 +941,7 @@ html.dark .nav.nav-scrolled {
   -webkit-text-fill-color: #7A3B1D !important;
   opacity: 1 !important;
   text-shadow: none !important;
+  outline: none !important;
 }
 
 .theme-toggle-btn svg {
