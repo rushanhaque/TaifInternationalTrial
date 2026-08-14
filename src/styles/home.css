@@ -421,7 +421,7 @@ html.dark .countries-card {
 }
 
 html.dark .home-reviews-grid .tm-card {
-  background: #4A2410 !important;
+  background: #2A1306 !important;
 }
 
 html.dark .hp,
@@ -435,7 +435,7 @@ html.dark .countries-section-wrap,
 html.dark .countries-card,
 html.dark .fs-section,
 html.dark .bestsellers-section {
-  background-color: #170D05 !important;
+  background-color: #2A1306 !important;
   color: #FFFFFF !important;
 }
 
@@ -495,7 +495,7 @@ html.dark .section-divider {
 }
 
 html.dark .section-divider::before {
-  background: #170D05 !important;
+  background: #2A1306 !important;
   color: #FFFFFF !important;
 }
 
@@ -534,8 +534,8 @@ html.dark .section-divider::before {
 
 html.dark .countries-card {
   background-color: #4A2410 !important;
-  border: 1px solid rgba(255, 255, 255, 0.4) !important;
-  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4) !important;
+  border: 1px solid rgba(122, 59, 29, 0.2) !important;
+  box-shadow: 0 12px 35px rgba(122, 59, 29, 0.08) !important;
 }
 
 html.dark .countries-card .meta,
@@ -568,7 +568,7 @@ html.dark #craft,
 html.dark .fs-section,
 html.dark .bestsellers-section,
 html.dark .craft-about-section {
-  background-color: #170D05 !important;
+  background-color: #2A1306 !important;
   color: #FFFFFF !important;
 }
 
@@ -580,7 +580,7 @@ html.dark .craft-about-section {
 
 html.dark .white-review-card {
   background-color: #4A2410 !important;
-  border-color: rgba(255, 255, 255, 0.15) !important;
+  border-color: rgba(122, 59, 29, 0.15) !important;
   color: #FFFFFF !important;
 }
 
@@ -780,7 +780,7 @@ html.dark .craft-process-item:hover .craft-process-num {
 
 html.dark .about-stat-card {
   background-color: #4A2410 !important;
-  border-color: rgba(255, 255, 255, 0.15) !important;
+  border-color: rgba(122, 59, 29, 0.15) !important;
 }
 
 /* ============ Reviews DragRail Section ============ */
@@ -849,7 +849,7 @@ html.dark .about-stat-card {
   background-color: var(--white);
 }
 html.dark .craft-card-spacer {
-  background-color: #170D05 !important;
+  background-color: #2A1306 !important;
 }
 
 .craft-card-wrapper {

@@ -128,27 +128,27 @@
 
 /* Dark Mode Overrides */
 html.dark .ed-title {
-  color: var(--graphite, #FFFFFF);
+  color: #FFFFFF;
 }
 
 html.dark .ed-body {
-  color: var(--dim, rgba(252, 251, 248, 0.7));
+  color: rgba(255, 255, 255, 0.72);
 }
 
 html.dark .ed-spec-item {
-  background: rgba(255, 255, 255, 0.035);
-  border-color: var(--hair, rgba(252, 251, 248, 0.15));
+  background: #4A2410;
+  border-color: rgba(255, 255, 255, 0.14);
 }
 
 html.dark .ed-spec-item:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: var(--brass, #9C5530);
+  background: #4A2410;
+  border-color: rgba(255, 255, 255, 0.35);
 }
 
 html.dark .ed-spec-label {
-  color: var(--faint, rgba(252, 251, 248, 0.45));
+  color: rgba(255, 255, 255, 0.55);
 }
 
 html.dark .ed-spec-value {
-  color: var(--graphite, #FFFFFF);
+  color: #FFFFFF;
 }

@@ -114,7 +114,7 @@ export const DEFAULT_EXHIBITIONS = [
    count up to it. */
 export const DEFAULT_STATS = [
   { id: 1, unit: 'artisans', value: 15, suffix: '+', label: 'Hands in the workshop', sub: 'Specialist masters under one roof' },
-  { id: 2, unit: 'orders', value: 600, suffix: '+', label: 'Pieces delivered per year', sub: 'Each piece finished by hand' },
+  { id: 2, unit: 'orders', value: 600, suffix: '+', label: 'orders', sub: 'Each piece finished by hand' },
   { id: 3, unit: 'countries', value: 16, suffix: '+', label: 'Countries served', sub: 'Global boutique export' },
   { id: 4, unit: 'years', value: 10, suffix: '+', label: 'Years of excellence', sub: 'Est. Moradabad atelier' },
 ]

@@ -276,7 +276,7 @@ html.dark .pl-card:hover {
 }
 
 html.dark .pl-shot {
-  background: radial-gradient(120% 90% at 50% 18%, #4A2410 0%, #170D05 100%);
+  background: #4A2410;
 }
 
 .pl-img {

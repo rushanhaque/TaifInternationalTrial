@@ -142,8 +142,9 @@
 /* ── Dark mode review card rules ── */
 html.dark .infinite-card {
   background: #4A2410 !important;
-  border-color: rgba(255, 255, 255, 0.15) !important;
-  box-shadow: 0 16px 45px rgba(0, 0, 0, 0.4) !important;
+  background-color: #4A2410 !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 16px 45px rgba(0, 0, 0, 0.40) !important;
 }
 
 html.dark .infinite-card-stars,

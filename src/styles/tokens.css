@@ -146,35 +146,30 @@
 
 /* ═══ DARK MODE (html.dark) ═══ */
 html.dark {
-  --white:      #3D1E0D;
+  --white:      #2A1306;
   --offwhite:   #4A2410;
   --chrome:     #4A2410;
-  --chrome-2:   #331808;
+  --chrome-2:   #3D1E0D;
   --chrome-3:   #2A1306;
   --shadow-soft: rgba(0, 0, 0, 0.50);
 
-  --graphite:   #F5EFE4;
-  --graphite-2: #EFE7D6;
-  --dim:        rgba(245, 239, 228, 0.72);
-  --faint:      rgba(245, 239, 228, 0.28);
-  --hair:       rgba(245, 239, 228, 0.16);
-  --hair-strong: rgba(245, 239, 228, 0.30);
-  --nav-bg:     linear-gradient(135deg, rgba(74, 36, 16, 0.95) 0%, rgba(61, 30, 13, 0.88) 100%);
+  --graphite:   #FFFFFF;
+  --graphite-2: #FFFFFF;
+  --dim:        rgba(255, 255, 255, 0.72);
+  --faint:      rgba(255, 255, 255, 0.35);
+  --hair:       rgba(255, 255, 255, 0.15);
+  --hair-strong: rgba(255, 255, 255, 0.28);
+  --nav-bg:     linear-gradient(135deg, rgba(74, 36, 16, 0.97) 0%, rgba(42, 19, 6, 0.97) 100%);
 
   --deep:       #2A1306;
-  --on-deep:    #F5EFE4;
-  --dim-on-deep: rgba(245, 239, 228, 0.72);
-  --hair-on-deep: rgba(245, 239, 228, 0.16);
+  --on-deep:    #FFFFFF;
+  --dim-on-deep: rgba(255, 255, 255, 0.72);
+  --hair-on-deep: rgba(255, 255, 255, 0.15);
 
-  --tint:       #F5EFE4;
-  --tint-deep:  #F5EFE4;
-  --tint-on-deep: #F5EFE4;
+  --tint:       #4A2410;
+  --tint-deep:  #2A1306;
+  --tint-on-deep: #FFFFFF;
 
-  /* The accent ramp had no dark-mode form, so every rule reading --brass kept
-     painting #7A3B1D on the deep umber ground — kickers, rating marks, small
-     caps labels and the masthead numeral all disappeared. These are warm
-     off-whites: they read as brass against umber without introducing a
-     saturated gold the palette does not contain. */
   --brass:      #EFE2D2;
   --brass-lt:   #FFFFFF;
   --brass-dk:   #D3C0A8;

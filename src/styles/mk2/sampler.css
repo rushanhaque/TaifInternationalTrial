@@ -45,7 +45,7 @@
 }
 
 html.dark .czoom-section {
-  background-color: #170D05 !important;
+  background-color: #2A1306 !important;
   color: #FFFFFF !important;
 }
 
@@ -1319,7 +1319,7 @@ html.dark .czoom-bestsellers-title {
     margin-top: 1.4rem;
   }
 
-  html.dark .czoom-section.is-mobile { background-color: #170D05; }
+  html.dark .czoom-section.is-mobile { background-color: #2A1306; }
   html.dark .mrail-title,
   html.dark .mrail-card-name,
   html.dark .mrail-thumb-name { color: #FFFFFF; }
