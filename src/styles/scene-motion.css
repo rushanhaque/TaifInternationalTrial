@@ -68,12 +68,10 @@ html.sr-anim [data-sr].is-in {
      the start earlier; this shortens the run itself so headings and media
      resolve quickly rather than drifting in over most of a second. */
   transition:
-    opacity 0.56s cubic-bezier(0.22, 1, 0.28, 1),
-    transform 0.56s cubic-bezier(0.16, 1, 0.3, 1),
-    clip-path 0.6s cubic-bezier(0.22, 1, 0.28, 1);
-  /* the index is stamped per container by SceneReveal, capped so a long
-     cascade never leaves the reader waiting on the tail */
-  transition-delay: calc(var(--sr-i, 0) * 60ms);
+    opacity 0.38s cubic-bezier(0.22, 1, 0.28, 1),
+    transform 0.38s cubic-bezier(0.16, 1, 0.3, 1),
+    clip-path 0.42s cubic-bezier(0.22, 1, 0.28, 1);
+  transition-delay: calc(var(--sr-i, 0) * 15ms);
 }
 
 /* ── card ─────────────────────────────────────────────────────────────────
@@ -105,10 +103,7 @@ html.sr-anim [data-sr='media'] {
 }
 
 html.sr-anim [data-sr='media'].is-in {
-  /* trimmed from 0.95s — this is the gesture the Heritage video/heading
-     block uses (.craft-card-container), so it was the single slowest
-     entrance on the page */
-  transition-duration: 0.68s;
+  transition-duration: 0.45s;
 }
 
 /* ── head ─────────────────────────────────────────────────────────────────
@@ -121,9 +116,7 @@ html.sr-anim [data-sr='head'] {
 }
 
 html.sr-anim [data-sr='head'].is-in {
-  /* trimmed from 0.9s — this is what carries the "Heritage" section heading
-     itself (.craft-sec-title) */
-  transition-duration: 0.6s;
+  transition-duration: 0.38s;
 }
 
 /* ── text ─────────────────────────────────────────────────────────────────
@@ -156,8 +149,7 @@ html.sr-anim [data-sr='btn'].is-in {
    them is too tight to register as a cascade at all. */
 @media (min-width: 1000px) {
   html.sr-anim [data-sr].is-in {
-    /* trimmed from 92ms */
-    transition-delay: calc(var(--sr-i, 0) * 70ms);
+    transition-delay: calc(var(--sr-i, 0) * 20ms);
   }
 
   html.sr-anim [data-sr='card'] {
