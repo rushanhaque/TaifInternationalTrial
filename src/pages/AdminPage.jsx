@@ -1,8 +1,8 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { CATEGORIES } from '../data/catalogue'
 import { SOCIAL_PLATFORMS, BEST_SELLER_SLOTS } from '../data/defaults'
 import {
-  useContent, getContent, setSection, resetContent, exportContent, importContent, nextId, hasStorage,
+  useContent, getContent, setSection, nextId,
 } from '../lib/content'
 import { publishSnapshot } from '../lib/publish'
 import { getLenis } from '../lib/useLenis'
@@ -693,113 +693,6 @@ function SubcategoriesSection({ notify, onDirty }) {
   )
 }
 
-/* ── settings ────────────────────────────────────────────────────────────── */
-function SubHead({ children }) {
-  return <h3 style={{ margin: '0 0 0.5rem', fontSize: '0.92rem', fontWeight: 650 }}>{children}</h3>
-}
-
-function PublishToGitHub({ notify }) {
-  const [busy, setBusy] = useState(false)
-
-  const publish = async () => {
-    if (!window.confirm(
-      'Publish your edits to the live site?\n\n'
-      + 'Every visitor will see these changes once the deploy finishes (usually 1–3 min).'
-    )) return
-    setBusy(true)
-    try {
-      await publishSnapshot(getContent())
-      notify('Published. The site will update once the deploy finishes (usually 1–3 min).')
-    } catch (err) {
-      notify(err.message, true)
-    } finally {
-      setBusy(false)
-    }
-  }
-
-  return (
-    <div className="ad-sub-group">
-      <SubHead>Publish to the live site</SubHead>
-      <p className="ad-hint" style={{ marginBottom: '0.9rem' }}>
-        Commits the content shown above to the repo and triggers a redeploy automatically.
-        Every visitor will see the changes once it finishes — usually within 1–3 minutes.
-      </p>
-      <button className="ad-btn ad-btn--primary" onClick={publish} disabled={busy}>
-        {busy ? 'Publishing…' : 'Publish now'}
-      </button>
-    </div>
-  )
-}
-
-function SettingsSection({ notify }) {
-  const fileRef = useRef(null)
-
-  const onImport = async (e) => {
-    const file = e.target.files?.[0]
-    if (!file) return
-    try {
-      notify(await importContent(file))
-    } catch (err) {
-      notify(err.message, true)
-    }
-    e.target.value = ''
-  }
-
-  const onReset = () => {
-    if (!window.confirm('Discard every change and go back to the content the site shipped with?')) return
-    resetContent()
-    notify('Reset to the shipped content.')
-  }
-
-  return (
-    <>
-      <div className="ad-head">
-        <div>
-          <h1>Save and publish</h1>
-          <p>How the edits made here reach the live site.</p>
-        </div>
-      </div>
-
-      <div className="ad-sub-group">
-        <SubHead>Where your edits are right now</SubHead>
-        <p className="ad-hint" style={{ marginBottom: '0.9rem' }}>
-          Every change is saved in this browser and shows on the site immediately — open the homepage or
-          Shows page in another tab and you will see it. It is <strong>not</strong> yet visible to anyone
-          else: this site is served as static files with no database behind it, so there is nowhere for a
-          change to be stored centrally, unless you publish it below.
-          {!hasStorage() && ' Storage is unavailable in this browser, so changes will be lost when you close the tab.'}
-        </p>
-      </div>
-
-      <PublishToGitHub notify={notify} />
-
-      <div className="ad-sub-group">
-        <SubHead>Or hand off the file manually</SubHead>
-        <p className="ad-hint" style={{ marginBottom: '0.9rem' }}>
-          Export the file below and send it to whoever maintains the site. They replace the contents of
-          <code style={{ padding: '0 .3em' }}>src/data/defaults.js</code> with it and redeploy — from then on
-          every visitor sees it, and this page starts from the new baseline.
-        </p>
-
-        <div style={{ display: 'flex', gap: '0.6rem', flexWrap: 'wrap' }}>
-          <button className="ad-btn ad-btn--primary" onClick={exportContent}>Export content.json</button>
-          <button className="ad-btn ad-btn--quiet" onClick={() => fileRef.current?.click()}>Import a file</button>
-          <input ref={fileRef} type="file" accept="application/json,.json" hidden onChange={onImport} />
-        </div>
-      </div>
-
-      <div className="ad-sub-group">
-        <SubHead>Start over</SubHead>
-        <p className="ad-hint" style={{ marginBottom: '0.9rem' }}>
-          Throws away every edit stored in this browser. Export first if you might want them back.
-        </p>
-        <button className="ad-btn ad-btn--quiet" onClick={onReset} style={{ color: 'var(--ad-danger)' }}>
-          Reset all content
-        </button>
-      </div>
-    </>
-  )
-}
 
 /* ── gate ────────────────────────────────────────────────────────────────── */
 function Gate({ onOpen }) {
@@ -848,10 +741,25 @@ export default function AdminPage() {
   const [tab, setTab] = useState('products')
   const [toast, setToast] = useState(null)
   const [dirty, setDirty] = useState(false)
+  const [publishing, setPublishing] = useState(false)
   const content = useContent()
 
   const notify = (msg, warn = false) => setToast({ msg, warn })
   const markDirty = () => setDirty(true)
+
+  const publish = async () => {
+    if (!window.confirm('Publish your edits to the live site?\n\nEvery visitor will see these changes once the deploy finishes (usually 1–3 min).')) return
+    setPublishing(true)
+    try {
+      await publishSnapshot(getContent())
+      setDirty(false)
+      notify('Published. The site will update once the deploy finishes (usually 1–3 min).')
+    } catch (err) {
+      notify(err.message, true)
+    } finally {
+      setPublishing(false)
+    }
+  }
 
   useEffect(() => {
     if (!toast) return
@@ -904,8 +812,8 @@ export default function AdminPage() {
               so it reads as an action rather than a place to navigate to. */}
           <button
             className="ad-publish-cta"
-            aria-current={tab === 'settings'}
-            onClick={() => setTab('settings')}
+            onClick={publish}
+            disabled={publishing}
           >
             <span className="ad-publish-ico" aria-hidden="true">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -915,8 +823,8 @@ export default function AdminPage() {
               </svg>
             </span>
             <span className="ad-publish-text">
-              <strong>Save &amp; publish</strong>
-              <em>Push edits live</em>
+              <strong>{publishing ? 'Publishing…' : 'Save & publish'}</strong>
+              <em>{publishing ? 'Pushing changes live' : 'Push edits live'}</em>
             </span>
           </button>
         </div>
@@ -926,7 +834,6 @@ export default function AdminPage() {
         {section && <ListSection key={section.key} section={section} notify={notify} onDirty={markDirty} />}
         {tab === 'subcategories' && <SubcategoriesSection notify={notify} onDirty={markDirty} />}
         {tab === 'bestsellers' && <BestSellersSection notify={notify} onDirty={markDirty} />}
-        {tab === 'settings' && <SettingsSection notify={notify} />}
       </main>
 
       {toast && (
@@ -936,14 +843,15 @@ export default function AdminPage() {
       {dirty && (
         <button
           className="ad-mobile-publish"
-          onClick={() => setTab('settings')}
+          onClick={publish}
+          disabled={publishing}
           aria-label="Save and publish"
         >
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
             strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="M12 19V5" /><path d="m5 12 7-7 7 7" />
           </svg>
-          Save &amp; publish
+          {publishing ? 'Publishing…' : 'Save & publish'}
         </button>
       )}
     </div>
