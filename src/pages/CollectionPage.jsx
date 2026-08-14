@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useCallback } from 'react'
+import { useEffect, useMemo, useRef, useCallback, useState } from 'react'
 import { gsap, ScrollTrigger, reduced, coarse } from '../lib/gsap'
 import { Link, navigate } from '../lib/router'
 import { CATEGORIES } from '../data/catalogue'
@@ -175,8 +175,18 @@ export default function CollectionPage({ params = {} }) {
      catalogue — familyPieces() reads the same store, but only re-runs when
      this value changes identity */
   const products = useContent('products')
+  const subcategoriesMap = useContent('subcategories')
   const family = useMemo(() => resolveFamily(params.family), [params.family])
   const pieces = useMemo(() => (family ? familyPieces(family) : []), [family, products])
+
+  const [subcat, setSubcat] = useState(null)
+  useEffect(() => { setSubcat(null) }, [family])
+
+  const subcats = useMemo(() => subcategoriesMap?.[family] || [], [subcategoriesMap, family])
+  const visiblePieces = useMemo(
+    () => (subcat ? pieces.filter((p) => p.subcategory === subcat) : pieces),
+    [pieces, subcat],
+  )
 
   /* the aggregate figures a buyer scans before opening a single plate */
   const stats = useMemo(() => {
@@ -294,6 +304,21 @@ export default function CollectionPage({ params = {} }) {
       {/* ── the plates ─────────────────────────────────────────────────── */}
       <section className="pl-grid-wrap" aria-label={`${family} pieces`}>
         <div className="wrap">
+          {subcats.length > 0 && (
+            <div className="pl-subcat-row" role="group" aria-label="Filter by subcategory">
+              <button
+                className={`pl-subcat-btn${!subcat ? ' is-active' : ''}`}
+                onClick={() => setSubcat(null)}
+              >All</button>
+              {subcats.map((s) => (
+                <button
+                  key={s}
+                  className={`pl-subcat-btn${subcat === s ? ' is-active' : ''}`}
+                  onClick={() => setSubcat(s)}
+                >{s}</button>
+              ))}
+            </div>
+          )}
           {!pieces.length && (
             /* an honest holding page: this family is real and reachable, its
                stock simply has not been filed yet. Never a 404. */
@@ -312,7 +337,7 @@ export default function CollectionPage({ params = {} }) {
             </div>
           )}
           <ol className="pl-grid">
-            {pieces.map((p) => (
+            {visiblePieces.map((p) => (
               <ProductCard key={p.slug} p={p} />
             ))}
           </ol>
