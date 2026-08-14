@@ -746,6 +746,23 @@
       "finishes": [],
       "rail": false,
       "id": 39
+    },
+    {
+      "name": "hsjsbs",
+      "category": "Home Decor",
+      "subcategory": "Wall sconce",
+      "slug": "hsjsbs",
+      "material": "hdjs",
+      "dims": "",
+      "weight": "",
+      "moq": "",
+      "lead": "",
+      "image": "https://unsplash.com/photos/brown-wooden-table-with-chairs-YI2YkyaREHk",
+      "story": "",
+      "tone": "brass",
+      "finishes": [],
+      "rail": false,
+      "id": 40
     }
   ],
   "subcategories": {
