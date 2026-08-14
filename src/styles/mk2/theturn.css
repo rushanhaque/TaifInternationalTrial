@@ -44,6 +44,10 @@
   overflow: visible;
 }
 
+html.dark .tt {
+  background-color: #4A2410 !important;
+}
+
 html.dark .tt-card {
   background-color: var(--white, #4A2410);
   border-color: rgba(255, 255, 255, 0.16);
