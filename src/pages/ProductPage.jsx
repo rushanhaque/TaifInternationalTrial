@@ -1,6 +1,6 @@
 import { Link, navigate } from '../lib/router'
 import { productBySlug, useContent } from '../lib/content'
-import { FINISHES } from '../data/site'
+import { FINISHES, BRAND } from '../data/site'
 import { CharCascade, Dilate } from '../components/Reveal'
 import Slab from '../components/Slab'
 import Button from '../components/Button'
@@ -31,8 +31,8 @@ export default function ProductPage({ params }) {
       <section className="page-hero wrap">
         <div className="grid" style={{ alignItems: 'center' }}>
           <div className="sp-6">
-            <Slab warp={false} className="prod-hero-slab" tone={p.tone} ratio="7/5" label={p.name.toUpperCase()} meta={p.material}
-              img={productImg(p.slug)} alt={p.name} />
+            <Slab warp={false} className="prod-hero-slab" tone={p.tone} ratio="7/5"
+              img={p.image || productImg(p.slug)} alt={p.name} />
           </div>
           <div className="sp-6 prod-info">
             <p className="meta">{p.category}</p>
@@ -54,7 +54,24 @@ export default function ProductPage({ params }) {
                 <Button small onClick={() => (has(p.slug) ? remove(p.slug) : add(p))}>
                   {has(p.slug) ? 'In your cart' : 'Add to cart'}
                 </Button>
-                <Button small variant="ghost" onClick={() => navigate('/contact')}>
+                <Button
+                  small
+                  variant="ghost"
+                  onClick={() => {
+                    const num = BRAND.phone.replace(/\D/g, '')
+                    const msg = [
+                      `Hi, I'm interested in a quote for:`,
+                      ``,
+                      `*${p.name}*`,
+                      `Category: ${p.category}`,
+                      `Material: ${p.material}`,
+                      finishes.length ? `Finishes: ${finishes.map((f) => f.name).join(', ')}` : null,
+                      ``,
+                      `Please share pricing, MOQ and lead time.`,
+                    ].filter((l) => l !== null).join('\n')
+                    window.open(`https://wa.me/${num}?text=${encodeURIComponent(msg)}`, '_blank')
+                  }}
+                >
                   Request a quote
                 </Button>
               </div>
@@ -73,7 +90,7 @@ export default function ProductPage({ params }) {
               {related.map((r) => (
                 <Link key={r.slug} to={`/catalogue/${r.slug}`} className="rail-card">
                   <Slab tone={r.tone} label={r.name.toUpperCase()} meta={r.material}
-                    img={productImg(r.slug)} alt={r.name} />
+                    img={r.image || productImg(r.slug)} alt={r.name} />
                   <div className="rail-card-meta meta"><span>{r.category}</span><span>{r.idx}</span></div>
                 </Link>
               ))}

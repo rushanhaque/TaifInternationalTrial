@@ -291,8 +291,9 @@ html.dark .ad-btn--primary:hover:not(:disabled) { background: #E4C489; }
   backdrop-filter: blur(3px);
   z-index: 1200;
   display: flex; align-items: flex-start; justify-content: center;
-  padding: clamp(1rem, 5vh, 3.5rem) 1rem;
+  padding: clamp(0.75rem, 4vh, 3rem) 1rem;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   animation: adFade 0.15s ease;
 }
 .ad-modal {
@@ -303,6 +304,8 @@ html.dark .ad-btn--primary:hover:not(:disabled) { background: #E4C489; }
   margin: auto;
   box-shadow: 0 24px 60px rgba(24, 16, 12, 0.24);
   animation: adRise 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex; flex-direction: column;
+  max-height: calc(100dvh - clamp(1.5rem, 8vh, 6rem));
 }
 @keyframes adFade { from { opacity: 0 } to { opacity: 1 } }
 @keyframes adRise { from { opacity: 0; transform: translateY(8px) } to { opacity: 1; transform: none } }
@@ -312,13 +315,21 @@ html.dark .ad-btn--primary:hover:not(:disabled) { background: #E4C489; }
   gap: 1rem;
   padding: 1.1rem 1.3rem;
   border-bottom: 1px solid var(--ad-line);
+  flex-shrink: 0;
 }
 .ad-modal-head h2 { margin: 0; font-size: 1.05rem; font-weight: 700; letter-spacing: -0.01em; text-transform: none; }
-.ad-modal-body { padding: 1.3rem; }
+.ad-modal-body {
+  padding: 1.3rem;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  flex: 1 1 auto;
+  min-height: 0;
+}
 .ad-modal-foot {
   display: flex; justify-content: flex-end; gap: 0.6rem;
   padding: 1rem 1.3rem;
   border-top: 1px solid var(--ad-line);
+  flex-shrink: 0;
 }
 
 /* ── toast ───────────────────────────────────────────────────────────────── */

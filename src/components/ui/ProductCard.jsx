@@ -23,7 +23,7 @@ export default function ProductCard({ p }) {
             <div className="pl-glow" aria-hidden="true" />
             <img
               className="pl-img"
-              src={productPlate(p.slug)}
+              src={p.image || productPlate(p.slug)}
               alt={p.name}
               loading="lazy"
               decoding="async"

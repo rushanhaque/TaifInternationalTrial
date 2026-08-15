@@ -62,7 +62,7 @@ export default function CataloguePage() {
             <div style={{ height: '600px', position: 'relative' }}>
               <CircularGallery
                 items={arrivals.map((p) => ({
-                  image: productImg(p.slug),
+                  image: p.image || productImg(p.slug),
                   text: p.name.toUpperCase()
                 }))}
                 bend={1.5}

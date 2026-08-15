@@ -49,9 +49,13 @@
 }
 
 /* The wave ribbon carries a -3.5rem pull meant for the section it used to
-   follow; below the vitrine that pull climbed over the last row of plates. */
+   follow; below the vitrine that pull climbed over the last row of plates.
+   Cover every combination of intermediary elements between the mosaic and
+   the ribbon so none of them let the negative margin sneak back in. */
 .cm-section + .section-divider + .ribbon,
-.cm-section + .ribbon {
+.cm-section + .ribbon,
+.vitrine-cta + .section-divider + .ribbon,
+.vitrine-cta + .ribbon {
   margin-top: 0;
 }
 
@@ -60,8 +64,8 @@
 .vitrine-cta {
   display: flex;
   justify-content: center;
-  padding: 0 var(--gutter) clamp(3rem, 6vh, 5rem);
-  margin-top: clamp(-4.5rem, -8vh, -3rem);
+  padding: 0 var(--gutter) clamp(2rem, 4vh, 3.5rem);
+  margin-top: clamp(-3rem, -5vh, -2rem);
   background-color: var(--white);
 }
 

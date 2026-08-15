@@ -22,17 +22,7 @@ export const HERO_IMG = pic('taif-workshop-hero', 1920, 1200)
    reshuffle every family's cover on every visit. */
 const COVER = (name) => `/img/collections/${name}.png`
 
-export const COLLECTION_IMGS = {
-  'Wooden Products': COVER('DecorCover'),
-  'Copper Products': COVER('KitchenwareCover'),
-  'Home Decor': COVER('AccessoriesCover'),
-  'Hardware Supplies': COVER('ClocksCover'),
-  'Corporate Gifting': COVER('WeddingCover'),
-  'Religious Supplies': COVER('LightingCover'),
-  'Bathroom Accessories': COVER('AccessoriesCover'),
-  'Kitchenware': COVER('KitchenwareCover'),
-  'Barware': COVER('DecorCover'),
-}
+export const COLLECTION_IMGS = {}
 
 /* materials (/materials) */
 export const MATERIAL_IMGS = {
