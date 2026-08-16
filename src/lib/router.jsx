@@ -141,7 +141,9 @@ export function Router({ routes, notFound, before = null, after = null }) {
     }
     if (push) window.history.pushState({}, '', to)
 
-    if (reduced() || !mitreRef.current) {
+    /* back/forward is a return to somewhere you have already been — the mitre
+       announces arrival at a new page, so it would misread here */
+    if (!push || reduced() || !mitreRef.current) {
       settle(to)
       requestAnimationFrame(() => ScrollTrigger.refresh())
       document.getElementById('main')?.focus({ preventScroll: true })

@@ -551,6 +551,45 @@ html.dark .countries-card span {
   padding-top: clamp(2.5rem, 5vh, 4rem);
 }
 
+.blog-card {
+  display: block;
+  position: relative;
+  border-radius: var(--r-lg, 20px);
+  overflow: hidden;
+  aspect-ratio: 9/16;
+  text-decoration: none;
+}
+
+.blog-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.blog-card:hover .blog-card-img {
+  transform: scale(1.04);
+}
+
+.blog-play {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: #fff;
+  background: rgba(0,0,0,0.18);
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+
+.blog-card:hover .blog-play {
+  opacity: 1;
+}
+
 /* Section 10: Reviews */
 #reviews,
 #instagram,

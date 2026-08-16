@@ -13,3 +13,4 @@ __pycache__/
 
 # raw source assets — processed versions live in public/, source stays local
 assets/
+.vercel

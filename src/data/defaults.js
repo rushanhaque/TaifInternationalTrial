@@ -66,12 +66,12 @@ export const DEFAULT_REVIEWS = [
 
 /* blogs — the video cards in the "Blogs and socials" band on the homepage */
 export const DEFAULT_BLOGS = [
-  { id: 1, title: 'Inside the metal floor', videoSrc: 'https://www.youtube.com/embed/qh3NGpYRG3I', thumbnail: 'https://picsum.photos/seed/taif-the-arc/900/700', alt: 'Workshop preview 1' },
-  { id: 2, title: 'Seasoning the timber', videoSrc: 'https://www.youtube.com/embed/qh3NGpYRG3I', thumbnail: 'https://picsum.photos/seed/taif-the-block/900/700', alt: 'Workshop preview 2' },
-  { id: 3, title: 'Setting a brass inlay', videoSrc: 'https://www.youtube.com/embed/qh3NGpYRG3I', thumbnail: 'https://picsum.photos/seed/taif-the-sweep/900/700', alt: 'Workshop preview 3' },
-  { id: 4, title: 'Raising a copper vessel', videoSrc: 'https://www.youtube.com/embed/qh3NGpYRG3I', thumbnail: 'https://picsum.photos/seed/taif-the-lean/900/700', alt: 'Workshop preview 4' },
-  { id: 5, title: 'The finishing bench', videoSrc: 'https://www.youtube.com/embed/qh3NGpYRG3I', thumbnail: 'https://picsum.photos/seed/taif-the-dip/900/700', alt: 'Workshop preview 5' },
-  { id: 6, title: 'Packing for the container', videoSrc: 'https://www.youtube.com/embed/qh3NGpYRG3I', thumbnail: 'https://picsum.photos/seed/taif-the-turn/900/700', alt: 'Workshop preview 6' },
+  { id: 1, title: 'Inside the metal floor', link: '', videoSrc: 'https://www.youtube.com/embed/qh3NGpYRG3I', thumbnail: 'https://picsum.photos/seed/taif-the-arc/900/700', alt: 'Workshop preview 1' },
+  { id: 2, title: 'Seasoning the timber', link: '', videoSrc: 'https://www.youtube.com/embed/qh3NGpYRG3I', thumbnail: 'https://picsum.photos/seed/taif-the-block/900/700', alt: 'Workshop preview 2' },
+  { id: 3, title: 'Setting a brass inlay', link: '', videoSrc: 'https://www.youtube.com/embed/qh3NGpYRG3I', thumbnail: 'https://picsum.photos/seed/taif-the-sweep/900/700', alt: 'Workshop preview 3' },
+  { id: 4, title: 'Raising a copper vessel', link: '', videoSrc: 'https://www.youtube.com/embed/qh3NGpYRG3I', thumbnail: 'https://picsum.photos/seed/taif-the-lean/900/700', alt: 'Workshop preview 4' },
+  { id: 5, title: 'The finishing bench', link: '', videoSrc: 'https://www.youtube.com/embed/qh3NGpYRG3I', thumbnail: 'https://picsum.photos/seed/taif-the-dip/900/700', alt: 'Workshop preview 5' },
+  { id: 6, title: 'Packing for the container', link: '', videoSrc: 'https://www.youtube.com/embed/qh3NGpYRG3I', thumbnail: 'https://picsum.photos/seed/taif-the-turn/900/700', alt: 'Workshop preview 6' },
 ]
 
 /* socials — `platform` picks the icon, so keep it to a known key.

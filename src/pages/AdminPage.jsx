@@ -113,18 +113,19 @@ const SECTIONS = [
     key: 'blogs',
     label: 'Blogs',
     title: 'Blogs and socials band',
-    blurb: 'The video cards on the homepage. Each opens a lightbox, so the video URL must be an embed link.',
+    blurb: 'The cards on the homepage. Clicking one opens its link in a new tab.',
     singular: 'post',
     /* a fixed set: these render into a layout that expects a known number of
        items, so they are edit-only — no adding, no deleting, no reordering */
     fixed: true,
     rowTitle: (b) => b.title,
-    rowSub: (b) => b.videoSrc,
+    rowSub: (b) => b.link || b.videoSrc,
     rowImg: (b) => b.thumbnail,
-    blank: { title: '', videoSrc: '', thumbnail: '', alt: '' },
+    blank: { title: '', link: '', videoSrc: '', thumbnail: '', alt: '' },
     fields: [
       { key: 'title', label: 'Title', required: true, full: true },
-      { key: 'videoSrc', label: 'Video embed URL', required: true, full: true, placeholder: 'https://www.youtube.com/embed/VIDEO_ID', hint: 'Use the /embed/ form of the link, not the watch?v= one.' },
+      { key: 'link', label: 'Link', full: true, placeholder: 'https://instagram.com/p/...', hint: 'Where the card goes when clicked. Falls back to the video URL if blank.' },
+      { key: 'videoSrc', label: 'Video URL', full: true, placeholder: 'https://www.youtube.com/watch?v=VIDEO_ID' },
       { key: 'thumbnail', label: 'Thumbnail', type: 'image', full: true },
       { key: 'alt', label: 'Image description', full: true, hint: 'Read aloud by screen readers.' },
     ],

@@ -285,12 +285,16 @@ export default function Home() {
           <div className="grid">
             {blogs.map((b) => (
               <div className="sp-2" key={b.id}>
-                <HeroVideoDialog
-                  animationStyle="from-center"
-                  videoSrc={b.videoSrc}
-                  thumbnailSrc={b.thumbnail}
-                  thumbnailAlt={b.alt || b.title}
-                />
+                <a
+                  href={b.link || b.videoSrc}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="blog-card"
+                  aria-label={b.alt || b.title}
+                >
+                  <img src={b.thumbnail} alt={b.alt || b.title} className="blog-card-img" />
+                  <span className="blog-play" aria-hidden="true">▶</span>
+                </a>
               </div>
             ))}
           </div>
