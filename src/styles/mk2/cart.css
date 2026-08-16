@@ -275,7 +275,13 @@
 .ct-btn-label,
 .ct-btn-go { position: relative; z-index: 1; }
 
-.ct-btn-go { font-size: 0.9rem; }
+/* holds an inline svg now, not a text arrow — flex keeps it optically centred
+   against the label's baseline box */
+.ct-btn-go {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
 
 .ct-fine {
   margin-top: 0.8rem;
