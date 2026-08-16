@@ -3,7 +3,7 @@ import { gsap, reduced } from '../lib/gsap'
 import { BRAND } from '../data/site'
 
 /* the hero clip — swap this URL to change the landing-page backdrop */
-const HERO_VIDEO = 'https://res.cloudinary.com/djszwbnxp/video/upload/v1786354702/IMG_0217_mkksta.mp4'
+const HERO_VIDEO = 'https://res.cloudinary.com/r9atxbdz/video/upload/v1786893166/Taif_Video_Final.mp4'
 
 /* ── E19 · THE WELCOME ────────────────────────────────────────────────────
    Three lines over the ambient footage — a small kicker, the big brand

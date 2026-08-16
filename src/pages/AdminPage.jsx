@@ -148,6 +148,19 @@ const SECTIONS = [
     ],
   },
   {
+    key: 'announcements',
+    label: 'Offers / Announcements',
+    title: 'Offers / Announcements',
+    blurb: 'The scrolling ticker at the very top of the homepage. Add, edit or remove items here.',
+    singular: 'item',
+    rowTitle: (a) => a.text,
+    rowSub: () => '',
+    blank: { text: '' },
+    fields: [
+      { key: 'text', label: 'Text', required: true, full: true, placeholder: 'Shipping worldwide' },
+    ],
+  },
+  {
     key: 'atelier',
     label: 'Atelier images',
     title: 'Atelier images',
@@ -784,17 +797,24 @@ export default function AdminPage() {
       <aside className="ad-nav">
         <p className="ad-nav-title">Content</p>
 
-        {SECTIONS.map((s) => (
-          <button
-            key={s.key}
-            className="ad-tab"
-            aria-current={tab === s.key}
-            onClick={() => setTab(s.key)}
-          >
-            <span>{s.label}</span>
-            <span className="ad-tab-count">{counts[s.key]}</span>
-          </button>
-        ))}
+        {SECTIONS.map((s) => {
+          const locked = s.key === 'atelier' || s.key === 'exhibitions'
+          return (
+            <button
+              key={s.key}
+              className={`ad-tab${locked ? ' ad-tab--locked' : ''}`}
+              aria-current={!locked && tab === s.key}
+              onClick={locked ? undefined : () => setTab(s.key)}
+              disabled={locked}
+              title={locked ? 'Shows page is coming soon — editing locked' : undefined}
+            >
+              <span>{s.label}</span>
+              {locked
+                ? <span className="ad-tab-lock">🔒</span>
+                : <span className="ad-tab-count">{counts[s.key]}</span>}
+            </button>
+          )
+        })}
 
         <button className="ad-tab" aria-current={tab === 'subcategories'} onClick={() => setTab('subcategories')}>
           <span>Subcategories</span>

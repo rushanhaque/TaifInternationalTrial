@@ -142,6 +142,12 @@ export const DEFAULT_BEST_SELLERS = [
   'copper-cocktail-shaker',
 ]
 
+/* announcements — the scrolling ticker at the very top of the homepage */
+export const DEFAULT_ANNOUNCEMENTS = [
+  { id: 1, text: 'Shipping worldwide' },
+  { id: 2, text: 'Export ready · Moradabad, India' },
+]
+
 /* the whole editable surface in one object — the shape the store persists and
    the shape an exported content.json takes */
 export const DEFAULTS = {
@@ -154,4 +160,5 @@ export const DEFAULTS = {
   socials: DEFAULT_SOCIALS,
   atelier: DEFAULT_ATELIER,
   exhibitions: DEFAULT_EXHIBITIONS,
+  announcements: DEFAULT_ANNOUNCEMENTS,
 }

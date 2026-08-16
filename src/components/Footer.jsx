@@ -110,6 +110,13 @@ export default function Footer() {
           </div>
         </div>
       </div>
+      <div className="foot-copy">
+        <span>© {new Date().getFullYear()} {BRAND.name}. All rights reserved.</span>
+        <span className="foot-copy-sep">·</span>
+        <span>{BRAND.origin}</span>
+        <span className="foot-copy-sep">·</span>
+        <Link to="/privacy">Privacy</Link>
+      </div>
     </footer>
   )
 }

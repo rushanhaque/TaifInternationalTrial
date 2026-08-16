@@ -83,9 +83,32 @@ function StatCard({ target, suffix = '+', label, sub, duration = 1800 }) {
 export default function Home() {
   const blogs = useContent('blogs')
   const stats = useContent('stats')
+  const announcements = useContent('announcements')
 
   return (
     <div className="hp">
+      {/* top announcement bar — items editable via Admin → Offers */}
+      {announcements.length > 0 && (
+        <div className="announce-bar" aria-label="Announcement">
+          <div className="announce-track">
+            {[...Array(6)].map((_, i) => (
+              <span key={i} className="announce-seg" aria-hidden={i > 0 ? 'true' : undefined}>
+                {/* a Fragment, not a wrapping span: .announce-seg is the flex
+                    container and its `gap` only separates DIRECT children, so
+                    boxing each pair up would leave the star jammed against the
+                    word it follows */}
+                {announcements.map((a, j) => (
+                  <span key={a.id ?? j} className="announce-item">
+                    {a.text}
+                    <span className="announce-dot" aria-hidden="true">✦</span>
+                  </span>
+                ))}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* 0.1 · HERO BRAND — the title sequence */}
       <HeroBrand />
 

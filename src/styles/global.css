@@ -797,53 +797,86 @@ html.dark .section.alt {
   color: var(--dim);
 }
 
+/* ============ announcement bar ============ */
+.announce-bar {
+  position: relative;
+  width: 100%;
+  z-index: 101;
+  background: #4A2410;
+  color: #FAF8F5;
+  height: 32px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+.announce-track {
+  display: flex;
+  white-space: nowrap;
+  animation: announce-scroll 28s linear infinite;
+  will-change: transform;
+}
+.announce-seg {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  font-family: var(--font-accent);
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(250, 248, 245, 0.9);
+}
+.announce-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0 0.9rem;
+}
+.announce-dot {
+  color: #C9A227;
+  font-size: 0.5rem;
+}
+@keyframes announce-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .announce-track { animation: none; }
+}
+
 /* ============ navbar (E6 · H1 · H3) ============ */
 /* ============ navbar (E6 · Liquid Glassmorphism) ============ */
-/* Full-width top header before scroll */
+/* Floating oval pill header — the ONLY header geometry. Every page, at every
+   scroll position, the bar is the centred pill. The single exception is the
+   landing page over the hero film, where .nav-hero strips the ground away but
+   leaves the geometry alone (see below). */
 .nav {
   position: fixed;
-  top: 0;
-  left: 0;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 100;
-  width: 100%;
+  width: min(calc(100% - 2 * var(--gutter)), 1280px);
   max-width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 0.8rem;
-  padding: 10px var(--gutter);
-  border-radius: 0;
-  background: var(--offwhite) !important;
-  background-color: var(--offwhite) !important;
-  border-bottom: 1px solid rgba(122, 59, 29, 0.1);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-  transition: 
-    top 0.45s cubic-bezier(0.16, 1, 0.3, 1),
-    width 0.45s cubic-bezier(0.16, 1, 0.3, 1),
-    padding 0.45s cubic-bezier(0.16, 1, 0.3, 1),
-    border-radius 0.45s cubic-bezier(0.16, 1, 0.3, 1),
-    background-color 0.35s ease,
-    border-color 0.35s ease,
-    box-shadow 0.35s ease;
-}
-
-/* Floating Oval Pill Header (on scroll) — Solid Matching #F5F5F5 */
-.nav.nav-scrolled {
-  top: 12px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: min(calc(100% - 2 * var(--gutter)), 1280px);
   padding: 6px 14px 6px 22px;
   border-radius: 9999px;
   background: var(--offwhite) !important;
   background-color: var(--offwhite) !important;
   border: 1px solid rgba(122, 59, 29, 0.12);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  transition:
+    top 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+    padding 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 0.35s ease,
+    border-color 0.35s ease,
+    box-shadow 0.35s ease;
 }
 
-.nav.nav-scrolled .header-brand-img {
-  height: 32px !important;
-}
+/* .nav-scrolled no longer changes the shape — it is already the pill. It stays
+   on the element because other rules (and the dropdown) key off it. */
 
 .nav::before {
   display: none !important;
@@ -856,11 +889,30 @@ html.dark .section.alt {
    .nav-scrolled goes on, so the pill returns unchanged. */
 .nav.nav-hero,
 html.dark .nav.nav-hero {
+  /* sits clear of the 32px announcement bar, which is in normal flow at the
+     very top of the homepage and scrolls away with the page */
+  top: 40px;
   background: transparent !important;
   background-color: transparent !important;
   border-bottom-color: transparent !important;
   border-color: transparent !important;
   box-shadow: none !important;
+
+  /* With no pill drawn there is nothing for the inset margins to shape, so the
+     bar goes full width and pads to --gutter instead: the mark then lands on
+     the same left edge as the hero copy and every section below it, and
+     space-between throws the links and controls out to the opposite edge. */
+  left: 0;
+  transform: none;
+  width: 100%;
+  max-width: 100%;
+  padding: 6px var(--gutter);
+}
+
+/* the brand link's own inset is there to hold the mark off the pill's edge;
+   with no pill it just breaks the alignment, so it goes */
+.nav.nav-hero .brand {
+  padding-left: 0;
 }
 
 .nav.nav-hero,
@@ -2250,10 +2302,29 @@ html.dark .header-brand-img {
   background: #4A2410 !important;
   color: #FFFFFF !important;
   padding-top: clamp(2rem, 4vw, 3.5rem);
-  padding-bottom: clamp(3rem, 6vw, 4.5rem);
+  padding-bottom: 0;
   position: relative;
   overflow: hidden;
 }
+
+.foot-copy {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.75rem;
+  padding: 0.75rem var(--gutter);
+  margin-top: clamp(2rem, 4vw, 3.5rem);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-family: var(--font-accent);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+}
+.foot-copy a { color: rgba(255, 255, 255, 0.45); text-decoration: none; }
+.foot-copy a:hover { color: rgba(255, 255, 255, 0.75); }
+.foot-copy-sep { opacity: 0.3; }
 
 .footer h3,
 .footer p,

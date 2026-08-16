@@ -3,3 +3,13 @@ dist
 .DS_Store
 *.local
 __pycache__/
+
+# video files — host on Cloudinary, never commit
+*.mp4
+*.mov
+*.avi
+*.webm
+*.mkv
+
+# raw source assets — processed versions live in public/, source stays local
+assets/
