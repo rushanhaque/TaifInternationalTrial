@@ -1990,6 +1990,14 @@ html.dark .header-brand-img {
   aspect-ratio: 4/3;
 }
 
+/* product hero — show the photo clean, no colour veil or sheen */
+.prod-hero-slab .slab-core::after {
+  display: none;
+}
+.prod-hero-slab .slab-sheen {
+  display: none;
+}
+
 .rail-card-meta {
   display: flex;
   justify-content: space-between;
