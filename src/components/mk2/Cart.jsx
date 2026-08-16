@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { gsap, reduced } from '../../lib/gsap'
 import { useCart, enquiryText } from '../../lib/cart'
 import { productPlate } from '../../data/images'
@@ -41,6 +41,7 @@ export default function Cart() {
   const paneRef = useRef(null)
   const tabRef = useRef(null)
   const prevCount = useRef(0)
+  const [copied, setCopied] = useState(false)
 
   /* the tab springs when an item lands — the only feedback that the hover
      button did anything, since the pane stays shut */
@@ -70,6 +71,18 @@ export default function Cart() {
     `mailto:${BRAND.email}` +
     `?subject=${encodeURIComponent(`Enquiry — ${count} ${count === 1 ? 'piece' : 'pieces'}`)}` +
     `&body=${encodeURIComponent(text)}`
+
+  /* A mailto: link is silent when the visitor has no mail client registered —
+     which is most people on desktop webmail. The link still fires, so we
+     cannot detect the failure; instead the enquiry goes to the clipboard on
+     the way out and the address is named underneath. If the mail app opened,
+     the copy is harmless; if it did not, nothing is lost. */
+  function onMailClick() {
+    navigator.clipboard?.writeText(`${BRAND.email}\n\n${text}`).then(
+      () => setCopied(true),
+      () => {}
+    )
+  }
 
   return (
     <>
@@ -158,10 +171,15 @@ export default function Cart() {
               <span className="ct-btn-label">Send on WhatsApp</span>
               <span className="ct-btn-go">{waGlyph}</span>
             </a>
-            <a className="ct-btn ct-mail" href={mailHref}>
+            <a className="ct-btn ct-mail" href={mailHref} onClick={onMailClick}>
               <span className="ct-btn-label">Send by email</span>
               <span className="ct-btn-go">{mailGlyph}</span>
             </a>
+            {copied && (
+              <p className="ct-copied meta" role="status">
+                Copied. If your mail app did not open, send to {BRAND.email}
+              </p>
+            )}
           </div>
         </footer>
       </aside>

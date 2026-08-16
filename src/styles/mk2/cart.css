@@ -283,6 +283,15 @@
   justify-content: center;
 }
 
+/* the mailto fallback line — only present after the button is used */
+.ct-copied {
+  margin: 0.7rem 0 0;
+  font-size: 0.68rem;
+  line-height: 1.45;
+  text-align: center;
+  color: var(--faint);
+}
+
 .ct-fine {
   margin-top: 0.8rem;
   font-size: 0.68rem;
