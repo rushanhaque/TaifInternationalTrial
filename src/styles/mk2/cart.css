@@ -123,19 +123,16 @@
   height: 36px;
   display: grid;
   place-items: center;
-  border: 1px solid var(--hair);
-  border-radius: 50%;
-  background: var(--white);
-  font-size: 1.2rem;
-  line-height: 1;
+  border: none;
+  border-radius: 0;
+  background: none;
   color: var(--graphite-2);
   cursor: pointer;
-  transition: transform 0.35s var(--ease-surge), border-color 0.3s, color 0.3s;
+  transition: transform 0.35s var(--ease-surge), color 0.3s;
 }
 
 .ct-close:hover {
   transform: rotate(90deg);
-  border-color: var(--brass);
   color: var(--tint-deep);
 }
 
@@ -323,8 +320,8 @@
     padding: 1.25rem 1rem 0.75rem;
   }
   .ct-close {
-    width: 42px;
-    height: 42px;
+    width: 36px;
+    height: 36px;
   }
   .ct-note {
     padding: 0 1rem 0.85rem;
