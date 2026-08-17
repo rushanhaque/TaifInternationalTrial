@@ -129,21 +129,12 @@ export default function SlatShow() {
 
   return (
     <section
-      className="section clear ss-section"
+      className="ss-section"
       id="section-1"
       ref={root}
-      aria-labelledby="ss-title"
+      aria-label="Workshop photographs"
     >
-      <div className="sec-head">
-        <span className="meta">Section 1</span>
-      </div>
-
       <div className="wrap">
-        {/* the caption is the accessible name of the picture on show, so a
-            screen reader is told what changed without being read the whole
-            mechanism */}
-        <h2 className="ss-title" id="ss-title">{SLIDES[current].caption}</h2>
-
         <div
           className="ss-frame"
           style={{ '--n': SLATS }}

@@ -16,17 +16,7 @@
      composited transforms and nothing that forces layout. */
 
 .ss-section {
-  background-color: var(--white);
-}
-
-.ss-title {
-  margin: 0 0 clamp(1.1rem, 2.4vw, 1.9rem);
-  font-family: var(--font-display, inherit);
-  font-size: clamp(1.6rem, 4vw, 2.9rem);
-  font-weight: 500;
-  letter-spacing: -0.02em;
-  line-height: 1.05;
-  color: var(--tint-deep);
+  padding: clamp(3rem, 6vw, 5rem) 0;
 }
 
 /* ── the frame ─────────────────────────────────────────────────────────── */
@@ -80,6 +70,7 @@
   top: 0;
   left: calc(-100% * var(--i));
   width: calc(100% * var(--n));
+  max-width: none;
   height: 100%;
   object-fit: cover;
   display: block;
@@ -164,8 +155,7 @@
 }
 
 /* ── dark ──────────────────────────────────────────────────────────────── */
-html.dark .ss-section { background-color: #2A1306; }
-html.dark .ss-title { color: #FFFFFF; }
+html.dark .ss-section { background-color: transparent; }
 
 /* ── narrow ────────────────────────────────────────────────────────────── */
 @media (max-width: 700px) {
