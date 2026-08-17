@@ -22,7 +22,31 @@ export const HERO_IMG = pic('taif-workshop-hero', 1920, 1200)
    reshuffle every family's cover on every visit. */
 const COVER = (name) => `/img/collections/${name}.png`
 
-export const COLLECTION_IMGS = {}
+/* Homepage mosaic covers — shown in the 3×3 grid on the landing page */
+export const COLLECTION_IMGS = {
+  'Wooden Products':       '/img/collections/homepage/WoodenProducts.jpeg',
+  'Copper Products':       '/img/collections/homepage/CopperProducts.jpeg',
+  'Home Decor':            '/img/collections/homepage/HomeDecor.jpeg',
+  'Hardware Supplies':     '/img/collections/homepage/HardwareSupplies.jpeg',
+  'Corporate Gifting':     '/img/collections/homepage/CorporateGifting.jpeg',
+  'Religious Supplies':    '/img/collections/homepage/ReligiousSupplies.jpeg',
+  'Bathroom Accessories':  '/img/collections/homepage/BathroomAccessories.jpeg',
+  'Kitchenware':           '/img/collections/homepage/Kitchenware.jpeg',
+  'Barware':               '/img/collections/homepage/Barware.jpeg',
+}
+
+/* Collection page covers — shown in the full-width wall on /collections */
+export const COLLECTION_PAGE_IMGS = {
+  'Wooden Products':       '/img/collections/collectionpage/WoodenProducts.jpeg',
+  'Copper Products':       '/img/collections/collectionpage/CopperProducts.jpeg',
+  'Home Decor':            '/img/collections/collectionpage/HomeDecor.jpeg',
+  'Hardware Supplies':     '/img/collections/collectionpage/HardwareSupplies.jpeg',
+  'Corporate Gifting':     '/img/collections/collectionpage/CorporateGifting.jpeg',
+  'Religious Supplies':    '/img/collections/collectionpage/ReligiousSupplies.jpeg',
+  'Bathroom Accessories':  '/img/collections/collectionpage/BathroomAccessories.jpeg',
+  'Kitchenware':           '/img/collections/collectionpage/Kitchenware.jpeg',
+  'Barware':               '/img/collections/collectionpage/Barware.jpeg',
+}
 
 /* materials (/materials) */
 export const MATERIAL_IMGS = {

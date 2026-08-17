@@ -2,7 +2,7 @@ import { useLayoutEffect, useRef } from 'react'
 import { gsap, reduced } from '../lib/gsap'
 import { Link } from '../lib/router'
 import { COLLECTIONS } from '../data/site'
-import { COLLECTION_IMGS } from '../data/images'
+import { COLLECTION_PAGE_IMGS } from '../data/images'
 import { familySlug } from '../pages/CollectionPage'
 
 /* ── THE INDEX ──────────────────────────────────────────────────────────────
@@ -94,7 +94,7 @@ export default function CollectionsWall() {
                 <span className="cw-frame">
                   <img
                     className="cw-img"
-                    src={COLLECTION_IMGS[c.name]}
+                    src={COLLECTION_PAGE_IMGS[c.name]}
                     alt=""
                     style={{ '--focus': FOCUS[i] }}
                     loading={i < 3 ? 'eager' : 'lazy'}
