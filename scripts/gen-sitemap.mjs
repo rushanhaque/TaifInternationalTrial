@@ -25,7 +25,7 @@ const familySlug = (name) =>
 
 const FAMILIES = [
   'Wooden Products', 'Copper Products', 'Home Decor', 'Hardware Supplies',
-  'Corporate Gifting', 'Religious Supplies', 'Bathroom Accessories',
+  'Gifting', 'Religious Supplies', 'Bathroom Accessories',
   'Kitchenware', 'Barware',
 ]
 
