@@ -149,7 +149,6 @@ export default function SlatShow() {
       <div className="wrap">
         <div
           className="ss-frame"
-          style={{ '--n': SLATS }}
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
           onFocus={() => setPaused(true)}
@@ -165,14 +164,15 @@ export default function SlatShow() {
               <div
                 className="ss-slat"
                 key={i}
-                style={{ '--i': i }}
                 ref={(el) => { slatsRef.current[i] = el }}
               >
                 <div className="ss-face ss-front">
-                  <img className="ss-img" src={SLIDES[front].src} alt="" draggable="false" />
+                  <img className="ss-img" src={SLIDES[front].src} alt="" draggable="false"
+                    style={{ width: `${SLATS * 100}%`, left: `${-i * 100}%`, maxWidth: 'none' }} />
                 </div>
                 <div className="ss-face ss-back">
-                  <img className="ss-img" src={SLIDES[back].src} alt="" draggable="false" />
+                  <img className="ss-img" src={SLIDES[back].src} alt="" draggable="false"
+                    style={{ width: `${SLATS * 100}%`, left: `${-i * 100}%`, maxWidth: 'none' }} />
                 </div>
               </div>
             ))}

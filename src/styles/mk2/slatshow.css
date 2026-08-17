@@ -64,13 +64,13 @@
   transform: rotateY(180deg);
 }
 
-/* the window onto a full-frame copy of the picture — see the note at the top */
+/* the window onto a full-frame copy of the picture.
+   width / left are set as inline styles in JSX (SLATS * 100% / -i * 100%)
+   so they resolve to concrete px values rather than CSS custom-property calc
+   which prod builds can drop or mis-order. */
 .ss-img {
   position: absolute;
   top: 0;
-  left: calc(-100% * var(--i));
-  width: calc(100% * var(--n));
-  max-width: none;
   height: 100%;
   object-fit: cover;
   display: block;
@@ -167,9 +167,6 @@ html.dark .ss-section { background-color: transparent; }
   }
 
   .ss-slat:nth-child(n + 7) { display: none; }
-
-  /* with six panels showing, the windows must re-register against six */
-  .ss-stage { --n: 6; }
 }
 
 /* ── reduced motion ────────────────────────────────────────────────────── */
