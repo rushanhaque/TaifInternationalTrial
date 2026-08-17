@@ -4,6 +4,7 @@ import { CharCascade, Dilate } from '../components/Reveal'
 import Button from '../components/Button'
 import MaskedHeading from '../components/MaskedHeading'
 import Timeline from '../components/mk2/Timeline'
+import SlatShow from '../components/mk2/SlatShow'
 
 
 export default function AboutPage() {
@@ -145,6 +146,8 @@ export default function AboutPage() {
 
       {/* the chronology, as a rail that fills while you read */}
       <Timeline />
+
+      <SlatShow />
 
       <section className="section">
         <div className="wrap">

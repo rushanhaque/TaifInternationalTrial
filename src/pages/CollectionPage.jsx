@@ -50,7 +50,7 @@ export const familySlug = (name) =>
 
 export const FAMILIES = [
   'Wooden Products', 'Copper Products', 'Home Decor', 'Hardware Supplies',
-  'Corporate Gifting', 'Religious Supplies', 'Bathroom Accessories',
+  'Gifting', 'Religious Supplies', 'Bathroom Accessories',
   'Kitchenware', 'Barware',
 ]
 
@@ -60,7 +60,7 @@ const ALIAS = {
   'copper-products': 'Copper Products',
   'home-decor': 'Home Decor',
   'hardware-supplies': 'Hardware Supplies',
-  'corporate-gifting': 'Corporate Gifting',
+  'gifting': 'Gifting',
   'religious-supplies': 'Religious Supplies',
   'bathroom-accessories': 'Bathroom Accessories',
   'kitchenware': 'Kitchenware',
@@ -99,7 +99,7 @@ const FAMILY_NOTE = {
   'Copper Products': 'Hand-hammered copper vessels, trays and serveware with lasting patina.',
   'Home Decor': 'Vessels, sculpture, wall pieces. The quiet centrepiece of a room.',
   'Hardware Supplies': 'Handles, knobs, hinges and fittings — cast, forged and finished by hand.',
-  'Corporate Gifting': 'Branded keepsakes, desk sets and presentation pieces for corporate orders.',
+  'Gifting': 'Branded keepsakes, desk sets and presentation pieces for corporate orders.',
   'Religious Supplies': 'Pooja thalis, diyas, bells and temple fittings in traditional brass and copper.',
   'Bathroom Accessories': 'Soap dishes, towel rings, dispensers and vanity trays for premium bathrooms.',
   'Kitchenware': 'Serving bowls, ladles, utensil holders and cookware in hand-finished metal.',

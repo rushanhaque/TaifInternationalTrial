@@ -44,7 +44,7 @@ export const COLLECTIONS = [
     accent: 'antique', pitch: 'Vessels, sculpture, wall pieces. The quiet centrepiece of a room.' },
   { no: '04', name: 'Hardware Supplies', tone: 'brass',  material: 'Brass · Iron · Steel',
     accent: 'brass',   pitch: 'Handles, knobs, hinges and fittings — cast, forged and finished by hand.' },
-  { no: '05', name: 'Corporate Gifting', tone: 'inlay',  material: 'Brass · Wood · Copper',
+  { no: '05', name: 'Gifting', tone: 'inlay',  material: 'Brass · Wood · Copper',
     accent: 'copper',  pitch: 'Branded keepsakes, desk sets and presentation pieces for corporate orders.' },
   { no: '06', name: 'Religious Supplies', tone: 'brass', material: 'Brass · Copper',
     accent: 'brass',   pitch: 'Pooja thalis, diyas, bells and temple fittings in traditional brass and copper.' },

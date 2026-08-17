@@ -1,4 +1,4 @@
-{
+﻿{
   "stats": [
     {
       "id": 1,
@@ -104,7 +104,7 @@
       "Fixtures",
       "DoorKnobs"
     ],
-    "Corporate Gifting": [
+    "Gifting": [
       "Hampers"
     ],
     "Religious Supplies": [
@@ -133,7 +133,7 @@
       "quote": "They send a moisture reading with the sample. Nobody else in this category has ever done that unprompted.",
       "client": "Meridian Living",
       "role": "Head of Product",
-      "tag": "300 pcs · 0 returns",
+      "tag": "300 pcs Â· 0 returns",
       "location": "Frankfurt, Germany"
     },
     {
@@ -141,7 +141,7 @@
       "role": "Founding Partner",
       "category": "Inlay project",
       "stars": 5,
-      "tag": "36 SKUs · 0.5% defects",
+      "tag": "36 SKUs Â· 0.5% defects",
       "location": "Paris, France",
       "quote": "The brass inlay is the reason we moved. Four suppliers promised flush finish; only Taif delivered it.",
       "id": 2
@@ -331,7 +331,7 @@
     },
     {
       "id": 2,
-      "text": "Export ready · Moradabad, India"
+      "text": "Export ready Â· Moradabad, India"
     }
   ]
 }

@@ -4,7 +4,7 @@
 
 export const CATEGORIES = [
   'Wooden Products', 'Copper Products', 'Home Decor', 'Hardware Supplies',
-  'Corporate Gifting', 'Religious Supplies', 'Bathroom Accessories',
+  'Gifting', 'Religious Supplies', 'Bathroom Accessories',
   'Kitchenware', 'Barware'
 ]
 
@@ -33,11 +33,11 @@ export const CATALOGUE = [
   { slug: 'flush-brass-hinge', name: 'Flush Brass Hinge', category: 'Hardware Supplies', tone: 'brass', material: 'Brass', finishes: ['burnished'], dims: '75 × 50 × 3 mm', weight: '0.15 kg', moq: 1000, lead: '5 wks', idx: '15', story: 'Heavy-duty brass hinge, precision milled for smooth operation.' },
   { slug: 'antique-drawer-pull', name: 'Antique Drawer Pull', category: 'Hardware Supplies', tone: 'antique', material: 'Brass', finishes: ['antique'], dims: '120 × 40 × 20 mm', weight: '0.18 kg', moq: 800, lead: '4 wks', idx: '16', story: 'Classic cup pull, chemically aged and relieved on high points.' },
 
-  // Corporate Gifting
-  { slug: 'brass-desk-clock', name: 'Brass Desk Clock', category: 'Corporate Gifting', tone: 'brass', material: 'Brass', finishes: ['burnished'], dims: 'Ø 100 × 40 mm', weight: '0.45 kg', moq: 200, lead: '6 wks', idx: '17', story: 'Minimalist desk clock, housed in a solid brass casing.' },
-  { slug: 'wooden-pen-stand', name: 'Wooden Pen Stand', category: 'Corporate Gifting', tone: 'walnut', material: 'Sheesham + Brass', finishes: ['inlay'], dims: '80 × 80 × 100 mm', weight: '0.30 kg', moq: 300, lead: '5 wks', idx: '18', story: 'Rosewood pen stand with brass inlay detailing.' },
-  { slug: 'copper-flask', name: 'Copper Flask', category: 'Corporate Gifting', tone: 'copper', material: 'Copper', finishes: ['burnished'], dims: '90 × 25 × 120 mm', weight: '0.25 kg', moq: 250, lead: '6 wks', idx: '19', story: 'Pocket flask, formed from copper and lined with tin.' },
-  { slug: 'engraved-brass-tray', name: 'Engraved Brass Tray', category: 'Corporate Gifting', tone: 'antique', material: 'Brass', finishes: ['antique'], dims: '200 × 100 × 10 mm', weight: '0.40 kg', moq: 500, lead: '5 wks', idx: '20', story: 'Small catch-all tray, perfect for corporate engraving.' },
+  // Gifting
+  { slug: 'brass-desk-clock', name: 'Brass Desk Clock', category: 'Gifting', tone: 'brass', material: 'Brass', finishes: ['burnished'], dims: 'Ø 100 × 40 mm', weight: '0.45 kg', moq: 200, lead: '6 wks', idx: '17', story: 'Minimalist desk clock, housed in a solid brass casing.' },
+  { slug: 'wooden-pen-stand', name: 'Wooden Pen Stand', category: 'Gifting', tone: 'walnut', material: 'Sheesham + Brass', finishes: ['inlay'], dims: '80 × 80 × 100 mm', weight: '0.30 kg', moq: 300, lead: '5 wks', idx: '18', story: 'Rosewood pen stand with brass inlay detailing.' },
+  { slug: 'copper-flask', name: 'Copper Flask', category: 'Gifting', tone: 'copper', material: 'Copper', finishes: ['burnished'], dims: '90 × 25 × 120 mm', weight: '0.25 kg', moq: 250, lead: '6 wks', idx: '19', story: 'Pocket flask, formed from copper and lined with tin.' },
+  { slug: 'engraved-brass-tray', name: 'Engraved Brass Tray', category: 'Gifting', tone: 'antique', material: 'Brass', finishes: ['antique'], dims: '200 × 100 × 10 mm', weight: '0.40 kg', moq: 500, lead: '5 wks', idx: '20', story: 'Small catch-all tray, perfect for corporate engraving.' },
 
   // Religious Supplies
   { slug: 'brass-pooja-thali', name: 'Brass Pooja Thali', category: 'Religious Supplies', tone: 'brass', material: 'Brass', finishes: ['burnished', 'hammered'], dims: 'Ø 300 × 25 mm', weight: '0.85 kg', moq: 200, lead: '6 wks', idx: '21', story: 'Traditional offering plate, spun and hand-polished.' },
