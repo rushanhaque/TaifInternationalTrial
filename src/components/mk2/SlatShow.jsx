@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { flushSync } from 'react-dom'
 import { gsap, reduced } from '../../lib/gsap'
 import '../../styles/mk2/slatshow.css'
 
@@ -75,13 +76,24 @@ export default function SlatShow() {
 
     busy.current = true
 
-    /* print the incoming picture on whichever side is hidden right now */
-    if (showing === 0) setBack(next); else setFront(next)
+    /* Paint the incoming picture on the hidden face NOW — before any slat
+       moves. flushSync forces React to write to the DOM synchronously so that
+       when slat 0 starts turning and passes 90°, the correct image is already
+       on its back. Without this, React batches the update and may not flush
+       until mid-stagger, causing early slats to reveal a stale or blank face. */
+    flushSync(() => {
+      if (showing === 0) setBack(next); else setFront(next)
+    })
 
     const tl = gsap.timeline({
       onComplete() {
-        setShowing((s) => (s === 0 ? 1 : 0))
-        setCurrent(next)
+        /* Flush these together so `showing` and `current` are consistent in
+           the same paint — prevents a stagger where one update lands before
+           the other and briefly exposes the wrong face. */
+        flushSync(() => {
+          setShowing((s) => (s === 0 ? 1 : 0))
+          setCurrent(next)
+        })
         busy.current = false
       },
     })
