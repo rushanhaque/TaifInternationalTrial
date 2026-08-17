@@ -16,25 +16,25 @@
      composited transforms and nothing that forces layout. */
 
 .ss-section {
-  padding: clamp(2rem, 4vw, 3.5rem) 0;
+  padding: clamp(3rem, 6vw, 5rem) 0;
 }
 
 /* ── the frame ─────────────────────────────────────────────────────────── */
 .ss-frame {
   position: relative;
+  border-radius: var(--r-lg);
   overflow: hidden;
   outline: none;
 }
 
 .ss-frame:focus-visible {
-  outline: 2px solid var(--brass);
-  outline-offset: 2px;
+  box-shadow: 0 0 0 2px var(--brass);
 }
 
 .ss-stage {
   position: relative;
   display: flex;
-  aspect-ratio: 21 / 9;
+  aspect-ratio: 16 / 7;
   /* the depth that makes the turn read as a panel pivoting rather than a
      flat width animation — shallow enough that the nine slats do not fan out
      into obviously different vanishing points */
@@ -160,7 +160,7 @@ html.dark .ss-section { background-color: transparent; }
 /* ── narrow ────────────────────────────────────────────────────────────── */
 @media (max-width: 700px) {
   .ss-stage {
-    aspect-ratio: 4 / 3;
+    aspect-ratio: 4 / 5;
     /* fewer, wider panels read better at phone width — nine slats across
        360px is a set of 40px slivers, which turns into visual noise */
     perspective: 1200px;

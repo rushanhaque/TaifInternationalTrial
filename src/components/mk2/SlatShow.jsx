@@ -134,7 +134,8 @@ export default function SlatShow() {
       ref={root}
       aria-label="Workshop photographs"
     >
-      <div
+      <div className="wrap">
+        <div
           className="ss-frame"
           style={{ '--n': SLATS }}
           onMouseEnter={() => setPaused(true)}
@@ -170,9 +171,9 @@ export default function SlatShow() {
           <p className="sr-only" role="status">
             {`${current + 1} of ${SLIDES.length} — ${SLIDES[current].caption}`}
           </p>
-      </div>
+        </div>
 
-      <div className="ss-controls">
+        <div className="ss-controls">
           <button type="button" className="ss-arrow" onClick={prev} aria-label="Previous photograph">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor"
               strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -199,6 +200,7 @@ export default function SlatShow() {
               <path d="M6 2l6 6-6 6" />
             </svg>
           </button>
+        </div>
       </div>
     </section>
   )
