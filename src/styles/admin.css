@@ -303,8 +303,7 @@ html.dark .ad-btn--primary:hover:not(:disabled) { background: #E4C489; }
   z-index: 1200;
   display: flex; align-items: center; justify-content: center;
   padding: clamp(0.75rem, 4vh, 3rem) 1rem;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
+  overflow: hidden; /* modal body scrolls internally; overlay never grows past viewport */
   animation: adFade 0.15s ease;
 }
 .ad-modal {
@@ -322,13 +321,30 @@ html.dark .ad-btn--primary:hover:not(:disabled) { background: #E4C489; }
   .ad-overlay {
     align-items: flex-end;
     padding: 0;
+    overflow: hidden; /* modal scrolls internally; overlay must not grow past dvh */
   }
   .ad-modal {
     max-width: 100%;
-    border-radius: 18px 18px 0 0;
-    max-height: 92dvh;
-    margin: 0;
     width: 100%;
+    border-radius: 18px 18px 0 0;
+    margin: 0;
+    /* fill up to 92% of the visual viewport so the footer is always reachable */
+    max-height: 92dvh;
+    height: auto;
+  }
+  .ad-modal-body {
+    /* ensure the body actually scrolls and never pushes the footer off screen */
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+  .ad-modal-foot {
+    /* always glued to the bottom of the card */
+    flex-shrink: 0;
+    position: sticky;
+    bottom: 0;
+    background: var(--ad-panel);
   }
 }
 @keyframes adFade { from { opacity: 0 } to { opacity: 1 } }
