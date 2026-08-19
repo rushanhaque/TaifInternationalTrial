@@ -72,12 +72,12 @@ const SECTIONS = [
     rowImg: (p) => p.imageThumb || p.image,
     blank: { name: '', category: CATEGORIES[0], subcategory: '', slug: '', material: '', dims: '', weight: '', moq: '', lead: '', image: '', story: '', tone: 'brass', finishes: [], rail: false },
     fields: [
-      { key: 'image', label: 'Image', type: 'image', full: true, hint: 'Leave blank to keep the generated placeholder.' },
+      { key: 'image', label: 'Image', type: 'image', full: true },
       { key: 'name', label: 'Name', required: true, full: true },
       { key: 'category', label: 'Category', type: 'select', options: () => CATEGORIES, required: true },
-      { key: 'subcategory', label: 'Subcategory', type: 'select', options: (draft, content) => ['', ...(content.subcategories[draft.category] || [])], hint: 'Managed in the Subcategories tab.' },
+      { key: 'subcategory', label: 'Subcategory', type: 'select', options: (draft, content) => ['', ...(content.subcategories[draft.category] || [])] },
       { key: 'material', label: 'Material', placeholder: 'Brass' },
-      { key: 'finishes', label: 'Finish', placeholder: 'antique, hammered', hint: 'Comma separated keys like antique, hammered' },
+      { key: 'finishes', label: 'Finish', placeholder: 'antique, hammered' },
       { key: 'story', label: 'Description', type: 'textarea', full: true },
     ],
     /* a product with no slug is unroutable, so derive one on save */
@@ -288,11 +288,6 @@ function Field({ f, draft, content, onChange, onFile, onImage, busy }) {
               {busy === f.key ? 'Optimising…' : 'Upload file'}
               <input type="file" accept="image/*" hidden disabled={!!busy} onChange={(e) => onFile(f.key, e)} />
             </label>
-            <span className="ad-hint">
-              {supportsWebp()
-                ? 'Converted to WebP and resized automatically — upload the original, not a shrunk copy.'
-                : 'This browser cannot write WebP; uploads are saved as optimised JPEG.'}
-            </span>
           </div>
         </div>
       )}
@@ -381,7 +376,7 @@ function RecordModal({ section, record, content, onSave, onClose, notify }) {
   return (
     <div className="ad-overlay" onMouseDown={onClose}>
       <div className="ad-modal" role="dialog" aria-modal="true" aria-label={`${record ? 'Edit' : 'New'} ${section.singular}`} onMouseDown={(e) => e.stopPropagation()}>
-        <form onSubmit={submit}>
+        <form onSubmit={submit} style={{ display: 'flex', flexDirection: 'column', flex: '1 1 auto', minHeight: 0 }}>
           <div className="ad-modal-head">
             <h2>{record ? `Edit ${section.singular}` : `New ${section.singular}`}</h2>
             <button type="button" className="ad-ibtn" onClick={onClose} aria-label="Close">✕</button>

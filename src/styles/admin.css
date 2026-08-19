@@ -244,7 +244,7 @@ html.dark .ad-btn--primary:hover:not(:disabled) { background: #E4C489; }
 .ad-empty p { margin: 0 0 1rem; color: var(--ad-ink-2); font-size: 0.88rem; }
 
 /* ── forms ───────────────────────────────────────────────────────────────── */
-.ad-form { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.ad-form { display: grid; grid-template-columns: 1fr 1fr; gap: 0.65rem; }
 .ad-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 /* a field that reads badly at half width — quotes, urls, image pickers */
 .ad-field--full { grid-column: 1 / -1; }
@@ -262,16 +262,16 @@ html.dark .ad-btn--primary:hover:not(:disabled) { background: #E4C489; }
 .ad-field textarea {
   width: 100%;
   font: inherit;
-  font-size: 0.88rem;
+  font-size: 0.85rem;
   color: var(--ad-ink);
   background: var(--ad-bg);
   border: 1px solid var(--ad-line-2);
-  border-radius: 9px;
-  padding: 0.55rem 0.7rem;
+  border-radius: 8px;
+  padding: 0.4rem 0.6rem;
   outline: none;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
-.ad-field textarea { resize: vertical; min-height: 84px; line-height: 1.5; }
+.ad-field textarea { resize: vertical; min-height: 60px; line-height: 1.45; }
 .ad-field input:focus,
 .ad-field select:focus,
 .ad-field textarea:focus {
@@ -288,8 +288,8 @@ html.dark .ad-btn--primary:hover:not(:disabled) { background: #E4C489; }
 /* image field — url box plus an upload button and a preview */
 .ad-img { display: flex; gap: 0.6rem; align-items: flex-start; }
 .ad-img-preview {
-  width: 68px; height: 68px; flex: 0 0 68px;
-  border-radius: 9px; object-fit: cover;
+  width: 52px; height: 52px; flex: 0 0 52px;
+  border-radius: 7px; object-fit: cover;
   border: 1px solid var(--ad-line-2);
   background: var(--ad-accent-soft);
 }
@@ -315,33 +315,23 @@ html.dark .ad-btn--primary:hover:not(:disabled) { background: #E4C489; }
   box-shadow: 0 24px 60px rgba(24, 16, 12, 0.24);
   animation: adRise 0.18s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex; flex-direction: column;
-  max-height: min(calc(100dvh - clamp(1.5rem, 8vh, 4rem)), 92dvh);
+  overflow: hidden;
+  max-height: calc(100dvh - clamp(1.5rem, 8vh, 6rem) * 2);
 }
 @media (max-width: 600px) {
   .ad-overlay {
     align-items: flex-end;
     padding: 0;
-    overflow: hidden; /* modal scrolls internally; overlay must not grow past dvh */
+    overflow: hidden;
   }
   .ad-modal {
     max-width: 100%;
     width: 100%;
     border-radius: 18px 18px 0 0;
     margin: 0;
-    /* fill up to 92% of the visual viewport so the footer is always reachable */
     max-height: 92dvh;
-    height: auto;
-  }
-  .ad-modal-body {
-    /* ensure the body actually scrolls and never pushes the footer off screen */
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    flex: 1 1 auto;
-    min-height: 0;
   }
   .ad-modal-foot {
-    /* always glued to the bottom of the card */
-    flex-shrink: 0;
     position: sticky;
     bottom: 0;
     background: var(--ad-panel);
@@ -353,21 +343,26 @@ html.dark .ad-btn--primary:hover:not(:disabled) { background: #E4C489; }
 .ad-modal-head {
   display: flex; align-items: center; justify-content: space-between;
   gap: 1rem;
-  padding: 1.1rem 1.3rem;
+  padding: 0.8rem 1.1rem;
   border-bottom: 1px solid var(--ad-line);
   flex-shrink: 0;
 }
-.ad-modal-head h2 { margin: 0; font-size: 1.05rem; font-weight: 700; letter-spacing: -0.01em; text-transform: none; }
+.ad-modal-head h2 { margin: 0; font-size: 1rem; font-weight: 700; letter-spacing: -0.01em; text-transform: none; }
 .ad-modal-body {
-  padding: 1.3rem;
-  overflow-y: auto;
+  padding: 0.9rem 1.1rem;
+  overflow-y: scroll;
+  overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
   flex: 1 1 auto;
   min-height: 0;
+  scrollbar-width: none; /* Firefox */
 }
+.ad-modal-body::-webkit-scrollbar { display: none; } /* Chrome / Safari */
 .ad-modal-foot {
   display: flex; justify-content: flex-end; gap: 0.6rem;
-  padding: 1rem 1.3rem;
+  padding: 0.7rem 1.1rem;
   border-top: 1px solid var(--ad-line);
   flex-shrink: 0;
 }
