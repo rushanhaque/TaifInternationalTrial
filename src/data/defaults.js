@@ -13,7 +13,11 @@
      · the blog / video cards             ← src/pages/Home.jsx
      · the social links                   ← src/components/Footer.jsx        */
 
-import { CATALOGUE, CATEGORIES } from './catalogue'
+/* The .js extension is required, not stylistic. Vite resolves the bare form,
+   but scripts/gen-sitemap.mjs imports this file with plain Node ESM to learn
+   the real product list, and Node does not — it threw ERR_MODULE_NOT_FOUND
+   and took the build with it. */
+import { CATALOGUE, CATEGORIES } from './catalogue.js'
 
 /* products — seeded from the shipped catalogue. The admin adds `subcategory`
    and `image`; every other field already existed on the catalogue records.

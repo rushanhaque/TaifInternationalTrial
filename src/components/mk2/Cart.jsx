@@ -140,7 +140,9 @@ export default function Cart() {
             <li className="ct-row" key={p.slug}>
               <span className="ct-row-n meta" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
               <span className="ct-thumb">
-                <img src={p.image || productPlate(p.slug)} alt="" loading="lazy" decoding="async" />
+                {/* a cart row is a 60px square — the thumbnail is the
+                    right image here, not a fallback for one */}
+                <img src={p.imageThumb || p.image || productPlate(p.slug)} alt="" loading="lazy" decoding="async" />
               </span>
               <span className="ct-row-say">
                 <span className="ct-row-name">{p.name}</span>

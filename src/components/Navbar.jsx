@@ -3,7 +3,7 @@ import { gsap, ScrollTrigger, reduced } from '../lib/gsap'
 import { Link, NavLink, useRoute } from '../lib/router'
 import { useDarkMode } from '../lib/hooks'
 import { BRAND, NAV_LINKS, COLLECTIONS } from '../data/site'
-import { familySlug } from '../pages/CollectionPage'
+import { familySlug } from '../lib/families'
 import { AnimatedThemeToggler } from './magicui/AnimatedThemeToggler'
 import Button from './Button'
 import MobileSheet from './MobileSheet'
@@ -124,6 +124,13 @@ export default function Navbar() {
             src={heroMode ? "/img/taif-logo-white.png" : (dark ? "/img/taif-logo-white.png" : "/img/taif-logo-dark.png")}
             alt={BRAND.name}
             className="header-brand-img"
+            /* the source is 2172x724; the ratio is what matters — it reserves
+               the width the bar needs before the PNG arrives, so the nav does
+               not jump sideways on first paint */
+            width="2172"
+            height="724"
+            decoding="async"
+            fetchpriority="high"
             style={{
               height: atTop ? '38px' : '36px',
               width: 'auto',

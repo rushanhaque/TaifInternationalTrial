@@ -82,6 +82,9 @@ export default function FinishesShowcase() {
                   key={f.key}
                   src={f.img}
                   alt=""
+                  /* every finish is stacked here and cross-faded on select;
+                     a lazy one would show an empty frame on first click */
+                  decoding="async"
                   className={`fin-hero-img${f.key === shownKey ? ' is-shown' : ''}`}
                   loading={f.key === DEFAULT_KEY ? 'eager' : 'lazy'}
                   decoding="async"

@@ -12,13 +12,31 @@ const root = join(here, '..')
 
 const ORIGIN = process.env.SITE_ORIGIN || 'https://taifinternational.com'
 
-/* The data files are plain ESM with no JSX, so they import directly. */
-const { CATALOGUE } = await import(
-  new URL('../src/data/catalogue.js', import.meta.url).href
+/* ── which products actually exist ────────────────────────────────────────
+   NOT src/data/catalogue.js. That file is the shipped *default* list, and
+   src/lib/content.jsx replaces it wholesale when content.snapshot.json
+   carries a `products` key — it layers section by section, not record by
+   record. Publishing two products from /admin therefore leaves a site with
+   two product pages while this script was still advertising all 36 shipped
+   slugs, so 34 sitemap entries resolved to the noindex Not Found page and
+   were reported back as crawl errors.
+
+   The rule here has to be the rule content.jsx uses, or the sitemap
+   describes a site that does not exist. */
+const { DEFAULT_PRODUCTS } = await import(
+  new URL('../src/data/defaults.js', import.meta.url).href
 )
 
-/* Mirrors familySlug() in src/pages/CollectionPage.jsx. Kept in sync by the
-   assertion below rather than by hope. */
+const snapshot = JSON.parse(
+  /* utf-8 BOM tolerated: the file has carried one before, and JSON.parse
+     rejects it outright */
+  readFileSync(join(root, 'src/data/content.snapshot.json'), 'utf8').replace(/^\uFEFF/, ''),
+)
+
+const PRODUCTS = Array.isArray(snapshot.products) ? snapshot.products : DEFAULT_PRODUCTS
+
+/* Mirrors familySlug() in src/lib/families.js. Kept in sync by the assertion
+   below rather than by hope. */
 const familySlug = (name) =>
   name.normalize('NFD').replace(/[̀-ͯ]/g, '')
     .toLowerCase().replace(/[^a-z0-9]+/g, '-')
@@ -29,16 +47,25 @@ const FAMILIES = [
   'Kitchenware', 'Barware',
 ]
 
-/* Guard: if someone edits FAMILIES in CollectionPage.jsx without touching this
-   file, fail the build loudly instead of shipping a half-right sitemap. */
-const pageSrc = readFileSync(join(root, 'src/pages/CollectionPage.jsx'), 'utf8')
-const declared = pageSrc.match(/export const FAMILIES = \[([\s\S]*?)\]/)
-if (declared) {
+/* Guard: if someone edits FAMILIES without touching this file, fail the build
+   loudly instead of shipping a half-right sitemap.
+
+   This read src/pages/CollectionPage.jsx until FAMILIES moved to lib. The
+   `if (declared)` below meant the guard did not fail when its target went
+   missing — it just quietly stopped guarding, which is the worst behaviour
+   a guard can have. A missing match is now an error in its own right. */
+const famSrc = readFileSync(join(root, 'src/lib/families.js'), 'utf8')
+const declared = famSrc.match(/export const FAMILIES = \[([\s\S]*?)\]/)
+if (!declared) {
+  console.error('[sitemap] could not find FAMILIES in src/lib/families.js — did it move again?')
+  process.exit(1)
+}
+{
   const names = [...declared[1].matchAll(/'([^']+)'/g)].map((m) => m[1])
   const missing = names.filter((n) => !FAMILIES.includes(n))
   const extra = FAMILIES.filter((n) => !names.includes(n))
   if (missing.length || extra.length) {
-    console.error('[sitemap] FAMILIES out of sync with CollectionPage.jsx')
+    console.error('[sitemap] FAMILIES out of sync with src/lib/families.js')
     if (missing.length) console.error('  missing here:', missing)
     if (extra.length) console.error('  stale here:', extra)
     process.exit(1)
@@ -68,7 +95,7 @@ const urls = [
   ...FAMILIES.map((f) => ({
     path: `/collections/${familySlug(f)}`, priority: '0.8', changefreq: 'weekly',
   })),
-  ...CATALOGUE.map((p) => ({
+  ...PRODUCTS.filter((p) => p && p.slug).map((p) => ({
     path: `/catalogue/${p.slug}`, priority: '0.7', changefreq: 'monthly',
   })),
 ]
@@ -87,4 +114,5 @@ ${urls.map(({ path, priority, changefreq }) => `  <url>
 `
 
 writeFileSync(join(root, 'public/sitemap.xml'), xml)
-console.log(`[sitemap] wrote ${urls.length} urls (${FAMILIES.length} families, ${CATALOGUE.length} products)`)
+const source = Array.isArray(snapshot.products) ? 'published snapshot' : 'shipped defaults'
+console.log(`[sitemap] wrote ${urls.length} urls (${FAMILIES.length} families, ${PRODUCTS.length} products from ${source})`)

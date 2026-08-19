@@ -196,6 +196,8 @@ export default function TheTurn() {
                 <img
                   src={MATERIAL_IMAGES[m.key]}
                   alt={`${m.name} macro texture`}
+                  loading="lazy"
+                  decoding="async"
                   style={{
                     width: '100%',
                     height: '100%',

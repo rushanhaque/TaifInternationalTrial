@@ -1,4 +1,4 @@
-import { Component, useEffect } from 'react'
+import { Component, Suspense, lazy, useEffect } from 'react'
 import { ScrollTrigger } from './lib/gsap'
 import { Router } from './lib/router'
 import { BRAND } from './data/site'
@@ -17,21 +17,38 @@ import SceneReveal from './components/SceneReveal'
 import Cart from './components/mk2/Cart'
 import { CartProvider } from './lib/cart'
 
+/* ── one chunk per route ───────────────────────────────────────────────────
+   Home stays a static import: it is the landing page for nearly every
+   visitor, and making the most-requested route wait on a second network
+   round-trip to start rendering would trade a smaller bundle for a slower
+   first paint. That is the wrong way round.
+
+   Everything else is lazy. /admin is the clearest case — it is a 900-line
+   editor with an image encoder attached that no visitor ever opens, and it
+   was being downloaded by all of them. The collection and product pages
+   carry heavy GSAP timelines that only matter once you are on them.
+
+   The route table below needs resolveFamily() and friends to build titles
+   and JSON-LD *during* routing, before any page renders, so those come from
+   src/lib/families.js rather than from CollectionPage — see the header
+   there. Importing them from the page would defeat every lazy() here.     */
 import Home from './pages/Home'
-import CollectionsPage from './pages/CollectionsPage'
-import CollectionPage, { resolveFamily, familyPieces, canonicalFamilySlug } from './pages/CollectionPage'
-import ProductPage from './pages/ProductPage'
-import CataloguePage from './pages/CataloguePage'
-import ShowsPage from './pages/ShowsPage'
-import AboutPage from './pages/AboutPage'
-import PartnersPage from './pages/PartnersPage'
-import TestimonialsPage from './pages/TestimonialsPage'
-import CarePage from './pages/CarePage'
-import ContactPage from './pages/ContactPage'
-import FaqPage from './pages/FaqPage'
-import LegalPage from './pages/LegalPage'
-import NotFoundPage from './pages/NotFoundPage'
-import AdminPage from './pages/AdminPage'
+import { resolveFamily, familyPieces, canonicalFamilySlug } from './lib/families'
+
+const CollectionsPage  = lazy(() => import('./pages/CollectionsPage'))
+const CollectionPage   = lazy(() => import('./pages/CollectionPage'))
+const ProductPage      = lazy(() => import('./pages/ProductPage'))
+const CataloguePage    = lazy(() => import('./pages/CataloguePage'))
+const ShowsPage        = lazy(() => import('./pages/ShowsPage'))
+const AboutPage        = lazy(() => import('./pages/AboutPage'))
+const PartnersPage     = lazy(() => import('./pages/PartnersPage'))
+const TestimonialsPage = lazy(() => import('./pages/TestimonialsPage'))
+const CarePage         = lazy(() => import('./pages/CarePage'))
+const ContactPage      = lazy(() => import('./pages/ContactPage'))
+const FaqPage          = lazy(() => import('./pages/FaqPage'))
+const LegalPage        = lazy(() => import('./pages/LegalPage'))
+const NotFoundPage     = lazy(() => import('./pages/NotFoundPage'))
+const AdminPage        = lazy(() => import('./pages/AdminPage'))
 
 const B = BRAND.name
 const t = (s) => `${s} — ${B}`
@@ -170,12 +187,18 @@ export default function App() {
       <Viscosity />
       {/* the navbar goes through the router so it can read the current path —
           as a sibling it only ever saw the context default, '/' */}
-      <Router
-        routes={ROUTES}
-        notFound={NOT_FOUND}
-        before={<Navbar />}
-        after={<><SectionStack /><RevealGuard /><SceneReveal /><Footer /></>}
-      />
+      {/* No spinner in the fallback on purpose. The mitre transition already
+          covers the moment a route swaps, and a second loading indicator
+          underneath it reads as a stutter. On a cold load of a lazy route
+          the chunk is a few kB over an already-open connection. */}
+      <Suspense fallback={<div style={{ minHeight: '60vh' }} />}>
+        <Router
+          routes={ROUTES}
+          notFound={NOT_FOUND}
+          before={<Navbar />}
+          after={<><SectionStack /><RevealGuard /><SceneReveal /><Footer /></>}
+        />
+      </Suspense>
       <Ambient />
       <Interactions />
       <div className="grain" aria-hidden="true" />

@@ -1,6 +1,12 @@
 import { useSyncExternalStore } from 'react'
 import { DEFAULTS } from '../data/defaults'
-import PUBLISHED from '../data/content.snapshot.json'
+/* NOT content.snapshot.json — the .built. one, generated from it before every
+   dev run and every build by scripts/extract-content-images.mjs. The two are
+   identical except that every uploaded image has been lifted out to a real
+   file under /img/content/ and replaced by its path, so the pictures stop
+   being megabytes of base64 inside this bundle. See that script's header.
+   The file is gitignored; `npm run dev` and `npm run build` both write it. */
+import PUBLISHED from '../data/content.snapshot.built.json'
 
 /* ============ editable-content store ============
    One module-level store the admin writes and every public page reads, so an

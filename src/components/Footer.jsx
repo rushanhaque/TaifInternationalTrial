@@ -56,6 +56,10 @@ export default function Footer() {
               <img
                 src="/img/taif-logo-white.png"
                 alt={BRAND.name}
+                width="2172"
+                height="724"
+                loading="lazy"
+                decoding="async"
                 style={{ height: '46px', width: 'auto', objectFit: 'contain', display: 'block' }}
               />
               <span className="foot-lockup-suffix">{BRAND.suffix}</span>

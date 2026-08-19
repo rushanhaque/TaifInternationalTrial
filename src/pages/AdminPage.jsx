@@ -5,6 +5,7 @@ import {
   useContent, getContent, setSection, nextId,
 } from '../lib/content'
 import { publishSnapshot } from '../lib/publish'
+import { processImage, reprocessDataUrl, humanBytes, supportsWebp } from '../lib/image'
 import { getLenis } from '../lib/useLenis'
 import '../styles/admin.css'
 
@@ -26,7 +27,24 @@ import '../styles/admin.css'
 const PASSCODE = 'taif@ruh'
 const GATE_KEY = 'taif:admin:open'
 
-const MAX_IMAGE_BYTES = 1_500_000
+/* The cap on the file an admin may CHOOSE. It is generous because the upload
+   is re-encoded to WebP before anything is stored (src/lib/image.js) — a 9 MB
+   camera original routinely lands under 250 KB. */
+const MAX_UPLOAD_BYTES = 12_000_000
+
+/* The cap on what may be STORED, after re-encoding. Images live as data URLs
+   inside the content store, which is both a localStorage value (a few MB of
+   quota, shared by every section) and a file baked into the JS bundle. An
+   image that survives the encoder and is still this large is a sign the
+   source is enormous, and letting it through would silently drop every other
+   unsaved edit when the quota blows. */
+const MAX_STORED_BYTES = 900_000
+
+/* Where the small companion image is filed. A record with `image` gets
+   `imageThumb` beside it; nothing else in the schema has to change, and a
+   record written before this existed simply has no thumb and falls back to
+   the full image. */
+export const thumbKey = (key) => `${key}Thumb`
 
 /* ── icons ───────────────────────────────────────────────────────────────── */
 const Ico = ({ d, ...rest }) => (
@@ -51,7 +69,7 @@ const SECTIONS = [
     singular: 'product',
     rowTitle: (p) => p.name,
     rowSub: (p) => [p.category, p.subcategory, p.moq ? `MOQ ${p.moq}` : ''].filter(Boolean).join(' · '),
-    rowImg: (p) => p.image,
+    rowImg: (p) => p.imageThumb || p.image,
     blank: { name: '', category: CATEGORIES[0], subcategory: '', slug: '', material: '', dims: '', weight: '', moq: '', lead: '', image: '', story: '', tone: 'brass', finishes: [], rail: false },
     fields: [
       { key: 'image', label: 'Image', type: 'image', full: true, hint: 'Leave blank to keep the generated placeholder.' },
@@ -223,7 +241,7 @@ function ConfirmModal({ message, confirmLabel = 'Delete', onConfirm, onClose }) 
 }
 
 /* ── field renderer ──────────────────────────────────────────────────────── */
-function Field({ f, draft, content, onChange, onFile }) {
+function Field({ f, draft, content, onChange, onFile, onImage, busy }) {
   /* master-key fields are machine identifiers that other pages depend on —
      showing them as editable text would invite breaking changes */
   if (f.masterKey) return null
@@ -258,15 +276,23 @@ function Field({ f, draft, content, onChange, onFile }) {
 
       {f.type === 'image' && (
         <div className="ad-img">
+          {/* the preview reads from the thumbnail when there is one: on a list
+              of twenty products, previewing the full-size data URLs is tens of
+              megabytes of decoded bitmap for a 90px box */}
           {v
-            ? <img className="ad-img-preview" src={v} alt="" />
+            ? <img className="ad-img-preview" src={draft[thumbKey(f.key)] || v} alt="" loading="lazy" decoding="async" />
             : <div className="ad-img-preview ad-thumb--empty">None</div>}
           <div className="ad-img-side">
-            <input id={id} value={v} placeholder="https://... or upload" onChange={(e) => onChange(f.key, e.target.value)} />
-            <label className="ad-btn ad-btn--quiet ad-btn--sm" style={{ alignSelf: 'flex-start', cursor: 'pointer' }}>
-              Upload file
-              <input type="file" accept="image/*" hidden onChange={(e) => onFile(f.key, e)} />
+            <input id={id} value={v} placeholder="https://... or upload" onChange={(e) => onImage(f.key, e.target.value)} />
+            <label className={`ad-btn ad-btn--quiet ad-btn--sm${busy === f.key ? ' is-busy' : ''}`} style={{ alignSelf: 'flex-start', cursor: busy ? 'progress' : 'pointer' }}>
+              {busy === f.key ? 'Optimising…' : 'Upload file'}
+              <input type="file" accept="image/*" hidden disabled={!!busy} onChange={(e) => onFile(f.key, e)} />
             </label>
+            <span className="ad-hint">
+              {supportsWebp()
+                ? 'Converted to WebP and resized automatically — upload the original, not a shrunk copy.'
+                : 'This browser cannot write WebP; uploads are saved as optimised JPEG.'}
+            </span>
           </div>
         </div>
       )}
@@ -292,6 +318,8 @@ function Field({ f, draft, content, onChange, onFile }) {
 /* ── record modal ────────────────────────────────────────────────────────── */
 function RecordModal({ section, record, content, onSave, onClose, notify }) {
   const [draft, setDraft] = useState(() => ({ ...section.blank, ...record }))
+  /* the field key currently being encoded, so its uploader can say so */
+  const [busy, setBusy] = useState(null)
 
   /* the page behind the modal is Lenis-smooth-scrolled; without stopping it
      the wheel scrolls the page instead of a long form */
@@ -310,21 +338,40 @@ function RecordModal({ section, record, content, onSave, onClose, notify }) {
 
   const set = (k, val) => setDraft((d) => ({ ...d, [k]: val }))
 
-  const onFile = (key, e) => {
+  /* Uploads are re-encoded to WebP and given a thumbnail before they are
+     stored — see the header of src/lib/image.js for why that matters here. */
+  const onFile = async (key, e) => {
     const file = e.target.files?.[0]
+    e.target.value = ''
     if (!file) return
-    if (file.size > MAX_IMAGE_BYTES) {
-      /* base64 in localStorage is ~33% larger than the file and the whole
-         quota is a few MB — a big upload would silently drop every edit */
-      notify(`That image is ${(file.size / 1e6).toFixed(1)} MB. Use one under 1.5 MB, or paste a URL.`, true)
-      e.target.value = ''
+
+    if (file.size > MAX_UPLOAD_BYTES) {
+      notify(`That file is ${humanBytes(file.size)}. Use one under ${humanBytes(MAX_UPLOAD_BYTES)}.`, true)
       return
     }
-    const reader = new FileReader()
-    reader.onload = (ev) => set(key, ev.target.result)
-    reader.readAsDataURL(file)
-    e.target.value = ''
+
+    setBusy(key)
+    try {
+      const out = await processImage(file)
+      if (out.full.length > MAX_STORED_BYTES) {
+        notify(`Even after compression that image is ${humanBytes(out.full.length)}. Try a smaller source, or paste a URL.`, true)
+        return
+      }
+      setDraft((d) => ({ ...d, [key]: out.full, [thumbKey(key)]: out.thumb }))
+      const saved = out.beforeBytes ? Math.round((1 - out.afterBytes / out.beforeBytes) * 100) : 0
+      notify(out.note || (out.converted && saved > 0
+        ? `Converted to WebP — ${humanBytes(out.beforeBytes)} → ${humanBytes(out.afterBytes)} (${saved}% smaller), thumbnail included.`
+        : `Optimised — ${humanBytes(out.afterBytes)} stored, thumbnail included.`))
+    } catch (err) {
+      notify(err.message || 'Could not read that image.', true)
+    } finally {
+      setBusy(null)
+    }
   }
+
+  /* Typing or clearing the URL by hand must not leave last upload's thumbnail
+     behind — it would keep showing in card and list views under a new image. */
+  const setImage = (key, value) => setDraft((d) => ({ ...d, [key]: value, [thumbKey(key)]: '' }))
 
   const submit = (e) => {
     e.preventDefault()
@@ -343,7 +390,7 @@ function RecordModal({ section, record, content, onSave, onClose, notify }) {
           <div className="ad-modal-body">
             <div className="ad-form">
               {section.fields.map((f) => (
-                <Field key={f.key} f={f} draft={draft} content={content} onChange={set} onFile={onFile} />
+                <Field key={f.key} f={f} draft={draft} content={content} onChange={set} onFile={onFile} onImage={setImage} busy={busy} />
               ))}
             </div>
           </div>
@@ -474,7 +521,7 @@ function ListSection({ section, notify, onDirty }) {
             return (
               <div className="ad-row" key={item.id}>
                 {section.rowImg && (img
-                  ? <img className="ad-thumb" src={img} alt="" loading="lazy" />
+                  ? <img className="ad-thumb" src={img} alt="" loading="lazy" decoding="async" />
                   : <div className="ad-thumb ad-thumb--empty">None</div>)}
 
                 <div className="ad-row-main">
@@ -571,7 +618,7 @@ function BestSellersSection({ notify, onDirty }) {
               <span className="ad-slot-no">{i + 1}</span>
 
               {product?.image
-                ? <img className="ad-thumb" src={product.image} alt="" loading="lazy" />
+                ? <img className="ad-thumb" src={product.imageThumb || product.image} alt="" loading="lazy" decoding="async" />
                 : <div className="ad-thumb ad-thumb--empty">{product ? 'None' : 'Empty'}</div>}
 
               <div className="ad-row-main">
@@ -708,6 +755,161 @@ function SubcategoriesSection({ notify, onDirty }) {
 }
 
 
+
+/* ── images ──────────────────────────────────────────────────────────────
+   A one-button pass over everything already stored. Images uploaded before
+   the WebP pipeline existed are full-weight JPEGs sitting in the JS bundle;
+   re-encoding them is the single largest thing that can be done to this
+   site's load time, and it is not something the admin should have to do by
+   re-uploading twenty products by hand.
+
+   It also backfills thumbnails for records that predate them.               */
+function imageFieldsOf(section) {
+  return section.fields ? section.fields.filter((f) => f.type === 'image').map((f) => f.key) : []
+}
+
+function ImagesSection({ notify, onDirty }) {
+  const content = useContent()
+  const [running, setRunning] = useState(false)
+  const [progress, setProgress] = useState(null)
+
+  /* every stored image across every section, with where it came from */
+  const inventory = useMemo(() => {
+    const rows = []
+    for (const section of SECTIONS) {
+      for (const key of imageFieldsOf(section)) {
+        for (const item of content[section.key] || []) {
+          const src = item[key]
+          if (typeof src !== 'string' || !src) continue
+          rows.push({
+            section: section.key,
+            label: section.label,
+            id: item.id,
+            key,
+            title: section.rowTitle(item) || `#${item.id}`,
+            embedded: src.startsWith('data:'),
+            webp: src.startsWith('data:image/webp'),
+            bytes: src.startsWith('data:') ? src.length : 0,
+            hasThumb: !!item[thumbKey(key)],
+            thumb: item[thumbKey(key)] || src,
+          })
+        }
+      }
+    }
+    return rows
+  }, [content])
+
+  const embedded = inventory.filter((r) => r.embedded)
+  const totalBytes = embedded.reduce((n, r) => n + r.bytes, 0)
+  const stale = embedded.filter((r) => !r.webp || !r.hasThumb)
+
+  const optimise = async () => {
+    if (!stale.length) return
+    setRunning(true)
+    let done = 0
+    let before = 0
+    let after = 0
+    let failed = 0
+
+    try {
+      for (const row of stale) {
+        setProgress({ done, total: stale.length, title: row.title })
+        /* read the section fresh each time: an earlier iteration already wrote
+           to it, and a stale closure would undo that write */
+        const list = getContent(row.section)
+        const item = list.find((i) => i.id === row.id)
+        if (!item) { done++; continue }
+        try {
+          const out = await reprocessDataUrl(item[row.key])
+          if (out && out.full.length + out.thumb.length < item[row.key].length) {
+            before += item[row.key].length
+            after += out.full.length + out.thumb.length
+            setSection(row.section, list.map((i) => (
+              i.id === row.id ? { ...i, [row.key]: out.full, [thumbKey(row.key)]: out.thumb } : i
+            )))
+          } else if (out) {
+            /* not worth swapping the full image, but the thumbnail still is */
+            before += item[row.key].length
+            after += item[row.key].length + out.thumb.length
+            setSection(row.section, list.map((i) => (
+              i.id === row.id ? { ...i, [thumbKey(row.key)]: out.thumb } : i
+            )))
+          }
+        } catch {
+          failed++
+        }
+        done++
+        /* yield to the browser so the progress line actually paints and the
+           tab does not look hung on a long run */
+        await new Promise((r) => setTimeout(r, 0))
+      }
+
+      onDirty?.()
+      const saved = before ? Math.round((1 - after / before) * 100) : 0
+      notify(failed
+        ? `Optimised ${done - failed} of ${stale.length}. ${failed} could not be read.`
+        : `Optimised ${done} image${done === 1 ? '' : 's'} — ${humanBytes(before)} → ${humanBytes(after)} (${saved}% smaller). Publish to push it live.`)
+    } finally {
+      setRunning(false)
+      setProgress(null)
+    }
+  }
+
+  return (
+    <>
+      <div className="ad-head">
+        <div>
+          <h1>Images</h1>
+          <p>
+            Every picture uploaded here is stored inside the site itself, so its weight is
+            paid by every visitor on their first load. New uploads are converted to WebP
+            automatically — this screen re-converts the ones that came before that.
+          </p>
+        </div>
+        {!!stale.length && (
+          <button className="ad-btn ad-btn--primary" onClick={optimise} disabled={running}>
+            {running ? 'Optimising…' : `Optimise ${stale.length} image${stale.length === 1 ? '' : 's'}`}
+          </button>
+        )}
+      </div>
+
+      <div className="ad-sub-group">
+        <div className="ad-sub-head">
+          <h3>{embedded.length} uploaded image{embedded.length === 1 ? '' : 's'} · {humanBytes(totalBytes)}</h3>
+        </div>
+        <p className="ad-sub-none">
+          {inventory.length - embedded.length} more are linked by URL and cost nothing to store.
+          {stale.length
+            ? ` ${stale.length} could still be made smaller.`
+            : ' Everything stored is already converted and has a thumbnail.'}
+        </p>
+        {progress && (
+          <p className="ad-sub-none" role="status">
+            {progress.done + 1} of {progress.total} — {progress.title}
+          </p>
+        )}
+      </div>
+
+      {embedded.length > 0 && (
+        <div className="ad-list">
+          {embedded.map((r) => (
+            <div className="ad-row" key={`${r.section}-${r.id}-${r.key}`}>
+              <img className="ad-thumb" src={r.thumb} alt="" loading="lazy" decoding="async" />
+              <div className="ad-row-main">
+                <p className="ad-row-title">{r.title}</p>
+                <p className="ad-row-sub">
+                  {r.label} · {humanBytes(r.bytes)} · {r.webp ? 'WebP' : 'not converted'}
+                  {r.hasThumb ? ' · has thumbnail' : ' · no thumbnail'}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </>
+  )
+}
+
 /* ── gate ────────────────────────────────────────────────────────────────── */
 function Gate({ onOpen }) {
   const [val, setVal] = useState('')
@@ -786,6 +988,9 @@ export default function AdminPage() {
     for (const s of SECTIONS) c[s.key] = (content[s.key] || []).length
     c.subcategories = Object.values(content.subcategories || {}).reduce((n, l) => n + l.length, 0)
     c.bestSellers = (content.bestSellers || []).filter(Boolean).length
+    c.images = SECTIONS.reduce((n, sec) => n + (content[sec.key] || []).reduce(
+      (m, item) => m + imageFieldsOf(sec).filter((k) => typeof item[k] === 'string' && item[k].startsWith('data:')).length, 0,
+    ), 0)
     return c
   }, [content])
 
@@ -827,6 +1032,11 @@ export default function AdminPage() {
           <span className="ad-tab-count">{counts.bestSellers}</span>
         </button>
 
+        <button className="ad-tab" aria-current={tab === 'images'} onClick={() => setTab('images')}>
+          <span>Images</span>
+          <span className="ad-tab-count">{counts.images}</span>
+        </button>
+
         <div className="ad-nav-foot">
           {/* Deliberately not styled as another .ad-tab: this is the only
               control that leaves the browser and changes what visitors see,
@@ -855,6 +1065,7 @@ export default function AdminPage() {
         {section && <ListSection key={section.key} section={section} notify={notify} onDirty={markDirty} />}
         {tab === 'subcategories' && <SubcategoriesSection notify={notify} onDirty={markDirty} />}
         {tab === 'bestsellers' && <BestSellersSection notify={notify} onDirty={markDirty} />}
+        {tab === 'images' && <ImagesSection notify={notify} onDirty={markDirty} />}
       </main>
 
       {toast && (

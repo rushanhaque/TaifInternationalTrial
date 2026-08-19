@@ -47,11 +47,54 @@ export default async function handler(req, res) {
   const branch = process.env.GITHUB_BRANCH || DEFAULT_BRANCH
   const path   = process.env.GITHUB_PATH   || DEFAULT_PATH
 
+  /* ── who may write ──────────────────────────────────────────────────────
+     This endpoint commits to the repo and triggers a deploy, and until this
+     check existed it would do that for ANY caller who knew the URL — the
+     /admin passcode is checked in the browser, which is no check at all.
+
+     ADMIN_PUBLISH_SECRET is compared against the x-admin-secret header the
+     admin UI sends. Set it in the same place as GITHUB_TOKEN. It is not real
+     authentication: the value has to reach the browser to be sent, so anyone
+     who reads the bundle can find it. What it does buy is that the endpoint
+     is no longer writable by anyone who merely stumbles on /api/publish.
+
+     Proper protection is to serve /admin behind an identity provider
+     (Vercel Password Protection, Cloudflare Access) — see the note at the
+     top of src/pages/AdminPage.jsx. */
+  const secret = process.env.ADMIN_PUBLISH_SECRET
+  if (secret && req.headers['x-admin-secret'] !== secret) {
+    return res.status(401).json({ error: 'Not authorised to publish.' })
+  }
+
   let snapshot
   try {
     snapshot = typeof req.body === 'string' ? JSON.parse(req.body) : req.body
   } catch {
     return res.status(400).json({ error: 'Request body must be JSON.' })
+  }
+
+  /* ── is this actually a content snapshot ────────────────────────────────
+     The body is written straight over src/data/content.snapshot.json, so a
+     malformed one does not fail loudly — it deploys, and the site falls back
+     to shipped defaults with every edit the client ever made now gone. The
+     old `verifyAccess()` probe in src/lib/publish.jsx posted {__probe:true}
+     to this endpoint to test connectivity, which would have committed
+     exactly that and wiped the content.
+
+     A real snapshot is an object carrying at least one known section. */
+  const SECTIONS = [
+    'stats', 'bestSellers', 'products', 'subcategories', 'reviews',
+    'blogs', 'socials', 'atelier', 'exhibitions', 'announcements',
+  ]
+
+  if (!snapshot || typeof snapshot !== 'object' || Array.isArray(snapshot)) {
+    return res.status(400).json({ error: 'Body must be a content snapshot object.' })
+  }
+  const present = SECTIONS.filter((k) => snapshot[k] !== undefined)
+  if (!present.length) {
+    return res.status(400).json({
+      error: 'That body carries no recognisable content sections — refusing to overwrite the live content with it.',
+    })
   }
 
   const api = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`

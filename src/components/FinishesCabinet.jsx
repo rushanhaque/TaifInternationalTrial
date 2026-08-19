@@ -36,6 +36,8 @@ export default function FinishesCabinet() {
                     src={FINISH_IMGS[f.key] || '/assets/materials/brass.png'}
                     alt={f.name}
                     className="chouse-cover"
+                    loading="lazy"
+                    decoding="async"
                   />
                   <span aria-hidden="true" className="chouse-scrim" />
 

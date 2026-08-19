@@ -141,7 +141,7 @@ export default function ShowsPage() {
             {exhibitions.map((event) => (
               <article key={event.id} className="shows-event">
                 <div className="shows-event-media">
-                  <img src={event.img} alt="" loading="lazy" decoding="async" />
+                  <img src={event.imgThumb || event.img} alt="" loading="lazy" decoding="async" />
                   <span className="shows-event-date">{event.date}</span>
                 </div>
                 <div className="shows-event-body">

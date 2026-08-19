@@ -1,0 +1,74 @@
+/* SmartImage — see src/components/SmartImage.jsx for what and why.
+
+   The wrapper is `display: block` rather than inline so `aspect-ratio` has
+   something to act on, and it inherits its own size from whatever grid or
+   card it is dropped into: this sheet must never impose a width, or every
+   card family on the site would need an override. */
+
+.si {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  /* the placeholder is scaled up and blurred, which bleeds a soft edge past
+     the frame; without this it shows as a halo on light grounds */
+  isolation: isolate;
+}
+
+/* Zero specificity, deliberately. SmartImage is dropped inside card families
+   that already style their own image class (.pl-img, .cm-img, …), and those
+   classes must keep winning — a default that overrides the caller is worse
+   than no default. `:where()` contributes nothing, so anything at all beats
+   these. */
+:where(.si) > :where(img) {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* The frame must fill a parent that already owns the box — .pl-shot and
+   friends set their own aspect-ratio and only need the images inside them. */
+.si--fill {
+  position: absolute;
+  inset: 0;
+}
+
+/* Both images occupy the same cell. The thumbnail sits underneath and fades
+   out as the full one fades in, so there is no moment of empty frame. */
+.si-thumb,
+.si-full {
+  position: absolute;
+  inset: 0;
+}
+
+.si-thumb {
+  /* a 420px image stretched over a 1200px frame is visibly soft; leaning into
+     that with a blur reads as intentional, where a mild upscale reads as a
+     mistake. scale hides the transparent edge the blur creates. */
+  filter: blur(12px);
+  transform: scale(1.06);
+  opacity: 1;
+  transition: opacity 0.4s ease 0.05s;
+}
+
+.si-thumb[data-loaded] {
+  opacity: 0;
+}
+
+.si-full {
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.si-full[data-loaded] {
+  opacity: 1;
+}
+
+/* An animation the visitor did not ask for, on content they came to look at,
+   is exactly what this setting is for. The full image simply appears. */
+@media (prefers-reduced-motion: reduce) {
+  .si-thumb,
+  .si-full {
+    transition: none;
+  }
+}

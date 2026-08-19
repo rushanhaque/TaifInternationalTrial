@@ -46,6 +46,8 @@ export function HeroVideoDialog({
           src={thumbnailSrc}
           alt={thumbnailAlt}
           className="hero-video-thumbnail"
+          loading="lazy"
+          decoding="async"
         />
         <div className="hero-video-play-overlay">
           <div className="hero-video-play-btn">

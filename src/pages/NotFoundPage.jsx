@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 import { gsap, reduced } from '../lib/gsap'
 import { Link } from '../lib/router'
 import Button from '../components/Button'
-import { FAMILIES, familySlug } from './CollectionPage'
+import { FAMILIES, familySlug } from '../lib/families'
 
 /* ── NOT ON FILE ────────────────────────────────────────────────────────────
    A 404 that says "page not found" wastes the one moment it has. This one

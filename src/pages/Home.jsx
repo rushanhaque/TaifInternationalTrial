@@ -25,13 +25,14 @@ import { productImg } from '../data/images'
    Deliberately NOT on this page: Measured and Ledger — the page was too long,
    so it keeps only the moments that earn their height. Both still exist and
    can be dropped back in. */
-import { familySlug } from './CollectionPage'
+import { familySlug } from '../lib/families'
 import TheTurn from '../components/mk2/TheTurn'
 import Sampler from '../components/mk2/Sampler'
 import Philosophy from '../components/mk2/Philosophy'
 import MaterialGuidance from '../components/mk2/MaterialGuidance'
 import FinishesShowcase from '../components/mk2/FinishesShowcase'
 import MaskedHeading from '../components/MaskedHeading'
+import SmartImage from '../components/SmartImage'
 
 import LogoLoop from '../components/reactbits/LogoLoop'
 import CircularGallery from '../components/reactbits/CircularGallery'
@@ -292,7 +293,13 @@ export default function Home() {
                   className="blog-card"
                   aria-label={b.alt || b.title}
                 >
-                  <img src={b.thumbnail} alt={b.alt || b.title} className="blog-card-img" />
+                  <SmartImage
+                    className="blog-card-img"
+                    src={b.thumbnail}
+                    thumb={b.thumbnailThumb}
+                    alt={b.alt || b.title}
+                    ratio="16 / 9"
+                  />
                   <span className="blog-play" aria-hidden="true">▶</span>
                 </a>
               </div>

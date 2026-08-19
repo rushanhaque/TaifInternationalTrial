@@ -1,5 +1,6 @@
 import { Link } from '../../lib/router'
 import { productPlate } from '../../data/images'
+import SmartImage from '../SmartImage'
 import { useCart } from '../../lib/cart'
 
 /* ── Velora Specimen Card (1:1 exact match with Velora design & screenshot) ─────────────── */
@@ -21,12 +22,15 @@ export default function ProductCard({ p }) {
           {/* Studio Frame — 4/5 Portrait ratio with Velora vitrine ground */}
           <div className="pl-shot burnish">
             <div className="pl-glow" aria-hidden="true" />
-            <img
+            {/* .pl-shot already owns the 16/10 box, so the frame only
+                has to fill it — see .si--fill in styles/smart-image.css */}
+            <SmartImage
               className="pl-img"
+              wrapClassName="si--fill"
               src={p.image || productPlate(p.slug)}
+              thumb={p.imageThumb}
               alt={p.name}
-              loading="lazy"
-              decoding="async"
+              sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 33vw"
             />
 
             {/* Ref tag top-left (e.g. VD-02) */}

@@ -4,7 +4,7 @@ import { useGSAP } from '@gsap/react'
 import { COLLECTIONS } from '../data/site'
 import { COLLECTION_IMGS } from '../data/images'
 import { Link } from '../lib/router'
-import { familySlug } from '../pages/CollectionPage'
+import { familySlug } from '../lib/families'
 import '../styles/mk2/collections-mosaic.css'
 
 /* ── THE VITRINE — nine collections, one screen ───────────────────────────

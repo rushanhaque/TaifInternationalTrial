@@ -31,8 +31,11 @@ export default function ProductPage({ params }) {
       <section className="page-hero wrap">
         <div className="grid" style={{ alignItems: 'center' }}>
           <div className="sp-6">
+            {/* the Largest Contentful Paint on this route — the only
+                image here that must not be lazy */}
             <Slab warp={false} className="prod-hero-slab" tone={p.tone} ratio="7/5"
-              img={p.image || productImg(p.slug)} alt={p.name} />
+              img={p.image || productImg(p.slug)} imgThumb={p.imageThumb}
+              priority sizes="(max-width: 900px) 100vw, 50vw" alt={p.name} />
           </div>
           <div className="sp-6 prod-info">
             <p className="meta">{p.category}</p>
@@ -90,7 +93,7 @@ export default function ProductPage({ params }) {
               {related.map((r) => (
                 <Link key={r.slug} to={`/catalogue/${r.slug}`} className="rail-card">
                   <Slab tone={r.tone} label={r.name.toUpperCase()} meta={r.material}
-                    img={r.image || productImg(r.slug)} alt={r.name} />
+                    img={r.image || productImg(r.slug)} imgThumb={r.imageThumb} alt={r.name} />
                   <div className="rail-card-meta meta"><span>{r.category}</span><span>{r.idx}</span></div>
                 </Link>
               ))}

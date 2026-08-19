@@ -1,6 +1,7 @@
 import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef } from 'react'
 import { gsap, ScrollTrigger, reduced } from '../lib/gsap'
 import { onPointer } from '../lib/usePointer'
+import SmartImage from './SmartImage'
 
 /* E2 Meniscus Edge — one shared ticker rebuilds every active blob path (§9.2),
    capped at 4 concurrent slabs; offscreen slabs are deactivated via
@@ -77,7 +78,8 @@ function warpRadii(px, py) {
 }
 
 const Slab = forwardRef(function Slab(
-  { tone = 'brass', label, meta, ratio = '16/10', blob = false, bead = false, warp = true, quietHover = false, img, alt = '', className = '', children },
+  { tone = 'brass', label, meta, ratio = '16/10', blob = false, bead = false, warp = true, quietHover = false,
+    img, imgThumb, priority = false, sizes, alt = '', className = '', children },
   fref
 ) {
   const id = useMemo(() => `men-${++uid}`, [])
@@ -205,12 +207,17 @@ const Slab = forwardRef(function Slab(
         style={useBlob ? { clipPath: `url(#${id})`, WebkitClipPath: `url(#${id})` } : undefined}
       >
         {img && (
-          <img
+          /* `priority` is for the one slab that is the Largest Contentful
+             Paint — the product hero. Everything else stays lazy: the rails
+             below the fold hold a dozen of these. */
+          <SmartImage
             className="slab-img"
+            wrapClassName="si--fill"
             src={img}
+            thumb={imgThumb}
             alt={alt}
-            loading="lazy"
-            decoding="async"
+            priority={priority}
+            sizes={sizes}
             aria-hidden={alt ? undefined : 'true'}
           />
         )}

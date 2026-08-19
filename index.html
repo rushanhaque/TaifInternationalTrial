@@ -59,7 +59,29 @@
     <!-- /shows sources its atelier and exhibition plates from Unsplash. Same
          caveat as above — DELETE when the real photographs land. -->
     <link rel="preconnect" href="https://images.unsplash.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Tenor+Sans&display=swap" rel="stylesheet" />
+    <!-- Loaded WITHOUT blocking the first paint. A plain <link rel=stylesheet>
+         to fonts.googleapis.com is render-blocking on a third-party origin:
+         nothing on the page can paint until that request resolves, which on a
+         slow connection is most of the delay a visitor actually feels.
+
+         `rel=preload as=style` fetches it at high priority but does not block;
+         the onload handler promotes it to a real stylesheet the moment it
+         lands. Because every family already carries `display=swap`, text is
+         painted in the fallback face immediately and reflows once — which is
+         the trade this makes on purpose, and the reason the fallback stacks
+         in tokens.css are metric-matched rather than arbitrary.
+
+         The <noscript> copy keeps the fonts for a browser with JavaScript
+         disabled, where the onload promotion never runs. -->
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Tenor+Sans&display=swap"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <noscript>
+      <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Tenor+Sans&display=swap" rel="stylesheet" />
+    </noscript>
     <!-- NOTE: the brand facts below are stated a second time here, outside
          src/data/site.js, because a crawler that never runs JavaScript sees
          only this file. Verify the phone, headcount and founding date against

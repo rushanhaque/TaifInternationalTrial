@@ -5,9 +5,10 @@
   "type": "module",
   "engines": { "node": "24.x" },
   "scripts": {
-    "dev": "vite",
+    "prep": "node scripts/extract-content-images.mjs",
+    "dev": "npm run prep && vite",
     "sitemap": "node scripts/gen-sitemap.mjs",
-    "build": "node scripts/gen-sitemap.mjs && vite build",
+    "build": "npm run prep && node scripts/gen-sitemap.mjs && vite build",
     "preview": "vite preview"
   },
   "dependencies": {

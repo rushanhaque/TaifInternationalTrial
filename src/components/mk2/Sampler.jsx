@@ -170,9 +170,11 @@ export default function Sampler() {
         {signature && (
           <Link to={`/catalogue/${signature.slug}`} className="mrail-sig">
             <img
-              src={signature.image || productImg(signature.slug)}
+              src={signature.imageThumb || signature.image || productImg(signature.slug)}
               alt={signature.name}
               className="mrail-sig-img"
+              loading="lazy"
+              decoding="async"
             />
             <div className="mrail-sig-scrim" />
             <div className="mrail-sig-meta">
@@ -191,7 +193,7 @@ export default function Sampler() {
               className="mrail-thumb"
               aria-label={item.name}
             >
-              <img src={item.image || productImg(item.slug)} alt={item.name} />
+              <img src={item.imageThumb || item.image || productImg(item.slug)} alt={item.name} loading="lazy" decoding="async" />
               <span className="mrail-thumb-name">{item.name}</span>
             </Link>
           ))}
@@ -253,7 +255,7 @@ export default function Sampler() {
                     pointerEvents: p > 0.4 ? 'auto' : 'none'
                   }}
                 >
-                  <img src={item.image || productImg(item.slug)} alt={item.name} className="czoom-card-img" />
+                  <img src={item.image || productImg(item.slug)} alt={item.name} className="czoom-card-img" loading="lazy" decoding="async" />
                   <div className="czoom-card-meta">
                     <span className="czoom-card-sub">{item.material}</span>
                     <h3 className="czoom-card-name">{item.name}</h3>

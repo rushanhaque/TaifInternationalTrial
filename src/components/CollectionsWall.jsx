@@ -3,7 +3,7 @@ import { gsap, reduced } from '../lib/gsap'
 import { Link } from '../lib/router'
 import { COLLECTIONS } from '../data/site'
 import { COLLECTION_PAGE_IMGS } from '../data/images'
-import { familySlug } from '../pages/CollectionPage'
+import { familySlug } from '../lib/families'
 
 /* ── THE INDEX ──────────────────────────────────────────────────────────────
    All nine families as large plates, three to a row, captions underneath.
