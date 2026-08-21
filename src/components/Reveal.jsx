@@ -1,104 +1,41 @@
 import { createElement, useEffect, useRef } from 'react'
-import { gsap, reduced, splitChars } from '../lib/gsap'
+import { gsap, reduced } from '../lib/gsap'
 export { EditorialReveal } from './EditorialReveal'
 
-/* E7 Dilate — smooth luxury upward reveal without bounce or scale */
+/* ── TEXT IS STATIC, EVERYWHERE, BY REQUEST ──────────────────────────────
+   Dilate, CharCascade and SmoothReveal each used to seed their element at
+   opacity 0 and tween it back on a ScrollTrigger. All three now render
+   their children and nothing else.
+
+   THEY ARE KEPT AS COMPONENTS ON PURPOSE. Between them they have 60-odd
+   call sites across every page, and they carry real API — `as` picks the
+   tag, `id` and `className` land on it, `style` and arbitrary props pass
+   through. Deleting them would mean rewriting every one of those call
+   sites into a bare tag, a large mechanical diff with a lot of room to
+   drop an id or a class. Passing the props through a plain createElement
+   is the same render with none of that risk, and restoring the motion
+   later means editing three functions rather than sixty JSX blocks.
+
+   `delay` is still accepted and ignored, for the same reason: callers pass
+   it, and making it a hard error would break pages for no benefit.        */
+
+const Static = (as, props, children) => createElement(as, props, children)
+
+/* eslint-disable no-unused-vars -- delay is accepted and deliberately ignored */
+
 export function Dilate({ as = 'div', className = '', delay = 0, children, style, ...rest }) {
-  const ref = useRef(null)
-  useEffect(() => {
-    if (reduced()) return
-    if (!ref.current) return
-
-    gsap.set(ref.current, { opacity: 0, y: 22 })
-
-    const tw = gsap.to(ref.current, {
-      y: 0, opacity: 1,
-      duration: 0.85, delay, ease: 'power3.out',
-      scrollTrigger: {
-        trigger: ref.current,
-        start: 'top 95%',
-        toggleActions: 'play none none none',
-        once: true
-      },
-      onComplete: () => {
-        gsap.set(ref.current, { clearProps: 'transform' })
-      }
-    })
-
-    if (tw.scrollTrigger && tw.scrollTrigger.progress > 0) {
-      tw.play()
-    }
-
-    return () => { tw.scrollTrigger?.kill(); tw.kill() }
-  }, [delay])
-  return createElement(as, { ref, className, style, ...rest }, children)
+  return Static(as, { className, style, ...rest }, children)
 }
 
-/* Premium Luxury Text Cascade — smooth subtle upward fade without bounce or scale */
 export function CharCascade({ as = 'h2', className = '', delay = 0, children, id, style, ...rest }) {
-  const ref = useRef(null)
-  useEffect(() => {
-    if (reduced()) return
-    if (!ref.current) return
-
-    gsap.set(ref.current, { opacity: 0, y: 22 })
-
-    const tw = gsap.to(ref.current, {
-      y: 0, opacity: 1,
-      duration: 0.85, delay, ease: 'power3.out',
-      scrollTrigger: {
-        trigger: ref.current,
-        start: 'top 95%',
-        toggleActions: 'play none none none',
-        once: true
-      },
-      onComplete: () => {
-        gsap.set(ref.current, { clearProps: 'transform' })
-      }
-    })
-
-    if (tw.scrollTrigger && tw.scrollTrigger.progress > 0) {
-      tw.play()
-    }
-
-    return () => { tw.scrollTrigger?.kill(); tw.kill() }
-  }, [delay, children])
-
-  return createElement(as, { ref, className, id, style, ...rest }, children)
+  return Static(as, { className, id, style, ...rest }, children)
 }
 
-/* Minimal & smooth scroll-triggered reveal for body copy & secondary homepage texts */
 export function SmoothReveal({ as = 'div', className = '', delay = 0, children, style, ...rest }) {
-  const ref = useRef(null)
-  useEffect(() => {
-    if (reduced()) return
-    if (!ref.current) return
-
-    gsap.set(ref.current, { opacity: 0, y: 20 })
-
-    const tw = gsap.to(ref.current, {
-      y: 0, opacity: 1,
-      duration: 0.8, delay, ease: 'power3.out',
-      scrollTrigger: {
-        trigger: ref.current,
-        start: 'top 95%',
-        toggleActions: 'play none none none',
-        once: true
-      },
-      onComplete: () => {
-        gsap.set(ref.current, { clearProps: 'transform' })
-      }
-    })
-
-    if (tw.scrollTrigger && tw.scrollTrigger.progress > 0) {
-      tw.play()
-    }
-
-    return () => { tw.scrollTrigger?.kill(); tw.kill() }
-  }, [delay])
-
-  return createElement(as, { ref, className, style, ...rest }, children)
+  return Static(as, { className, style, ...rest }, children)
 }
+
+/* eslint-enable no-unused-vars */
 
 /* CardsReveal — staggered scroll slide-in for a grid of cards. Each direct
    child eases up and in as the group enters, assembling the grid rather than

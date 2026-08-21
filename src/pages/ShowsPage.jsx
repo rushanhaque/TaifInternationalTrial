@@ -130,7 +130,7 @@ export default function ShowsPage() {
         </div>
       </section>
 
-      <section className="section" style={{ paddingTop: 'clamp(3.5rem, 7vw, 5.5rem)' }}>
+      <section className="section">
         <div className="wrap">
           <div className="ed-block-head">
             <h2 className="d2">Exhibitions &amp; Events</h2>

@@ -1,6 +1,6 @@
 /* ============ shared page hero ============ */
-.page-hero { padding-top: calc(var(--nav-h) + clamp(3rem, 7vw, 6rem)); padding-bottom: clamp(2.5rem, 5vw, 4.5rem); }
-.page-hero .lede { margin-top: 1.4rem; }
+.page-hero { padding-top: calc(var(--nav-h) + var(--s-7)); padding-bottom: var(--s-7); }
+.page-hero .lede { margin-top: var(--s-5); }
 .dim2 { color: var(--dim); }
 
 /* ============ catalogue ============ */

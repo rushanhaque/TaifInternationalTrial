@@ -129,7 +129,7 @@ export const HOME_COLLECTIONS = [
 
 export const PROCESS_STAGES = [
   { name: 'Source', spec: 'papers first', copy: 'Brass and copper arrive from mills with test certificates; sheesham, mango and acacia from plantation lots with legal harvest documents. Nothing enters the yard unpapered.' },
-  { name: 'Season', spec: '8–10% MC', copy: 'Timber is air-stacked, kiln-dried to 8–10% moisture and then rested. Wood rushed at this stage cracks in a customer’s living room two winters later.' },
+  { name: 'Season', spec: '8–10% MC', copy: "Timber is air-stacked, kiln-dried to 8–10% moisture and then rested. Wood rushed at this stage cracks in a customer's living room two winters later." },
   { name: 'Cast & Cut', spec: '±0.5 mm', copy: 'Sand casting and lost wax on the metal floor; band-saw and CNC blanking on the wood floor. Both work to the same drawing, in the same week.' },
   { name: 'Form', spec: 'by hand', copy: 'Spinning lathes, stakes and hammers for metal. Turning, carving and jali fretwork for wood. This is the stage that cannot be bought as a machine.' },
   { name: 'Join', spec: 'no filler', copy: 'Brazing, riveting, mortise and tenon. Metal-to-wood joints are pinned and seated dry — we do not hide a gap behind putty.' },
@@ -174,7 +174,7 @@ export const CASES = [
   {
     client: 'Halcyon Hotels', cat: 'Hospitality',
     brief: '2,800 hammered-brass and sheesham amenity sets across four properties, matched to a 2012 original whose original maker had closed.',
-    result: 'Reverse-engineered from five surviving pieces; delivered in 16 weeks with a patina the client’s own housekeepers could not tell apart.',
+    result: "Reverse-engineered from five surviving pieces; delivered in 16 weeks with a patina the client's own housekeepers could not tell apart.",
     stat: '2,800 sets · 16 weeks',
   },
   {
@@ -199,6 +199,72 @@ export const TIMELINE = [
   { year: '2019', copy: 'Lacquer and powder-coat lines brought in-house. Colour becomes a process instead of a subcontract.' },
   { year: '2024', copy: 'Rooftop solar carries the finishing lines; metal offcuts go back to the smelter, wood offcuts to the boiler.' },
   { year: '2026', copy: 'Today: 15+ artisans, 16 export markets, and six materials.' },
+]
+
+/* ── The About-page slideshow (SlatShow.jsx) ────────────────────────────────
+   Four frames, each a picture and a piece of the argument: who we are, where
+   we come from, what we will build for you, and who signs it off.
+
+   THE PHOTOGRAPHS ARE STAND-INS. Every `image.src` currently points at
+   Unsplash so the section can be judged as a finished design. `brief` is the
+   shot to commission in its place — hand it to the photographer, put the
+   result in public/img/, and swap `src`. Frames can be filled one at a time.
+
+   Because the picture is now the full ground of the frame rather than a panel
+   beside the text, choose replacements with a QUIET LEFT-HAND SIDE: the copy
+   sits over the left half under a gradient, and a busy left edge fights it.
+
+   NOTE FOR HANDOVER: the copy is drafted from the facts already in this file
+   (est. 1998, Moradabad, the TIMELINE, the FAQ lead times) plus the public
+   record on Moradabad and Saharanpur. Two things need the director's own
+   sign-off before launch: his name — TEAM above still marks it a placeholder —
+   and the pull quote on frame 04, which is written for him, not by him. */
+export const ABOUT_SLIDES = [
+  {
+    no: '01',
+    kicker: 'Introduction',
+    title: 'An atelier that ships by the container.',
+    lede: 'Metal and wood handicraft, raised by hand in Moradabad since 1998 — packed, papered and exported to sixteen countries.',
+    paras: [
+      'Two floors, six materials, 15+ artisans — in the city the rest of India calls Peetal Nagri, the brass town. Metal in Moradabad, wood in Saharanpur, and the seam where the two meet belongs to us alone.',
+    ],
+    facts: ['Est. 1998', 'Moradabad · India', '16 export markets'],
+    image: {
+      src: '/assets/about/intro.webp',
+      alt: 'An artisan chasing an intricate pattern into a copper tray by hand.',
+      focus: '50% 50%',
+    },
+  },
+  {
+    no: '02',
+    kicker: 'The story',
+    title: 'Four centuries of practice. Twenty-eight of ours.',
+    lede: 'Moradabad has beaten brass since 1625. We are one workshop inside that inheritance.',
+    paras: [
+      'The first container left in 2003 — brass planters, bound for Hamburg. The wood floor opened in 2008, the kiln in 2013, the lacquer lines in 2019. Every step the same decision: bring whatever decides the quality inside the building.',
+    ],
+    facts: ['Moradabad, est. 1625', 'GI-tagged craft', 'Exporting since 2003'],
+    image: {
+      src: '/assets/about/story.webp',
+      alt: 'Heritage tools on a workshop bench.',
+      focus: '50% 50%',
+    },
+  },
+  {
+    no: '03',
+    kicker: 'Bespoke & samples',
+    title: 'Send a drawing. Or a photograph. Or the broken original.',
+    lede: 'A sketch on a napkin or a fully specced drawing — we start from wherever you are.',
+    paras: [
+      'Send a drawing. Share a reference image. Schedule a call and talk us through the idea. A priced quote comes back in five working days, a physical sample in ten — and nothing enters the floor until you have approved it in your hands.',
+    ],
+    facts: ['Quote in 5 days', 'Sample in 10', 'MOQ from 100'],
+    image: {
+      src: '/assets/about/bespoke and sample.webp',
+      alt: 'A carver working a chisel into timber at the bench.',
+      focus: '50% 50%',
+    },
+  },
 ]
 
 export const PRINCIPLES = [

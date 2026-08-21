@@ -1,70 +1,74 @@
-import { useRef, useState } from 'react'
-import { coarse } from '../../lib/gsap'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { coarse, reduced } from '../../lib/gsap'
 import { CharCascade, SmoothReveal } from '../Reveal'
 import Button from '../Button'
 
 /* ── FINISHES, AT A GLANCE ─────────────────────────────────────────────────
-   An interactive swatch selector, not a static gallery. The big card on the
-   left is a single window that shows whichever finish the small list on the
-   right is pointing at — the four photographs sit stacked and pre-loaded
-   underneath each other, and only their opacity moves, so swapping between
-   them reads as the SAME piece changing its surface rather than as one
-   photo being replaced by an unrelated one.
-
-   TWO INPUTS, ONE STATE MACHINE.
-   · `active` is the persistent choice — what the window shows at rest, and
-     which row carries the highlighted "this is selected" treatment. It
-     starts on Antique, the house default, and only a CLICK ever moves it.
-   · `preview` is a transient, hover-only look-ahead. It exists on desktop
-     alone: resting a pointer or keyboard focus on a row shows that finish
-     without committing to it, and leaving the row snaps back to `active`.
-
-   MOBILE HAS NO HOVER, SO IT ONLY EVER USES THE FIRST HALF OF THAT MACHINE.
-   coarse() is read once at mount (matches the pattern DragRail already uses
-   for the same touch/mouse fork) and gates the pointerenter/leave handlers
-   entirely — a tap fires the click handler either way, so touch reduces
-   cleanly to "tap a row, it becomes the selection," exactly the click
-   effect asked for in place of hover. */
+   Same crossfade mechanism as SlatShow: the incoming image stacks above the
+   outgoing one and fades up over 700ms, so the swap never dips through the
+   background. Autoplay advances every 5 s; hover/focus pauses it; clicking a
+   selector row or a dot/arrow jumps to that finish. */
 
 const FINISHES = [
   {
     key: 'antique', name: 'Antique',
-    img: '/assets/finishes/antique.png',
+    img: '/assets/finishes/antique.webp',
     substrates: ['Brass', 'Copper', 'Iron'],
     character: 'Aged forward by hand until it reads a century old, then stopped exactly where we want it.',
   },
   {
     key: 'nickel', name: 'Nickel',
-    img: '/assets/finishes/nickel.png',
+    img: '/assets/finishes/nickel.webp',
     substrates: ['Brass', 'Steel', 'Zinc Alloy'],
     character: 'Plated in a cool, bright nickel that resists tarnish and fingerprints far longer than raw brass.',
   },
   {
     key: 'oiled-rubbed-bronze', name: 'Oiled Rubbed Bronze',
-    img: '/assets/finishes/oiled-rubbed-bronze.png',
+    img: '/assets/finishes/oiled-rubbed-bronze.webp',
     substrates: ['Brass', 'Zinc Alloy'],
     character: 'A dark, worked bronze with warm highlights left standing on the raised detail — hand-rubbed, not sprayed flat.',
   },
   {
     key: 'powder-coated', name: 'Powder Coated',
-    img: '/assets/finishes/powder-coated.png',
+    img: '/assets/finishes/powder-coated.webp',
     substrates: ['Steel', 'Iron', 'Aluminium'],
-    character: 'An electrostatic coat baked to a hard, even shell — the most weatherproof finish on the floor, built for daily handling.',
+    character: 'An electrostatic coat baked to a hard, even shell — the most weatherproof finish on the floor.',
   },
 ]
 
-const DEFAULT_KEY = 'antique'
+const SPEED = 1400
+const DWELL = 5000
 
 export default function FinishesShowcase() {
   const isTouch = useRef(coarse()).current
-  const [active, setActive] = useState(DEFAULT_KEY)
-  const [preview, setPreview] = useState(null)
+  const [current, setCurrent] = useState(0)
+  const [outgoing, setOutgoing] = useState(null)
+  const [paused, setPaused] = useState(false)
+  const settle = useRef(null)
 
-  const shownKey = preview || active
-  const shown = FINISHES.find((f) => f.key === shownKey)
+  const go = useCallback((next) => {
+    if (next === current) return
+    if (!reduced()) setOutgoing(current)
+    setCurrent(next)
+  }, [current])
 
-  const look = (key) => { if (!isTouch) setPreview(key) }
-  const unlook = () => { if (!isTouch) setPreview(null) }
+  useEffect(() => {
+    if (outgoing === null) return undefined
+    clearTimeout(settle.current)
+    settle.current = setTimeout(() => setOutgoing(null), SPEED)
+    return () => clearTimeout(settle.current)
+  }, [outgoing, current])
+
+  const next = useCallback(() => go((current + 1) % FINISHES.length), [current, go])
+  const prev = useCallback(() => go((current - 1 + FINISHES.length) % FINISHES.length), [current, go])
+
+  useEffect(() => {
+    if (paused) return undefined
+    const t = setTimeout(next, DWELL)
+    return () => clearTimeout(t)
+  }, [next, paused])
+
+  const shown = FINISHES[current]
 
   return (
     <section className="fin section" id="finishes">
@@ -75,52 +79,51 @@ export default function FinishesShowcase() {
 
         <div className="fin-grid">
           {/* ── the window ── */}
-          <article className="fin-hero">
+          <article
+            className="fin-hero"
+            onMouseEnter={() => setPaused(true)}
+            onMouseLeave={() => setPaused(false)}
+            onFocus={() => setPaused(true)}
+            onBlur={() => setPaused(false)}
+          >
             <span className="fin-hero-media" aria-hidden="true">
-              {FINISHES.map((f) => (
+              {FINISHES.map((f, i) => (
                 <img
                   key={f.key}
                   src={f.img}
                   alt=""
-                  /* every finish is stacked here and cross-faded on select;
-                     a lazy one would show an empty frame on first click */
                   decoding="async"
-                  className={`fin-hero-img${f.key === shownKey ? ' is-shown' : ''}`}
-                  loading={f.key === DEFAULT_KEY ? 'eager' : 'lazy'}
-                  decoding="async"
+                  className={`fin-hero-img${i === current ? ' is-on' : ''}${i === outgoing ? ' is-out' : ''}`}
+                  loading={i === 0 ? 'eager' : 'lazy'}
                 />
               ))}
-              <span className="fin-hero-scrim" />
             </span>
+
             <div className="fin-hero-body">
-              <span className="fin-hero-eyebrow meta">
-                {shownKey === active ? 'Selected finish' : 'Previewing'}
-              </span>
-              {/* keyed so the name swap gets its own fade rather than
-                  jump-cutting under the crossfading photo behind it. Just
-                  the name now — the character copy and substrate tags read
-                  as a caption competing with the photo itself, and the same
-                  copy is already on each row of the selector below. */}
-              <div className="fin-hero-copy" key={shownKey}>
+              <div className="fin-hero-copy" key={current}>
+                <span className="fin-hero-eyebrow meta">Selected finish</span>
                 <h3 className="fin-hero-name">{shown.name}</h3>
+                <p className="fin-hero-note">{shown.character}</p>
+                <ul className="fin-hero-subs">
+                  {shown.substrates.map((s) => <li key={s}>{s}</li>)}
+                </ul>
               </div>
             </div>
+
           </article>
 
           {/* ── the selector ── */}
-          <ul className="fin-list" role="listbox" aria-label="Choose a finish to preview">
-            {FINISHES.map((f) => (
+          <ul className="fin-list" role="listbox" aria-label="Choose a finish">
+            {FINISHES.map((f, i) => (
               <li key={f.key}>
                 <button
                   type="button"
-                  className={`fin-row${f.key === active ? ' is-active' : ''}`}
+                  className={`fin-row${i === current ? ' is-active' : ''}`}
                   role="option"
-                  aria-selected={f.key === active}
-                  onPointerEnter={() => look(f.key)}
-                  onPointerLeave={unlook}
-                  onFocus={() => look(f.key)}
-                  onBlur={unlook}
-                  onClick={() => setActive(f.key)}
+                  aria-selected={i === current}
+                  onClick={() => go(i)}
+                  onPointerEnter={() => { if (!isTouch) { setPaused(true); go(i) } }}
+                  onPointerLeave={() => { if (!isTouch) setPaused(false) }}
                 >
                   <span className="fin-swatch">
                     <img src={f.img} alt="" loading="lazy" decoding="async" />

@@ -4,6 +4,7 @@ import { gsap, ScrollTrigger, reduced } from '../lib/gsap'
 import { useCounter } from '../lib/hooks'
 import { PROCESS_STAGES, RIBBON_TERMS, HOME_COLLECTIONS, MATERIALS, FINISHES } from '../data/site'
 import { useContent, railProducts } from '../lib/content'
+import { CRAFT_VIDEO } from '../data/video'
 import { CharCascade, SmoothReveal, Dilate, CardsReveal } from '../components/Reveal'
 import '../styles/mk2/page-materials.css'
 /* the home Reviews block reuses the testimonial card styling */
@@ -256,7 +257,7 @@ export default function Home() {
       <section className="section clear countries-section-wrap" id="countries">
         <div className="wrap">
           <div className="countries-card">
-            <div style={{ position: 'absolute', top: '1.6rem', left: 0, width: '100%', textAlign: 'center' }}>
+            <div style={{ textAlign: 'center', paddingBottom: '1.25rem' }}>
               <CharCascade as="span" className="meta" style={{ display: 'inline-block', fontSize: '1.25rem' }}>
                 Countries served
               </CharCascade>
@@ -329,13 +330,13 @@ function ReviewsSection() {
   const reviews = useContent('reviews')
 
   return (
-    <section className="section alt fs-section bestsellers-section" id="reviews" style={{ paddingBlock: '4rem 3rem' }}>
+    <section className="section alt fs-section bestsellers-section" id="reviews">
       <div className="wrap">
-        <div className="sec-head" style={{ marginBottom: '2.5rem' }}>
+        <div className="sec-head">
           <CharCascade as="span" className="meta">What our clients say</CharCascade>
         </div>
 
-        <CardsReveal className="home-reviews-grid" selector=":scope > .tm-card" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.8rem' }}>
+        <CardsReveal className="home-reviews-grid" selector=":scope > .tm-card">
           {reviews.map((t) => (
             <div
               key={t.id}
@@ -373,7 +374,6 @@ function ReviewsSection() {
 }
 
 function Heritage() {
-  const bgVideo = "https://res.cloudinary.com/djszwbnxp/video/upload/v1786264932/IMG_0205_n1mn8t.mp4"
   const bgVideoRef = useRef(null)
 
   return (
@@ -389,8 +389,9 @@ function Heritage() {
               loop
               muted
               playsInline
-              src={bgVideo}
-            />
+            >
+              {CRAFT_VIDEO.map((s) => <source key={s.src} src={s.src} type={s.type} />)}
+            </video>
             <div className="craft-card__overlay" />
           </div>
 
@@ -399,7 +400,7 @@ function Heritage() {
             <MaskedHeading
               text="THE CRAFT"
               mediaType="video"
-              src={bgVideo}
+              sources={CRAFT_VIDEO}
               syncVideoRef={bgVideoRef}
               fillScale={1.35}
               parallax={32}

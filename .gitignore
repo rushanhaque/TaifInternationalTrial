@@ -4,12 +4,22 @@ dist
 *.local
 __pycache__/
 
-# video files — host on Cloudinary, never commit
+# Video. Raw camera/editor files stay local — they are large, and the
+# processed versions are what the site serves.
 *.mp4
 *.mov
 *.avi
 *.webm
 *.mkv
+
+# ...except the encoded delivery clips, which MUST ship. Vite copies public/
+# into dist/, so anything here that git does not carry is missing from a
+# fresh clone and 404s on deploy while still working on the machine that
+# encoded it. Produced by scripts/encode-video.mjs from assets/ — see
+# src/data/video.js for how they are referenced.
+!public/video/
+!public/video/*.webm
+!public/video/*.mp4
 
 # raw source assets — processed versions live in public/, source stays local
 assets/

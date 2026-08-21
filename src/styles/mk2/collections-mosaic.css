@@ -310,13 +310,32 @@
 
 /* ── Dimmed neighbours — the wall goes quiet around the lit plate ─────── */
 
+/* DARK, BUT NOT SWITCHED OFF. Three passes got here, and the range is
+   worth recording because the useful window is narrower than it looks:
+
+     brightness 0.5   + duotone 0.86  — the original. Pointing at one plate
+                                        blacked out the other eight.
+     brightness 0.965 + duotone 0.22  — the overcorrection. Nothing
+                                        visibly happened at all.
+     brightness 0.9   + duotone 0.32  — still read as "no effect".
+
+   These sit deliberately nearer the first: better than a quarter-stop
+   down with the burgundy at half strength, so the neighbours genuinely go
+   dark rather than merely settling. The two treatments compound — the
+   duotone is a multiply layer over an already-darkened image — which is
+   why the brightness figure on its own understates how this reads.
+
+   The floor being protected is legibility. Nine collections are shown
+   together so they can be compared, so a neighbouring plate has to stay
+   identifiable as its own photograph; that is what keeps this above the
+   original 0.5, and it is the thing to preserve if it moves again. */
 .cm-wall.is-hot .cm-card:not(.is-live) .cm-img {
-  filter: saturate(0.28) brightness(0.5) contrast(1.02);
+  filter: saturate(0.72) brightness(0.72) contrast(1.02);
 }
 
-.cm-wall.is-hot .cm-card:not(.is-live) .cm-duotone { opacity: 0.86; }
-.cm-wall.is-hot .cm-card:not(.is-live) .cm-no { color: rgba(227, 200, 143, 0.45); }
-.cm-wall.is-hot .cm-card:not(.is-live) .cm-name { color: rgba(255, 255, 255, 0.62); }
+.cm-wall.is-hot .cm-card:not(.is-live) .cm-duotone { opacity: 0.52; }
+.cm-wall.is-hot .cm-card:not(.is-live) .cm-no { color: rgba(227, 200, 143, 0.6); }
+.cm-wall.is-hot .cm-card:not(.is-live) .cm-name { color: rgba(255, 255, 255, 0.74); }
 
 .cm-link:focus-visible {
   outline: 2px solid var(--cm-gold);

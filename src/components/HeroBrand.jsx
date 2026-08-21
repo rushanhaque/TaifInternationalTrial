@@ -1,9 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { gsap, reduced } from '../lib/gsap'
 import { BRAND } from '../data/site'
-
-/* the hero clip — swap this URL to change the landing-page backdrop */
-const HERO_VIDEO = 'https://res.cloudinary.com/r9atxbdz/video/upload/v1786893166/Taif_Video_Final.mp4'
+import { LANDING_VIDEO } from '../data/video'
 
 /* ── E19 · THE WELCOME ────────────────────────────────────────────────────
    Three lines over the ambient footage — a small kicker, the big brand
@@ -117,7 +115,7 @@ export default function HeroBrand() {
           Muted + loop + inline so it autoplays everywhere. Reduced-motion
           visitors get the same file held on its first frame rather than a
           different image, so the page never shows a photograph.
-          The clip is the client's own Cloudinary asset — swap the URL above. */}
+          The clip is self-hosted — swap the paths above. */}
       <div className="hb-media" aria-hidden="true">
         <video
           className="hb-video"
@@ -126,8 +124,9 @@ export default function HeroBrand() {
           muted
           playsInline
           preload="auto"
-          src={HERO_VIDEO}
-        />
+        >
+          {LANDING_VIDEO.map((s) => <source key={s.src} src={s.src} type={s.type} />)}
+        </video>
         <div className="hb-scrim" />
       </div>
       <div className="hb-stage" ref={stage}>

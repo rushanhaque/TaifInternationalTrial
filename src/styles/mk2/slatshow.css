@@ -1,19 +1,24 @@
-/* ── SECTION 1 · THE LOUVRE ─────────────────────────────────────────────────
+/* ── SECTION 1 · THE ABOUT SLIDESHOW ────────────────────────────────────────
    The mechanism is documented in SlatShow.jsx. What matters here:
 
-   ▸ Each `.ss-face` is a WINDOW the width of one slat. The `<img>` inside it
-     is the width of the whole FRAME (`100% * --n`) and is pulled left by that
-     slat's index (`-100% * --i`), so the nine windows line up into one
-     continuous photograph. Both numbers are percentages of the slat, so the
-     picture stays registered at every viewport width with nothing measured
-     in JS.
+   ▸ NO PANELS. The photograph is the ground of the entire frame and the copy
+     is set on top of it. What separates the two is `.ss-scrim`, a gradient
+     that is nearly opaque at the left margin and fully clear by the right
+     third — so the type always has a solid surface under it while the picture
+     still runs edge to edge, and there is no seam for the eye to catch.
 
-   ▸ The flip is a real half-turn in 3-D: `.ss-back` is pre-rotated 180°, and
-     both faces hide their reverse, so turning the slat 180° swaps which
-     picture faces the viewer without either ever appearing mirrored.
+   ▸ The stage is a ONE-CELL GRID. All four frames sit in `grid-area: 1 / 1`,
+     so the stage is as tall as the tallest frame and advancing never reflows
+     the page.
 
-   ▸ Only `rotationY` is animated. No width, no opacity, no filter — nine
-     composited transforms and nothing that forces layout. */
+   ▸ Only `opacity` is animated on the frame itself. The stacking order is
+     what makes it read as a wipe-over rather than a dissolve: the incoming
+     frame sits above the outgoing one, so the background is never visible
+     between the two.
+
+   ▸ The copy and the picture both animate on `.is-on`. Removing and re-adding
+     the class restarts a CSS animation, so both replay every time a frame
+     comes back round. */
 
 .ss-section {
   padding: clamp(3rem, 6vw, 5rem) 0;
@@ -25,6 +30,8 @@
   border-radius: var(--r-lg);
   overflow: hidden;
   outline: none;
+  background: var(--deep);
+  isolation: isolate;
 }
 
 .ss-frame:focus-visible {
@@ -32,154 +39,346 @@
 }
 
 .ss-stage {
+  display: grid;
+}
+
+/* Only the arrival is animated. Everything else snaps, because it happens
+   underneath a frame that is already fully opaque and so is never seen. */
+.ss-slide {
+  grid-area: 1 / 1;
   position: relative;
-  display: flex;
-  aspect-ratio: 16 / 7;
-  /* the depth that makes the turn read as a panel pivoting rather than a
-     flat width animation — shallow enough that the nine slats do not fan out
-     into obviously different vanishing points */
-  perspective: 1900px;
-  perspective-origin: 50% 50%;
-  background: var(--offwhite);
+  display: grid;
+  /* the copy occupies the left column; the right column is deliberately empty
+     so the photograph has somewhere to be looked at */
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.62fr);
+  align-items: center;
+  min-height: clamp(32rem, 88vh, 56rem);
+  opacity: 0;
+  z-index: 0;
 }
 
-.ss-slat {
-  position: relative;
-  flex: 1 1 0;
-  transform-style: preserve-3d;
-  /* the seam between panels: a slat is lit slightly differently from its
-     neighbour mid-turn, and this keeps that legible as an edge */
-  will-change: transform;
+/* the frame being read: on top, fading up over the one it replaces */
+.ss-slide.is-on {
+  opacity: 1;
+  z-index: 2;
+  transition: opacity 1s ease;
 }
 
-.ss-face {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
+/* the frame it replaces: held at full opacity underneath for the length of
+   the transition, so the incoming one fades onto a picture and not onto the
+   page background */
+.ss-slide.is-out {
+  opacity: 1;
+  z-index: 1;
 }
 
-.ss-back {
-  transform: rotateY(180deg);
-}
-
-/* the window onto a full-frame copy of the picture.
-   width / left are set as inline styles in JSX (SLATS * 100% / -i * 100%)
-   so they resolve to concrete px values rather than CSS custom-property calc
-   which prod builds can drop or mis-order. */
+/* ── the picture ───────────────────────────────────────────────────────── */
 .ss-img {
   position: absolute;
-  top: 0;
+  inset: 0;
+  width: 100%;
   height: 100%;
   object-fit: cover;
+  /* object-position comes from `image.focus` in site.js — pushed right of
+     centre so the subject sits clear of the copy rather than behind it */
   display: block;
   user-select: none;
   -webkit-user-drag: none;
+  z-index: 0;
 }
 
-/* the travelling light that ties the nine flips into one gesture */
-.ss-sweep {
+/* The gradient that replaces the old partition. Two passes: one across, to
+   carry the paragraphs, and one up from the floor, to seat the facts row and
+   the controls.
+
+   THE 48% STOP IS A CONTRAST FLOOR, not a taste call. No text in any frame
+   runs past ~50% of the width, and holding 0.80 alpha out to there keeps body
+   copy at roughly 6:1 even where the photograph behind it is blown to white.
+   At 0.66 it fell to 4:1 against a bright frame, which is under AA. Move this
+   stop left, or let the copy run wider, and that guarantee goes with it. */
+.ss-scrim {
   position: absolute;
-  top: -6%;
-  bottom: -6%;
-  left: 0;
-  width: 26%;
+  inset: 0;
+  z-index: 1;
   pointer-events: none;
-  opacity: 0;
-  background: linear-gradient(
-    100deg,
-    transparent 0%,
-    rgba(255, 245, 226, 0.05) 32%,
-    rgba(255, 240, 214, 0.26) 50%,
-    rgba(255, 245, 226, 0.05) 68%,
-    transparent 100%
-  );
-  mix-blend-mode: soft-light;
-  z-index: 3;
+  background:
+    linear-gradient(
+      100deg,
+      rgba(46, 21, 8, 0.95) 0%,
+      rgba(46, 21, 8, 0.90) 26%,
+      rgba(46, 21, 8, 0.80) 48%,
+      rgba(46, 21, 8, 0.42) 68%,
+      rgba(46, 21, 8, 0.08) 100%
+    ),
+    linear-gradient(
+      to top,
+      rgba(30, 13, 4, 0.55) 0%,
+      rgba(30, 13, 4, 0.12) 34%,
+      transparent 62%
+    );
 }
 
-/* ── controls ──────────────────────────────────────────────────────────── */
-.ss-controls {
+/* the slow drift, held for as long as the frame is. Scale only — no position,
+   no filter — so it stays a single composited transform. */
+@keyframes ss-drift {
+  from { transform: scale(1); }
+  to   { transform: scale(1.07); }
+}
+
+.ss-slide.is-on .ss-img {
+  animation: ss-drift 13s ease-out both;
+}
+
+/* ── the copy ──────────────────────────────────────────────────────────── */
+.ss-copy {
+  position: relative;
+  z-index: 2;
+  grid-column: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: clamp(2.5rem, 5vw, 4.5rem);
+  color: var(--on-deep);
+}
+
+.ss-kicker {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 1.1rem;
-  margin-top: 1.4rem;
+  gap: 0.7rem;
+  margin: 0;
+  color: var(--dim-on-deep);
+}
+
+.ss-kicker__no {
+  color: var(--on-deep);
+}
+
+.ss-kicker__rule {
+  width: 28px;
+  height: 1px;
+  background: var(--hair-on-deep);
+}
+
+.ss-title {
+  font-family: var(--font-section);
+  font-size: clamp(2rem, 4vw, 3.4rem);
+  font-weight: 500;
+  line-height: 1.06;
+  letter-spacing: -0.015em;
+  color: var(--on-deep);
+  margin: 0;
+  max-width: 19ch;
+  text-wrap: balance;
+}
+
+.ss-lede {
+  font-family: var(--font-body);
+  font-size: clamp(1rem, 1.25vw, 1.16rem);
+  font-weight: 350;
+  line-height: 1.55;
+  color: var(--on-deep);
+  margin: 0;
+  max-width: 46ch;
+  text-wrap: pretty;
+}
+
+.ss-para {
+  font-family: var(--font-body);
+  font-size: 0.93rem;
+  font-weight: 350;
+  line-height: 1.66;
+  /* a touch brighter than --dim-on-deep (0.78): these paragraphs sit over a
+     photograph rather than a flat deep panel, so they need the extra lift */
+  color: rgba(253, 251, 247, 0.86);
+  margin: 0;
+  max-width: 54ch;
+  text-wrap: pretty;
+}
+
+.ss-quote {
+  margin: 0.3rem 0 0;
+  padding-left: 1.1rem;
+  border-left: 2px solid var(--on-deep);
+}
+
+.ss-quote__text {
+  font-family: var(--font-section);
+  font-size: clamp(1.05rem, 1.6vw, 1.3rem);
+  font-weight: 500;
+  line-height: 1.35;
+  color: var(--on-deep);
+  margin: 0 0 0.45rem;
+  max-width: 34ch;
+  text-wrap: balance;
+}
+
+.ss-quote__text::before { content: '\201C'; }
+.ss-quote__text::after  { content: '\201D'; }
+
+.ss-quote__cite {
+  font-style: normal;
+  color: var(--dim-on-deep);
+}
+
+.ss-facts {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  list-style: none;
+  margin-top: auto;
+  padding: 0.85rem 0 0;
+  border-top: 1px solid var(--hair-on-deep);
+  color: var(--dim-on-deep);
+  align-self: stretch;
+  max-width: 46ch;
+}
+
+.ss-fact + .ss-fact {
+  padding-left: 1rem;
+  border-left: 1px solid var(--hair-on-deep);
+}
+
+/* ── the entrance ──────────────────────────────────────────────────────────
+   REMOVED. Every child of .ss-copy — kicker, title, lede, paragraphs, quote
+   — rose 40px and faded in on a 0.30s–0.66s per-child stagger each time a
+   slide became current. Text is static site-wide by request, so the copy is
+   simply present when its slide is.
+
+   The keyframes went with it deliberately. `animation: … both` holds the
+   `from` state before the delay elapses, so anything still referencing
+   ss-rise would sit at opacity 0 for up to two thirds of a second — a
+   half-removal here reads as missing text, not as reduced motion.
+
+   The picture still drifts (ss-drift, above) and slides still cross-fade;
+   only the words stopped moving. */
+
+/* ── controls, on the picture ──────────────────────────────────────────── */
+.ss-controls {
+  position: absolute;
+  right: clamp(1.8rem, 3.5vw, 3rem);
+  bottom: clamp(1.8rem, 3.5vw, 2.8rem);
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  gap: 1.4rem;
+}
+
+.ss-dots {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* bars rather than dots — they carry a sense of position that circles do not,
+   and the active one can simply grow along the row */
+.ss-dot {
+  width: 20px;
+  height: 2px;
+  padding: 0;
+  border: none;
+  border-radius: 2px;
+  background: rgba(253, 251, 247, 0.34);
+  cursor: pointer;
+  transition: width 0.45s var(--ease-surge), background-color 0.3s;
+}
+
+.ss-dot:hover {
+  background: rgba(253, 251, 247, 0.62);
+}
+
+.ss-dot.is-on {
+  width: 46px;
+  background: var(--on-deep);
+}
+
+.ss-arrows {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .ss-arrow {
   flex: none;
   display: grid;
   place-items: center;
-  width: 34px;
-  height: 34px;
+  width: 36px;
+  height: 36px;
   padding: 0;
-  border: 1px solid var(--hair);
+  border: 1px solid var(--hair-on-deep);
   border-radius: 50%;
-  background: none;
-  color: var(--graphite-2);
+  background: rgba(30, 13, 4, 0.28);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  color: var(--on-deep);
   cursor: pointer;
-  transition: border-color 0.3s, color 0.3s;
+  transition: border-color 0.3s, background-color 0.3s;
 }
 
 .ss-arrow:hover {
-  border-color: var(--brass);
-  color: var(--tint-deep);
+  border-color: rgba(253, 251, 247, 0.5);
+  background: rgba(30, 13, 4, 0.5);
 }
 
-.ss-dots {
-  display: flex;
-  align-items: center;
-  gap: 0.55rem;
+.ss-arrow:focus-visible {
+  outline: 2px solid var(--on-deep);
+  outline-offset: 2px;
 }
-
-.ss-dot {
-  width: 7px;
-  height: 7px;
-  padding: 0;
-  border: none;
-  border-radius: 50%;
-  background: var(--faint);
-  cursor: pointer;
-  transition: transform 0.35s var(--ease-surge), background-color 0.3s;
-}
-
-.ss-dot:hover {
-  background: var(--brass-lt);
-}
-
-.ss-dot.is-on {
-  background: var(--brass);
-  transform: scale(1.55);
-}
-
-/* ── dark ──────────────────────────────────────────────────────────────── */
-html.dark .ss-section { background-color: transparent; }
 
 /* ── narrow ────────────────────────────────────────────────────────────── */
-@media (max-width: 700px) {
-  .ss-stage {
-    aspect-ratio: 4 / 5;
-    /* fewer, wider panels read better at phone width — nine slats across
-       360px is a set of 40px slivers, which turns into visual noise */
-    perspective: 1200px;
+@media (max-width: 900px) {
+  .ss-slide {
+    /* one column, and the scrim turns to a bottom-up wash — a left-to-right
+       gradient at phone width would darken the whole picture */
+    grid-template-columns: minmax(0, 1fr);
+    min-height: clamp(26rem, 68vh, 38rem);
   }
 
-  .ss-slat:nth-child(n + 7) { display: none; }
+  .ss-scrim {
+    background: linear-gradient(
+      to top,
+      rgba(46, 21, 8, 0.95) 0%,
+      rgba(46, 21, 8, 0.90) 38%,
+      rgba(46, 21, 8, 0.62) 62%,
+      rgba(46, 21, 8, 0.24) 82%,
+      rgba(46, 21, 8, 0.10) 100%
+    );
+  }
+
+  .ss-img {
+    object-position: 50% 42% !important;
+  }
+
+  /* Room for the controls AND for the 40px the facts row starts below its
+     resting place during the entrance rise — without this the copy slides up
+     through the dots on every advance. */
+  .ss-copy {
+    padding-bottom: clamp(7rem, 22vw, 9rem);
+  }
+
+  .ss-title { max-width: 16ch; }
+
+  /* controls drop to the left margin so they clear the facts row above them */
+  .ss-controls {
+    left: clamp(1.4rem, 5vw, 2.6rem);
+    right: auto;
+    bottom: clamp(1.3rem, 4vw, 2rem);
+    gap: 1rem;
+  }
+
+  .ss-arrow { width: 34px; height: 34px; }
 }
 
 /* ── reduced motion ────────────────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
-  .ss-sweep { display: none; }
-
-  .ss-slat {
-    /* no depth, no turn: the component swaps the picture outright, and a
-       flat stage keeps the seams from showing while it does */
-    transform: none !important;
-  }
-
+  .ss-slide,
   .ss-dot {
     transition-duration: 0.01ms;
+  }
+
+  .ss-slide.is-on .ss-copy > *,
+  .ss-slide.is-on .ss-img {
+    animation: none;
   }
 }

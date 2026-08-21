@@ -2,18 +2,18 @@ import { FINISHES } from '../data/site'
 import { CharCascade } from './Reveal'
 
 const FINISH_IMGS = {
-  hammered: '/assets/materials/brass.png',
+  hammered: '/assets/materials/brass.webp',
   antique: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=1200&auto=format&fit=crop',
-  burnished: '/assets/materials/copper.png',
-  natural: '/assets/materials/sheesham.png',
-  inlay: '/assets/materials/teak.png',
+  burnished: '/assets/materials/copper.webp',
+  natural: '/assets/materials/sheesham.webp',
+  inlay: '/assets/materials/teak.webp',
 }
 
 export default function FinishesCabinet() {
   return (
-    <section className="section" id="finishes-we-offer" style={{ paddingBlock: '4rem 5rem', background: '#FFFFFF', color: '#7A3B1D' }}>
+    <section className="section" id="finishes-we-offer" style={{ background: '#FFFFFF', color: '#7A3B1D' }}>
       <div className="wrap">
-        <div className="sec-head" style={{ marginBottom: '1.5rem' }}>
+        <div className="sec-head">
           <CharCascade as="h2" className="d2" style={{ color: '#7A3B1D' }}>Finishes we offer</CharCascade>
           <p className="meta" style={{ marginTop: '0.5rem', color: 'rgba(122, 59, 29, 0.75)' }}>
             Five hand-crafted surfaces · Struck, aged, burnished, oiled, and inlaid
@@ -33,7 +33,7 @@ export default function FinishesCabinet() {
 
                 <div className="chouse-lift">
                   <img
-                    src={FINISH_IMGS[f.key] || '/assets/materials/brass.png'}
+                    src={FINISH_IMGS[f.key] || '/assets/materials/brass.webp'}
                     alt={f.name}
                     className="chouse-cover"
                     loading="lazy"

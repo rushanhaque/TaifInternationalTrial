@@ -57,30 +57,24 @@ const GROUPS = [
     ].join(','),
   ],
   ['btn', '.btn, .czoom-schedule-btn, .hero-cta > *, .craft-cta > *'],
-  [
-    /* Headings get their own gesture — a horizontal wipe rather than the
-       vertical lift body copy uses. Two gestures reading against each other
-       is what makes a section arrive as a composition instead of a block. */
-    'head',
-    [
-      '.craft-sec-title', '.craft-headline', '.czoom-bestsellers-title',
-      '.mrail-title', '.sec-title', '.tt-h',
-      'section h2', 'section h3', 'section h4',
-    ].join(','),
-  ],
-  [
-    /* The broad net, deliberately last. Everything above has already claimed
-       its subtree, so what reaches here is genuinely loose copy — ledes and
-       standalone paragraphs that no card owns. This is what stops a page
-       from having three animated things and forty static ones. */
-    'text',
-    [
-      '.craft-body', '.page-hero .lede', '.hero-kicker', '.prt-lede',
-      '.tt-h-lede', '.tt-head-eyebrow',
-      'section > p', 'section > .wrap > p', 'section .lede',
-      '.ed-block-head', '.sec-head > *',
-    ].join(','),
-  ],
+
+  /* TEXT IS STATIC, EVERYWHERE, BY REQUEST.
+     There were two more groups here — 'head' (a horizontal wipe for
+     headings) and 'text' (a vertical lift for loose copy) — and between
+     them they claimed essentially every heading and paragraph on the site,
+     which is why prose nobody had enumerated still faded in. They are gone
+     rather than merely restyled: the hidden state is applied by MARKING an
+     element (scene-motion.css hides `[data-sr]` under `html.sr-anim`), so
+     leaving the groups in place and neutering the CSS would still take
+     every heading to opacity 0 for a frame before putting it back.
+
+     Not marking them at all is the only version with no flash in it.
+
+     What remains — media, card, btn — are frames, panels and controls, not
+     copy. A card carrying a heading still travels as one object; the
+     heading does not animate independently, and nothing here fades text in
+     on its own. The gestures for the two removed groups have been deleted
+     from scene-motion.css alongside this. */
 ]
 
 /* ── who already has an owner ───────────────────────────────────────────────
@@ -209,6 +203,24 @@ export default function SceneReveal() {
       el.style.setProperty('opacity', '1', 'important')
       el.style.setProperty('transform', 'none', 'important')
       el.style.setProperty('clip-path', 'none', 'important')
+
+      /* THEN GIVE THE TRANSITION BACK. The kill above only has to survive
+         long enough for the three landed values to take effect in this
+         frame — reading offsetHeight forces that recalculation, so by the
+         next line they are committed.
+
+         Left in place it was permanent, and it did not only disable the
+         reveal: `transition: none !important` on the element outranks every
+         stylesheet, so a card that had been hardened could never animate
+         ANYTHING again. Card hovers across the site were snapping between
+         states instead of easing, and the cause was invisible from the CSS
+         because the winning declaration was written by this function.
+
+         Removing it cannot un-land the element: opacity, transform and
+         clip-path are still pinned inline with !important, so there is no
+         value left for a transition to run from. */
+      void el.offsetHeight
+      el.style.removeProperty('transition')
     }
 
     /* ── LATERAL DRIFT, measured late ────────────────────────────────────

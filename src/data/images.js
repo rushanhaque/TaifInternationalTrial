@@ -24,28 +24,28 @@ const COVER = (name) => `/img/collections/${name}.png`
 
 /* Homepage mosaic covers — shown in the 3×3 grid on the landing page */
 export const COLLECTION_IMGS = {
-  'Wooden Products':       '/img/collections/homepage/WoodenProducts.jpeg',
-  'Copper Products':       '/img/collections/homepage/CopperProducts.jpeg',
-  'Home Decor':            '/img/collections/homepage/HomeDecor.jpeg',
-  'Hardware Supplies':     '/img/collections/homepage/HardwareSupplies.jpeg',
-  'Gifting':               '/img/collections/homepage/Gifting.jpeg',
-  'Religious Supplies':    '/img/collections/homepage/ReligiousSupplies.jpeg',
-  'Bathroom Accessories':  '/img/collections/homepage/BathroomAccessories.jpeg',
-  'Kitchenware':           '/img/collections/homepage/Kitchenware.jpeg',
-  'Barware':               '/img/collections/homepage/Barware.jpeg',
+  'Wooden Products':       '/img/collections/homepage/WoodenProducts.webp',
+  'Copper Products':       '/img/collections/homepage/CopperProducts.webp',
+  'Home Decor':            '/img/collections/homepage/HomeDecor.webp',
+  'Hardware Supplies':     '/img/collections/homepage/HardwareSupplies.webp',
+  'Gifting':               '/img/collections/homepage/Gifting.webp',
+  'Religious Supplies':    '/img/collections/homepage/ReligiousSupplies.webp',
+  'Bathroom Accessories':  '/img/collections/homepage/BathroomAccessories.webp',
+  'Kitchenware':           '/img/collections/homepage/Kitchenware.webp',
+  'Barware':               '/img/collections/homepage/Barware.webp',
 }
 
 /* Collection page covers — shown in the full-width wall on /collections */
 export const COLLECTION_PAGE_IMGS = {
-  'Wooden Products':       '/img/collections/collectionpage/WoodenProducts.jpeg',
-  'Copper Products':       '/img/collections/collectionpage/CopperProducts.jpeg',
-  'Home Decor':            '/img/collections/collectionpage/HomeDecor.jpeg',
-  'Hardware Supplies':     '/img/collections/collectionpage/HardwareSupplies.jpeg',
-  'Gifting':               '/img/collections/collectionpage/Gifting.jpeg',
-  'Religious Supplies':    '/img/collections/collectionpage/ReligiousSupplies.jpeg',
-  'Bathroom Accessories':  '/img/collections/collectionpage/BathroomAccessories.jpeg',
-  'Kitchenware':           '/img/collections/collectionpage/Kitchenware.jpeg',
-  'Barware':               '/img/collections/collectionpage/Barware.jpeg',
+  'Wooden Products':       '/img/collections/collectionpage/WoodenProducts.webp',
+  'Copper Products':       '/img/collections/collectionpage/CopperProducts.webp',
+  'Home Decor':            '/img/collections/collectionpage/HomeDecor.webp',
+  'Hardware Supplies':     '/img/collections/collectionpage/HardwareSupplies.webp',
+  'Gifting':               '/img/collections/collectionpage/Gifting.webp',
+  'Religious Supplies':    '/img/collections/collectionpage/ReligiousSupplies.webp',
+  'Bathroom Accessories':  '/img/collections/collectionpage/BathroomAccessories.webp',
+  'Kitchenware':           '/img/collections/collectionpage/Kitchenware.webp',
+  'Barware':               '/img/collections/collectionpage/Barware.webp',
 }
 
 /* materials (/materials) */

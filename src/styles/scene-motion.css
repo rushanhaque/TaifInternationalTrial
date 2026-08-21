@@ -70,8 +70,21 @@ html.sr-anim [data-sr].is-in {
   transition:
     opacity 0.38s cubic-bezier(0.22, 1, 0.28, 1),
     transform 0.38s cubic-bezier(0.16, 1, 0.3, 1),
-    clip-path 0.42s cubic-bezier(0.22, 1, 0.28, 1);
-  transition-delay: calc(var(--sr-i, 0) * 15ms);
+    clip-path 0.42s cubic-bezier(0.22, 1, 0.28, 1),
+    /* Not part of the reveal. This selector out-ranks anything a card sets
+       for itself, so declaring `transition` here REPLACED the card's own —
+       and a card whose hover is a border tint (see interactions-premium.css)
+       lost the fade and snapped instead. Listing it here is what gives it
+       back. Harmless for the elements that never change a border. */
+    border-color 0.4s ease;
+  /* The cascade delay is for the three reveal properties only — carried onto
+     border-color it would stagger the HOVER too, so a card late in the grid
+     took an extra beat to answer the cursor. Fourth value zeroes it. */
+  transition-delay:
+    calc(var(--sr-i, 0) * 15ms),
+    calc(var(--sr-i, 0) * 15ms),
+    calc(var(--sr-i, 0) * 15ms),
+    0s;
 }
 
 /* ── card ─────────────────────────────────────────────────────────────────
@@ -106,27 +119,12 @@ html.sr-anim [data-sr='media'].is-in {
   transition-duration: 0.45s;
 }
 
-/* ── head ─────────────────────────────────────────────────────────────────
-   Wipes open left to right, on the same curve as everything else, so it
-   reads as the same hand. The 12px lift keeps it from being a pure wipe,
-   which on its own looks mechanical. */
-html.sr-anim [data-sr='head'] {
-  transform: translate3d(0, 12px, 0);
-  clip-path: inset(0 100% 0 0);
-}
-
-html.sr-anim [data-sr='head'].is-in {
-  transition-duration: 0.38s;
-}
-
-/* ── text ─────────────────────────────────────────────────────────────────
-   Lifts from beneath its own baseline. The mask is partial, not full: a
-   100% inset makes short paragraphs pop rather than rise, and the difference
-   between the two is the whole character of the gesture. */
-html.sr-anim [data-sr='text'] {
-  transform: translate3d(0, 22px, 0);
-  clip-path: inset(0 0 46% 0);
-}
+/* ── head, text ───────────────────────────────────────────────────────────
+   REMOVED. Headings wiped open left-to-right and loose copy lifted from
+   under its own baseline; both are gone because text is static site-wide by
+   request. SceneReveal.jsx no longer marks anything as 'head' or 'text', so
+   these selectors could never match — they are deleted rather than left as
+   dead weight that reads like a feature still in use. */
 
 /* ── btn ──────────────────────────────────────────────────────────────────
    The one gesture with overshoot, because a control should feel sprung. The
@@ -149,7 +147,13 @@ html.sr-anim [data-sr='btn'].is-in {
    them is too tight to register as a cascade at all. */
 @media (min-width: 1000px) {
   html.sr-anim [data-sr].is-in {
-    transition-delay: calc(var(--sr-i, 0) * 20ms);
+    /* fourth value zeroed for the same reason as the base rule above — the
+       cascade stagger belongs to the reveal, not to the hover */
+    transition-delay:
+      calc(var(--sr-i, 0) * 20ms),
+      calc(var(--sr-i, 0) * 20ms),
+      calc(var(--sr-i, 0) * 20ms),
+      0s;
   }
 
   html.sr-anim [data-sr='card'] {
@@ -164,13 +168,8 @@ html.sr-anim [data-sr='btn'].is-in {
     transform: translate3d(0, 44px, 0) scale(1.045);
   }
 
-  html.sr-anim [data-sr='head'] {
-    transform: translate3d(0, 18px, 0);
-  }
-
-  html.sr-anim [data-sr='text'] {
-    transform: translate3d(0, 30px, 0);
-  }
+  /* the wide-view 'head' and 'text' overrides went with the gestures
+     themselves — see the note above */
 }
 
 /* Anyone who asked for less motion gets the content, statically. */

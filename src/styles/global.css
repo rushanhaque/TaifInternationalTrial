@@ -307,7 +307,7 @@ h4, h5, h6 {
 .grid {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
-  gap: clamp(0.8rem, 1.6vw, 1.6rem);
+  gap: var(--space-gap);
 }
 
 .sp-2,
@@ -375,16 +375,26 @@ h4, h5, h6 {
 /* Sections carry their own opaque ground. They used to be transparent and
    simply show the body colour — but with the hero pinned behind the page,
    anything transparent lets the backdrop read through it. */
+/* ONE section rhythm, everywhere. The gap a reader sees between two bands is
+   this padding doubled — which is why it is the only place it is declared.
+   Anything that needs less says so with .tight; nothing gets to invent its
+   own number. */
 .section {
   position: relative;
-  padding-block: clamp(2rem, 4vw, 3rem);
+  padding-block: var(--space-section);
   background-color: var(--white);
   background-image: var(--paper);
 }
 
+/* .tight used to be LARGER than the base it modified — a straightforward bug
+   that widened the very sections meant to close up. */
 .section.tight {
-  padding-block: clamp(2.5rem, 5vw, 4rem);
+  padding-block: var(--space-section-sm);
 }
+
+/* The join between two adjacent sections is handled once, in
+   mk2/pages-mk2.css § 9 — that file loads after this one, so a second
+   opinion here would only ever be dead code. */
 
 /* the alternating band. It was a literal #FFFFFF, which in dark mode painted
    a white stripe across every page that uses it. --chrome is white in light
@@ -428,6 +438,11 @@ html.dark .section.alt {
   color: var(--dim-on-deep);
 }
 
+/* The heading sits at the TOP of its section, so it takes no margin there —
+   the section's own padding already positioned it. Giving it one was what
+   opened the canyon between a section's top edge and its title: the two
+   values stacked, and neither knew about the other. It owns the space below
+   itself only, because that gap belongs to the heading, not to the grid. */
 .sec-head {
   position: relative;
   top: 0;
@@ -439,9 +454,9 @@ html.dark .section.alt {
   justify-content: center;
   width: 100%;
   text-align: center;
-  margin-top: clamp(2.5rem, 5vh, 4rem);
-  margin-bottom: clamp(2.5rem, 5vh, 4rem);
-  padding-inline: 1rem;
+  margin-top: 0;
+  margin-bottom: var(--space-head);
+  padding-inline: var(--s-4);
 }
 
 .sec-head .meta {
@@ -478,8 +493,11 @@ html.dark .section.alt {
   line-height: 1.08;
   letter-spacing: -0.02em;
   color: var(--graphite);
-  margin-top: clamp(2.5rem, 5vh, 4rem);
-  margin-bottom: clamp(2.5rem, 5vh, 4rem);
+  /* same reasoning as .sec-head — a title at the top of its section is
+     already placed by that section's padding, and a margin here only stacks
+     on top of it. Space below only, and on the scale. */
+  margin-top: 0;
+  margin-bottom: var(--space-head);
   text-align: center;
 }
 
@@ -3125,7 +3143,8 @@ html.dark .btn.ghost * {
     position: relative;
     top: 0;
     left: 0;
-    margin-bottom: 1.2rem;
+    margin-top: 0;
+    margin-bottom: var(--s-6);
   }
 
   .sec-head .meta {
@@ -3285,9 +3304,12 @@ html.dark .btn.ghost * {
     line-height: 1.2 !important;
   }
 
-  /* Section padding on mobile */
+  /* Section padding on mobile. The !important is load-bearing — several
+     component sheets set their own padding-block on a .section and this has
+     to beat all of them, which is exactly why it must point at the scale
+     rather than at a number of its own. */
   .section {
-    padding-block: clamp(3rem, 7vh, 4.5rem) !important;
+    padding-block: var(--space-section-sm) !important;
   }
 
   /* Slide-in & Fade-up mobile animation utilities */

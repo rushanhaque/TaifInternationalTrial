@@ -73,7 +73,7 @@ export default function CarePage() {
             </div>
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'center', marginTop: 'clamp(2.5rem, 5vw, 4rem)' }}>
+          <div className="sec-foot" style={{ display: 'flex', justifyContent: 'center' }}>
             <Button to="/contact">Ask about a finish</Button>
           </div>
         </div>

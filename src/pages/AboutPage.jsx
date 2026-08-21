@@ -5,10 +5,10 @@ import Button from '../components/Button'
 import MaskedHeading from '../components/MaskedHeading'
 import Timeline from '../components/mk2/Timeline'
 import SlatShow from '../components/mk2/SlatShow'
+import { CRAFT_VIDEO } from '../data/video'
 
 
 export default function AboutPage() {
-  const bgVideo = "https://res.cloudinary.com/djszwbnxp/video/upload/v1786264932/IMG_0205_n1mn8t.mp4"
   const posterImg = "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=1600&auto=format&fit=crop"
   const bgVideoRef = useRef(null)
 
@@ -38,8 +38,9 @@ export default function AboutPage() {
                 loop
                 muted
                 playsInline
-                src={bgVideo}
-              />
+              >
+                {CRAFT_VIDEO.map((s) => <source key={s.src} src={s.src} type={s.type} />)}
+              </video>
               <div className="craft-card__overlay" />
             </div>
 
@@ -48,7 +49,7 @@ export default function AboutPage() {
               <MaskedHeading
                 text="THE CRAFT"
                 mediaType="video"
-                src={bgVideo}
+                sources={CRAFT_VIDEO}
                 syncVideoRef={bgVideoRef}
                 fillScale={1.35}
                 parallax={32}
@@ -144,10 +145,10 @@ export default function AboutPage() {
 
 
 
+      <SlatShow />
+
       {/* the chronology, as a rail that fills while you read */}
       <Timeline />
-
-      <SlatShow />
 
       <section className="section">
         <div className="wrap">

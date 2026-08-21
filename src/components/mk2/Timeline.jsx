@@ -59,10 +59,11 @@ export default function Timeline() {
           onEnter: () => row.classList.add('is-lit'),
           onLeaveBack: () => row.classList.remove('is-lit'),
         })
-        gsap.from(row.querySelectorAll('.tl-year, .tl-copy'), {
-          y: 22, opacity: 0, duration: 0.85, ease: 'atelys', stagger: 0.07,
-          scrollTrigger: { trigger: row, start: 'top 86%', once: true },
-        })
+        /* The year and its copy used to lift 22px out of opacity 0 as each
+           row came up. Removed — text is static site-wide by request. The
+           row still lights (`is-lit`, above) and the rail still fills, so
+           the reader's position on the timeline is still marked; it is
+           marked by the rail rather than by the words moving. */
       })
 
       ScrollTrigger.refresh()

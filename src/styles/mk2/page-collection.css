@@ -242,9 +242,7 @@ html.dark .pl-head-scrim {
 }
 
 .pl-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.09);
-  border-color: rgba(0, 0, 0, 0.12);
+  border-color: rgba(122, 59, 29, 0.35);
 }
 
 html.dark .pl-card {
@@ -254,8 +252,7 @@ html.dark .pl-card {
 }
 
 html.dark .pl-card:hover {
-  border-color: rgba(255, 255, 255, 0.3) !important;
-  box-shadow: 0 22px 50px rgba(0, 0, 0, 0.6) !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
 }
 
 .pl-card-link {

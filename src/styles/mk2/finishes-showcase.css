@@ -27,23 +27,18 @@
   display: flex;
   align-items: flex-end;
   box-shadow: var(--lift-2);
-  background: var(--offwhite);
+  background: #1a0d04;
 }
 
 .fin-hero-media {
   position: absolute;
   inset: 0;
-  z-index: -1;
+  z-index: 0;
 }
 
-/* every finish photograph is already in the DOM, stacked and pre-decoded —
-   changing the shown finish only ever moves opacity, which is what makes
-   the swap read as the SAME object catching different light rather than
-   one picture being replaced by another.
-
-   STATIC, NOT ZOOMED. No scale change between the resting and shown state —
-   a Ken-Burns creep read as the photo itself moving, which fought the point
-   of a still, clean fade. Opacity is the only thing that ever animates. */
+/* Same crossfade mechanism as SlatShow: incoming image stacks above the
+   outgoing one at z-index:2 and fades up; outgoing is held opaque at
+   z-index:1 so the swap never exposes the background underneath. */
 .fin-hero-img {
   position: absolute;
   inset: 0;
@@ -52,24 +47,35 @@
   object-fit: cover;
   opacity: 0;
   z-index: 0;
-  transition: opacity 0.5s var(--ease-fluid);
 }
 
-.fin-hero-img.is-shown {
+.fin-hero-img.is-on {
+  opacity: 1;
+  z-index: 2;
+  transition: opacity 1.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.fin-hero-img.is-out {
   opacity: 1;
   z-index: 1;
 }
 
-/* No wash over the photograph at all — the finish reads at full brightness
-   through the whole switch. Legibility for the type on top comes from a
-   text-shadow on the type itself (see .fin-hero-eyebrow / .fin-hero-name),
-   the same fix already used on the hero. */
 .fin-hero-scrim {
-  display: none;
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+  background: linear-gradient(
+    to top,
+    rgba(20, 9, 3, 0.82) 0%,
+    rgba(20, 9, 3, 0.38) 42%,
+    transparent 70%
+  );
 }
 
 .fin-hero-body {
   position: relative;
+  z-index: 11;
   padding: clamp(1.6rem, 3vw, 2.6rem);
   color: #fff;
 }
@@ -265,6 +271,74 @@
   margin-top: clamp(1.8rem, 3vw, 2.6rem);
 }
 
+/* ── dots + arrows ────────────────────────────────────────────────────── */
+.fin-controls {
+  position: absolute;
+  left: clamp(1.2rem, 2.5vw, 2rem);
+  bottom: clamp(1.2rem, 2.5vw, 1.8rem);
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.fin-dots {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.fin-dot {
+  width: 20px;
+  height: 2px;
+  padding: 0;
+  border: none;
+  border-radius: 2px;
+  background: rgba(253, 251, 247, 0.34);
+  cursor: pointer;
+  transition: width 0.45s var(--ease-surge), background-color 0.3s;
+}
+
+.fin-dot:hover { background: rgba(253, 251, 247, 0.62); }
+
+.fin-dot.is-on {
+  width: 40px;
+  background: #fff;
+}
+
+.fin-arrows {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.fin-arrow {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid rgba(253, 251, 247, 0.28);
+  border-radius: 50%;
+  background: rgba(30, 13, 4, 0.28);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  color: #fff;
+  cursor: pointer;
+  transition: border-color 0.3s, background-color 0.3s;
+}
+
+.fin-arrow:hover {
+  border-color: rgba(253, 251, 247, 0.5);
+  background: rgba(30, 13, 4, 0.5);
+}
+
+.fin-arrow:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
 /* ── desk width: window left, four rows stacked right ──────────────────── */
 @media (min-width: 900px) {
   .fin-grid {
@@ -349,6 +423,7 @@
 @media (prefers-reduced-motion: reduce) {
   .fin-hero-img,
   .fin-hero-copy,
+  .fin-dot,
   .fin-row,
   .fin-row-mark,
   .fin-swatch img {

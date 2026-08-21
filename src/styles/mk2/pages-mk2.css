@@ -19,10 +19,13 @@
    margin, the headline given room, and a hairline that closes the block.
    ───────────────────────────────────────────────────────────────────────── */
 
+/* The masthead clears the fixed navbar and then takes ONE step of the scale
+   on top — enough that the kicker is not tucked under the bar, not so much
+   that every inner page opens on a screen of nothing. */
 .page-hero {
   position: relative;
-  padding-top: calc(var(--nav-h) + clamp(3.5rem, 8vw, 6.5rem));
-  padding-bottom: clamp(1.8rem, 4vw, 3rem);
+  padding-top: calc(var(--nav-h) + var(--s-7));
+  padding-bottom: var(--s-7);
 }
 
 .page-hero .mega,
@@ -324,9 +327,16 @@
 .nf-drop { margin-inline: auto; }
 
 /* ─────────────────────────────────────────────────────────────────────────
-   9 · RHYTHM
-   Consecutive same-ground sections used to double their padding at the
-   join, which is what made some pages feel loose.
+   9 · THE JOIN BETWEEN TWO SECTIONS
+
+   Where the ground CHANGES colour, that edge is already doing the work of
+   separating the two bands. Letting both pay their full padding across it
+   put ~176px between them and made the page feel loose, so the incoming
+   band drops its top padding and the outgoing band's own bottom padding
+   becomes the single, consistent gap.
+
+   This is the ONLY place the join is decided — global.css defers to it,
+   since this file loads later and would win anyway.
    ───────────────────────────────────────────────────────────────────────── */
 
 .section + .section.alt,

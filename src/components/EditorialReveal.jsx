@@ -1,17 +1,24 @@
-import React, { useEffect, useRef } from 'react'
-import { gsap, ScrollTrigger, reduced } from '../lib/gsap'
+import React, { useRef } from 'react'
 
 /**
- * EditorialReveal — High-End Luxury Text Reveal Component
- * 
- * Inspired by premium furniture & material showcase editorial layouts.
- * Sequence:
- *  1. Category / Eyebrow (translateY 30px -> 0, opacity 0 -> 1)
- *  2. Main Title / Product Name (translateY 30px -> 0, opacity 0 -> 1)
- *  3. Body / Lede Description (translateY 30px -> 0, opacity 0 -> 1)
- *  4. Specification items (staggered 80–120ms apart)
- * 
- * Uses GSAP + ScrollTrigger, ultra-calm slow ease-out, 60 FPS sharp rendering.
+ * EditorialReveal — editorial text block: eyebrow, title, body, specs, CTA.
+ *
+ * THE REVEAL IS GONE, AND THE NAME IS NOW A LIE. This staged a GSAP
+ * timeline on a ScrollTrigger — eyebrow, then title, then body, then the
+ * specs on an 80–120ms stagger, each from opacity 0 and 25px down. Text is
+ * static site-wide by request, so the timeline has been removed and the
+ * component is now purely the layout it always also was.
+ *
+ * It keeps its name and its whole prop surface because it is used both
+ * declaratively (category/title/body/specs) and through its compound
+ * sub-components (EditorialReveal.Title and friends), and renaming it would
+ * churn every one of those call sites to no effect. `delay`, `staggerMs`,
+ * `start`, `once` and `disabled` are still accepted and ignored — callers
+ * pass them, and rejecting them would break pages for no gain.
+ *
+ * Nothing here now sets opacity, which is the important part: the old code
+ * seeded every target at 0 and relied on a tween to bring it back, so a
+ * half-removal would have left the copy permanently invisible.
  */
 export function EditorialReveal({
   category,
@@ -34,138 +41,6 @@ export function EditorialReveal({
   const titleRef = useRef(null)
   const bodyRef = useRef(null)
   const specsRef = useRef([])
-
-  useEffect(() => {
-    if (disabled || !containerRef.current) return
-
-    // If reduced motion, set fully visible & clear transforms
-    if (reduced()) {
-      const targets = [
-        categoryRef.current,
-        titleRef.current,
-        bodyRef.current,
-        ...specsRef.current.filter(Boolean)
-      ].filter(Boolean)
-      gsap.set(targets, { opacity: 1, y: 0, clearProps: 'all' })
-      return
-    }
-
-    // Query elements inside container (supports both props & children slot patterns)
-    const catEl = categoryRef.current || containerRef.current.querySelector('.ed-category')
-    const titleEl = titleRef.current || containerRef.current.querySelector('.ed-title')
-    const bodyEl = bodyRef.current || containerRef.current.querySelector('.ed-body')
-    const specEls = specsRef.current.length > 0 && specsRef.current[0]
-      ? specsRef.current.filter(Boolean)
-      : Array.from(containerRef.current.querySelectorAll('.ed-spec-item'))
-    const ctaEl = containerRef.current.querySelector('.ed-cta')
-
-    const allTargets = [catEl, titleEl, bodyEl, ...specEls, ctaEl].filter(Boolean)
-    if (allTargets.length === 0) return
-
-    // Hidden initial state: subtle 25px vertical offset, opacity 0 (no bounce, scale, rotation, or blur)
-    gsap.set(allTargets, {
-      opacity: 0,
-      y: 25,
-      willChange: 'transform, opacity',
-      backfaceVisibility: 'hidden',
-      force3D: true
-    })
-
-    const staggerSec = Math.max(0.08, Math.min(0.12, staggerMs / 1000))
-    const ease = 'power3.out'
-
-    // GSAP timeline with power3.out for smooth, calm editorial reveal
-    const tl = gsap.timeline({
-      delay,
-      scrollTrigger: {
-        trigger: containerRef.current,
-        start,
-        toggleActions: 'play none none none',
-        once: true
-      },
-      onComplete: () => {
-        // Clear transform to keep typography 100% crisp and stable
-        gsap.set(allTargets, { clearProps: 'transform,willChange,backfaceVisibility' })
-      }
-    })
-
-    // If trigger is already in viewport on mount, play timeline immediately
-    if (tl.scrollTrigger && tl.scrollTrigger.progress > 0) {
-      tl.play()
-    }
-
-    // 1. Small label appears first
-    if (catEl) {
-      tl.to(catEl, {
-        y: 0,
-        opacity: 1,
-        duration: 0.8,
-        ease
-      })
-    }
-
-    // 2. Large heading slides upward while fading in (starts slightly after label)
-    if (titleEl) {
-      tl.to(
-        titleEl,
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.95,
-          ease
-        },
-        catEl ? '-=0.62' : 0
-      )
-    }
-
-    // 3. Description follows after a slight delay
-    if (bodyEl) {
-      tl.to(
-        bodyEl,
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.85,
-          ease
-        },
-        titleEl ? '-=0.74' : catEl ? '-=0.62' : 0
-      )
-    }
-
-    // 4. Specification values animate last with a subtle stagger (80-120ms)
-    if (specEls.length > 0) {
-      tl.to(
-        specEls,
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.75,
-          stagger: staggerSec,
-          ease
-        },
-        bodyEl ? '-=0.68' : titleEl ? '-=0.74' : catEl ? '-=0.62' : 0
-      )
-    }
-
-    // 5. CTA Button / Action element
-    if (ctaEl) {
-      tl.to(
-        ctaEl,
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.8,
-          ease
-        },
-        specEls.length > 0 ? '-=0.55' : bodyEl ? '-=0.68' : 0
-      )
-    }
-
-    return () => {
-      tl.scrollTrigger?.kill()
-      tl.kill()
-    }
-  }, [category, title, body, specs, delay, staggerMs, start, once])
 
   const Component = as
 

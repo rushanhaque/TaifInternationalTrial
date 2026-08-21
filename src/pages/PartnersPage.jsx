@@ -204,14 +204,14 @@ function CaseSpread({ c, i }) {
     const ctx = gsap.context(() => {
       const once = (t, s) => ({ trigger: t, start: s, once: true })
 
-      gsap.from('.prt-case-head > *', {
-        y: 22, opacity: 0, duration: 0.85, ease: 'fluid', stagger: 0.07,
-        scrollTrigger: once(el, 'top 74%'),
-      })
-      gsap.from('.prt-stat-num', {
-        yPercent: 114, duration: 1.05, ease: 'surge', stagger: 0.09,
-        scrollTrigger: once('.prt-stat', 'top 84%'),
-      })
+      /* Two text entrances removed — text is static site-wide by request.
+         `.prt-case-head > *` (the index, category, client name and note)
+         lifted 22px out of opacity 0 on a stagger, and `.prt-stat-num`
+         rolled each figure up from 114% inside its `.prt-stat-clip` mask.
+
+         The rule beneath each stat still draws itself in below: it is a
+         line, not a word, and it is what gives the block its arrival now
+         that the figures simply sit there. */
       gsap.from('.prt-stat-rule', {
         scaleX: 0, transformOrigin: '0% 50%', duration: 0.95, ease: 'viscous', stagger: 0.09,
         scrollTrigger: once('.prt-stat', 'top 84%'),

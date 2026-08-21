@@ -54,7 +54,7 @@ export default function Footer() {
                 leaving the footer reading "TAIF". */}
             <div className="foot-lockup">
               <img
-                src="/img/taif-logo-white.png"
+                src="/img/taif-logo-white.webp"
                 alt={BRAND.name}
                 width="2172"
                 height="724"

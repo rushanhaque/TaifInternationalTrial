@@ -199,7 +199,7 @@ export default function CollectionPage({ params = {} }) {
         <div className="wrap" style={{ textAlign: 'center' }}>
           <p className="idx">0.2</p>
           <h1 className="d1">No such family.</h1>
-          <p className="lede" style={{ margin: '1rem auto 1.6rem' }}>
+          <p className="lede" style={{ marginInline: 'auto' }}>
             Nine families leave this workshop. That is not one of them.
           </p>
           <Button to="/collections">See all nine</Button>

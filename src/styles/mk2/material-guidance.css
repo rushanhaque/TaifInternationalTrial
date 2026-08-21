@@ -9,7 +9,7 @@
 .mg {
   position: relative;
   background: var(--offwhite);
-  padding-block: clamp(3.4rem, 7vw, 6.5rem);
+  padding-block: var(--space-section);
 }
 
 .mg-in {

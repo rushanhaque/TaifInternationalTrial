@@ -121,7 +121,7 @@ export default function Navbar() {
               #170D05 in dark (white mark) — the burgundy one was being used
               there too, at 1.25:1 against the dark bar, i.e. invisible. */}
           <img
-            src={heroMode ? "/img/taif-logo-white.png" : (dark ? "/img/taif-logo-white.png" : "/img/taif-logo-dark.png")}
+            src={heroMode ? "/img/taif-logo-white.webp" : (dark ? "/img/taif-logo-white.webp" : "/img/taif-logo-dark.webp")}
             alt={BRAND.name}
             className="header-brand-img"
             /* the source is 2172x724; the ratio is what matters — it reserves

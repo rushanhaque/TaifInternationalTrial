@@ -330,14 +330,15 @@ html.dark .hb-video { opacity: 1; }
 /* ============ countries card ============ */
 .countries-card {
   margin-top: 3rem;
-  padding: 4.5rem 0 2.5rem;
+  padding: 2rem 0 2.5rem;
   /* A flat warm beige rather than the old cool silver wash — the card is what
      carries the colour here, on a white section ground. */
   background: var(--offwhite, #FDFCFA);
   border-radius: var(--r-lg);
   box-shadow: var(--lift-2), 0 24px 48px -12px rgba(0, 0, 0,0.06);
   border: 1px solid var(--hair);
-  position: relative;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
 }
 
@@ -506,7 +507,7 @@ html.dark .section-divider::before {
   align-items: center;
   justify-content: center;
   min-height: clamp(320px, 45vh, 480px);
-  padding-block: clamp(3.5rem, 7vh, 5.5rem);
+  padding-block: var(--space-section);
   margin-block: 0;
 }
 
@@ -522,11 +523,12 @@ html.dark .section-divider::before {
   margin-bottom: 0 !important;
   margin-inline: auto;
   width: 100%;
-  padding: 4.5rem 0 2.5rem;
+  padding: 2rem 0 2.5rem;
   border-radius: clamp(16px, 2vw, 24px) !important;
   border: 1px solid rgba(122, 59, 29, 0.12) !important;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03) !important;
-  position: relative;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
   background-color: var(--offwhite, #FDFCFA);
   transition: background-color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
@@ -548,7 +550,7 @@ html.dark .countries-card span {
 #instagram {
   background-color: var(--white) !important;
   margin-top: 0;
-  padding-top: clamp(2.5rem, 5vh, 4rem);
+  padding-top: var(--space-section);
 }
 
 .blog-card {
@@ -624,8 +626,11 @@ html.dark .white-review-card {
 }
 
 /* ============ Craft & About Section ============ */
+/* was clamp(3rem, 6vh, 5rem) — vertical padding driven by viewport HEIGHT,
+   so this band was 54px tall on a laptop and 80px on a desktop monitor while
+   every section around it stayed put. Vertical rhythm follows the scale. */
 .craft-about-section {
-  padding-block: clamp(3rem, 6vh, 5rem);
+  padding-block: var(--space-section);
 }
 
 .craft-container {
@@ -825,9 +830,9 @@ html.dark .about-stat-card {
 /* ============ Reviews DragRail Section ============ */
 .bestsellers-section {
   min-height: auto;
-  padding-top: clamp(2rem, 4vh, 3.5rem);
-  padding-bottom: clamp(5rem, 10vh, 8rem);
-  margin-bottom: 3rem;
+  padding-top: var(--space-section);
+  padding-bottom: var(--space-section);
+  margin-bottom: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -901,7 +906,7 @@ html.dark .craft-card-spacer {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-block: clamp(2rem, 4vh, 4rem);
+  padding-block: var(--space-section);
   margin-top: 0 !important;
   background-color: var(--white) !important;
   background-image: none !important;
@@ -922,8 +927,8 @@ html.dark .craft-card-spacer {
   display: flex;
   justify-content: center;
   text-align: center;
-  margin-top: clamp(1rem, 2.5vh, 2rem);
-  margin-bottom: clamp(2.4rem, 5vh, 4rem);
+  margin-top: 0;
+  margin-bottom: var(--space-head);
 }
 
 /* matched to .czoom-bestsellers-title so this and the Best Sellers plate

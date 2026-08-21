@@ -12,12 +12,12 @@ const MATERIAL_SLIDES = [
 ]
 
 const MATERIAL_IMAGES = {
-  brass: '/img/materials/brass.png',
-  aluminium: '/img/materials/aluminium.png',
-  iron: '/img/materials/iron.png',
-  copper: '/img/materials/copper.png',
-  steel: '/img/materials/steel.png',
-  wood: '/img/materials/wood.png',
+  brass: '/img/materials/brass.webp',
+  aluminium: '/img/materials/aluminium.webp',
+  iron: '/img/materials/iron.webp',
+  copper: '/img/materials/copper.webp',
+  steel: '/img/materials/steel.webp',
+  wood: '/img/materials/wood.webp',
 }
 
 const COLS = [

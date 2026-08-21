@@ -46,7 +46,7 @@ export default function FaqPage() {
               </div>
             </div>
           ))}
-          <div style={{ marginTop: '2.4rem' }}>
+          <div className="sec-foot">
             <Button to="/contact">Ask something else</Button>
           </div>
         </div>

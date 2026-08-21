@@ -59,18 +59,15 @@ export default function FinishMorph({
     }
     layers.forEach((l, i) => gsap.to(l, { opacity: i === active ? 1 : 0, duration: 0.5 }))
     copies.forEach((c, i) => gsap.to(c, { opacity: i === active ? 1 : 0, duration: 0.35 }))
-    names.forEach((n, i) => {
-      if (i === active) {
-        gsap.set(n, { opacity: 1 })
-        if (!reduced()) {
-          const chars = splitChars(n)
-          gsap.from(chars, {
-            y: 16, opacity: 0,
-            stagger: { each: 0.014, from: 'center' }, duration: 0.4, ease: 'power3.out',
-          })
-        }
-      } else gsap.set(n, { opacity: 0 })
-    })
+    /* The finish name used to be split into characters and cascaded in from
+       the centre on every swatch tap. Text is static site-wide by request,
+       so the name simply appears at full opacity — the slab underneath
+       still morphs, which is what the swatch is actually reporting.
+
+       splitChars also rewrote the node into per-character spans, so
+       dropping it leaves the heading as plain text for a screen reader
+       rather than something reassembled from an aria-label. */
+    names.forEach((n, i) => gsap.set(n, { opacity: i === active ? 1 : 0 }))
     const e = EDGES[finishes[active].key] || [0.012, 0.55]
     slabRef.current?.setEdge(e[0], e[1])
     /* one animated phase sweep per swatch tap — advances the shape by ~1

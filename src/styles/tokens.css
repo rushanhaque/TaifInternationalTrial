@@ -142,6 +142,49 @@
   --gutter: clamp(1.25rem, 4vw, 3.5rem);
   --nav-h: 68px;
   --col: 12;
+
+  /* ═══════════════════════════════════════════════════════════════════════
+     THE SPACING SCALE
+
+     Every measurement on this site comes from here. Before this existed each
+     of the fifty stylesheets invented its own clamp(), which is why the same
+     "gap under a heading" was 24px on one page and 64px on the next.
+
+     STEPS 1–4 ARE FIXED. Below ~24px a value is a detail — the gap between a
+     label and its rule — and detail should not breathe with the viewport, or
+     it stops reading as deliberate.
+
+     STEPS 5–10 ARE FLUID. Above that a value is structure, and structure has
+     to hold its proportion from a 360px phone to a 1560px desktop. Each step
+     is roughly 1.5× the one below it, so two adjacent steps are always
+     visibly different — the thing that makes spacing read as a system rather
+     than as noise.
+     ═════════════════════════════════════════════════════════════════════ */
+  --s-1: 0.25rem;   /*  4px — hairline offsets                             */
+  --s-2: 0.5rem;    /*  8px — icon-to-label                                */
+  --s-3: 0.75rem;   /* 12px — inside a chip or tag                         */
+  --s-4: 1rem;      /* 16px — paragraph to paragraph                       */
+  --s-5: clamp(1.25rem, 2vw, 1.5rem);    /* 20→24 — card interior, tight   */
+  --s-6: clamp(1.5rem, 2.8vw, 2rem);     /* 24→32 — card interior          */
+  --s-7: clamp(2rem, 4vw, 3rem);         /* 32→48 — heading to content     */
+  --s-8: clamp(2.5rem, 5.5vw, 4rem);     /* 40→64 — block to block         */
+  --s-9: clamp(3.5rem, 7vw, 5.5rem);     /* 56→88 — section padding        */
+  --s-10: clamp(5rem, 10vw, 8rem);       /* 80→128 — a deliberate silence  */
+
+  /* ── semantic aliases ──────────────────────────────────────────────────
+     Components reference these, not the numbers. Retuning the site's rhythm
+     is then four edits here rather than four hundred across the tree. */
+  --space-section: var(--s-9);      /* the padding-block every section owns */
+  --space-section-sm: var(--s-8);   /* when two related bands sit together  */
+  --space-head: var(--s-7);         /* section heading → its content        */
+  --space-card: var(--s-6);         /* the inside of a card                 */
+  --space-gap: var(--s-6);          /* between cards in a grid              */
+  --space-stack: var(--s-4);        /* between stacked lines of type        */
+
+  /* the measure — a line of body copy past ~70 characters is hard to track
+     back from, and every long-form column on the site should respect it */
+  --measure: 62ch;
+  --measure-tight: 46ch;
 }
 
 /* ═══ DARK MODE (html.dark) ═══ */

@@ -147,7 +147,7 @@ export default function Cart() {
               <span className="ct-row-say">
                 <span className="ct-row-name">{p.name}</span>
                 <span className="ct-row-mat meta">{p.category} · {p.material}</span>
-                <span className="ct-row-figs meta">MOQ {p.moq} · {p.lead}</span>
+                <span className="ct-row-figs meta">{p.lead}</span>
               </span>
               <button
                 type="button"

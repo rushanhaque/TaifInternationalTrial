@@ -1,0 +1,241 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   THE RHYTHM LAYER
+
+   This file does not introduce a look. It takes the spacing that fifty
+   stylesheets each invented separately and puts it back on the one scale
+   declared in tokens.css.
+
+   WHY IT LOADS LAST, AND WHY IT IS SMALL. Retuning three hundred individual
+   declarations across the tree would be three hundred chances to break a
+   layout that is currently fine. Instead this normalises the handful of
+   patterns that actually repeat — the card interior, the stack of type, the
+   measure of a paragraph, the gap under a heading — and leaves genuinely
+   bespoke components alone.
+
+   THE RULE FOR ADDING TO THIS FILE: a declaration earns its place here only
+   if the same thing is being said in three or more other files with three
+   different numbers. Anything less than that belongs in the component.
+
+   IT DOES NOT OVERRIDE MOBILE. mobile-polish.css and mobile-motion.css load
+   after this one deliberately — their narrow-screen corrections are the
+   considered exception to the desktop rhythm, and they must keep winning.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ───────────────────────────────────────────────────────────────────────────
+   1 · THE CARD INTERIOR
+
+   Six card types carried six paddings, three of them asymmetric — 1.4rem on
+   one edge and 1.6rem on the other, differences too small to read as
+   intentional and too large to read as even. A card is a card: one value,
+   all four sides, from the scale.
+   ────────────────────────────────────────────────────────────────────────── */
+.principle-card,
+.year-card,
+.loc-card,
+.cap-card,
+.tm-card,
+.care-card,
+.team-card,
+.about-stat-card,
+.countries-card {
+  padding: var(--space-card);
+}
+
+/* A card whose first child is a photograph has no top padding to give — the
+   image is meant to meet the frame. */
+.card-has-img,
+.blog-card {
+  padding: 0;
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   2 · VERTICAL RHYTHM INSIDE A BLOCK OF TYPE
+
+   The single most common defect on the site: a heading with a margin-bottom
+   sitting above a paragraph with a margin-top, the two adding up to a gap
+   nobody chose. Type sets its own space DOWNWARD only, and the first element
+   in any container never pushes off the top of it.
+   ────────────────────────────────────────────────────────────────────────── */
+.wrap > :first-child,
+.sec-head + *,
+.card > :first-child,
+.principle-card > :first-child,
+.year-card > :first-child,
+.loc-card > :first-child,
+.cap-card > :first-child,
+.tm-card > :first-child,
+.care-card > :first-child {
+  margin-top: 0;
+}
+
+.principle-card > :last-child,
+.year-card > :last-child,
+.loc-card > :last-child,
+.cap-card > :last-child,
+.tm-card > :last-child,
+.care-card > :last-child {
+  margin-bottom: 0;
+}
+
+/* A heading is bound to the thing underneath it, not floating between two
+   paragraphs — so the space above it is always larger than the space below.
+   Reverse that ratio and a page stops having sections at all. */
+.d1 + p,
+.d2 + p,
+.d3 + p,
+h2 + p,
+h3 + p,
+h4 + p {
+  margin-top: var(--s-3);
+}
+
+p + .d2,
+p + .d3,
+p + h2,
+p + h3,
+p + h4 {
+  margin-top: var(--s-7);
+}
+
+/* consecutive paragraphs in running copy */
+p + p {
+  margin-top: var(--space-stack);
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   3 · THE MEASURE
+
+   Body copy that runs the full width of a 1560px wrap is close to 180
+   characters a line. The eye loses the return sweep somewhere past 75 and
+   has to re-find the next line by counting — which reads as "hard to read"
+   long before a reader can say why.
+   ────────────────────────────────────────────────────────────────────────── */
+.body {
+  max-width: var(--measure);
+}
+
+.lede {
+  max-width: var(--measure-tight);
+}
+
+/* A centred heading block centres its own measure too, or the text is capped
+   at 62ch and then left-aligned inside a full-width box, which looks like a
+   mistake rather than a decision. */
+.sec-head .body,
+.sec-head .lede,
+[style*="text-align: center"] > .body,
+[style*="text-align: center"] > .lede {
+  margin-inline: auto;
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   4 · GRID GAPS
+
+   Card grids were running gaps from 0.8rem to 2.4rem depending on which file
+   built them. Two cards 13px apart read as one object that has cracked.
+   ────────────────────────────────────────────────────────────────────────── */
+.grid,
+.tm-grid,
+.care-grid,
+.cap-grid,
+.loc-grid,
+.year-grid,
+.team-grid,
+.home-reviews-grid {
+  gap: var(--space-gap);
+}
+
+/* This grid was declared inline on the element in Home.jsx and nowhere else,
+   so the class carried the name of a layout it did not actually own. Moved
+   here whole — an inline style beats every stylesheet, which meant no gap
+   rule above could ever have reached it. */
+.home-reviews-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   5 · THE SPACE UNDER A SECTION HEADING
+
+   .sec-head owns this in global.css. The rules here catch the section heads
+   that were built before it existed and set their own.
+   ────────────────────────────────────────────────────────────────────────── */
+.section-title {
+  margin-bottom: var(--space-head);
+}
+
+.craft-sec-head,
+.rail-sec-head {
+  margin-bottom: var(--space-head);
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   6 · THE FOOT OF A SECTION
+
+   A "see all" button or closing link under a grid is part of that section,
+   not the start of the next one — it sits closer to the grid it belongs to
+   than to the band below.
+   ────────────────────────────────────────────────────────────────────────── */
+.fin-foot,
+.sec-foot,
+.section-cta {
+  margin-top: var(--s-8);
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   7 · ALIGNMENT
+
+   Cards in a row match their tops and stretch to a common height; the copy
+   inside them starts on the same line regardless of how long each title runs.
+   Without this a three-up of cards with one two-line title has its body copy
+   on three different baselines.
+   ────────────────────────────────────────────────────────────────────────── */
+.grid > .principle-card,
+.grid > .year-card,
+.grid > .loc-card,
+.grid > .cap-card,
+.tm-grid > .tm-card,
+.care-grid > .care-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* the last line of a card — a stat, a link, a date — sits on the floor of the
+   card rather than wherever the copy above happened to end, so a row of cards
+   shares one bottom line */
+.principle-card > :last-child.meta,
+.year-card > :last-child.meta,
+.loc-card > :last-child.meta,
+.cap-card > :last-child.meta,
+.tm-card > .tm-cite,
+.care-card > :last-child.meta {
+  margin-top: auto;
+  padding-top: var(--s-5);
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   8 · NARROW SCREENS
+
+   The scale already shrinks with the viewport, so this only handles the two
+   things a clamp cannot: a card interior that should not fall below a usable
+   inset, and section padding that would otherwise leave a phone showing more
+   ground than content.
+   ────────────────────────────────────────────────────────────────────────── */
+@media (max-width: 599px) {
+  .principle-card,
+  .year-card,
+  .loc-card,
+  .cap-card,
+  .tm-card,
+  .care-card,
+  .team-card,
+  .about-stat-card,
+  .countries-card {
+    padding: var(--s-5);
+  }
+
+  /* Section padding on narrow screens is set once, in global.css's mobile
+     block — it carries an !important to beat the component sheets, so a
+     second rule here would be dead weight that only looked authoritative. */
+}

@@ -49,14 +49,10 @@ export default function CollectionsMosaic() {
       stagger: { each: 0.055, from: 'start' },
       scrollTrigger: { trigger: root.current, start: 'top 72%', once: true },
     })
-    gsap.from(root.current.querySelectorAll('.cm-head > *'), {
-      y: 24,
-      opacity: 0,
-      duration: 0.8,
-      ease: 'power3.out',
-      stagger: 0.08,
-      scrollTrigger: { trigger: root.current, start: 'top 78%', once: true },
-    })
+    /* A second tween lifted `.cm-head > *` — "Nine houses, one floor" and
+       "Browse our collections" — in from 24px on a stagger. Removed: text
+       is static site-wide by request. The plates below still assemble;
+       only the words above them stopped moving. */
     return () => ScrollTrigger.getAll().forEach((t) => t.trigger === root.current && t.kill())
   }, { scope: root })
 

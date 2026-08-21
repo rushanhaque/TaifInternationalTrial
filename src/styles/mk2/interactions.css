@@ -18,11 +18,16 @@
 
 /* ── the specular pass ──
    A raised brass surface throws a highlight as you move past it. That is the
-   product's own behaviour, borrowed for the interface. */
-.slab,
+   product's own behaviour, borrowed for the interface.
+
+   IT IS NO LONGER APPLIED TO ANYTHING CARRYING A PHOTOGRAPH. Over a flat
+   material swatch the moving highlight reads as light on metal, which is the
+   point. Over a product shot it reads as a smear of haze crossing the
+   picture — the photograph already has its own lighting, and a second light
+   source that follows the cursor argues with it. .slab, .rail-card and
+   .pl-card are the three surfaces that hold product photography, so the
+   pass is off for all three; the swatches and plates below keep it. */
 .cat-card,
-.pl-card,
-.rail-card,
 .loc-card,
 .nf-card,
 .dp,
@@ -31,10 +36,7 @@
   position: relative;
 }
 
-.slab::after,
 .cat-card::after,
-.pl-card::after,
-.rail-card::after,
 .loc-card::after,
 .nf-card::after,
 .dp::after,
@@ -56,28 +58,16 @@
   );
 }
 
-.slab.is-lit::after,
 .cat-card.is-lit::after,
-.pl-card.is-lit::after,
-.rail-card.is-lit::after,
 .loc-card.is-lit::after,
 .nf-card.is-lit::after,
 .dp.is-lit::after,
 .pat-swatch.is-lit::after,
 .wo-attach.is-lit::after { opacity: 1; }
 
-/* On the dark stages a warm bloom would grey out. Multiply keeps the light
-   sitting IN the surface on pale paper; screen does the same job on espresso. */
-.deep .slab::after,
-.deep .rail-card::after {
-  mix-blend-mode: screen;
-  background: radial-gradient(
-    20rem 20rem at var(--mx, 50%) var(--my, 50%),
-    rgba(156, 85, 48, 0.26) 0%,
-    rgba(122, 59, 29, 0.10) 40%,
-    transparent 70%
-  );
-}
+/* The dark-stage variant of the pass went with it — .slab and .rail-card
+   were the only two surfaces it named, and neither draws the highlight any
+   more. */
 
 /* ── magnetism ──
    `translate` and not `transform`: Button animates transform with GSAP for
@@ -122,9 +112,8 @@
 .pl-card:hover .slab-img { transform: scale(1.015); }
 
 @media (prefers-reduced-motion: reduce) {
-  .slab::after, .cat-card::after, .pl-card::after, .rail-card::after,
-  .loc-card::after, .nf-card::after, .dp::after, .pat-swatch::after,
-  .wo-attach::after { transition: none; }
+  .cat-card::after, .loc-card::after, .nf-card::after, .dp::after,
+  .pat-swatch::after, .wo-attach::after { transition: none; }
   .btn { translate: none; transition: none; }
   .slab-img { transition: none; }
   .is-lit .slab-img, .cat-card:hover .slab-img,
@@ -133,7 +122,6 @@
 
 /* no hover on touch: the highlight would stick under the finger */
 @media (hover: none) {
-  .slab::after, .cat-card::after, .pl-card::after, .rail-card::after,
-  .loc-card::after, .nf-card::after, .dp::after, .pat-swatch::after,
-  .wo-attach::after { display: none; }
+  .cat-card::after, .loc-card::after, .nf-card::after, .dp::after,
+  .pat-swatch::after, .wo-attach::after { display: none; }
 }

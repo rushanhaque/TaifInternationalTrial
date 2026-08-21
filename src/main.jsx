@@ -10,6 +10,10 @@ import './styles/pages.css'
 import './styles/mk2/index.css'
 /* site-wide hover polish, layered over every card family */
 import './styles/interactions-premium.css'
+/* the one spacing scale, put back over the fifty sheets that each invented
+   their own — after the components, before the mobile corrections, because
+   those are the considered exceptions to it */
+import './styles/rhythm.css'
 /* mobile-only refinements, last so its media query wins */
 import './styles/mobile-polish.css'
 /* mobile-only: hover switched off on touch */

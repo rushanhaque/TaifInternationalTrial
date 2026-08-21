@@ -9,6 +9,11 @@ export default function MaskedHeading({
   tag: Tag = 'h2',
   mediaType = 'video',
   src = 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+  /* Optional [{ src, type }] in preference order. When present these are
+     rendered as <source> children and `src` is ignored, so a caller can
+     offer VP9 ahead of H.264 the way the hero does. `src` alone still
+     works, which is what every other caller of this component uses. */
+  sources = null,
   poster = '',
   syncVideoRef,
   fillScale = 1.25,
@@ -267,7 +272,18 @@ export default function MaskedHeading({
         <span className="masked-heading__clip" style={{ clipPath: `url(#${clipId})` }}>
           <span ref={mediaRef} className="masked-heading__media">
             {mediaType === 'video' ? (
-              <video ref={videoRef} className="masked-heading__source" src={src} poster={poster} autoPlay muted loop playsInline />
+              <video
+                ref={videoRef}
+                className="masked-heading__source"
+                src={sources ? undefined : src}
+                poster={poster}
+                autoPlay
+                muted
+                loop
+                playsInline
+              >
+                {sources?.map((s) => <source key={s.src} src={s.src} type={s.type} />)}
+              </video>
             ) : (
               <img className="masked-heading__source" src={src} alt="" draggable={false} />
             )}
