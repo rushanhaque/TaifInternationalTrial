@@ -32,7 +32,7 @@ export default function AboutPage() {
             {/* Background Video */}
             <div className="craft-card__video-wrap">
               <video
-                ref={bgVideoRef}
+                ref={(el) => { bgVideoRef.current = el; if (el) el.setAttribute('muted', '') }}
                 className="craft-card__video-bg"
                 autoPlay
                 loop

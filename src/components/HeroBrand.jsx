@@ -124,6 +124,7 @@ export default function HeroBrand() {
           muted
           playsInline
           preload="auto"
+          ref={(el) => { if (el) el.setAttribute('muted', '') }}
         >
           {LANDING_VIDEO.map((s) => <source key={s.src} src={s.src} type={s.type} />)}
         </video>

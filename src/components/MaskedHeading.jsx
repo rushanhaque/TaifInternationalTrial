@@ -273,7 +273,7 @@ export default function MaskedHeading({
           <span ref={mediaRef} className="masked-heading__media">
             {mediaType === 'video' ? (
               <video
-                ref={videoRef}
+                ref={(el) => { videoRef.current = el; if (el) el.setAttribute('muted', '') }}
                 className="masked-heading__source"
                 src={sources ? undefined : src}
                 poster={poster}
