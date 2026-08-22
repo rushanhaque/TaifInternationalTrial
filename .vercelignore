@@ -1,7 +1,12 @@
 node_modules
-assets/
-*.mp4
-*.mov
-*.avi
-*.webm
-*.mkv
+
+# Raw source media — the large camera/editor originals. These live ONLY at the
+# repo root and are never served; scripts/encode-video.mjs and to-webp.mjs turn
+# them into the delivery files under public/.
+#
+# The leading slash matters. Unanchored `assets/` matches a directory of that
+# name at ANY depth, which silently swallowed public/assets/ — the processed
+# WebP images the site actually loads. Likewise a blanket `*.mp4` / `*.webm`
+# stripped public/video/*, so the encoded clips 404'd on deploy while working
+# locally. Anchor to the root; do not re-add extension globs here.
+/assets/
