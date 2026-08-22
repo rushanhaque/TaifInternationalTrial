@@ -1,3 +1,4 @@
+import { asset } from '../lib/asset'
 /* All site content lives here. The brand lives only in BRAND (§8.1) — navbar,
    footer, preloader, transitions and SEO all derive from it, so a rename is
    one edit.
@@ -230,7 +231,7 @@ export const ABOUT_SLIDES = [
     ],
     facts: ['Est. 1998', 'Moradabad · India', '16 export markets'],
     image: {
-      src: '/assets/about/intro.webp',
+      src: asset('/assets/about/intro.webp'),
       alt: 'An artisan chasing an intricate pattern into a copper tray by hand.',
       focus: '50% 50%',
     },
@@ -245,7 +246,7 @@ export const ABOUT_SLIDES = [
     ],
     facts: ['Moradabad, est. 1625', 'GI-tagged craft', 'Exporting since 2003'],
     image: {
-      src: '/assets/about/story.webp',
+      src: asset('/assets/about/story.webp'),
       alt: 'Heritage tools on a workshop bench.',
       focus: '50% 50%',
     },
@@ -260,7 +261,7 @@ export const ABOUT_SLIDES = [
     ],
     facts: ['Quote in 5 days', 'Sample in 10', 'MOQ from 100'],
     image: {
-      src: '/assets/about/bespoke and sample.webp',
+      src: asset('/assets/about/bespoke and sample.webp'),
       alt: 'A carver working a chisel into timber at the bench.',
       focus: '50% 50%',
     },

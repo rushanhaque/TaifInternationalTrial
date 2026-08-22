@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { coarse, reduced } from '../../lib/gsap'
+import { asset } from '../../lib/asset'
 import { CharCascade, SmoothReveal } from '../Reveal'
 import Button from '../Button'
 
@@ -12,25 +13,25 @@ import Button from '../Button'
 const FINISHES = [
   {
     key: 'antique', name: 'Antique',
-    img: '/assets/finishes/antique.webp',
+    img: asset('/assets/finishes/antique.webp'),
     substrates: ['Brass', 'Copper', 'Iron'],
     character: 'Aged forward by hand until it reads a century old, then stopped exactly where we want it.',
   },
   {
     key: 'nickel', name: 'Nickel',
-    img: '/assets/finishes/nickel.webp',
+    img: asset('/assets/finishes/nickel.webp'),
     substrates: ['Brass', 'Steel', 'Zinc Alloy'],
     character: 'Plated in a cool, bright nickel that resists tarnish and fingerprints far longer than raw brass.',
   },
   {
     key: 'oiled-rubbed-bronze', name: 'Oiled Rubbed Bronze',
-    img: '/assets/finishes/oiled-rubbed-bronze.webp',
+    img: asset('/assets/finishes/oiled-rubbed-bronze.webp'),
     substrates: ['Brass', 'Zinc Alloy'],
     character: 'A dark, worked bronze with warm highlights left standing on the raised detail — hand-rubbed, not sprayed flat.',
   },
   {
     key: 'powder-coated', name: 'Powder Coated',
-    img: '/assets/finishes/powder-coated.webp',
+    img: asset('/assets/finishes/powder-coated.webp'),
     substrates: ['Steel', 'Iron', 'Aluminium'],
     character: 'An electrostatic coat baked to a hard, even shell — the most weatherproof finish on the floor.',
   },

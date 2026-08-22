@@ -1,12 +1,13 @@
 import { FINISHES } from '../data/site'
 import { CharCascade } from './Reveal'
+import { asset } from '../lib/asset'
 
 const FINISH_IMGS = {
-  hammered: '/assets/materials/brass.webp',
+  hammered: asset('/assets/materials/brass.webp'),
   antique: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=1200&auto=format&fit=crop',
-  burnished: '/assets/materials/copper.webp',
-  natural: '/assets/materials/sheesham.webp',
-  inlay: '/assets/materials/teak.webp',
+  burnished: asset('/assets/materials/copper.webp'),
+  natural: asset('/assets/materials/sheesham.webp'),
+  inlay: asset('/assets/materials/teak.webp'),
 }
 
 export default function FinishesCabinet() {
@@ -33,7 +34,7 @@ export default function FinishesCabinet() {
 
                 <div className="chouse-lift">
                   <img
-                    src={FINISH_IMGS[f.key] || '/assets/materials/brass.webp'}
+                    src={FINISH_IMGS[f.key] || asset('/assets/materials/brass.webp')}
                     alt={f.name}
                     className="chouse-cover"
                     loading="lazy"
