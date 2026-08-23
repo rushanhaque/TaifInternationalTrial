@@ -399,10 +399,17 @@
     grid-auto-flow: column;
     grid-auto-columns: clamp(4.8rem, 23vw, 6.5rem);
     overflow-x: auto;
+    /* `visible` is a lie here and cannot be honoured: once one axis is auto,
+       CSS computes the other to auto as well. So this rail DOES clip
+       vertically, and the selected swatch's 2px brass ring — which is a
+       box-shadow, drawn outside the element's box — was being sliced off
+       along the top edge. The padding is what gives the ring somewhere to
+       land; it is not cosmetic spacing. */
     overflow-y: visible;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
+    padding-top: 0.4rem;
     padding-bottom: 0.5rem;
   }
 

@@ -32,13 +32,9 @@ const GATE_KEY = 'taif:admin:open'
    camera original routinely lands under 250 KB. */
 const MAX_UPLOAD_BYTES = 12_000_000
 
-/* The cap on what may be STORED, after re-encoding. Images live as data URLs
-   inside the content store, which is both a localStorage value (a few MB of
-   quota, shared by every section) and a file baked into the JS bundle. An
-   image that survives the encoder and is still this large is a sign the
-   source is enormous, and letting it through would silently drop every other
-   unsaved edit when the quota blows. */
-const MAX_STORED_BYTES = 900_000
+/* The cap on what may be STORED lives in src/lib/image.js as STORE_BUDGET,
+   because that is where it is now acted on: the encoder compresses down to
+   the budget instead of this page rejecting whatever missed it. */
 
 /* Where the small companion image is filed. A record with `image` gets
    `imageThumb` beside it; nothing else in the schema has to change, and a
@@ -347,16 +343,19 @@ function RecordModal({ section, record, content, onSave, onClose, notify }) {
 
     setBusy(key)
     try {
+      /* No size rejection here. processImage walks a compression ladder until
+         the result fits its budget, so an oversized upload comes back smaller
+         rather than refused; when even the last rung is over, out.overBudget
+         says so and the image is stored anyway. Turning an admin away from
+         their own photograph was never the right trade. */
       const out = await processImage(file)
-      if (out.full.length > MAX_STORED_BYTES) {
-        notify(`Even after compression that image is ${humanBytes(out.full.length)}. Try a smaller source, or paste a URL.`, true)
-        return
-      }
       setDraft((d) => ({ ...d, [key]: out.full, [thumbKey(key)]: out.thumb }))
       const saved = out.beforeBytes ? Math.round((1 - out.afterBytes / out.beforeBytes) * 100) : 0
+      /* the image is saved either way — overBudget only colours the notice,
+         so a heavy one is flagged rather than silently accepted */
       notify(out.note || (out.converted && saved > 0
         ? `Converted to WebP — ${humanBytes(out.beforeBytes)} → ${humanBytes(out.afterBytes)} (${saved}% smaller), thumbnail included.`
-        : `Optimised — ${humanBytes(out.afterBytes)} stored, thumbnail included.`))
+        : `Optimised — ${humanBytes(out.afterBytes)} stored, thumbnail included.`), out.overBudget)
     } catch (err) {
       notify(err.message || 'Could not read that image.', true)
     } finally {

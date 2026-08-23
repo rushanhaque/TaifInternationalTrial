@@ -34,7 +34,12 @@ function ComingSoonOverlay({ dark }) {
       left: 0,
       right: 0,
       bottom: 0,
-      zIndex: 90,
+      /* Below the mobile drawer (.sheet, z-index 88) and the nav (100), above
+         the page content it is there to cover. At 90 it sat between the two:
+         the burger stayed clickable because the nav outranks it, but the
+         drawer opened *behind* this panel, so the menu looked broken on a
+         phone. Anything at or above 88 reintroduces that. */
+      zIndex: 80,
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
@@ -85,7 +90,11 @@ function ComingSoonOverlay({ dark }) {
             padding: '0.65rem 1.6rem',
             borderRadius: 'var(--r-pill)',
             background: 'var(--brass)',
-            color: '#FFFFFF',
+            /* --brass INVERTS between themes: #7A3B1D (dark brown) in light,
+               #EFE2D2 (pale cream) in dark. A hardcoded white label is
+               therefore invisible on the dark-mode button, so the ink has to
+               follow the ground the same way the rest of this card does. */
+            color: dark ? '#2A1306' : '#FFFFFF',
             fontFamily: 'var(--font-accent)',
             fontSize: '0.7rem',
             letterSpacing: '0.14em',

@@ -34,6 +34,35 @@ const THUMB_EDGE = 420
 const QUALITY_FULL  = 0.92
 const QUALITY_THUMB = 0.7
 
+/* How large a single stored image is allowed to be, in data-URL characters.
+   Everything here is base64 inside the JS bundle, so this is a real cost paid
+   by every visitor — see the WHY at the top of this file. */
+export const STORE_BUDGET = 900_000
+
+/* ── THE COMPRESSION LADDER ───────────────────────────────────────────────
+   One pass at 1800/0.92 is right for a normal photograph and not nearly
+   enough for a 6000px camera original, which lands around 1.5 MB even after
+   conversion. Rather than refuse that upload, walk down this ladder until a
+   step fits STORE_BUDGET and keep the first one that does.
+
+   Each rung drops the long edge, the quality, or both. The early rungs give
+   up quality the eye does not miss at these display sizes; only the last few
+   start costing visible resolution, and they exist so that there is always
+   an answer — a huge upload comes out soft rather than rejected.
+
+   Ordered largest-first, so a normal image stops on rung 1 and never pays
+   for the rest. */
+const LADDER = [
+  { edge: 1800, quality: 0.92 },
+  { edge: 1800, quality: 0.82 },
+  { edge: 1600, quality: 0.76 },
+  { edge: 1400, quality: 0.70 },
+  { edge: 1200, quality: 0.64 },
+  { edge: 1000, quality: 0.58 },
+  { edge: 820,  quality: 0.52 },
+  { edge: 640,  quality: 0.46 },
+]
+
 /* Formats whose meaning would be destroyed by a canvas round-trip. */
 const PASSTHROUGH = /^image\/(svg\+xml|gif)$/i
 
@@ -147,16 +176,38 @@ export async function processImage(file) {
 
   const bitmap = await decode(file)
   try {
-    const full = render(bitmap, FULL_EDGE, QUALITY_FULL)
+    /* Walk the ladder until something fits. `full` always ends up holding a
+       result — if even the last rung is over budget we keep it anyway, since
+       the smallest thing we can produce is still the best available answer
+       and refusing the upload helps nobody. */
+    let full = null
+    let rung = 0
+    for (let i = 0; i < LADDER.length; i += 1) {
+      const step = LADDER[i]
+      full = render(bitmap, step.edge, step.quality)
+      rung = i
+      if (dataUrlBytes(full.url) <= STORE_BUDGET) break
+    }
+
     const thumb = render(bitmap, THUMB_EDGE, QUALITY_THUMB)
 
     /* A small PNG screenshot or an already-tiny JPEG can come out of the
        encoder *larger* than it went in. Storing the bigger one would make
        "optimise" a pessimisation, so keep the original when that happens —
-       the thumbnail is still worth generating either way. */
+       the thumbnail is still worth generating either way.
+
+       The budget check is part of the condition on purpose: an original that
+       is smaller than a rung-1 encode but still over budget must NOT win, or
+       a 3 MB photograph would sail through untouched precisely because the
+       encoder had already done its job on the rung we were comparing to. */
     const original = await readAsDataUrl(file)
-    const keptOriginal = dataUrlBytes(full.url) >= dataUrlBytes(original)
+    const keptOriginal =
+      dataUrlBytes(full.url) >= dataUrlBytes(original) &&
+      dataUrlBytes(original) <= STORE_BUDGET
     const chosen = keptOriginal ? original : full.url
+
+    const overBudget = dataUrlBytes(chosen) > STORE_BUDGET
+    const squeezed = !keptOriginal && rung > 0
 
     return {
       full: chosen,
@@ -167,9 +218,17 @@ export async function processImage(file) {
       afterBytes: dataUrlBytes(chosen) + dataUrlBytes(thumb.url),
       format: keptOriginal ? (file.type || 'image') : OUT_TYPE(),
       converted: !keptOriginal && OUT_TYPE() === 'image/webp',
+      /* what actually happened, so the admin is told rather than guessing */
+      steps: rung + 1,
+      resized: !keptOriginal ? { w: full.w, h: full.h } : null,
+      overBudget,
       note: keptOriginal
         ? 'Already smaller than the converted version — kept the original.'
-        : (supportsWebp() ? '' : 'This browser cannot write WebP — saved as optimised JPEG instead.'),
+        : overBudget
+          ? `Compressed as far as the pipeline goes — stored at ${full.w}×${full.h}. It is still large; a smaller source or a pasted URL would do better.`
+          : squeezed
+            ? `Large source — compressed harder than usual, stored at ${full.w}×${full.h}.`
+            : (supportsWebp() ? '' : 'This browser cannot write WebP — saved as optimised JPEG instead.'),
     }
   } finally {
     bitmap.close?.()

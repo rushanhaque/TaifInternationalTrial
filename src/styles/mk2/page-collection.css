@@ -703,10 +703,14 @@ html.dark .pl-subcat-btn:hover {
   color: #FFFFFF;
 }
 
+/* --brass is #7A3B1D in light and #EFE2D2 in dark, so the selected chip goes
+   from a dark brown pill to a pale cream one. The white label inherited from
+   the light-mode rule was invisible on it — the ink has to invert with the
+   ground. */
 html.dark .pl-subcat-btn.is-active {
   background: var(--brass);
   border-color: var(--brass);
-  color: #FFFFFF;
+  color: #2A1306;
 }
 
 /* ---- a family whose stock is not filed yet ---- */

@@ -210,7 +210,17 @@ html.dark {
   --hair-on-deep: rgba(255, 255, 255, 0.15);
 
   --tint:       #4A2410;
-  --tint-deep:  #2A1306;
+  /* WAS #2A1306, byte-for-byte the same as --deep and --bg on this theme,
+     which made every one of the ~50 rules that use it as `color:` paint text
+     in exactly the page background. The partner tallies and several counters
+     were rendering invisible.
+
+     It is an accent TYPE colour (see the light-mode comment) — the surface
+     roles are --tint and --deep, which already exist — so the dark value has
+     to be a light umber that reads on the dark ground rather than a dark one
+     borrowed from the surface ramp. Same hue family as the light #7A3B1D,
+     lifted: ~8:1 on --deep and ~6:1 on --tint. */
+  --tint-deep:  #D9A47A;
   --tint-on-deep: #FFFFFF;
 
   --brass:      #EFE2D2;

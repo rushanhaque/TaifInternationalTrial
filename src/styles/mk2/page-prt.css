@@ -833,6 +833,17 @@
   backdrop-filter: blur(3px);
 }
 
+/* The pill behind this label is a fixed translucent white — it sits over a
+   photograph, so it does NOT invert with the theme, and the ink on it must
+   not either. home.css carries a blanket `html.dark .meta` that forces every
+   .meta white with !important, which turned this into white-on-white. Beaten
+   here on specificity, and -webkit-text-fill-color has to be named too:
+   where both are set, the fill colour is what actually paints. */
+html.dark .prt-cmp-pane .meta {
+  color: #2A1306 !important;
+  -webkit-text-fill-color: #2A1306 !important;
+}
+
 .prt-cmp-after .meta {
   left: 16px;
 }
@@ -977,6 +988,14 @@
 .prt-quote:hover .prt-quote-mark {
   transform: rotate(-8deg) scale(1.08);
   color: var(--oak-lt);
+}
+
+/* --chrome-3 is a divider tint that collapses to #2A1306 in dark mode, i.e.
+   the page ground, so the oversized quotation mark disappeared completely
+   rather than sitting behind the quote as a faint ornament. A low-alpha warm
+   white keeps it ornamental without vanishing. */
+html.dark .prt-quote-mark {
+  color: rgba(239, 226, 210, 0.16);
 }
 
 .prt-quote-src {
