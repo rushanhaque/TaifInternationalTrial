@@ -222,7 +222,7 @@ html.dark .pl-head-scrim {
 }
 
 @media (min-width: 1380px) {
-  .pl-grid { grid-template-columns: repeat(3, 1fr); }
+  .pl-grid { grid-template-columns: repeat(4, 1fr); }
 }
 
 .pl-plate { position: relative; list-style: none; height: 100%; }

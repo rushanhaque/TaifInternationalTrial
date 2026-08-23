@@ -29,7 +29,6 @@ const CELLS = [
   { row: 1, col: 1 }, { row: 1, col: 3 },                    // flanking the plate
   { row: 2, col: 1 }, { row: 2, col: 2 }, { row: 2, col: 3 },
   { row: 3, col: 1 }, { row: 3, col: 2 }, { row: 3, col: 3 },
-  { row: 4, col: 2 },                                        // centred capstone
 ]
 
 /* Hard cap on how many selections the grid will show. /admin lets more than
@@ -153,8 +152,8 @@ export default function Sampler() {
 
   // heroScale shrinks from 2.25x down to 1.0x as user scrolls
   const p = progress
-  const heroScale = Math.max(1, 2.25 - p * 1.25)
-  const heroOffsetY = (1 - p) * 135
+  const heroScale = Math.max(1, 1.5 - p * 0.5)
+  const heroOffsetY = (1 - p) * 40
   /* how far the settled grid drifts down at the end of the scroll. Was 140px,
      which pushed the bottom cards and the CTA toward the sticky's lower edge —
      right where the next (Craft) section approaches — so the two read as

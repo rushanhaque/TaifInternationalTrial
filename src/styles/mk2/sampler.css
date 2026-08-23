@@ -157,7 +157,7 @@ html.dark .czoom-bestsellers-title {
   width: 100%;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(4, auto);
+  grid-template-rows: repeat(3, auto);
   gap: clamp(0.55rem, 1.2vw, 1.15rem);
 }
 

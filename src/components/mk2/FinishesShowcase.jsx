@@ -65,8 +65,8 @@ const FINISHES = [
     'An electrostatic coat baked to a hard, even shell — the most weatherproof finish on the floor.'),
 ]
 
-const SPEED = 1800  // must match the .fin-frame.is-on opacity transition
-const DWELL = 5200  // time the finished frame is held still before the next
+const SPEED = 1600  // must match the fin-transmute animation in the stylesheet
+const DWELL = 5600  // time the finished frame is held still before the next
 
 /* Ask the browser for a stage frame without mounting it, so the crossfade
    has bytes to work with by the time the visitor commits to a swatch. */
@@ -76,6 +76,7 @@ export default function FinishesShowcase() {
   const isTouch = useRef(coarse()).current
   const [current, setCurrent] = useState(0)
   const [outgoing, setOutgoing] = useState(null)
+  const [switching, setSwitching] = useState(false)
   const [paused, setPaused] = useState(false)
   const settle = useRef(null)
   const tabs = useRef([])
@@ -92,8 +93,9 @@ export default function FinishesShowcase() {
      any longer holds a second full-size decode in memory for nothing. */
   useEffect(() => {
     if (outgoing === null) return undefined
+    setSwitching(true)
     clearTimeout(settle.current)
-    settle.current = setTimeout(() => setOutgoing(null), SPEED)
+    settle.current = setTimeout(() => { setOutgoing(null); setSwitching(false) }, SPEED)
     return () => clearTimeout(settle.current)
   }, [outgoing, current])
 
@@ -158,13 +160,12 @@ export default function FinishesShowcase() {
                   src={FINISHES[i].img}
                   alt=""
                   decoding="async"
-                  /* lowercase: React 18 does not know the camelCase form and
-                     drops it with a warning; it passes this through as-is */
                   fetchpriority={i === current ? 'high' : 'low'}
                   className={`fin-frame${i === current ? ' is-on' : ' is-out'}`}
                 />
               ))}
             </span>
+            <span className={`fin-vignette${switching ? ' is-on' : ''}`} aria-hidden="true" />
             <span className="fin-scrim" aria-hidden="true" />
 
             <div className="fin-cap">
