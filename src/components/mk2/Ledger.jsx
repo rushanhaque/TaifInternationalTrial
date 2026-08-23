@@ -6,7 +6,7 @@ import Button from '../Button'
    ⚠ PLACEHOLDER DATA — CLIENT MUST CONFIRM EVERY LINE BEFORE LAUNCH ⚠
 
    Everything in LEDGER and DOC below is written to the correct SHAPE for a
-   Moradabad metal-and-wood handicraft exporter, but the actual values are
+   Moradabad metal-and-wooden handicraft exporter, but the actual values are
    assumptions. They are plausible, not verified. Publishing an unconfirmed
    HS code, certificate scope or payment term is a commercial and customs
    liability, not a copy problem.

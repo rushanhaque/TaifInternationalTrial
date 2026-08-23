@@ -60,8 +60,8 @@ const familyName = (slug) => resolveFamily(slug) || 'Collection'
 
 const ROUTES = [
   { path: '/', page: Home, idx: '0.1', name: 'Home',
-    title: `${B} — ${BRAND.line} · Metal & Wood Handicraft`,
-    desc: 'Metal and wood handicraft manufacture and export. Hand-hammered brass, burnished copper, seasoned sheesham and flush brass inlay, made in Moradabad, India.' },
+    title: `${B} — ${BRAND.line} · Metal and Wooden Handicraft`,
+    desc: 'Metal and wooden handicraft manufacturer and exporter. Hand-hammered brass, burnished copper, seasoned sheesham and flush brass inlay, made in Moradabad, India.' },
   { path: '/collections', page: CollectionsPage, idx: '0.2', name: 'Collections',
     title: t('Collections'),
     desc: 'Nine families — wooden products, copper products, home decor, hardware, corporate gifting, religious supplies, bathroom accessories, kitchenware and barware.' },

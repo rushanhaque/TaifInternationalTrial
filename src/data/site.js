@@ -12,7 +12,7 @@ export const BRAND = {
   mark: 'TAIF',                       // short wordmark for display lockups
   suffix: 'INTERNATIONAL',            // set beside the mark, letterspaced
   line: 'An Atelier of Metal and Wood',
-  descriptor: 'Metal & Wood Handicraft Manufacture · Export',
+  descriptor: 'Metal and Wooden Handicraft Manufacturer · Export',
   est: '1998',
   origin: 'Moradabad · India',
   /* Every mailto: and wa.me link on the site derives from these two — the
@@ -141,7 +141,7 @@ export const PROCESS_STAGES = [
 
 export const CAPABILITIES = [
   { name: 'Metal handicraft', stat: '11 processes', copy: 'Sand casting, lost wax, spinning, raising, chasing and repoussé in brass, copper, aluminium and iron — up to 900 mm across.' },
-  { name: 'Wood handicraft', stat: '8–10% MC', copy: 'Turning, carving, jali fretwork, joinery and inlay in sheesham, mango, acacia and reclaimed teak. Seasoned and kiln-dried on site.' },
+  { name: 'Wooden handicraft', stat: '8–10% MC', copy: 'Turning, carving, jali fretwork, joinery and inlay in sheesham, mango, acacia and reclaimed teak. Seasoned and kiln-dried on site.' },
   { name: 'Metal-and-wood assembly', stat: 'no filler', copy: 'The joint is the product. Pinned, seated and levelled flush so two materials leave the floor reading as one object.' },
   { name: 'Finishing & colour', stat: 'ΔE ≤ 1.5', copy: 'Antiquing, burnishing, lacquer, powder coat and hard-wax oil, matched to a physical master swatch batch after batch.' },
   { name: 'Private label & packing', stat: '18k pcs / wk', copy: 'Laser marking, gift boxes, barcodes, retail-ready cartons and container consolidation. One PO, one container, one invoice.' },
@@ -225,7 +225,7 @@ export const ABOUT_SLIDES = [
     no: '01',
     kicker: 'Introduction',
     title: 'An atelier that ships by the container.',
-    lede: 'Metal and wood handicraft, raised by hand in Moradabad since 1998 — packed, papered and exported to sixteen countries.',
+    lede: 'Metal and wooden handicraft, raised by hand in Moradabad since 1998 — packed, papered and exported to sixteen countries.',
     paras: [
       'Two floors, six materials, 15+ artisans — in the city the rest of India calls Peetal Nagri, the brass town. Metal in Moradabad, wood in Saharanpur, and the seam where the two meet belongs to us alone.',
     ],
