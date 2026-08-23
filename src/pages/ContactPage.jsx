@@ -1,8 +1,6 @@
-import { useState } from 'react'
 import { LOCATIONS, BRAND } from '../data/site'
 import { CharCascade } from '../components/Reveal'
-import Field from '../components/Field'
-import Button from '../components/Button'
+import ContactForm from '../components/ContactForm'
 
 const site = LOCATIONS[0]
 const addressLine = [site.name, ...site.lines].join(', ')
@@ -10,33 +8,9 @@ const mapPin = `${site.coords.lat},${site.coords.lng}`
 const mapEmbedSrc = `https://www.google.com/maps?q=${mapPin}&z=17&output=embed`
 const mapsHref = site.share
 
+/* Submit handling, validation and the sent state all live in ContactForm now
+   — this page is layout and contact details. */
 export default function ContactPage() {
-  const [sent, setSent] = useState(false)
-  const [error, setError] = useState(false)
-  const [busy, setBusy] = useState(false)
-
-  async function handleSubmit(e) {
-    e.preventDefault()
-    setBusy(true)
-    setError(false)
-    try {
-      const res = await fetch('https://formspree.io/f/xdenzbon', {
-        method: 'POST',
-        body: new FormData(e.target),
-        headers: { Accept: 'application/json' },
-      })
-      if (res.ok) {
-        setSent(true)
-      } else {
-        setError(true)
-      }
-    } catch {
-      setError(true)
-    } finally {
-      setBusy(false)
-    }
-  }
-
   return (
     <>
       <section className="page-hero wrap">
@@ -51,36 +25,7 @@ export default function ContactPage() {
               <div className="contact-split">
                 {/* ── LEFT: Contact Form ───────────────────── */}
                 <div className="contact-form-col">
-                  {!sent ? (
-                    <form className="contact-form" onSubmit={handleSubmit}>
-                      <h2 className="d3" style={{ marginBottom: '.4rem' }}>Send us a message</h2>
-                      <p className="body dim" style={{ marginBottom: '1rem' }}>
-                        We'll get back to you within two working days.
-                      </p>
-                      <Field label="Name" name="name" autoComplete="name" required />
-                      <Field label="Email" name="email" type="email" autoComplete="email" required />
-                      <Field label="Message" name="message" textarea required />
-                      {error && (
-                        <p className="body" style={{ color: 'var(--c-err, #c0392b)', marginBottom: '.8rem' }}>
-                          Something went wrong — please try again or email us at{' '}
-                          <a href={`mailto:${BRAND.email}`}>{BRAND.email}</a>.
-                        </p>
-                      )}
-                      <Button type="submit" disabled={busy}>{busy ? 'Sending…' : 'Send message'}</Button>
-                    </form>
-                  ) : (
-                    <div className="sent-card">
-                      <h2 className="d3">Message sent.</h2>
-                      <p className="body" style={{ marginTop: '.6rem' }}>
-                        We'll get back to you within two working days. If it's urgent,
-                        reach us at{' '}
-                        <a href={`mailto:${BRAND.email}`}>{BRAND.email}</a>.
-                      </p>
-                      <div style={{ marginTop: '1.2rem' }}>
-                        <Button onClick={() => setSent(false)} variant="ghost">Send another</Button>
-                      </div>
-                    </div>
-                  )}
+                  <ContactForm />
                 </div>
 
                 {/* ── RIGHT: Details ───────────────────────── */}

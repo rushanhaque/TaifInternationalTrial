@@ -11,61 +11,119 @@
    this does and does not protect. */
 const SECRET = import.meta.env.VITE_ADMIN_PUBLISH_SECRET || ''
 
-/* ── putting the images back before publishing ────────────────────────────
-   THE ROUND-TRIP THIS CLOSES
+/* ── images travel on their own, not inside the snapshot ──────────────────
+   WHAT CHANGED AND WHY
 
-   content.snapshot.json — the file this endpoint commits — stores uploaded
-   images as data: URLs. Before every build, scripts/extract-content-images.mjs
-   writes each of those out to public/img/content/<hash>.webp and hands the app
-   a copy of the snapshot with paths instead, so the pictures stop weighing
-   down the JS bundle.
+   This module used to do the opposite of what it does now. Uploaded images
+   lived in content.snapshot.json as data: URLs; a build step wrote them out
+   to public/img/content/<hash>.<ext> so they would not weigh down the JS
+   bundle; and publishing INLINED them back, because those extracted files
+   were generated and gitignored, so a snapshot of bare paths would have
+   pointed at files the next deploy never rebuilt.
 
-   The admin UI therefore holds paths, not data URLs. Publishing that state
-   verbatim would replace the data URLs in the committed file with paths — and
-   those files are generated, gitignored, and rebuilt from the data URLs that
-   just got overwritten. The first publish would look fine (the extracted files
-   still exist on that build) and the *next* deploy would ship a site whose
-   every uploaded image 404s, with no way back short of a git revert.
+   That worked and did not scale. Images are ~99% of the snapshot's bytes, so
+   the single POST to /api/publish grew with every upload until it crossed the
+   ~4.5 MB serverless body limit and publishing stopped working outright —
+   the failure the admin saw as "the content is 5.1 MB".
 
-   So publishing reverses the extraction: each /img/content/ path is fetched
-   from this same origin and inlined back to a data URL. The committed file
-   stays the single source of truth, the bundle stays small, and the two steps
-   are exact inverses of each other.
+   Now the extracted files are COMMITTED (see .gitignore), which makes a path
+   a durable reference rather than a dangling one, so the inlining is no
+   longer needed and the direction is reversed:
 
-   A path that cannot be fetched is left alone rather than dropped — losing a
-   reference is recoverable, silently deleting an image is not. */
+     · every data: URL is written to the repo as its own file, one request
+       each, well inside the body limit — see api/publish-image.js;
+     · the snapshot then carries paths only, a few kB regardless of how many
+       pictures exist.
+
+   The filename is a content hash produced with the SAME algorithm as
+   scripts/extract-content-images.mjs (sha256, first 16 hex chars) so both
+   halves of the system agree on a name and identical bytes are stored once.
+
+   AN IMAGE THAT FAILS TO UPLOAD KEEPS ITS DATA URL. Substituting a path we
+   failed to write would publish a reference to a file that does not exist,
+   turning a retryable error into a broken image on the live site. Leaving it
+   inline keeps the snapshot correct; if that makes the request too large the
+   size error explains exactly that. */
 const EXTRACTED = '/img/content/'
 
-const toDataUrl = (blob) => new Promise((resolve, reject) => {
-  const r = new FileReader()
-  r.onload = () => resolve(r.result)
-  r.onerror = () => reject(new Error('unreadable'))
-  r.readAsDataURL(blob)
-})
+const DATA_URL = /^data:([a-z0-9.+/-]+);base64,([A-Za-z0-9+/=]+)$/i
 
-async function inlineExtractedImages(node, cache) {
+/* Mirrors EXT in scripts/extract-content-images.mjs. A type not listed here
+   is left as a data: URL rather than written under a guessed extension — a
+   file served as the wrong type is a worse bug than a larger request. */
+const EXT = {
+  'image/webp': 'webp',
+  'image/jpeg': 'jpg',
+  'image/jpg': 'jpg',
+  'image/png': 'png',
+  'image/avif': 'avif',
+  'image/gif': 'gif',
+  'image/svg+xml': 'svg',
+}
+
+const b64ToBytes = (b64) => {
+  const bin = atob(b64)
+  const out = new Uint8Array(bin.length)
+  for (let i = 0; i < bin.length; i += 1) out[i] = bin.charCodeAt(i)
+  return out
+}
+
+/** sha256 of the decoded bytes, first 16 hex chars — matches the build step. */
+async function hashName(bytes, ext) {
+  const digest = await crypto.subtle.digest('SHA-256', bytes)
+  const hex = [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, '0')).join('')
+  return `${hex.slice(0, 16)}.${ext}`
+}
+
+/** Commit one image and return its public path, or null if it could not go. */
+async function putImage(name, contentBase64) {
+  const res = await fetch('/api/publish-image', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      ...(SECRET ? { 'x-admin-secret': SECRET } : {}),
+    },
+    body: JSON.stringify({ name, contentBase64 }),
+  })
+  if (!res.ok) return null
+  try { return (await res.json()).path || null } catch { return null }
+}
+
+/* Walk the snapshot, upload every data: URL, and swap in its path. `cache`
+   keys on the data URL so the same picture used in two places is sent once.
+   `stats` is reported back so the caller can say what happened. */
+async function externaliseImages(node, cache, stats) {
   if (typeof node === 'string') {
-    if (!node.startsWith(EXTRACTED)) return node
+    if (node.startsWith(EXTRACTED)) return node          // already a file
+    const m = DATA_URL.exec(node)
+    if (!m) return node
     if (cache.has(node)) return cache.get(node)
+
+    const ext = EXT[m[1].toLowerCase()]
+    if (!ext) { stats.skipped += 1; cache.set(node, node); return node }
+
+    let path = null
     try {
-      const res = await fetch(node)
-      if (!res.ok) throw new Error(String(res.status))
-      const url = await toDataUrl(await res.blob())
-      cache.set(node, url)
-      return url
+      const bytes = b64ToBytes(m[2])
+      path = await putImage(await hashName(bytes, ext), m[2])
     } catch {
-      cache.set(node, node)
-      return node
+      path = null
     }
+
+    if (path) stats.uploaded += 1
+    else stats.failed += 1
+    const value = path || node
+    cache.set(node, value)
+    return value
   }
   if (Array.isArray(node)) {
     const out = []
-    for (const v of node) out.push(await inlineExtractedImages(v, cache))
+    for (const v of node) out.push(await externaliseImages(v, cache, stats))
     return out
   }
   if (node && typeof node === 'object') {
     const out = {}
-    for (const [k, v] of Object.entries(node)) out[k] = await inlineExtractedImages(v, cache)
+    for (const [k, v] of Object.entries(node)) out[k] = await externaliseImages(v, cache, stats)
     return out
   }
   return node
@@ -73,7 +131,8 @@ async function inlineExtractedImages(node, cache) {
 
 /** Commit `snapshot` (the content store) via the server-side publish endpoint. */
 export async function publishSnapshot(snapshot) {
-  const payload = await inlineExtractedImages(snapshot, new Map())
+  const stats = { uploaded: 0, failed: 0, skipped: 0 }
+  const payload = await externaliseImages(snapshot, new Map(), stats)
 
   const res = await fetch('/api/publish', {
     method: 'POST',
@@ -106,8 +165,11 @@ export async function publishSnapshot(snapshot) {
          past the serverless body limit. Say so, and say what to do. */
       const mb = (new Blob([JSON.stringify(payload)]).size / 1024 / 1024).toFixed(1)
       msg = res.status === 413 || res.status === 507
-        ? `Too large to publish — the content is ${mb} MB and the server limit is about 4.5 MB. Re-upload the newest images (they compress on upload), or replace a few with pasted URLs, then publish again.`
-        : `Publish failed — the server answered ${res.status}${res.statusText ? ` ${res.statusText}` : ''}. The content is ${mb} MB. Nothing was published; your edits are still here.`
+        /* Images ship separately now, so a snapshot this large means some of
+           them could not be uploaded and stayed inline — say that, because
+           "make your images smaller" would be the wrong advice for it. */
+        ? `Too large to publish — ${mb} MB. ${stats.failed} image${stats.failed === 1 ? '' : 's'} could not be uploaded and had to stay inside the content. Check your connection and publish again.`
+        : `Publish failed — the server answered ${res.status}${res.statusText ? ` ${res.statusText}` : ''}. Nothing was published; your edits are still here.`
     }
     throw new Error(msg)
   }

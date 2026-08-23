@@ -25,7 +25,7 @@
    Both outputs are generated, not authored — see .gitignore.                */
 
 import { createHash } from 'node:crypto'
-import { mkdirSync, readFileSync, writeFileSync, existsSync, readdirSync, unlinkSync } from 'node:fs'
+import { mkdirSync, readFileSync, writeFileSync, existsSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -124,12 +124,24 @@ mkdirSync(IMG_DIR, { recursive: true })
 
 const built = walk(snapshot)
 
-/* Sweep files from earlier runs whose image has since been replaced or
-   deleted, so the directory does not grow without bound across deploys. */
-let removed = 0
-for (const f of readdirSync(IMG_DIR)) {
-  if (!written.has(f)) { unlinkSync(join(IMG_DIR, f)); removed++ }
-}
+/* THE SWEEP IS GONE ON PURPOSE.
+
+   This used to delete every file here that the snapshot no longer referenced,
+   which was safe while the directory was generated and gitignored — anything
+   removed by mistake came back on the next run from the data: URL it was
+   built from.
+
+   That is no longer true. public/img/content/ is committed now (see
+   .gitignore and src/lib/publish.jsx): these files ARE the images, and there
+   is no data: URL left to rebuild them from. A sweep here would delete
+   committed files during an ordinary `npm run build`, leave the deletions
+   staged in the working tree, and take the pictures off the live site the
+   moment someone committed that.
+
+   Orphans are handled where it is safe to handle them — in the repo, by a
+   person who can see what is being removed. They cost a few kB and git keeps
+   the history regardless, so deleting them reclaims nothing. */
+const removed = 0
 
 writeFileSync(OUT, JSON.stringify(built), 'utf8')
 

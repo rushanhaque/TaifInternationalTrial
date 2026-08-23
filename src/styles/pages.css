@@ -264,23 +264,10 @@ html.dark .contact-card-3d:hover .contact-card-inner {
 @media (max-width: 800px) {
   .contact-split { grid-template-columns: 1fr; }
 }
+/* The form itself is src/components/ContactForm.jsx + styles/contact-form.css.
+   What lived here — .contact-form, .sent-card, and four !important overrides
+   fighting a global button rule — went with the old markup. */
 .contact-form-col { max-width: 560px; }
-.contact-form { display: flex; flex-direction: column; gap: 1rem; }
-.contact-form button {
-  align-self: flex-start;
-  margin-top: .4rem;
-  color: #FFFFFF !important;
-  background-color: #1e1710 !important;
-  border: 1px solid #b0894f !important;
-}
-.contact-form button * {
-  color: #FFFFFF !important;
-}
-.sent-card {
-  border: 1px solid var(--hair); border-radius: var(--r-lg);
-  background: var(--chrome); padding: 2.2rem; max-width: 560px;
-}
-.sent-card h2 { margin-block: .5rem .6rem; }
 
 .contact-info-col {
   display: flex; flex-direction: column; gap: 1.8rem;

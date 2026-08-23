@@ -1,0 +1,347 @@
+/* ══════════════════════════════════════════════════════════════════════════
+   CONTACT FORM
+
+   Replaces the floating-label pill fields. The rules that matter:
+
+   ▸ FOCUS IS DRAWN WITH box-shadow, NEVER border-width. Thickening a border
+     on focus reflows the control by a pixel and nudges the text under the
+     caret — the old field changed its padding on focus and did exactly that.
+     A shadow paints outside the box and costs no layout.
+
+   ▸ THE CONTROL FILLS ITS LABEL EDGE TO EDGE. Hit-testing follows
+     border-radius, so a heavily rounded control loses its corners as click
+     targets. The radius here is modest and the wrapper is the <label>, so
+     the corners resolve to the control either way.
+
+   ▸ EVERY COLOUR IS A TOKEN. --brass inverts between themes (dark umber in
+     light mode, pale cream in dark), so anything painted on it takes its ink
+     from --tint-on-deep rather than a hardcoded white.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.cf {
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+  max-width: 560px;
+}
+
+.cf-head {
+  margin-bottom: 0.15rem;
+}
+
+.cf-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.45rem, 2.6vw, 1.95rem);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--graphite);
+  margin: 0 0 0.4rem;
+}
+
+.cf-sub {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 350;
+  line-height: 1.55;
+  color: var(--dim);
+  margin: 0;
+}
+
+/* ── a field ──────────────────────────────────────────────────────────────
+   `display: block` on a <label> so it stacks caption over control, and so the
+   whole block is one focus target. */
+.cf-field {
+  display: block;
+  cursor: text;
+}
+
+.cf-label {
+  display: block;
+  margin-bottom: 0.42rem;
+  font-family: var(--font-body);
+  font-size: 0.63rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  /* --graphite-2 is a mid umber and measured 4.18:1 on the card — under the
+     4.5 AA floor for text this small. A field caption is functional UI, not
+     decoration, so it takes the primary ink. */
+  color: var(--graphite);
+}
+
+.cf-req {
+  margin-left: 0.25em;
+  color: var(--brass);
+  /* the asterisk is decoration; the input carries `required` for machines */
+  font-weight: 700;
+}
+
+.cf-control {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.82rem 1rem;
+  border: 1px solid var(--hair-strong);
+  border-radius: 10px;
+  background: var(--white);
+  font-family: var(--font-body);
+  font-size: 0.98rem;
+  line-height: 1.5;
+  color: var(--graphite);
+  transition: border-color 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
+}
+
+.cf-control::placeholder {
+  color: var(--faint);
+}
+
+textarea.cf-control {
+  min-height: 148px;
+  resize: vertical;
+}
+
+.cf-control:hover {
+  border-color: var(--brass);
+}
+
+.cf-control:focus {
+  outline: none;
+  border-color: var(--brass);
+  /* the ring — painted outside the box, so nothing moves */
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--brass) 26%, transparent);
+}
+
+/* ── invalid ──────────────────────────────────────────────────────────── */
+.cf-field.is-invalid .cf-control {
+  border-color: var(--alert);
+}
+
+.cf-field.is-invalid .cf-control:focus {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--alert) 24%, transparent);
+}
+
+.cf-error {
+  display: block;
+  margin-top: 0.4rem;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  line-height: 1.4;
+  color: var(--alert);
+}
+
+.cf-failed {
+  margin: 0;
+  padding: 0.8rem 1rem;
+  border: 1px solid color-mix(in srgb, var(--alert) 40%, transparent);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--alert) 8%, transparent);
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: var(--graphite);
+}
+
+.cf-failed a {
+  color: var(--tint-deep);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* ── submit ───────────────────────────────────────────────────────────────
+   The old button needed four !important declarations to beat a global rule.
+   This one is its own class with its own colours, so nothing has to be
+   shouted down. */
+.cf-submit {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 0.25rem;
+  padding: 0.85rem 1.6rem;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: var(--tint-deep);
+  color: var(--tint-on-deep);
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  cursor: pointer;
+  transition: transform 0.25s var(--ease-surge), box-shadow 0.25s ease, opacity 0.2s ease;
+  box-shadow: 0 2px 6px -2px rgba(26, 13, 4, 0.28), 0 10px 22px -12px rgba(26, 13, 4, 0.34);
+}
+
+.cf-submit svg {
+  transition: transform 0.28s var(--ease-surge);
+}
+
+.cf-submit:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px -2px rgba(26, 13, 4, 0.32), 0 18px 34px -16px rgba(26, 13, 4, 0.42);
+}
+
+.cf-submit:hover:not(:disabled) svg {
+  transform: translateX(3px);
+}
+
+.cf-submit:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--brass) 45%, transparent);
+}
+
+.cf-submit:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+/* ── the sent state ───────────────────────────────────────────────────── */
+.cf-sent {
+  max-width: 560px;
+  padding: 2rem 1.9rem;
+  border: 1px solid var(--hair);
+  border-radius: var(--r-md);
+  background: var(--chrome);
+}
+
+.cf-sent-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  margin-bottom: 1rem;
+  border-radius: 50%;
+  background: var(--tint-deep);
+  color: var(--tint-on-deep);
+}
+
+.cf-sent-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 2.4vw, 1.8rem);
+  font-weight: 600;
+  color: var(--graphite);
+  margin: 0 0 0.5rem;
+}
+
+.cf-sent-note {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 350;
+  line-height: 1.6;
+  color: var(--dim);
+  margin: 0;
+}
+
+.cf-sent-note a {
+  color: var(--tint-deep);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.cf-again {
+  margin-top: 1.3rem;
+  padding: 0.7rem 1.4rem;
+  border: 1px solid var(--hair-strong);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--graphite);
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  cursor: pointer;
+  transition: border-color 0.22s ease, color 0.22s ease;
+}
+
+.cf-again:hover {
+  border-color: var(--brass);
+  color: var(--tint-deep);
+}
+
+.cf-again:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--brass) 40%, transparent);
+}
+
+/* ── dark ─────────────────────────────────────────────────────────────────
+   The control ground has to lift off the panel behind it. --white is the page
+   ground in dark mode too, so a field painted with it would disappear into
+   the card; a slightly lighter umber gives the input an edge without a
+   heavier border. */
+html.dark .cf-control {
+  background: rgba(255, 255, 255, 0.045);
+  border-color: rgba(255, 255, 255, 0.16);
+  color: var(--graphite);
+}
+
+html.dark .cf-control:focus {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: var(--brass);
+}
+
+html.dark .cf-sent {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* --tint-deep is an accent TYPE colour, and in dark mode it is a light umber
+   (#D9A47A) so it can be read on the dark ground. That makes it wrong as a
+   FILLED SURFACE here: white on light umber measured 2.2:1. The two filled
+   elements therefore invert — pale brass ground, dark ink — which is the same
+   pairing the nav and chip buttons use in dark mode. */
+html.dark .cf-submit,
+html.dark .cf-sent-mark {
+  background: var(--brass);
+  color: #2A1306;
+}
+
+html.dark .cf-submit {
+  box-shadow: 0 2px 6px -2px rgba(0, 0, 0, 0.5), 0 10px 22px -12px rgba(0, 0, 0, 0.6);
+}
+
+html.dark .cf-submit:hover:not(:disabled) {
+  box-shadow: 0 4px 10px -2px rgba(0, 0, 0, 0.55), 0 18px 34px -16px rgba(0, 0, 0, 0.7);
+}
+
+/* ── narrow ───────────────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .cf {
+    max-width: 100%;
+    gap: 1rem;
+  }
+
+  /* full width, because a thumb should not have to find a small target at
+     the end of a form */
+  .cf-submit {
+    align-self: stretch;
+    justify-content: center;
+  }
+
+  .cf-sent {
+    padding: 1.5rem 1.3rem;
+  }
+
+  .cf-again {
+    width: 100%;
+  }
+}
+
+/* ── reduced motion ───────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .cf-control,
+  .cf-submit,
+  .cf-submit svg,
+  .cf-again {
+    transition-duration: 0.01ms;
+  }
+
+  .cf-submit:hover:not(:disabled) {
+    transform: none;
+  }
+
+  .cf-submit:hover:not(:disabled) svg {
+    transform: none;
+  }
+}

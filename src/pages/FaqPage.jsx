@@ -46,7 +46,7 @@ export default function FaqPage() {
               </div>
             </div>
           ))}
-          <div className="sec-foot">
+          <div className="sec-foot" style={{ display: 'flex', justifyContent: 'center' }}>
             <Button to="/contact">Ask something else</Button>
           </div>
         </div>

@@ -6,6 +6,8 @@ import './styles/tokens.css'
 import './styles/global.css'
 import './styles/home.css'
 import './styles/pages.css'
+/* after pages.css, which still carries the old .contact-* layout rules */
+import './styles/contact-form.css'
 /* Mark II layers last so they win where they overlap the base sheets */
 import './styles/mk2/index.css'
 /* site-wide hover polish, layered over every card family */
