@@ -175,6 +175,42 @@
       "rail": false,
       "imageThumb": "/img/content/d3b34c1db6b4a281.jpg",
       "id": 8
+    },
+    {
+      "name": "hshsbhs",
+      "category": "Wooden Products",
+      "subcategory": "",
+      "slug": "hshsbhs",
+      "material": "",
+      "dims": "",
+      "weight": "",
+      "moq": "",
+      "lead": "",
+      "image": "/img/content/bf408667b5c14518.jpg",
+      "story": "",
+      "tone": "brass",
+      "finishes": [],
+      "rail": false,
+      "imageThumb": "/img/content/343def4504c6a97f.jpg",
+      "id": 9
+    },
+    {
+      "name": "hehehs",
+      "category": "Wooden Products",
+      "subcategory": "Chess",
+      "slug": "hehehs",
+      "material": "nsns",
+      "dims": "",
+      "weight": "",
+      "moq": "",
+      "lead": "",
+      "image": "/img/content/4beca02b008bad01.jpg",
+      "story": "",
+      "tone": "brass",
+      "finishes": [],
+      "rail": false,
+      "imageThumb": "/img/content/8b29c6759a8ce560.jpg",
+      "id": 10
     }
   ],
   "subcategories": {
