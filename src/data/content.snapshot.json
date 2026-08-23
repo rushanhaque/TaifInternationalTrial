@@ -177,10 +177,10 @@
       "id": 8
     },
     {
-      "name": "hshsbhs",
+      "name": "nansnsns",
       "category": "Wooden Products",
       "subcategory": "",
-      "slug": "hshsbhs",
+      "slug": "nansnsns",
       "material": "",
       "dims": "",
       "weight": "",
@@ -195,22 +195,42 @@
       "id": 9
     },
     {
-      "name": "hehehs",
+      "name": "nsjs",
       "category": "Wooden Products",
-      "subcategory": "Chess",
-      "slug": "hehehs",
+      "subcategory": "",
+      "slug": "nsjs",
+      "material": "",
+      "dims": "",
+      "weight": "",
+      "moq": "",
+      "lead": "",
+      "image": "/img/content/cece457aa3bd91e5.jpg",
+      "story": "",
+      "tone": "brass",
+      "finishes": [],
+      "rail": false,
+      "imageThumb": "/img/content/0d234e8bbf5b896e.jpg",
+      "id": 10
+    },
+    {
+      "name": "jsjs",
+      "category": "Religious Supplies",
+      "subcategory": "Ornaments",
+      "slug": "jsjs",
       "material": "nsns",
       "dims": "",
       "weight": "",
       "moq": "",
       "lead": "",
-      "image": "/img/content/4beca02b008bad01.jpg",
-      "story": "",
+      "image": "/img/content/074aed29602582e8.jpg",
+      "story": "nsjs",
       "tone": "brass",
-      "finishes": [],
+      "finishes": [
+        "nsnsn"
+      ],
       "rail": false,
-      "imageThumb": "/img/content/8b29c6759a8ce560.jpg",
-      "id": 10
+      "imageThumb": "/img/content/7a8b77c6a3eb0a0e.jpg",
+      "id": 11
     }
   ],
   "subcategories": {
