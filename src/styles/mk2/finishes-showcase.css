@@ -1,45 +1,65 @@
 /* ═══════════════════════════════════════════════════════════════════════════
-   FINISHES, AT A GLANCE
+   FINISHES — ONE OBJECT, TWELVE SURFACES
 
-   An interactive swatch selector. One window on the left, a list of finishes
-   on the right; pointing at a row shows that finish in the window. See
-   FinishesShowcase.jsx for the full interaction model (active vs. preview,
-   the hover/click fork by pointer type).
+   A stage holding the piece, and a wall of twelve material swatches beside
+   it. Pointing at a swatch re-finishes the object on the stage.
+
+   The interaction model lives in FinishesShowcase.jsx. What matters here:
+
+   ▸ THE STAGE TRANSITIONS OPACITY ONLY. The twelve photographs are the same
+     object in the same position, so a straight dissolve reads as the metal
+     transmuting. Any transform on `.fin-frame` breaks that illusion and
+     turns it back into a slideshow — see the note in the component.
+
+   ▸ THE SWATCHES ALL CROP TO THE SAME POINT. `object-position` plus a fixed
+     scale lands every tile on the bowl of the goblet, so the wall compares
+     materials instead of showing twelve small pictures of a cup.
    ══════════════════════════════════════════════════════════════════════════ */
 
 .fin {
   background: var(--white);
 }
 
-.fin-grid {
+.fin-lede {
+  max-width: 58ch;
+  margin: 0 auto clamp(2rem, 4vw, 3rem);
+  text-align: center;
+  font-family: var(--font-body);
+  font-size: clamp(0.98rem, 1.15vw, 1.1rem);
+  font-weight: 350;
+  line-height: 1.6;
+  color: var(--dim);
+  text-wrap: pretty;
+}
+
+.fin-layout {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: clamp(1.4rem, 2.6vw, 2rem);
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+  gap: clamp(1.4rem, 2.8vw, 2.4rem);
+  align-items: start;
 }
 
-/* ── the window ───────────────────────────────────────────────────────── */
-.fin-hero {
+/* ── the stage ─────────────────────────────────────────────────────────── */
+.fin-stage {
   position: relative;
-  overflow: hidden;
+  aspect-ratio: 3 / 2;
   border-radius: var(--r-lg);
+  overflow: hidden;
   isolation: isolate;
-  min-height: 420px;
-  display: flex;
-  align-items: flex-end;
-  box-shadow: var(--lift-2);
   background: #1a0d04;
+  box-shadow: var(--lift-2);
 }
 
-.fin-hero-media {
+.fin-frames {
   position: absolute;
   inset: 0;
   z-index: 0;
 }
 
-/* Same crossfade mechanism as SlatShow: incoming image stacks above the
-   outgoing one at z-index:2 and fades up; outgoing is held opaque at
-   z-index:1 so the swap never exposes the background underneath. */
-.fin-hero-img {
+/* The incoming frame stacks ABOVE the outgoing one and fades up, so the
+   background is never visible between the two. Opacity is the only property
+   that may be animated here. */
+.fin-frame {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -49,385 +69,254 @@
   z-index: 0;
 }
 
-.fin-hero-img.is-on {
+.fin-frame.is-on {
   opacity: 1;
   z-index: 2;
-  transition: opacity 1.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: opacity 900ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.fin-hero-img.is-out {
+.fin-frame.is-out {
   opacity: 1;
   z-index: 1;
 }
 
-.fin-hero-scrim {
+/* Lifts off the floor of the frame only — the photographs are lit from the
+   upper left and the top third carries the highlight, so darkening it would
+   cost the very thing the section is selling. */
+.fin-scrim {
   position: absolute;
   inset: 0;
-  z-index: 10;
+  z-index: 3;
   pointer-events: none;
   background: linear-gradient(
     to top,
-    rgba(20, 9, 3, 0.82) 0%,
-    rgba(20, 9, 3, 0.38) 42%,
-    transparent 70%
+    rgba(20, 9, 3, 0.9) 0%,
+    rgba(20, 9, 3, 0.62) 26%,
+    rgba(20, 9, 3, 0.2) 52%,
+    rgba(20, 9, 3, 0) 72%
   );
 }
 
-.fin-hero-body {
-  position: relative;
-  z-index: 11;
-  padding: clamp(1.6rem, 3vw, 2.6rem);
-  color: #fff;
+.fin-cap {
+  position: absolute;
+  z-index: 4;
+  inset: auto 0 0 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: clamp(1.4rem, 3vw, 2.4rem);
+  color: var(--on-deep);
 }
 
-.fin-hero-eyebrow {
-  display: inline-block;
-  color: rgba(243, 228, 210, 0.92);
-  text-shadow: 0 1px 8px rgba(12, 5, 7, 0.65);
-  transition: opacity 0.3s ease;
+.fin-cap-idx {
+  color: rgba(253, 251, 247, 0.72);
+  letter-spacing: 0.18em;
 }
 
-/* the name/copy block remounts (React key) on every swap, so it gets its
-   own quick rise-and-fade rather than jump-cutting under the slower photo
-   crossfade behind it */
-.fin-hero-copy {
-  animation: fin-copy-in 0.5s var(--ease-fluid) both;
+.fin-cap-name {
+  margin: 0;
+  font-family: var(--font-section);
+  font-size: clamp(1.7rem, 3.2vw, 2.9rem);
+  font-weight: 500;
+  line-height: 1.04;
+  letter-spacing: -0.015em;
+  color: var(--on-deep);
 }
 
-@keyframes fin-copy-in {
-  from { opacity: 0; transform: translateY(6px); }
-  to   { opacity: 1; transform: none; }
-}
-
-.fin-hero-name {
-  margin: 0.5rem 0 0;
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: clamp(1.7rem, 3vw, 2.5rem);
-  letter-spacing: -0.01em;
-  line-height: 1.05;
-  color: #fff;
-  text-shadow: 0 1px 2px rgba(12, 5, 7, 0.4), 0 8px 30px rgba(12, 5, 7, 0.6);
-}
-
-.fin-hero-note {
-  margin: 0.8rem 0 0;
-  max-width: 46ch;
+.fin-cap-note {
+  margin: 0;
+  max-width: 48ch;
   font-family: var(--font-body);
+  font-size: clamp(0.9rem, 1.05vw, 1rem);
   font-weight: 350;
-  font-size: 0.98rem;
   line-height: 1.6;
-  color: rgba(255, 255, 255, 0.82);
+  /* brighter than --dim-on-deep: this sits over a photograph, not a panel */
+  color: rgba(253, 251, 247, 0.87);
+  text-wrap: pretty;
 }
 
-.fin-hero-subs {
+.fin-subs {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
-  margin: 1.1rem 0 0;
+  gap: 0.45rem;
+  margin: 0.45rem 0 0;
   padding: 0;
   list-style: none;
 }
 
-.fin-hero-subs li {
-  padding: 0.32rem 0.75rem;
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  border-radius: var(--r-pill);
-  font-family: var(--font-accent);
-  font-size: 0.66rem;
-  letter-spacing: 0.1em;
+.fin-subs li {
+  padding: 0.3rem 0.7rem;
+  border: 1px solid var(--hair-on-deep);
+  border-radius: 999px;
+  font-family: var(--font-body);
+  font-size: 0.68rem;
+  font-weight: 500;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.92);
+  letter-spacing: 0.12em;
+  color: rgba(253, 251, 247, 0.9);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
 }
 
-/* ── the selector ─────────────────────────────────────────────────────── */
-.fin-list {
+/* ── the swatch wall ───────────────────────────────────────────────────── */
+.fin-grid {
   display: grid;
-  gap: clamp(0.7rem, 1.2vw, 0.9rem);
-  list-style: none;
-  margin: 0;
-  padding: 0;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(0.55rem, 1.1vw, 0.95rem);
 }
 
-/* a real <button> — this is a control, not a caption, and it needs to be
-   reachable and operable exactly like one */
-.fin-row {
-  width: 100%;
+.fin-sw {
   display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: clamp(0.9rem, 1.6vw, 1.15rem);
-  border: 1px solid var(--hair);
-  border-radius: var(--r-md);
-  background: var(--offwhite);
-  font: inherit;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0;
+  border: 0;
+  background: none;
   text-align: left;
-  color: inherit;
   cursor: pointer;
-  transition:
-    transform 0.4s var(--ease-surge),
-    box-shadow 0.4s var(--ease-fluid),
-    border-color 0.35s ease,
-    background 0.35s ease;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.fin-row:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--lift-1);
-  border-color: rgba(122, 59, 29, 0.24);
-}
-
-.fin-row:focus-visible {
-  outline: 2px solid var(--tint);
-  outline-offset: 2px;
-}
-
-/* the persistent selection — Antique, at rest, until something is clicked.
-   A filled brass mark plus a warmed border and ground, so "this is the one
-   showing in the window" reads even before you notice the photograph. */
-.fin-row.is-active {
-  border-color: rgba(122, 59, 29, 0.38);
-  background: rgba(122, 59, 29, 0.045);
-  box-shadow: var(--lift-1), inset 0 0 0 1px rgba(122, 59, 29, 0.08);
-}
-
-.fin-row-mark {
-  flex: none;
-  width: 9px;
-  height: 9px;
-  margin-left: auto;
-  border-radius: 50%;
-  background: var(--brass);
-  opacity: 0;
-  transform: scale(0.4);
-  transition:
-    opacity 0.35s var(--ease-fluid),
-    transform 0.4s var(--ease-surge);
-}
-
-.fin-row.is-active .fin-row-mark {
-  opacity: 1;
-  transform: scale(1);
-}
-
-/* the swatch — a circular crop, the way a sample chip is presented, not a
-   photograph of the material */
-.fin-swatch {
-  flex: none;
-  width: clamp(56px, 5.4vw, 68px);
-  height: clamp(56px, 5.4vw, 68px);
-  border-radius: 50%;
+.fin-sw-tile {
+  position: relative;
+  display: block;
+  aspect-ratio: 1;
+  border-radius: 14px;
   overflow: hidden;
-  box-shadow: 0 0 0 1px var(--hair), var(--lift-1);
+  background: #1a0d04;
+  box-shadow: 0 0 0 1px var(--hair);
+  transition:
+    transform 0.45s var(--ease-surge),
+    box-shadow 0.35s ease;
 }
 
-.fin-row.is-active .fin-swatch {
-  box-shadow: 0 0 0 2px var(--brass), var(--lift-1);
-}
-
-.fin-swatch img {
+/* Every tile lands on the bowl of the goblet — same point, same zoom — so
+   the wall reads as a set of material samples. */
+.fin-sw-tile img {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transform: scale(1.001);
-  transition: transform 0.6s var(--ease-fluid);
+  object-position: 51% 34%;
+  transform: scale(1.34);
+  transition: transform 0.6s var(--ease-surge);
 }
 
-.fin-row:hover .fin-swatch img {
-  transform: scale(1.12);
-}
-
-.fin-row-body {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-}
-
-.fin-row-name {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 1.02rem;
-  letter-spacing: -0.005em;
-  color: var(--graphite);
-}
-
-.fin-row-note {
-  margin-top: 0.28rem;
+.fin-sw-name {
   font-family: var(--font-body);
-  font-weight: 350;
-  font-size: 0.84rem;
-  line-height: 1.5;
-  color: var(--graphite-2);
-  /* one line at rest — the full character copy lives on /care */
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  font-size: 0.68rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  line-height: 1.3;
+  color: var(--dim);
+  transition: color 0.3s ease;
 }
 
-.fin-foot {
-  display: flex;
-  justify-content: center;
-  margin-top: clamp(1.8rem, 3vw, 2.6rem);
+.fin-sw:hover .fin-sw-tile,
+.fin-sw:focus-visible .fin-sw-tile {
+  transform: translateY(-3px);
+  box-shadow: 0 0 0 1px var(--brass);
 }
 
-/* ── dots + arrows ────────────────────────────────────────────────────── */
-.fin-controls {
-  position: absolute;
-  left: clamp(1.2rem, 2.5vw, 2rem);
-  bottom: clamp(1.2rem, 2.5vw, 1.8rem);
-  z-index: 4;
-  display: flex;
-  align-items: center;
-  gap: 1.2rem;
+.fin-sw:hover .fin-sw-tile img,
+.fin-sw:focus-visible .fin-sw-tile img {
+  transform: scale(1.44);
 }
 
-.fin-dots {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
+.fin-sw:hover .fin-sw-name {
+  color: var(--brass);
 }
 
-.fin-dot {
-  width: 20px;
-  height: 2px;
-  padding: 0;
-  border: none;
-  border-radius: 2px;
-  background: rgba(253, 251, 247, 0.34);
-  cursor: pointer;
-  transition: width 0.45s var(--ease-surge), background-color 0.3s;
+/* the selected swatch: a brass ring, held up off the wall */
+.fin-sw.is-on .fin-sw-tile {
+  transform: translateY(-3px);
+  box-shadow:
+    0 0 0 2px var(--brass),
+    0 10px 24px -12px rgba(26, 13, 4, 0.5);
 }
 
-.fin-dot:hover { background: rgba(253, 251, 247, 0.62); }
-
-.fin-dot.is-on {
-  width: 40px;
-  background: #fff;
+.fin-sw.is-on .fin-sw-name {
+  color: var(--brass);
 }
 
-.fin-arrows {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
+.fin-sw:focus-visible {
+  outline: none;
 }
 
-.fin-arrow {
-  flex: none;
-  display: grid;
-  place-items: center;
-  width: 32px;
-  height: 32px;
-  padding: 0;
-  border: 1px solid rgba(253, 251, 247, 0.28);
-  border-radius: 50%;
-  background: rgba(30, 13, 4, 0.28);
-  -webkit-backdrop-filter: blur(6px);
-  backdrop-filter: blur(6px);
-  color: #fff;
-  cursor: pointer;
-  transition: border-color 0.3s, background-color 0.3s;
+.fin-sw:focus-visible .fin-sw-tile {
+  box-shadow: 0 0 0 2px var(--brass), 0 0 0 5px rgba(122, 59, 29, 0.22);
 }
 
-.fin-arrow:hover {
-  border-color: rgba(253, 251, 247, 0.5);
-  background: rgba(30, 13, 4, 0.5);
-}
+/* ── narrow ────────────────────────────────────────────────────────────── */
+@media (max-width: 1040px) {
+  .fin-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
 
-.fin-arrow:focus-visible {
-  outline: 2px solid #fff;
-  outline-offset: 2px;
-}
-
-/* ── desk width: window left, four rows stacked right ──────────────────── */
-@media (min-width: 900px) {
+  /* the wall runs two rows of six under the stage rather than beside it */
   .fin-grid {
-    grid-template-columns: 1.15fr 1fr;
-    align-items: stretch;
-  }
-
-  .fin-hero { min-height: 100%; }
-
-  .fin-list {
-    grid-template-rows: repeat(4, 1fr);
+    grid-template-columns: repeat(6, minmax(0, 1fr));
   }
 }
 
-/* ── phone: one row of circles, name only, nothing else ─────────────────
-   The four full-width description cards read as a second copy of the same
-   list the big card already tells one item of at a time — on a narrow
-   screen there is no room for that duplication. Reduced to what a swatch
-   strip on a paint chip actually is: a row of samples and their names, tap
-   one to load it into the window above. Description, substrate tags and
-   the border/background card chrome all drop out entirely; only the
-   circle's own brass ring says which one is loaded. Desktop and the
-   tablet width above this query are untouched. */
-@media (max-width: 559px) {
-  .fin-list {
+@media (max-width: 720px) {
+  /* THE CAPTION COMES OFF THE PICTURE. Overlaid, it needed ~220px of a
+     ~420px frame — more than half the stage, landing squarely on the stem
+     and foot of the piece. At this width the copy gets its own panel under
+     the image instead, so the object is never covered by the text
+     describing it. */
+  .fin-stage {
+    aspect-ratio: auto;
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    gap: clamp(0.4rem, 2vw, 0.75rem);
-  }
-
-  .fin-list > li {
-    flex: 1 1 0;
-    min-width: 0;
-  }
-
-  .fin-row {
     flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 0.5rem;
-    width: 100%;
-    padding: 0;
-    border: none;
-    background: transparent;
-    box-shadow: none;
+    background: var(--deep);
   }
 
-  .fin-row:hover {
-    transform: translateY(-3px);
-    box-shadow: none;
-    border-color: transparent;
+  .fin-frames {
+    position: relative;
+    flex: none;
+    aspect-ratio: 4 / 3;
   }
 
-  .fin-row.is-active {
-    background: transparent;
-    box-shadow: none;
-  }
-
-  .fin-swatch {
-    width: clamp(52px, 16vw, 72px);
-    height: clamp(52px, 16vw, 72px);
-  }
-
-  .fin-row-note,
-  .fin-row-mark {
+  /* the scrim only ever existed to carry the overlaid copy */
+  .fin-scrim {
     display: none;
   }
 
-  .fin-row-body {
-    align-items: center;
+  .fin-cap {
+    position: static;
+    padding: clamp(1.1rem, 4.5vw, 1.5rem);
   }
 
-  .fin-row-name {
-    font-size: 0.76rem;
-    line-height: 1.2;
-    text-align: center;
-    text-wrap: balance;
+  .fin-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .fin-sw-name {
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
   }
 }
 
+/* ── reduced motion ────────────────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
-  .fin-hero-img,
-  .fin-hero-copy,
-  .fin-dot,
-  .fin-row,
-  .fin-row-mark,
-  .fin-swatch img {
-    transition-duration: 0.01ms !important;
-    animation-duration: 0.01ms !important;
+  .fin-frame.is-on,
+  .fin-sw-tile,
+  .fin-sw-tile img,
+  .fin-sw-name {
+    transition-duration: 0.01ms;
+  }
+
+  .fin-sw:hover .fin-sw-tile,
+  .fin-sw.is-on .fin-sw-tile {
+    transform: none;
+  }
+
+  .fin-sw:hover .fin-sw-tile img,
+  .fin-sw:focus-visible .fin-sw-tile img {
+    transform: scale(1.34);
   }
 }

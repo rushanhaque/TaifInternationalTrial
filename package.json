@@ -14,7 +14,8 @@
     "dev": "npm run prep && vite",
     "sitemap": "node scripts/gen-sitemap.mjs",
     "build": "npm run prep && node scripts/gen-sitemap.mjs && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "finishes": "node scripts/encode-finishes.mjs"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",

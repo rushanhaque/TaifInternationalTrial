@@ -17,7 +17,7 @@
    so their URL already changes with their bytes. This is only for the paths
    that live in public/ and are referenced as plain strings. */
 
-export const V = '3'
+export const V = '4'
 
 /** Version a site-absolute public/ asset path: '/a/b.webp' -> '/a/b.webp?v=3' */
 export const asset = (path) => `${path}?v=${V}`
