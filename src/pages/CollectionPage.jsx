@@ -64,7 +64,7 @@ function PlateCard({ p, add, remove, has, setOpen }) {
           data-cursor="VIEW"
           transition="slide-product"
         >
-          {/* Studio Frame — 16/10 Landscape ratio with radial vitrine ground */}
+          {/* Studio Frame — 1:1 square ratio with radial vitrine ground */}
           <div className="pl-shot burnish">
             <div className="pl-glow" aria-hidden="true" />
             <img

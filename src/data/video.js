@@ -16,12 +16,14 @@
    Paths, not imports: these live in public/ and are served as static files
    rather than going through the bundler.                                  */
 
+import { asset } from '../lib/asset'
+
 export const LANDING_VIDEO = [
-  { src: '/video/landing.webm', type: 'video/webm' },
-  { src: '/video/landing.mp4', type: 'video/mp4' },
+  { src: asset('/video/landing.webm'), type: 'video/webm' },
+  { src: asset('/video/landing.mp4'),  type: 'video/mp4'  },
 ]
 
 export const CRAFT_VIDEO = [
-  { src: '/video/craft.webm', type: 'video/webm' },
-  { src: '/video/craft.mp4', type: 'video/mp4' },
+  { src: asset('/video/craft.webm'), type: 'video/webm' },
+  { src: asset('/video/craft.mp4'),  type: 'video/mp4'  },
 ]

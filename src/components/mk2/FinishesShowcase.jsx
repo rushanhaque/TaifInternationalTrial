@@ -65,8 +65,8 @@ const FINISHES = [
     'An electrostatic coat baked to a hard, even shell — the most weatherproof finish on the floor.'),
 ]
 
-const SPEED = 900   // must match the .fin-frame.is-on opacity transition
-const DWELL = 5000
+const SPEED = 1800  // must match the .fin-frame.is-on opacity transition
+const DWELL = 5200  // time the finished frame is held still before the next
 
 /* Ask the browser for a stage frame without mounting it, so the crossfade
    has bytes to work with by the time the visitor commits to a swatch. */
@@ -173,9 +173,6 @@ export default function FinishesShowcase() {
               </span>
               <h3 className="fin-cap-name">{shown.name}</h3>
               <p className="fin-cap-note">{shown.character}</p>
-              <ul className="fin-subs">
-                {shown.substrates.map((s) => <li key={s}>{s}</li>)}
-              </ul>
             </div>
           </div>
 
@@ -208,8 +205,11 @@ export default function FinishesShowcase() {
               >
                 <span className="fin-sw-tile">
                   <img src={f.thumb} alt="" loading="lazy" decoding="async" />
+                  {/* the name sits on the tile, so it needs its own floor to
+                      stay legible over gold as well as over patina */}
+                  <span className="fin-sw-veil" aria-hidden="true" />
+                  <span className="fin-sw-name">{f.name}</span>
                 </span>
-                <span className="fin-sw-name">{f.name}</span>
               </button>
             ))}
           </div>

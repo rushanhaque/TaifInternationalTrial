@@ -2004,8 +2004,10 @@ html.dark .header-brand-img {
   box-sizing: border-box;
 }
 
+/* square, in step with the catalogue, collection and best-seller listings —
+   the related rail is the same kind of surface as those */
 .rail-card .slab {
-  aspect-ratio: 4/3;
+  aspect-ratio: 1/1;
 }
 
 /* product hero — show the photo clean, no colour veil or sheen */

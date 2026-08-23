@@ -19,10 +19,10 @@ export default function ProductCard({ p }) {
           data-cursor="VIEW"
           transition="slide-product"
         >
-          {/* Studio Frame — 4/5 Portrait ratio with Velora vitrine ground */}
+          {/* Studio Frame — 1:1 square with Velora vitrine ground */}
           <div className="pl-shot burnish">
             <div className="pl-glow" aria-hidden="true" />
-            {/* .pl-shot already owns the 16/10 box, so the frame only
+            {/* .pl-shot already owns the square box, so the frame only
                 has to fill it — see .si--fill in styles/smart-image.css */}
             <SmartImage
               className="pl-img"

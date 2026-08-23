@@ -241,14 +241,74 @@ html.dark .pl-head-scrim {
   transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.6s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease;
 }
 
+/* ── product listing cards: a raised slab ──────────────────────────────────
+   Scoped to .pl-plate, which only the catalogue and collection grids use.
+   .pl-card on its own is also the testimonial and care panel, and those are
+   flat editorial surfaces that should keep the soft 1.25rem corner.
+
+   The depth is four stacked shadows, not one big blur: a hairline contact
+   shadow directly under the edge, then progressively wider and softer casts.
+   A single large shadow reads as a glow; the stack reads as an object with a
+   thickness sitting above the page. The two insets are the bevel — a light
+   catch along the top edge and a dark one along the bottom, which is what
+   sells the slab as having a physical edge rather than being a printed
+   rectangle. */
+.pl-plate .pl-card {
+  border-radius: 10px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.85),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.07),
+    0 1px 1px rgba(0, 0, 0, 0.05),
+    0 3px 4px -1px rgba(0, 0, 0, 0.07),
+    0 8px 14px -4px rgba(0, 0, 0, 0.09),
+    0 18px 30px -12px rgba(0, 0, 0, 0.13);
+}
+
 .pl-card:hover {
   border-color: rgba(122, 59, 29, 0.35);
+}
+
+/* lifted, with every cast in the stack pushed further out — the shadow has
+   to travel with the card or the lift looks like the card is sliding under
+   its own shadow */
+.pl-plate .pl-card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.08),
+    0 1px 1px rgba(0, 0, 0, 0.06),
+    0 5px 7px -2px rgba(0, 0, 0, 0.09),
+    0 14px 22px -6px rgba(0, 0, 0, 0.12),
+    0 30px 48px -16px rgba(0, 0, 0, 0.18);
 }
 
 html.dark .pl-card {
   background: #4A2410 !important;
   border-color: rgba(255, 255, 255, 0.12) !important;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* the same slab on the dark ground: the top bevel does more of the work here
+   and the casts go deeper, because a dark card on a dark page has no tonal
+   contrast to separate it — the edge highlight is the separation */
+html.dark .pl-plate .pl-card {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.5),
+    0 1px 2px rgba(0, 0, 0, 0.45),
+    0 4px 6px -1px rgba(0, 0, 0, 0.5),
+    0 10px 18px -4px rgba(0, 0, 0, 0.55),
+    0 24px 40px -14px rgba(0, 0, 0, 0.7) !important;
+}
+
+html.dark .pl-plate .pl-card:hover {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.55),
+    0 1px 2px rgba(0, 0, 0, 0.5),
+    0 6px 10px -2px rgba(0, 0, 0, 0.55),
+    0 18px 28px -6px rgba(0, 0, 0, 0.62),
+    0 38px 60px -18px rgba(0, 0, 0, 0.78) !important;
 }
 
 html.dark .pl-card:hover {
@@ -263,11 +323,13 @@ html.dark .pl-card:hover {
   color: inherit;
 }
 
-/* Media Frame — 16:10 Landscape Ratio */
+/* Media Frame — 1:1 square. Shared by the catalogue grid (ui/ProductCard)
+   and the collection grid (pages/CollectionPage); both are product listings
+   and both read from this one rule. */
 .pl-shot {
   position: relative;
   width: 100%;
-  aspect-ratio: 16 / 10 !important;
+  aspect-ratio: 1 / 1 !important;
   overflow: hidden;
   background: radial-gradient(120% 90% at 50% 18%, #fcfbf7 0%, #f7f4ee 46%, #e6e0d3 100%);
 }

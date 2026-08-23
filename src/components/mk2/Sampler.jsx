@@ -13,21 +13,30 @@ import { productImg } from '../../data/images'
 
    The hardcoded eleven-piece list that used to live here was invented stock —
    names and photographs of pieces that are not in the catalogue. */
-/* The signature plate occupies row 1, column 2, so the first two cards flank
+/* Nine cells, and nine is also the cap — see MAX_PIECES below.
+
+   The signature plate occupies row 1, column 2, so the first two cards flank
    it — that top row is the arrangement this section has always had. Filling
    rows 2-4 only (which an earlier version did) left the plate stranded alone
    on row 1 with a gap either side.
 
-   The ninth slot lands centred on row 4 rather than in the left corner, so a
-   full selection ends on a deliberate capstone instead of a lopsided orphan. */
+   The ninth and last slot lands centred on row 4 rather than in a corner, so
+   a full selection ends on a deliberate capstone instead of a lopsided
+   orphan. That is the reason the list stops here rather than running the row
+   out to three: cells 10 and 11 existed only to fill a row that now closes
+   itself. */
 const CELLS = [
   { row: 1, col: 1 }, { row: 1, col: 3 },                    // flanking the plate
   { row: 2, col: 1 }, { row: 2, col: 2 }, { row: 2, col: 3 },
   { row: 3, col: 1 }, { row: 3, col: 2 }, { row: 3, col: 3 },
-  { row: 4, col: 1 },                                        // left of centred tail
-  { row: 4, col: 2 },                                        // centred tail
-  { row: 4, col: 3 },                                        // right of centred tail
+  { row: 4, col: 2 },                                        // centred capstone
 ]
+
+/* Hard cap on how many selections the grid will show. /admin lets more than
+   nine slugs be saved; anything past the ninth is dropped here rather than
+   wrapping back onto an occupied cell, which is what `% CELLS.length` in
+   layoutFor would otherwise do — two cards stacked on one square. */
+const MAX_PIECES = CELLS.length
 
 function layoutFor(index) {
   const { row, col } = CELLS[index % CELLS.length]
@@ -84,6 +93,7 @@ export default function Sampler() {
   const pieces = (bestSellers || [])
     .map((slug) => products.find((pr) => pr.slug === slug))
     .filter(Boolean)
+    .slice(0, MAX_PIECES)
   const signature = pieces[0]
 
   /* Clicking the signature plate runs the whole transition for you: it scrolls
