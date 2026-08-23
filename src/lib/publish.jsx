@@ -85,8 +85,30 @@ export async function publishSnapshot(snapshot) {
   })
 
   if (!res.ok) {
-    let msg = res.statusText
-    try { msg = (await res.json()).error || msg } catch { /* use statusText */ }
+    /* NEVER let this throw an empty message.
+       `res.statusText` is not a usable fallback in production: HTTP/2 removed
+       the reason phrase entirely, so on Vercel it is ALWAYS ''. Pair that
+       with an error body that is not JSON — which is exactly what the
+       platform returns for an oversized request — and `msg` stayed '',
+       Error('') reached the admin, and the toast rendered as a 34px red pill
+       with no text in it. Unreadable, and it named the one failure the admin
+       most needs to understand. */
+    let msg = ''
+    let body = ''
+    try { body = await res.text() } catch { /* body already consumed or gone */ }
+    if (body) {
+      try { msg = JSON.parse(body).error || '' } catch { /* not JSON */ }
+    }
+
+    if (!msg) {
+      /* The payload is the usual culprit: images are stored as base64 data
+         URLs inside the snapshot, so a few large uploads push the request
+         past the serverless body limit. Say so, and say what to do. */
+      const mb = (new Blob([JSON.stringify(payload)]).size / 1024 / 1024).toFixed(1)
+      msg = res.status === 413 || res.status === 507
+        ? `Too large to publish — the content is ${mb} MB and the server limit is about 4.5 MB. Re-upload the newest images (they compress on upload), or replace a few with pasted URLs, then publish again.`
+        : `Publish failed — the server answered ${res.status}${res.statusText ? ` ${res.statusText}` : ''}. The content is ${mb} MB. Nothing was published; your edits are still here.`
+    }
     throw new Error(msg)
   }
 }

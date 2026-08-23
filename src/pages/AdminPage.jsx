@@ -965,15 +965,26 @@ export default function AdminPage() {
       setDirty(false)
       notify('Published. The site will update once the deploy finishes (usually 1–3 min).')
     } catch (err) {
-      notify(err.message, true)
+      /* belt and braces: a blank message renders a toast with nothing in it,
+         which is a red pill the size of its own padding and tells the admin
+         nothing at all */
+      notify(err?.message || 'Publish failed. Nothing was sent; your edits are still here.', true)
     } finally {
       setPublishing(false)
     }
   }
 
+  /* 3.6s is right for "Saved." and much too short for a failure: the publish
+     errors run to a couple of sentences of instructions, which is past ten
+     seconds of reading. Warnings therefore hold roughly twice as long, and
+     scale with how much there is to read. */
   useEffect(() => {
     if (!toast) return
-    const t = setTimeout(() => setToast(null), 3600)
+    const words = String(toast.msg || '').trim().split(/\s+/).length
+    const ms = toast.warn
+      ? Math.min(16000, Math.max(7000, words * 380))
+      : 3600
+    const t = setTimeout(() => setToast(null), ms)
     return () => clearTimeout(t)
   }, [toast])
 
