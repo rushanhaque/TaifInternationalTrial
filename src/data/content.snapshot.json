@@ -213,24 +213,6 @@
       "id": 10
     },
     {
-      "name": "hsjs",
-      "category": "Religious Supplies",
-      "subcategory": "Ornaments",
-      "slug": "hsjs",
-      "material": "",
-      "dims": "",
-      "weight": "",
-      "moq": "",
-      "lead": "",
-      "image": "/img/content/3c5868ec481d67ee.jpg",
-      "story": "",
-      "tone": "brass",
-      "finishes": [],
-      "rail": false,
-      "imageThumb": "/img/content/f082262eb47e0cf1.jpg",
-      "id": 11
-    },
-    {
       "name": "nsnsns",
       "category": "Religious Supplies",
       "subcategory": "Ornaments",
