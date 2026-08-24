@@ -247,6 +247,26 @@
       "rail": false,
       "imageThumb": "/img/content/77ae1fae8614c166.jpg",
       "id": 12
+    },
+    {
+      "name": "bsnsbsbs",
+      "category": "Religious Supplies",
+      "subcategory": "Ornaments",
+      "slug": "bsnsbsbs",
+      "material": "nns",
+      "dims": "",
+      "weight": "",
+      "moq": "",
+      "lead": "",
+      "image": "/img/content/c7bd6280f2a93c19.jpg",
+      "story": "nsjsjs",
+      "tone": "brass",
+      "finishes": [
+        "nsnsnns"
+      ],
+      "rail": false,
+      "imageThumb": "/img/content/d0a4c33b691cf328.jpg",
+      "id": 13
     }
   ],
   "subcategories": {
