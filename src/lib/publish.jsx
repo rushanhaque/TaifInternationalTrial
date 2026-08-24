@@ -134,6 +134,13 @@ export async function publishSnapshot(snapshot) {
   const stats = { uploaded: 0, failed: 0, skipped: 0 }
   const payload = await externaliseImages(snapshot, new Map(), stats)
 
+  /* When this content became the published truth. Every browser compares it
+     against the savedAt on its own localStorage edits and throws those away
+     once this is newer — see superseded() in src/lib/content.jsx. Without it
+     a browser that ever used /admin keeps overriding this snapshot forever
+     and shows a different site from every other browser. */
+  payload.publishedAt = new Date().toISOString()
+
   const res = await fetch('/api/publish', {
     method: 'POST',
     headers: {

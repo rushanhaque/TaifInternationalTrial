@@ -76,10 +76,38 @@ function merge(saved) {
   return ensureIds(layer(out, saved))
 }
 
+/* ── has a publish overtaken this browser's local edits? ───────────────────
+   Layer 3 beating layer 2 is what makes preview-before-publish work, but
+   nothing ever expired it. A browser that opened /admin once and touched
+   anything kept that section in localStorage forever, and because layer()
+   copies WHOLE top-level sections, every later publish was silently
+   overridden in that browser alone. That is why Edge, Safari and Chrome each
+   showed a different site while incognito — with no localStorage — showed the
+   real published one.
+
+   Local edits now only outrank the snapshot while they are NEWER than it.
+   Once a publish lands they have been incorporated by definition, so they are
+   dropped. Edits written before this stamp existed carry no savedAt and count
+   as older than any publish, which is what clears the stale state already
+   sitting in browsers today. */
+function superseded(saved) {
+  const published = Date.parse(PUBLISHED?.publishedAt ?? '')
+  if (!published) return false /* snapshot predates the stamp — keep old behaviour */
+  return (Number(saved?.savedAt) || 0) < published
+}
+
 function read() {
   if (typeof localStorage === 'undefined') return merge(null)
   try {
-    return merge(JSON.parse(localStorage.getItem(KEY)))
+    const saved = JSON.parse(localStorage.getItem(KEY))
+    if (superseded(saved)) {
+      /* Remove it, not just ignore it: left in place it would be re-read and
+         re-compared on every load, and would win again the moment a future
+         snapshot shipped without a stamp. */
+      try { localStorage.removeItem(KEY) } catch { /* nothing to remove */ }
+      return merge(null)
+    }
+    return merge(saved)
   } catch {
     /* corrupt or unparseable — fall back to shipped content rather than
        leaving the whole site blank */
@@ -98,7 +126,10 @@ const emit = () => { for (const fn of listeners) fn() }
 function persist(next) {
   snapshot = next
   try {
-    localStorage.setItem(KEY, JSON.stringify(next))
+    /* savedAt is what superseded() compares against the snapshot's
+       publishedAt. It is not a content section, so layer() never copies it
+       into the merged store and it cannot reach the rendered site. */
+    localStorage.setItem(KEY, JSON.stringify({ ...next, savedAt: Date.now() }))
   } catch {
     /* quota — most likely a base64 image too large to store. The in-memory
        snapshot still updates so the UI stays truthful for this session; the
