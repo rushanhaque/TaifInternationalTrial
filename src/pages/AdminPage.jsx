@@ -4,7 +4,7 @@ import { SOCIAL_PLATFORMS, BEST_SELLER_SLOTS } from '../data/defaults'
 import {
   useContent, getContent, setSection, nextId,
 } from '../lib/content'
-import { publishSnapshot } from '../lib/publish'
+import { publishSnapshot, deploymentStatus, awaitDeploy } from '../lib/publish'
 import { processImage, reprocessDataUrl, humanBytes, supportsWebp } from '../lib/image'
 import { getLenis } from '../lib/useLenis'
 import '../styles/admin.css'
@@ -952,24 +952,52 @@ export default function AdminPage() {
   const [toast, setToast] = useState(null)
   const [dirty, setDirty] = useState(false)
   const [publishing, setPublishing] = useState(false)
+  /* publishing covers the whole button-disabled window; deploying is its
+     second half, when the commit is in and we are watching for the rebuild.
+     Separate so the button can say which of the two is happening. */
+  const [deploying, setDeploying] = useState(false)
   const content = useContent()
 
-  const notify = (msg, warn = false) => setToast({ msg, warn })
+  const notify = (msg, warn = false, sticky = false) => setToast({ msg, warn, sticky })
   const markDirty = () => setDirty(true)
 
   const publish = async () => {
     if (!window.confirm('Publish your edits to the live site?\n\nEvery visitor will see these changes once the deploy finishes (usually 1–3 min).')) return
     setPublishing(true)
     try {
+      /* Read the running deployment BEFORE committing, so there is something
+         to compare against afterwards. If /api/status cannot be reached this
+         is null and awaitDeploy reports 'unknown' rather than guessing. */
+      const before = (await deploymentStatus())?.deployment?.deployedCommit ?? null
+
       await publishSnapshot(getContent())
       setDirty(false)
-      notify('Published. The site will update once the deploy finishes (usually 1–3 min).')
+      /* The commit is in GitHub from here on. Everything below only reports
+         on whether the DEPLOY landed - it can never undo the publish. */
+      setDeploying(true)
+      notify('Published to GitHub. Waiting for the deploy to go live...', false, true)
+
+      const result = await awaitDeploy(before)
+      if (result === 'live') {
+        notify('Live. Every visitor now sees these changes.')
+      } else if (result === 'timeout') {
+        notify(
+          'Published to GitHub, but the live site has not rebuilt yet. It may still be building - reload /admin in a minute. If it stays behind, the Vercel build has failed: open the Vercel dashboard and read the build log.',
+          true,
+        )
+      } else {
+        notify(
+          'Published to GitHub. The deploy could not be confirmed from here, so check the live site in a private window before telling anyone it is up.',
+          true,
+        )
+      }
     } catch (err) {
       /* belt and braces: a blank message renders a toast with nothing in it,
          which is a red pill the size of its own padding and tells the admin
          nothing at all */
       notify(err?.message || 'Publish failed. Nothing was sent; your edits are still here.', true)
     } finally {
+      setDeploying(false)
       setPublishing(false)
     }
   }
@@ -980,6 +1008,9 @@ export default function AdminPage() {
      scale with how much there is to read. */
   useEffect(() => {
     if (!toast) return
+    /* the "waiting for the deploy" toast has to outlive any timer - it is
+       replaced by the outcome, never dismissed on its own */
+    if (toast.sticky) return
     const words = String(toast.msg || '').trim().split(/\s+/).length
     const ms = toast.warn
       ? Math.min(16000, Math.max(7000, words * 380))
@@ -1059,8 +1090,8 @@ export default function AdminPage() {
               </svg>
             </span>
             <span className="ad-publish-text">
-              <strong>{publishing ? 'Publishing…' : 'Save & publish'}</strong>
-              <em>{publishing ? 'Pushing changes live' : 'Push edits live'}</em>
+              <strong>{publishing ? (deploying ? 'Deploying…' : 'Publishing…') : 'Save & publish'}</strong>
+              <em>{publishing ? (deploying ? 'Waiting for the rebuild' : 'Pushing changes live') : 'Push edits live'}</em>
             </span>
           </button>
         </div>
@@ -1088,7 +1119,7 @@ export default function AdminPage() {
             strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="M12 19V5" /><path d="m5 12 7-7 7 7" />
           </svg>
-          {publishing ? 'Publishing…' : 'Save & publish'}
+          {publishing ? (deploying ? 'Deploying…' : 'Publishing…') : 'Save & publish'}
         </button>
       )}
     </div>

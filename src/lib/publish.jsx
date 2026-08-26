@@ -195,3 +195,74 @@ export function setConfig() {}
 export async function verifyAccess() {
   return { ok: true, fullName: 'configured on server' }
 }
+
+/* ── did the publish actually reach the live site? ─────────────────────────
+   THE HOLE THIS FILLS
+
+   publishSnapshot() resolves as soon as GitHub accepts the commit, and the
+   admin was told "the site will update once the deploy finishes". Nothing
+   ever checked that it did. If the Vercel build fails, the production alias
+   silently stays on the PREVIOUS deployment: GitHub has the new content, the
+   admin has been told it published, and the live site has not moved.
+
+   That failure is invisible from the one browser most likely to look at it.
+   The admin's own localStorage still holds the edits they just made (layer 3
+   in src/lib/content.jsx), so /admin and the public pages both look correct
+   to them. Every other visitor — including a private window on any device,
+   which has no localStorage to be misled by — keeps seeing the old build.
+   "It looks fine on my machine and wrong on my client's" is the exact shape
+   of this bug, and it can persist for days because nothing reports it.
+
+   So after publishing we watch until the deployment actually catches up, and
+   say so either way. /api/status compares the running deployment's commit
+   with the branch head; see api/status.js.
+
+   NEVER THROWS. This is a report on a publish that has already succeeded —
+   the commit is in GitHub whatever happens here. A network blip while
+   polling must not be presented to the admin as a failed publish. */
+
+const STATUS_URL = '/api/status'
+
+/** One reading of the live deployment, or null if it cannot be established. */
+export async function deploymentStatus() {
+  try {
+    const res = await fetch(`${STATUS_URL}?t=${Date.now()}`, { cache: 'no-store' })
+    if (!res.ok) return null
+    const data = await res.json()
+    return data && typeof data === 'object' && data.deployment ? data : null
+  } catch {
+    return null
+  }
+}
+
+/**
+ * Wait for the live deployment to move past `before` (a commit id from
+ * deploymentStatus(), or null if it could not be read).
+ *
+ * Resolves to one of:
+ *   'live'      — the deployment rebuilt and matches the branch head
+ *   'timeout'   — GitHub has the commit; the deploy has not landed in time
+ *   'unknown'   — /api/status could not be reached, so nothing was verified
+ */
+export async function awaitDeploy(before, { timeoutMs = 240000, intervalMs = 8000, onTick } = {}) {
+  const deadline = Date.now() + timeoutMs
+  let sawStatus = false
+
+  while (Date.now() < deadline) {
+    const s = await deploymentStatus()
+    if (s) {
+      sawStatus = true
+      const now = s.deployment.deployedCommit
+      /* Both conditions matter. `inSync` alone can be true for a moment
+         before the new commit is picked up — the deployment matches a head
+         that has not moved yet — and a changed commit alone can be a
+         different push landing ahead of ours. Together they mean the site
+         rebuilt and is at the branch head. */
+      if (s.inSync === true && now && now !== before) return 'live'
+      onTick?.(s)
+    }
+    await new Promise((r) => setTimeout(r, intervalMs))
+  }
+
+  return sawStatus ? 'timeout' : 'unknown'
+}
