@@ -766,3 +766,68 @@ html.dark .pl-subcat-btn.is-active {
     text-wrap: balance;
   }
 }
+
+/* ── phone: two plates to a row ────────────────────────────────────────────
+   A single full-width plate per row meant roughly one product per screen —
+   a nine-piece family took nine swipes to scan, and a listing you cannot
+   compare is not really a listing. Two up makes the family readable at a
+   glance, which is the whole job of this page.
+
+   SCOPED TO .pl-grid-wrap ON PURPOSE. .pl-grid is also the /catalogue grid
+   (see CataloguePage.jsx), and only the collection page is wrapped in
+   .pl-grid-wrap. Widening the selector would silently re-lay-out the
+   catalogue too.
+
+   INSIDE max-width, ALSO ON PURPOSE. `.pl-grid-wrap .pl-grid` outweighs the
+   plain `.pl-grid` that the 580px and 1380px rules use, so an unguarded
+   version of this would win at every width and pin the desktop grid to two
+   columns. Bounded here, it can only touch the band below the first
+   breakpoint, where the grid was one column. Tablet stays at 2, desktop
+   stays at 4.
+
+   The card shrinks with the column: at two up a plate is ~150px wide on a
+   360px phone, and the caption and corner marks have to come down with it or
+   the type crowds the frame. The add/remove toggle keeps the 42px touch
+   target mobile-polish.css gives it — only its insets tighten, because the
+   card getting smaller is not a reason to make a control harder to hit. */
+@media (max-width: 579.98px) {
+  .pl-grid-wrap .pl-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+
+  /* a smaller slab wants a tighter corner — 10px on a 150px card reads as a
+     blob rather than a radius */
+  .pl-grid-wrap .pl-plate .pl-card {
+    border-radius: 8px;
+  }
+
+  .pl-grid-wrap .pl-say {
+    padding: 0.55rem 0.65rem 0.7rem;
+  }
+
+  /* the clamp's floor is 1.05rem, which is a two-line title at this width.
+     Fixed, not clamped: there is no viewport range left to interpolate. */
+  .pl-grid-wrap .pl-name {
+    font-size: 0.9rem;
+    line-height: 1.25;
+  }
+
+  .pl-grid-wrap .pl-mat {
+    margin-top: 0.3rem;
+    font-size: 0.58rem;
+    letter-spacing: 0.14em;
+  }
+
+  .pl-grid-wrap .pl-ref-tag {
+    top: 0.6rem;
+    left: 0.65rem;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+  }
+
+  .pl-grid-wrap .pl-toggle-btn {
+    top: 0.5rem;
+    right: 0.5rem;
+  }
+}
