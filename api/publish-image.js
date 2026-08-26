@@ -36,6 +36,12 @@ function ghHeaders(token) {
     Accept: 'application/vnd.github+json',
     'X-GitHub-Api-Version': '2022-11-28',
     'Content-Type': 'application/json',
+    /* The read below fetches the file's current blob SHA, and that SHA is
+       what the write is checked against. GitHub serves the REST API through
+       its own CDN, so a cached response here means committing against a SHA
+       that is no longer current — GitHub rejects it as a 409 conflict and the
+       publish fails for no reason the admin can see. Ask for a fresh one. */
+    'Cache-Control': 'no-cache',
   }
 }
 

@@ -1,6 +1,7 @@
 import { createRoot } from 'react-dom/client'
 import { initLenis } from './lib/useLenis'
 import { startPointer } from './lib/usePointer'
+import { watchForNewBuild } from './lib/freshness'
 import App from './App'
 import './styles/tokens.css'
 import './styles/global.css'
@@ -24,6 +25,10 @@ import './styles/mobile-motion.css'
 import './styles/scene-motion.css'
 /* the mitre — the one page transition */
 import './styles/page-transition.css'
+
+/* before anything else paints: a browser holding a stale document should
+   find that out and reload rather than render a months-old site */
+watchForNewBuild()
 
 initLenis()
 startPointer()

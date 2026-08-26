@@ -6,7 +6,13 @@ import { DEFAULTS } from '../data/defaults'
    file under /img/content/ and replaced by its path, so the pictures stop
    being megabytes of base64 inside this bundle. See that script's header.
    The file is gitignored; `npm run dev` and `npm run build` both write it. */
-import PUBLISHED from '../data/content.snapshot.built.json'
+import BAKED from '../data/content.snapshot.built.json'
+
+/* The baked snapshot is the value at BUILD time. `published` is the value in
+   force RIGHT NOW: it starts as the baked one so the first paint needs no
+   network, and refreshPublishedContent() below may replace it with a newer
+   one fetched from /published-content.json. See that function for why. */
+let published = BAKED
 
 /* ============ editable-content store ============
    One module-level store the admin writes and every public page reads, so an
@@ -72,7 +78,7 @@ function layer(out, source) {
 }
 
 function merge(saved) {
-  const out = layer(clone(DEFAULTS), PUBLISHED)
+  const out = layer(clone(DEFAULTS), published)
   return ensureIds(layer(out, saved))
 }
 
@@ -91,9 +97,9 @@ function merge(saved) {
    as older than any publish, which is what clears the stale state already
    sitting in browsers today. */
 function superseded(saved) {
-  const published = Date.parse(PUBLISHED?.publishedAt ?? '')
-  if (!published) return false /* snapshot predates the stamp — keep old behaviour */
-  return (Number(saved?.savedAt) || 0) < published
+  const stamp = Date.parse(published?.publishedAt ?? '')
+  if (!stamp) return false /* snapshot predates the stamp — keep old behaviour */
+  return (Number(saved?.savedAt) || 0) < stamp
 }
 
 function read() {
@@ -242,3 +248,57 @@ export function importContent(file) {
 
 /** Next free integer id for a list whose items carry numeric ids. */
 export const nextId = (list) => (list.length ? Math.max(...list.map((i) => Number(i.id) || 0)) + 1 : 1)
+
+/* ── refresh the published layer without a new bundle ──────────────────────
+   WHY THIS EXISTS
+
+   Until now the published content was reachable only by importing it, which
+   means it was compiled into a content-hashed JS chunk. That ties one thing
+   that changes several times a day (what the client wrote in /admin) to one
+   thing that must be cached hard to keep the site fast (the JS bundle), and
+   makes the content only as fresh as the oldest cache between the visitor and
+   Vercel — a browser cache, a corporate proxy, or a CDN sitting in front of
+   the domain. A visitor whose HTML came out of such a cache is handed the old
+   chunk hash and therefore the old content, and nothing on the page can tell.
+
+   The same snapshot is now ALSO written to /published-content.json at build
+   (see vite.config.js) and served no-store. Fetching it costs one small
+   request and cannot be answered from a cache, so the content on screen stops
+   depending on how the shell around it was delivered.
+
+   It only ever moves FORWARD. A response is applied when its publishedAt is
+   strictly newer than what is already in force, so a stale copy, a 404 on an
+   older deployment, or a truncated body all leave the baked content alone.
+   That also makes the call safe to repeat. */
+export async function refreshPublishedContent() {
+  try {
+    const res = await fetch(`/published-content.json?t=${Date.now()}`, {
+      cache: 'no-store',
+      credentials: 'omit',
+    })
+    if (!res.ok) return false
+
+    const next = await res.json()
+    if (!next || typeof next !== 'object' || Array.isArray(next)) return false
+
+    /* Same guard api/publish.js applies before committing: a body carrying no
+       recognisable section is not a snapshot, and replacing the live content
+       with it would blank the site. */
+    if (!Object.keys(DEFAULTS).some((k) => next[k] !== undefined)) return false
+
+    const incoming = Date.parse(next.publishedAt ?? '')
+    const current = Date.parse(published?.publishedAt ?? '')
+    if (!incoming || (current && incoming <= current)) return false
+
+    published = next
+    /* re-run the whole three-layer merge, so this browser's own unpublished
+       edits are re-compared against the newer stamp and dropped if the
+       publish has overtaken them — exactly as on a cold load */
+    snapshot = read()
+    emit()
+    return true
+  } catch {
+    /* offline, or `vite dev` where the file is not emitted — not an error */
+    return false
+  }
+}

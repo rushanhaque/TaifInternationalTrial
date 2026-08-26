@@ -9,19 +9,23 @@
   to = "/index.html"
   status = 200
 
-[[headers]]
-  for = "/assets/*"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
+# ORDER MATTERS BELOW. Netlify applies every rule whose path matches and, for
+# a header named twice, the LAST matching rule wins. Netlify's `for` takes
+# globs, not the negative lookaheads vercel.json uses, so the only way to say
+# "documents are uncacheable, files under /assets are not" is to say the broad
+# thing first and let the narrow rules below overwrite it. Moving a block up
+# or down changes what ships.
 
-[[headers]]
-  for = "/"
-  [headers.values]
-    Cache-Control = "public, max-age=0, must-revalidate"
-
+# Every path, including the SPA fallback's index.html for /collections/decor
+# and friends. Deliberately no-store, not must-revalidate: a browser that is
+# already holding an old document is the whole problem, and only "never keep
+# this" is safe against an intermediary that treats a stale entry as fresh.
+# src/lib/freshness.js is the second line of defence for clients this never
+# reaches.
 [[headers]]
   for = "/*"
   [headers.values]
+    Cache-Control = "no-store, must-revalidate"
     X-Content-Type-Options = "nosniff"
     X-Frame-Options = "SAMEORIGIN"
     Referrer-Policy = "strict-origin-when-cross-origin"
@@ -29,3 +33,34 @@
     # same commit passes a security-header scan on Vercel and fails on Netlify,
     # with no code difference to explain why.
     Permissions-Policy = "camera=(), microphone=(), geolocation=(), browsing-topics=()"
+
+# Content-hashed by Vite — the filename changes when the bytes change, so the
+# old URL never needs to be re-fetched.
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Not hashed: these are checked into public/ under stable names, so a
+# replacement reuses the URL and must be allowed to expire.
+[[headers]]
+  for = "/img/*"
+  [headers.values]
+    Cache-Control = "public, max-age=3600, stale-while-revalidate=604800"
+
+# ...except uploads from /admin, which ARE content-hashed (see
+# scripts/extract-content-images.mjs). After /img/*, so it wins there.
+[[headers]]
+  for = "/img/content/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/media/*"
+  [headers.values]
+    Cache-Control = "public, max-age=3600, stale-while-revalidate=604800"
+
+[[headers]]
+  for = "/video/*"
+  [headers.values]
+    Cache-Control = "public, max-age=3600, stale-while-revalidate=604800"
