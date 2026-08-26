@@ -26,7 +26,12 @@ export const BRAND = {
      og:url and structured-data URL derives from this. Leave it empty and the
      site canonicalises to whatever origin is serving it, which is what you
      want on a preview deploy and NOT what you want in production. */
-  url: 'https://taifinternational.com',
+  /* The live site is taifinternational.co, and the apex 308-redirects to
+     www — so www IS the canonical origin. It was set to taifinternational.com
+     for months: a DIFFERENT domain, now parked on an "expired" page. Every
+     canonical, og:url and sitemap entry pointed search engines and shares at
+     it. Do not "correct" the www away without checking the redirect first. */
+  url: 'https://www.taifinternational.co',
 }
 
 export const NAV_LINKS = [

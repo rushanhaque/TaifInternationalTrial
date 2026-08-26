@@ -10,7 +10,7 @@ import { dirname, join } from 'node:path'
 const here = dirname(fileURLToPath(import.meta.url))
 const root = join(here, '..')
 
-const ORIGIN = process.env.SITE_ORIGIN || 'https://taifinternational.com'
+const ORIGIN = process.env.SITE_ORIGIN || 'https://www.taifinternational.co'
 
 /* ── which products actually exist ────────────────────────────────────────
    NOT src/data/catalogue.js. That file is the shipped *default* list, and
