@@ -300,6 +300,26 @@
       "finishes": [],
       "rail": false,
       "id": 16
+    },
+    {
+      "name": "nsjsbsjs",
+      "category": "Gifting",
+      "subcategory": "Hamper",
+      "slug": "nsjsbsjs",
+      "material": "nsjsns",
+      "dims": "",
+      "weight": "",
+      "moq": "",
+      "lead": "",
+      "image": "/img/content/1b8aac61571c2c32.jpg",
+      "story": "bsnsns",
+      "tone": "brass",
+      "finishes": [
+        "nsnsns"
+      ],
+      "rail": false,
+      "imageThumb": "/img/content/1ecb589d8bff4ed5.jpg",
+      "id": 17
     }
   ],
   "subcategories": {
@@ -554,5 +574,5 @@
       "text": "Export ready · Moradabad, India"
     }
   ],
-  "publishedAt": "2026-08-24T10:34:23.886Z"
+  "publishedAt": "2026-08-26T11:05:25.169Z"
 }
