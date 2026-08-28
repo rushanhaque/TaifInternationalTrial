@@ -320,6 +320,49 @@
       "rail": false,
       "imageThumb": "/img/content/1ecb589d8bff4ed5.jpg",
       "id": 17
+    },
+    {
+      "name": "bdjdbs",
+      "category": "Wooden Products",
+      "subcategory": "",
+      "slug": "bdjdbs",
+      "material": "",
+      "dims": "",
+      "weight": "",
+      "moq": "",
+      "lead": "",
+      "image": "",
+      "story": "",
+      "tone": "brass",
+      "finishes": [],
+      "rail": false,
+      "id": 18
+    },
+    {
+      "name": "hejshs",
+      "category": "Home Decor",
+      "subcategory": "Console tables",
+      "slug": "hejshs",
+      "material": "hsjs",
+      "dims": "",
+      "weight": "",
+      "moq": "",
+      "lead": "",
+      "image": "/img/content/a19e46dc37b52169.jpg",
+      "image2": "/img/content/74588ff17ba674f4.jpg",
+      "image3": "/img/content/95f0546551ffc45d.jpg",
+      "image4": "/img/content/3794c927af043ac2.jpg",
+      "story": "nsnsns",
+      "tone": "brass",
+      "finishes": [
+        "bshshs"
+      ],
+      "rail": false,
+      "imageThumb": "/img/content/20ce0d26f2b54982.jpg",
+      "image2Thumb": "/img/content/27083e1316a51398.jpg",
+      "image3Thumb": "/img/content/9e2c4ae699e4469a.jpg",
+      "image4Thumb": "/img/content/311dbbc43e03d08d.jpg",
+      "id": 19
     }
   ],
   "subcategories": {
@@ -574,5 +617,5 @@
       "text": "Export ready · Moradabad, India"
     }
   ],
-  "publishedAt": "2026-08-26T11:07:02.055Z"
+  "publishedAt": "2026-08-28T19:07:32.083Z"
 }
