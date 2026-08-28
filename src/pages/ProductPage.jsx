@@ -51,9 +51,6 @@ export default function ProductPage({ params }) {
             <CharCascade as="h1" className="d1">{p.name}</CharCascade>
             <Dilate>
               <p className="lede" style={{ marginTop: '1rem' }}>{p.story}</p>
-              {/* the other views of the piece, set in the same rhythm as the
-                  spec list directly below them */}
-              <GalleryViews api={gallery} />
               <dl className="spec-list">
                 {specs.map(([k, v]) => (
                   <div key={k} className="spec-row">
@@ -90,6 +87,8 @@ export default function ProductPage({ params }) {
                   Request a quote
                 </Button>
               </div>
+              {/* small square preview cards, below all product info */}
+              <GalleryViews api={gallery} />
             </Dilate>
           </div>
         </div>

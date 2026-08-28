@@ -3135,6 +3135,19 @@ html.dark .btn.ghost * {
     grid-column: 1 / -1;
   }
 
+  .foot-contact-cell {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .foot-contact-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
   .foot-brand-cell {
     align-items: center;
     text-align: center;

@@ -47,6 +47,7 @@
 
 /* ============ product ============ */
 .prod-hero-slab { border-radius: var(--r-sm) !important; width: 100%; }
+.page-hero .prod-info { display: flex; flex-direction: column; }
 .page-hero .prod-info .lede { max-width: 40ch; margin-left: 0; }
 .spec-list { margin-block: 1.4rem; border-top: 3px solid var(--chrome-2); }
 .spec-row {

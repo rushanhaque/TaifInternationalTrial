@@ -213,9 +213,9 @@ export function useProductGallery(product) {
    page rather than a widget dropped on top of it, and it halves the distance
    the hand travels between one photograph and the next.                     */
 const Chevron = ({ back }) => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-    strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-    <path d={back ? 'M14.5 5.5 8 12l6.5 6.5' : 'M9.5 5.5 16 12l-6.5 6.5'} />
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d={back ? 'M15 5 8.5 12 15 19' : 'M9 5 15.5 12 9 19'} />
   </svg>
 )
 
@@ -279,27 +279,26 @@ export function GalleryStage({ api, tone = 'brass', ratio = '7/5' }) {
         </div>
 
         {many && (
-          <div className="pg-nav">
+          <>
             <button
               type="button"
-              className="pg-nav-btn"
+              className="pg-arrow pg-arrow--prev"
               onClick={() => step(-1)}
               disabled={index === 0}
               aria-label="Previous photograph"
             >
               <Chevron back />
             </button>
-            <span className="pg-nav-split" aria-hidden="true" />
             <button
               type="button"
-              className="pg-nav-btn"
+              className="pg-arrow pg-arrow--next"
               onClick={() => step(1)}
               disabled={index === total - 1}
               aria-label="Next photograph"
             >
               <Chevron />
             </button>
-          </div>
+          </>
         )}
       </div>
     </div>
