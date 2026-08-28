@@ -74,3 +74,35 @@ export const productPlate = (slug) => pic(`taif-${slug}`, 1400, 880)
 
 /* the ground image behind a family masthead */
 export const familyPlate = (family) => pic(`taif-family-${family}`, 1600, 900)
+
+/* ── the four photographs a product may carry ──────────────────────────────
+   `image` is the main one and is what every grid, rail, card and cart row on
+   the site reads; `image2`–`image4` are extra angles that appear ONLY in the
+   slider on the product page. Four flat keys rather than a nested array is
+   deliberate: it is the shape the admin's existing image field, its upload
+   pipeline, the build-time extractor and the publisher already understand, so
+   the new photographs travel through all four without a line of new plumbing.
+
+   Each key has a `…Thumb` companion written by src/lib/image.js.
+
+   A product with one photograph yields one shot and therefore renders exactly
+   as it did before this existed — no arrows, no strip, no extra bytes. */
+export const PRODUCT_IMAGE_KEYS = ['image', 'image2', 'image3', 'image4']
+
+export function productShots(p) {
+  if (!p) return []
+  const out = []
+  /* the same file pasted into two slots is one photograph, and showing it
+     twice would read as a bug rather than a gallery */
+  const seen = new Set()
+  for (const key of PRODUCT_IMAGE_KEYS) {
+    const src = typeof p[key] === 'string' ? p[key].trim() : ''
+    if (!src || seen.has(src)) continue
+    seen.add(src)
+    out.push({ key, src, thumb: p[`${key}Thumb`] || '' })
+  }
+  /* nothing uploaded yet — the placeholder keeps the page whole, exactly as
+     `p.image || productImg(p.slug)` did at every call site before this */
+  if (!out.length) out.push({ key: 'image', src: productImg(p.slug), thumb: '' })
+  return out
+}

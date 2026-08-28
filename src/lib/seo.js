@@ -1,4 +1,5 @@
 import { BRAND } from '../data/site'
+import { PRODUCT_IMAGE_KEYS } from '../data/images'
 
 /* ── ROUTE METADATA ─────────────────────────────────────────────────────────
    The router used to update document.title and the description and nothing
@@ -123,9 +124,38 @@ export function applyMeta({ title, description, path, canonical, index = true, j
    drift from what the page actually says. Only facts we hold are emitted —
    no invented ratings, prices or availability. */
 
+/* Absolute URLs for the photographs a product carries, for the `image` field
+   of its structured data. Google will use up to about half a dozen, and a
+   piece shot from four angles is exactly what it wants.
+
+   Only real, fetchable URLs go in. A data: URL — which is what an image looks
+   like between an upload and the publish that files it — would be tens of
+   kilobytes of base64 inside a <script> tag in the head of every product
+   page, for a crawler that cannot follow it anyway.
+
+   The stored keys are read directly rather than through productShots(),
+   because that helper substitutes a placeholder photograph for a product
+   that has none — right for a page that must not render a hole, wrong for
+   structured data, where it would publish a stock image as a picture of a
+   piece we make. */
+function productImageUrls(p) {
+  const u = origin()
+  const out = []
+  const seen = new Set()
+  for (const key of PRODUCT_IMAGE_KEYS) {
+    const src = typeof p?.[key] === 'string' ? p[key].trim() : ''
+    if (!src || seen.has(src)) continue
+    seen.add(src)
+    if (src.startsWith('/')) out.push(`${u}${src}`)
+    else if (/^https?:\/\//i.test(src)) out.push(src)
+  }
+  return out
+}
+
 export function productLd(p) {
   if (!p) return null
   const u = origin()
+  const images = productImageUrls(p)
   return {
     '@context': 'https://schema.org',
     '@type': 'Product',
@@ -135,6 +165,7 @@ export function productLd(p) {
     material: p.material,
     sku: p.slug,
     url: `${u}/catalogue/${p.slug}`,
+    ...(images.length ? { image: images } : {}),
     ...(p.weight
       ? { weight: { '@type': 'QuantitativeValue', value: parseFloat(p.weight) || undefined, unitCode: 'KGM' } }
       : {}),

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { CATEGORIES } from '../data/catalogue'
+import { PRODUCT_IMAGE_KEYS } from '../data/images'
 import { SOCIAL_PLATFORMS, BEST_SELLER_SLOTS } from '../data/defaults'
 import {
   useContent, getContent, setSection, nextId,
@@ -64,11 +65,42 @@ const SECTIONS = [
     blurb: 'The catalogue behind every collection page and product page. Deleting a piece also removes it from its collection.',
     singular: 'product',
     rowTitle: (p) => p.name,
-    rowSub: (p) => [p.category, p.subcategory, p.moq ? `MOQ ${p.moq}` : ''].filter(Boolean).join(' · '),
+    rowSub: (p) => {
+      const shots = PRODUCT_IMAGE_KEYS.filter((k) => p[k]).length
+      return [
+        p.category,
+        p.subcategory,
+        p.moq ? `MOQ ${p.moq}` : '',
+        /* how many of the four slots are filled, so a product still short of
+           its gallery is visible from the list rather than only from inside
+           the form */
+        shots > 1 ? `${shots} photos` : '',
+      ].filter(Boolean).join(' · ')
+    },
     rowImg: (p) => p.imageThumb || p.image,
-    blank: { name: '', category: CATEGORIES[0], subcategory: '', slug: '', material: '', dims: '', weight: '', moq: '', lead: '', image: '', story: '', tone: 'brass', finishes: [], rail: false },
+    blank: { name: '', category: CATEGORIES[0], subcategory: '', slug: '', material: '', dims: '', weight: '', moq: '', lead: '', image: '', image2: '', image3: '', image4: '', story: '', tone: 'brass', finishes: [], rail: false },
     fields: [
-      { key: 'image', label: 'Image', type: 'image', full: true },
+      /* ONE COVER, THREE EXTRAS.
+         The cover is not slot one of four — it does a different job. It is
+         the piece's face: what every collection grid, rail, card, cart row
+         and search result shows, and what Google and WhatsApp pick up when
+         the page is shared. The other three are only ever seen by someone
+         already on the product page, in its slider. Giving the cover its own
+         control and the extras a row of tiles says that, where four identical
+         uploaders said the opposite.
+
+         Underneath they are still four ordinary flat image keys, which is
+         what lets the upload pipeline (WebP, thumbnail, the compression
+         ladder), the Images tab's bulk optimiser, the build-time extractor
+         and the publisher carry all four with no changes at all. */
+      {
+        key: 'image',
+        label: 'Cover image',
+        type: 'image',
+        full: true,
+        extras: PRODUCT_IMAGE_KEYS.slice(1),
+        hint: 'The face of the piece — shown in every collection grid, the cart and search results, and first on its own page. Pick several files at once and the rest fill the extra slots below.',
+      },
       { key: 'name', label: 'Name', required: true, full: true },
       { key: 'category', label: 'Category', type: 'select', options: () => CATEGORIES, required: true },
       { key: 'subcategory', label: 'Subcategory', type: 'select', options: (draft, content) => ['', ...(content.subcategories[draft.category] || [])] },
@@ -224,7 +256,11 @@ function ConfirmModal({ message, confirmLabel = 'Delete', onConfirm, onClose }) 
           <h2>Are you sure?</h2>
           <button type="button" className="ad-ibtn" onClick={onClose} aria-label="Close">✕</button>
         </div>
-        <div className="ad-modal-body">
+        <div
+          className="ad-modal-body"
+          /* see the note on the record modal's body below */
+          data-lenis-prevent
+        >
           <p style={{ margin: 0, fontSize: '0.88rem', color: 'var(--ad-ink-2)', lineHeight: 1.55 }}>{message}</p>
         </div>
         <div className="ad-modal-foot">
@@ -233,6 +269,125 @@ function ConfirmModal({ message, confirmLabel = 'Delete', onConfirm, onClose }) 
         </div>
       </div>
     </div>
+  )
+}
+
+/* ── image field ─────────────────────────────────────────────────────────────
+   One cover, then however many extra slots the schema declares.
+
+   The cover is the field the rest of the admin already had, unchanged: a
+   preview, a link box and an upload button. It is the piece's face — every
+   collection grid, the cart, search results, and the first slide on its own
+   page — so it keeps a control of its own rather than becoming slot one of a
+   uniform row. Its picker still takes several files at once and spills the
+   remainder into the extras, because choosing all of a product's photographs
+   in one go is the common case.
+
+   The extras are tiles. They are small and uniform on purpose: they say
+   "three more, in this order" at a glance, which four stacked full-width
+   uploaders never did.                                                      */
+function ImageField({ f, draft, id, onFile, onImage, busy }) {
+  const [link, setLink] = useState('')
+
+  const v = draft[f.key] ?? ''
+  const extras = f.extras || []
+  const filled = extras.filter((k) => draft[k]).length
+  const firstFree = extras.find((k) => !draft[k])
+  const coverBusy = busy?.key === f.key
+
+  const addLink = () => {
+    const url = link.trim()
+    if (!url || !firstFree) return
+    onImage(firstFree, url)
+    setLink('')
+  }
+
+  return (
+    <>
+      <div className={`ad-img${extras.length ? ' ad-img--cover' : ''}`}>
+        {/* the preview reads from the thumbnail when there is one: on a list
+            of twenty products, previewing the full-size data URLs is tens of
+            megabytes of decoded bitmap for a 90px box */}
+        {v
+          ? <img className="ad-img-preview" src={draft[thumbKey(f.key)] || v} alt="" loading="lazy" decoding="async" />
+          : <div className="ad-img-preview ad-thumb--empty">None</div>}
+        <div className="ad-img-side">
+          <input id={id} value={v} placeholder="https://... or upload" onChange={(e) => onImage(f.key, e.target.value)} />
+          <label className={`ad-btn ad-btn--quiet ad-btn--sm${coverBusy ? ' is-busy' : ''}`} style={{ alignSelf: 'flex-start', cursor: busy ? 'progress' : 'pointer' }}>
+            {coverBusy ? (busy.note || 'Optimising…') : (extras.length ? 'Upload photos' : 'Upload file')}
+            <input
+              type="file"
+              accept="image/*"
+              multiple={extras.length > 0}
+              hidden
+              disabled={!!busy}
+              /* the cover first, then the extras in order — so picking four
+                 files here fills the whole product in one action */
+              onChange={(e) => onFile(f.key, e, extras.length ? [f.key, ...extras] : null)}
+            />
+          </label>
+        </div>
+      </div>
+
+      {extras.length > 0 && (
+        <div className="ad-extras">
+          <div className="ad-extras-head">
+            <span>Extra photos</span>
+            <span className="ad-extras-count">{filled} of {extras.length}</span>
+          </div>
+
+          <div className="ad-extras-row">
+            {extras.map((k, i) => (draft[k] ? (
+              <span className="ad-slot is-filled" key={k}>
+                <img src={draft[thumbKey(k)] || draft[k]} alt="" loading="lazy" decoding="async" />
+                <span className="ad-slot-badge">{i + 2}</span>
+                <button
+                  type="button"
+                  onClick={() => onImage(k, '')}
+                  aria-label={`Remove extra photo ${i + 1}`}
+                  title="Remove"
+                >✕</button>
+              </span>
+            ) : (
+              <label
+                className={`ad-slot ad-slot--add${busy?.key === k ? ' is-busy' : ''}`}
+                key={k}
+                title="Add a photo"
+                style={{ cursor: busy ? 'progress' : 'pointer' }}
+              >
+                <span aria-hidden="true">{busy?.key === k ? '…' : '+'}</span>
+                <input
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  hidden
+                  disabled={!!busy}
+                  /* from this tile onward, so what you clicked is where the
+                     first file lands */
+                  onChange={(e) => onFile(k, e, extras.slice(i))}
+                />
+                <span className="sr-only">Add extra photo {i + 1}</span>
+              </label>
+            )))}
+          </div>
+
+          {/* parity with the cover's link box — an extra photo can come from a
+              URL too, without giving each tile a text field of its own */}
+          {firstFree && (
+            <div className="ad-extras-paste">
+              <input
+                value={link}
+                placeholder="or paste an image link"
+                aria-label="Paste a link for the next extra photo"
+                onChange={(e) => setLink(e.target.value)}
+                onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addLink() } }}
+              />
+              <button type="button" className="ad-btn ad-btn--quiet ad-btn--sm" disabled={!link.trim()} onClick={addLink}>Add</button>
+            </div>
+          )}
+        </div>
+      )}
+    </>
   )
 }
 
@@ -271,21 +426,7 @@ function Field({ f, draft, content, onChange, onFile, onImage, busy }) {
       )}
 
       {f.type === 'image' && (
-        <div className="ad-img">
-          {/* the preview reads from the thumbnail when there is one: on a list
-              of twenty products, previewing the full-size data URLs is tens of
-              megabytes of decoded bitmap for a 90px box */}
-          {v
-            ? <img className="ad-img-preview" src={draft[thumbKey(f.key)] || v} alt="" loading="lazy" decoding="async" />
-            : <div className="ad-img-preview ad-thumb--empty">None</div>}
-          <div className="ad-img-side">
-            <input id={id} value={v} placeholder="https://... or upload" onChange={(e) => onImage(f.key, e.target.value)} />
-            <label className={`ad-btn ad-btn--quiet ad-btn--sm${busy === f.key ? ' is-busy' : ''}`} style={{ alignSelf: 'flex-start', cursor: busy ? 'progress' : 'pointer' }}>
-              {busy === f.key ? 'Optimising…' : 'Upload file'}
-              <input type="file" accept="image/*" hidden disabled={!!busy} onChange={(e) => onFile(f.key, e)} />
-            </label>
-          </div>
-        </div>
+        <ImageField f={f} draft={draft} id={id} onFile={onFile} onImage={onImage} busy={busy} />
       )}
 
       {!f.type || f.type === 'text' || f.type === 'number' ? (
@@ -309,7 +450,8 @@ function Field({ f, draft, content, onChange, onFile, onImage, busy }) {
 /* ── record modal ────────────────────────────────────────────────────────── */
 function RecordModal({ section, record, content, onSave, onClose, notify }) {
   const [draft, setDraft] = useState(() => ({ ...section.blank, ...record }))
-  /* the field key currently being encoded, so its uploader can say so */
+  /* { key, note } for the field currently being encoded, so its uploader can
+     say so — and, on a multi-file pick, say which of them it is on */
   const [busy, setBusy] = useState(null)
 
   /* the page behind the modal is Lenis-smooth-scrolled; without stopping it
@@ -330,32 +472,77 @@ function RecordModal({ section, record, content, onSave, onClose, notify }) {
   const set = (k, val) => setDraft((d) => ({ ...d, [k]: val }))
 
   /* Uploads are re-encoded to WebP and given a thumbnail before they are
-     stored — see the header of src/lib/image.js for why that matters here. */
-  const onFile = async (key, e) => {
-    const file = e.target.files?.[0]
-    e.target.value = ''
-    if (!file) return
+     stored — see the header of src/lib/image.js for why that matters here.
 
-    if (file.size > MAX_UPLOAD_BYTES) {
-      notify(`That file is ${humanBytes(file.size)}. Use one under ${humanBytes(MAX_UPLOAD_BYTES)}.`, true)
+     `keys` is the field's `multi` list when it has one. The files chosen fill
+     it in order, and SLOTS PAST WHAT WAS CHOSEN ARE LEFT ALONE: picking one
+     file to replace the main photograph must not silently delete the other
+     three, and picking four must replace all four. "Replace exactly what I
+     handed you" is the only rule here that is never surprising. */
+  const onFile = async (key, e, keys) => {
+    const picked = Array.from(e.target.files || [])
+    e.target.value = ''
+    if (!picked.length) return
+
+    const slots = keys?.length ? keys : [key]
+    const files = picked.slice(0, slots.length)
+    const dropped = picked.length - files.length
+
+    const tooBig = files.find((f) => f.size > MAX_UPLOAD_BYTES)
+    if (tooBig) {
+      notify(`"${tooBig.name}" is ${humanBytes(tooBig.size)}. Use files under ${humanBytes(MAX_UPLOAD_BYTES)}.`, true)
       return
     }
 
-    setBusy(key)
+    setBusy({ key, note: files.length > 1 ? `Optimising 1 of ${files.length}…` : 'Optimising…' })
+    let before = 0
+    let after = 0
+    let overBudget = false
+    let firstNote = ''
+
     try {
-      /* No size rejection here. processImage walks a compression ladder until
-         the result fits its budget, so an oversized upload comes back smaller
-         rather than refused; when even the last rung is over, out.overBudget
-         says so and the image is stored anyway. Turning an admin away from
-         their own photograph was never the right trade. */
-      const out = await processImage(file)
-      setDraft((d) => ({ ...d, [key]: out.full, [thumbKey(key)]: out.thumb }))
-      const saved = out.beforeBytes ? Math.round((1 - out.afterBytes / out.beforeBytes) * 100) : 0
-      /* the image is saved either way — overBudget only colours the notice,
+      /* One at a time, not Promise.all. Each pass holds a full-size canvas of
+         a multi-megapixel photograph; four of those alive together is enough
+         to get the tab killed on a phone. */
+      const done = []
+      for (let i = 0; i < files.length; i += 1) {
+        if (files.length > 1) setBusy({ key, note: `Optimising ${i + 1} of ${files.length}…` })
+        /* No size rejection here. processImage walks a compression ladder
+           until the result fits its budget, so an oversized upload comes back
+           smaller rather than refused; when even the last rung is over,
+           out.overBudget says so and the image is stored anyway. Turning an
+           admin away from their own photograph was never the right trade. */
+        const out = await processImage(files[i])
+        done.push(out)
+        before += out.beforeBytes
+        after += out.afterBytes
+        overBudget = overBudget || out.overBudget
+        if (!firstNote && out.note) firstNote = out.note
+      }
+
+      setDraft((d) => {
+        const next = { ...d }
+        done.forEach((out, i) => {
+          next[slots[i]] = out.full
+          next[thumbKey(slots[i])] = out.thumb
+        })
+        return next
+      })
+
+      const saved = before ? Math.round((1 - after / before) * 100) : 0
+      const count = files.length === 1 ? 'Photo' : `${files.length} photos`
+      /* the images are saved either way — overBudget only colours the notice,
          so a heavy one is flagged rather than silently accepted */
-      notify(out.note || (out.converted && saved > 0
-        ? `Converted to WebP — ${humanBytes(out.beforeBytes)} → ${humanBytes(out.afterBytes)} (${saved}% smaller), thumbnail included.`
-        : `Optimised — ${humanBytes(out.afterBytes)} stored, thumbnail included.`), out.overBudget)
+      notify(
+        [
+          saved > 0
+            ? `${count} optimised — ${humanBytes(before)} → ${humanBytes(after)} (${saved}% smaller), thumbnails included.`
+            : `${count} optimised — ${humanBytes(after)} stored, thumbnails included.`,
+          dropped > 0 ? `Only the first ${slots.length} were used; ${dropped} more ${dropped === 1 ? 'was' : 'were'} ignored.` : '',
+          files.length === 1 ? firstNote : '',
+        ].filter(Boolean).join(' '),
+        overBudget || dropped > 0,
+      )
     } catch (err) {
       notify(err.message || 'Could not read that image.', true)
     } finally {
@@ -381,7 +568,16 @@ function RecordModal({ section, record, content, onSave, onClose, notify }) {
             <button type="button" className="ad-ibtn" onClick={onClose} aria-label="Close">✕</button>
           </div>
 
-          <div className="ad-modal-body">
+          <div
+            className="ad-modal-body"
+            /* Lenis smooth-scrolls the page, and its wheel handler calls
+               preventDefault() on EVERY wheel event while it is stopped —
+               which is exactly the state a modal puts it in. Without this
+               attribute a form taller than the viewport could not be
+               scrolled at all: not by wheel, not by trackpad, not by touch.
+               Lenis checks for it before it swallows the gesture. */
+            data-lenis-prevent
+          >
             <div className="ad-form">
               {section.fields.map((f) => (
                 <Field key={f.key} f={f} draft={draft} content={content} onChange={set} onFile={onFile} onImage={setImage} busy={busy} />
@@ -758,8 +954,15 @@ function SubcategoriesSection({ notify, onDirty }) {
    re-uploading twenty products by hand.
 
    It also backfills thumbnails for records that predate them.               */
+/* Every key an image field writes — `multi` when it owns several slots, its
+   own key otherwise. Reading only `f.key` here would leave a product's
+   photos 2–4 out of the inventory and out of the bulk re-encode, which is
+   precisely the pass they most need: they are the pictures most likely to
+   have been uploaded in a hurry. */
 function imageFieldsOf(section) {
-  return section.fields ? section.fields.filter((f) => f.type === 'image').map((f) => f.key) : []
+  return section.fields
+    ? section.fields.filter((f) => f.type === 'image').flatMap((f) => [f.key, ...(f.extras || [])])
+    : []
 }
 
 function ImagesSection({ notify, onDirty }) {
@@ -771,16 +974,21 @@ function ImagesSection({ notify, onDirty }) {
   const inventory = useMemo(() => {
     const rows = []
     for (const section of SECTIONS) {
-      for (const key of imageFieldsOf(section)) {
+      const keys = imageFieldsOf(section)
+      for (const key of keys) {
+        /* which slot of a multi-photo field this is, so four rows for one
+           product are told apart rather than all reading "Product 1" */
+        const slot = PRODUCT_IMAGE_KEYS.indexOf(key)
         for (const item of content[section.key] || []) {
           const src = item[key]
           if (typeof src !== 'string' || !src) continue
+          const name = section.rowTitle(item) || `#${item.id}`
           rows.push({
             section: section.key,
             label: section.label,
             id: item.id,
             key,
-            title: section.rowTitle(item) || `#${item.id}`,
+            title: slot > 0 ? `${name} — photo ${slot + 1}` : name,
             embedded: src.startsWith('data:'),
             webp: src.startsWith('data:image/webp'),
             bytes: src.startsWith('data:') ? src.length : 0,

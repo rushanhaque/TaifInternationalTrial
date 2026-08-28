@@ -1,0 +1,221 @@
+/* ProductGallery — see src/components/ProductGallery.jsx for what and why.
+
+   The stage deliberately reproduces the frame the single product hero had
+   (.prod-hero-slab: radius --r-sm, the tone ground beneath, the same image
+   grade, no colour veil and no sheen), so a product with ONE photograph looks
+   exactly as it did before the gallery existed. Everything below that is only
+   reachable when there are two or more.
+
+   Loaded only by the /catalogue/:slug chunk — ProductPage is lazy, so no
+   other route pays for this sheet. */
+
+.pg {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.55rem, 1.1vw, 0.8rem);
+}
+
+/* ── the stage ───────────────────────────────────────────────────────────── */
+
+.pg-stage {
+  position: relative;
+  width: 100%;
+  border-radius: var(--r-sm);
+  overflow: hidden;
+  background: var(--tone-bg, var(--sheen));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.78);
+  /* the gesture takes the horizontal axis and leaves the vertical one to the
+     page — without this the browser claims the whole drag and the gallery
+     never sees a swipe */
+  touch-action: pan-y;
+}
+
+.pg--multi .pg-stage {
+  cursor: grab;
+}
+
+.pg--multi .pg-stage.is-dragging {
+  cursor: grabbing;
+}
+
+.pg-track {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  transition: transform 0.62s var(--ease-fluid);
+}
+
+/* Promoted only while it is actually moving. `will-change` left on
+   permanently keeps a compositor layer alive for every product page in the
+   background, which is exactly the kind of thing that costs memory on a
+   phone for no benefit. */
+.pg-stage.is-dragging .pg-track {
+  will-change: transform;
+}
+
+.pg-slide {
+  position: relative;
+  flex: 0 0 100%;
+  height: 100%;
+}
+
+/* matches .slab-img, so the photograph is graded the same here as in every
+   rail and grid on the site */
+.pg-shot {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.82) contrast(1.04);
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* the stand-in for a slide whose full image has not been asked for yet */
+.pg-shot--ghost {
+  filter: saturate(0.82) contrast(1.04) blur(10px);
+  transform: scale(1.06);
+}
+
+/* ── arrows ──────────────────────────────────────────────────────────────── */
+
+.pg-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid var(--hair-strong);
+  border-radius: 50%;
+  background: var(--nav-bg);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  color: var(--graphite);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.35s var(--ease-fluid), transform 0.35s var(--ease-surge),
+    border-color 0.35s var(--ease-fluid);
+}
+
+.pg-nav--prev { left: clamp(0.5rem, 1.4vw, 0.9rem); }
+.pg-nav--next { right: clamp(0.5rem, 1.4vw, 0.9rem); }
+
+/* Revealed on approach on a mouse; always visible where there is no hover to
+   approach with — a control that only exists on hover does not exist on a
+   phone, and the strip below is not a substitute for stepping one at a time. */
+.pg-stage:hover .pg-nav,
+.pg-nav:focus-visible {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .pg-nav { opacity: 1; }
+}
+
+.pg-nav:hover:not(:disabled) {
+  border-color: var(--brass);
+  transform: translateY(-50%) scale(1.07);
+}
+
+.pg-nav:disabled {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* on touch the disabled end-stop should still be legible as an end-stop
+   rather than vanishing and shifting the eye */
+@media (hover: none) {
+  .pg-nav:disabled { opacity: 0.28; }
+}
+
+/* ── counter ─────────────────────────────────────────────────────────────── */
+
+.pg-count {
+  position: absolute;
+  right: clamp(0.5rem, 1.4vw, 0.9rem);
+  bottom: clamp(0.5rem, 1.4vw, 0.9rem);
+  margin: 0;
+  padding: 0.3rem 0.62rem;
+  border: 1px solid var(--hair-strong);
+  border-radius: var(--r-pill, 999px);
+  background: var(--nav-bg);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  color: var(--graphite);
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+
+/* ── thumbnail strip ─────────────────────────────────────────────────────── */
+
+.pg-strip {
+  display: flex;
+  gap: clamp(0.4rem, 0.9vw, 0.6rem);
+}
+
+.pg-dot {
+  flex: 1 1 0;
+  /* four thumbnails share the width of the stage, so the strip reads as an
+     index of the piece rather than a row of loose chips */
+  max-width: 96px;
+  aspect-ratio: 1;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--hair);
+  border-radius: var(--r-sm);
+  background: var(--tone-bg, var(--sheen));
+  cursor: pointer;
+  opacity: 0.58;
+  transition: opacity 0.3s var(--ease-fluid), border-color 0.3s var(--ease-fluid),
+    transform 0.35s var(--ease-surge);
+}
+
+.pg-dot img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.82) contrast(1.04);
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.pg-dot:hover {
+  opacity: 1;
+  transform: translateY(-2px);
+}
+
+.pg-dot[aria-current='true'] {
+  opacity: 1;
+  border-color: var(--brass);
+  box-shadow: 0 0 0 1px var(--brass);
+}
+
+.pg-nav:focus-visible,
+.pg-dot:focus-visible {
+  outline: 2px solid var(--tint);
+  outline-offset: 2px;
+}
+
+/* ── reduced motion ──────────────────────────────────────────────────────────
+   The slide still changes — that is the content, not the decoration. It just
+   arrives instead of travelling. */
+@media (prefers-reduced-motion: reduce) {
+  .pg-track,
+  .pg-nav,
+  .pg-dot {
+    transition: none;
+  }
+
+  .pg-nav:hover:not(:disabled) {
+    transform: translateY(-50%);
+  }
+
+  .pg-dot:hover {
+    transform: none;
+  }
+}
