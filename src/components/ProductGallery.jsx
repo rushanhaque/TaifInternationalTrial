@@ -4,8 +4,16 @@ import { productShots } from '../data/images'
 import '../styles/product-gallery.css'
 
 /* ============ ProductGallery ============
-   The photographs on a product page: up to four, one at a time, with arrows,
-   a thumbnail strip and a swipe.
+   A product's photographs, split across the two columns of the page: the
+   stage sits on the left under the piece itself, and the row of view cards
+   sits on the right, under its name and description, in the rhythm of the
+   spec list below it.
+
+   That is why this file exports a HOOK and two components rather than one
+   component. The stage and the cards are one control — the same index, the
+   same preload set, the same keyboard — but they render into two different
+   places in the page's grid, which no single element can do without a
+   portal. `useProductGallery` holds the state; the two pieces read it.
 
    THREE THINGS IT IS CAREFUL ABOUT
 
@@ -21,9 +29,9 @@ import '../styles/product-gallery.css'
       scroll viewport as far as some engines are concerned, and lazy loading
       is a hint either way. A slide that is not rendered cannot be fetched.
 
-   2. NO EMPTY FRAME BETWEEN SLIDES. The strip already holds every thumbnail
-      — a few kB each, written by the upload pipeline — so a slide arriving
-      for the first time paints its thumbnail out of cache immediately and
+   2. NO EMPTY FRAME BETWEEN SLIDES. The cards already hold every thumbnail —
+      a few kB each, written by the upload pipeline — so a slide arriving for
+      the first time paints its thumbnail out of cache immediately and
       sharpens as the full image decodes. SmartImage does that cross-fade.
 
    3. THE TRANSFORM IS NOT REACT STATE. A drag writes the track's transform
@@ -43,18 +51,11 @@ const commitDistance = (w) => Math.min(96, Math.max(36, w * 0.18))
    or scroll the page, and claiming it early would break vertical scrolling. */
 const AXIS_LOCK = 7
 
-const Chevron = ({ back }) => (
-  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-    strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-    <path d={back ? 'M15 5l-7 7 7 7' : 'M9 5l7 7-7 7'} />
-  </svg>
-)
-
-export default function ProductGallery({ product, tone = 'brass', ratio = '7/5' }) {
+/* ── the shared state ─────────────────────────────────────────────────────── */
+export function useProductGallery(product) {
   const shots = productShots(product)
   const total = shots.length
-  const many = total > 1
-  const name = product?.name || ''
+  const slug = product?.slug
 
   const [index, setIndex] = useState(0)
   /* The same number as `index`, readable synchronously.
@@ -82,7 +83,22 @@ export default function ProductGallery({ product, tone = 'brass', ratio = '7/5' 
     el.style.transform = `translate3d(${-n * 100}%, 0, 0)`
   }, [])
 
+  /* Moving to another product must start at its first photograph rather than
+     on whichever slide the last piece was left on. */
+  const lastSlug = useRef(slug)
   useEffect(() => {
+    if (lastSlug.current === slug) return
+    lastSlug.current = slug
+    idx.current = 0
+    setIndex(0)
+    setMounted(new Set([0]))
+  }, [slug])
+
+  useEffect(() => {
+    /* No product at all — the page is about to render its not-found state.
+       The hook still has to run (it sits above that guard, so the hook order
+       stays fixed), but there is nothing to settle. */
+    if (!total) return
     /* An admin editing this product in another tab can take a photograph
        away while the page is open (the content store broadcasts across tabs),
        which would leave the track parked past the last slide showing nothing.
@@ -116,9 +132,17 @@ export default function ProductGallery({ product, tone = 'brass', ratio = '7/5' 
     settle(next)
   }, [total, settle])
 
+  const step = useCallback((d) => go(idx.current + d), [go])
+
+  const onKeyDown = useCallback((e) => {
+    if (total < 2) return
+    if (e.key === 'ArrowLeft') { e.preventDefault(); step(-1) }
+    else if (e.key === 'ArrowRight') { e.preventDefault(); step(1) }
+  }, [total, step])
+
   /* ── swipe ───────────────────────────────────────────────────────────── */
   const onPointerDown = (e) => {
-    if (!many) return
+    if (total < 2) return
     if (e.pointerType === 'mouse' && e.button !== 0) return
     warm()
     drag.current = { id: e.pointerId, x: e.clientX, y: e.clientY, dx: 0, axis: null }
@@ -162,16 +186,41 @@ export default function ProductGallery({ product, tone = 'brass', ratio = '7/5' 
     if (d.axis !== 'x') return
 
     const threshold = commitDistance(stage.current?.clientWidth || 1)
-    if (d.dx <= -threshold) go(idx.current + 1)
-    else if (d.dx >= threshold) go(idx.current - 1)
+    if (d.dx <= -threshold) step(1)
+    else if (d.dx >= threshold) step(-1)
     else settle(idx.current)
   }
 
-  const onKeyDown = (e) => {
-    if (!many) return
-    if (e.key === 'ArrowLeft') { e.preventDefault(); go(idx.current - 1) }
-    else if (e.key === 'ArrowRight') { e.preventDefault(); go(idx.current + 1) }
+  return {
+    shots, total, many: total > 1, index, mounted,
+    name: product?.name || '',
+    go, step, warm, onKeyDown,
+    stage, track,
+    pointer: {
+      onPointerDown, onPointerMove,
+      onPointerUp: endDrag, onPointerCancel: endDrag,
+    },
   }
+}
+
+/* ── arrows ──────────────────────────────────────────────────────────────────
+   One cluster, not two buttons thrown at opposite edges of the picture.
+
+   Two floating circles is what every carousel on the internet does, and it
+   puts the two halves of a single decision as far apart as the frame allows.
+   Joining them into one unit — split by a hairline, squared to the same
+   radius as the frame it sits in — reads as an instrument belonging to this
+   page rather than a widget dropped on top of it, and it halves the distance
+   the hand travels between one photograph and the next.                     */
+const Chevron = ({ back }) => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d={back ? 'M14.5 5.5 8 12l6.5 6.5' : 'M9.5 5.5 16 12l-6.5 6.5'} />
+  </svg>
+)
+
+export function GalleryStage({ api, tone = 'brass', ratio = '7/5' }) {
+  const { shots, total, many, index, mounted, name, step, warm, onKeyDown, stage, track, pointer } = api
 
   return (
     <div
@@ -185,12 +234,9 @@ export default function ProductGallery({ product, tone = 'brass', ratio = '7/5' 
         ref={stage}
         className={`pg-stage tone-${tone}`}
         style={{ aspectRatio: ratio }}
-        onPointerDown={onPointerDown}
-        onPointerMove={onPointerMove}
-        onPointerUp={endDrag}
-        onPointerCancel={endDrag}
         onPointerEnter={many ? warm : undefined}
         onFocusCapture={many ? warm : undefined}
+        {...pointer}
       >
         <div ref={track} className="pg-track">
           {shots.map((shot, n) => (
@@ -233,47 +279,62 @@ export default function ProductGallery({ product, tone = 'brass', ratio = '7/5' 
         </div>
 
         {many && (
-          <>
+          <div className="pg-nav">
             <button
               type="button"
-              className="pg-nav pg-nav--prev"
-              onClick={() => go(idx.current - 1)}
+              className="pg-nav-btn"
+              onClick={() => step(-1)}
               disabled={index === 0}
               aria-label="Previous photograph"
             >
               <Chevron back />
             </button>
+            <span className="pg-nav-split" aria-hidden="true" />
             <button
               type="button"
-              className="pg-nav pg-nav--next"
-              onClick={() => go(idx.current + 1)}
+              className="pg-nav-btn"
+              onClick={() => step(1)}
               disabled={index === total - 1}
               aria-label="Next photograph"
             >
               <Chevron />
             </button>
-            <p className="pg-count meta" aria-live="polite">{index + 1} / {total}</p>
-          </>
+          </div>
         )}
       </div>
+    </div>
+  )
+}
 
-      {many && (
-        <div className="pg-strip">
-          {shots.map((shot, n) => (
-            <button
-              key={shot.key}
-              type="button"
-              className="pg-dot"
-              aria-current={n === index ? 'true' : undefined}
-              aria-label={`Show photograph ${n + 1} of ${total}`}
-              onMouseEnter={warm}
-              onClick={() => go(n)}
-            >
-              <img src={shot.thumb || shot.src} alt="" loading="lazy" decoding="async" draggable="false" />
-            </button>
-          ))}
-        </div>
-      )}
+/* ── the view cards ──────────────────────────────────────────────────────────
+   A rule and a small caption over a row of four, which is the same shape the
+   spec list underneath it uses. That is the whole idea: on the right-hand
+   column these are not a carousel accessory, they are one more block of the
+   piece's record, set in the same rhythm as everything around them.        */
+export function GalleryViews({ api }) {
+  const { shots, total, index, name, go, warm, onKeyDown } = api
+  if (total < 2) return null
+
+  return (
+    <div className="pg-views" onKeyDown={onKeyDown} onMouseEnter={warm}>
+      <p className="meta pg-views-label">
+        Views<span aria-hidden="true"> · {String(total).padStart(2, '0')}</span>
+      </p>
+      <div className="pg-views-row">
+        {shots.map((shot, n) => (
+          <button
+            key={shot.key}
+            type="button"
+            className="pg-view"
+            aria-current={n === index ? 'true' : undefined}
+            aria-label={`Show photograph ${n + 1} of ${total} of ${name}`}
+            onClick={() => go(n)}
+          >
+            <img src={shot.thumb || shot.src} alt="" loading="lazy" decoding="async" draggable="false" />
+            <span className="pg-view-mark" aria-hidden="true" />
+          </button>
+        ))}
+      </div>
     </div>
   )
 }

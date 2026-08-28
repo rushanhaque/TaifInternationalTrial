@@ -7,7 +7,7 @@ import Button from '../components/Button'
 import SpecularButton from '../components/reactbits/SpecularButton'
 import DragRail from '../components/DragRail'
 import SpecDock from '../components/mk2/SpecDock'
-import ProductGallery from '../components/ProductGallery'
+import { useProductGallery, GalleryStage, GalleryViews } from '../components/ProductGallery'
 import NotFoundPage from './NotFoundPage'
 import { productImg } from '../data/images'
 import { useCart } from '../lib/cart'
@@ -16,6 +16,10 @@ export default function ProductPage({ params }) {
   const products = useContent('products')
   const p = productBySlug(params.slug)
   const { add, remove, has, setOpen } = useCart()
+  /* Above the not-found guard so the hook order never changes between
+     renders. It holds the state the stage and the view cards share — they
+     are one control rendered into two columns of the grid below. */
+  const gallery = useProductGallery(p)
   if (!p) return <NotFoundPage />
 
   const finishes = FINISHES.filter((f) => p.finishes.includes(f.key))
@@ -30,23 +34,26 @@ export default function ProductPage({ params }) {
       <SpecDock piece={p} />
 
       <section className="page-hero wrap">
-        <div className="grid" style={{ alignItems: 'center' }}>
+        {/* Top-aligned, not centred. The right-hand column now carries the
+            view cards as well as the copy, so it is reliably taller than the
+            picture — centring it floated the photograph against nothing and
+            left the two columns starting on different lines. */}
+        <div className="grid prod-hero-grid">
           <div className="sp-6">
             {/* Up to four photographs, one at a time. The first is still the
                 Largest Contentful Paint on this route and is still the only
                 image here that must not be lazy; the rest are not fetched
-                until the visitor reaches for them. See ProductGallery.
-
-                Keyed by slug so moving between two products resets the
-                gallery to its first photograph rather than landing on
-                whichever slide the previous piece was left on. */}
-            <ProductGallery key={p.slug} product={p} tone={p.tone} ratio="7/5" />
+                until the visitor reaches for them. See ProductGallery. */}
+            <GalleryStage api={gallery} tone={p.tone} ratio="7/5" />
           </div>
           <div className="sp-6 prod-info">
             <p className="meta">{p.category}</p>
             <CharCascade as="h1" className="d1">{p.name}</CharCascade>
             <Dilate>
               <p className="lede" style={{ marginTop: '1rem' }}>{p.story}</p>
+              {/* the other views of the piece, set in the same rhythm as the
+                  spec list directly below them */}
+              <GalleryViews api={gallery} />
               <dl className="spec-list">
                 {specs.map(([k, v]) => (
                   <div key={k} className="spec-row">
