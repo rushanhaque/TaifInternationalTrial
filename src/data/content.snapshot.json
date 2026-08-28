@@ -131,12 +131,17 @@
       "moq": "",
       "lead": "",
       "image": "/img/content/fad8f9fe0c2bc4d9.jpg",
+      "image2": "/img/content/17216557e4b3cad3.jpg",
+      "image3": "/img/content/b76484ab868bf7a8.jpg",
+      "image4": "",
       "story": "",
       "tone": "brass",
       "finishes": [],
       "rail": false,
       "imageThumb": "/img/content/dc971546fb0c18c5.jpg",
-      "id": 6
+      "id": 6,
+      "image2Thumb": "/img/content/2e7393de2f4673a7.jpg",
+      "image3Thumb": "/img/content/963fbbb586fe5052.jpg"
     },
     {
       "name": "bsjsbsbs",
@@ -363,6 +368,32 @@
       "image3Thumb": "/img/content/9e2c4ae699e4469a.jpg",
       "image4Thumb": "/img/content/311dbbc43e03d08d.jpg",
       "id": 19
+    },
+    {
+      "name": "shsbsb",
+      "category": "Home Decor",
+      "subcategory": "Lamps",
+      "slug": "shsbsb",
+      "material": "hehs",
+      "dims": "",
+      "weight": "",
+      "moq": "",
+      "lead": "",
+      "image": "/img/content/65fd2fa0fd9bfa03.jpg",
+      "image2": "/img/content/3794c927af043ac2.jpg",
+      "image3": "/img/content/851dd2685896880e.jpg",
+      "image4": "/img/content/7adf4577c43a3280.jpg",
+      "story": "bsbbs",
+      "tone": "brass",
+      "finishes": [
+        "bsbsb"
+      ],
+      "rail": false,
+      "imageThumb": "/img/content/c7761070d86ff207.jpg",
+      "image2Thumb": "/img/content/311dbbc43e03d08d.jpg",
+      "image3Thumb": "/img/content/baf279814397c0a8.jpg",
+      "image4Thumb": "/img/content/09b0b8e8b070f858.jpg",
+      "id": 20
     }
   ],
   "subcategories": {
@@ -617,5 +648,5 @@
       "text": "Export ready · Moradabad, India"
     }
   ],
-  "publishedAt": "2026-08-28T19:07:32.083Z"
+  "publishedAt": "2026-08-28T19:45:10.118Z"
 }
