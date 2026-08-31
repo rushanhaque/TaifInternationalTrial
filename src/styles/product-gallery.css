@@ -276,6 +276,12 @@
   display: none;
 }
 
+/* ── hide view cards on mobile ───────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  .pg-views { display: none; }
+}
+
 /* ── reduced motion ──────────────────────────────────────────────────────────
    The slide still changes — that is the content, not the decoration. It just
    arrives instead of travelling. */
