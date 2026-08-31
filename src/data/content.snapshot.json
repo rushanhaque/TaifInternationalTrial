@@ -57,6 +57,9 @@
       "moq": "",
       "lead": "",
       "image": "/img/content/9fdff45e3d7126bd.jpg",
+      "image2": "/img/content/b59f9c8b9c9f5353.webp",
+      "image3": "/img/content/883a4c0af926828f.jpg",
+      "image4": "/img/content/76d6960aef1e4da6.jpg",
       "story": "nznba726282",
       "tone": "brass",
       "finishes": [
@@ -64,7 +67,10 @@
       ],
       "rail": false,
       "imageThumb": "/img/content/13caa871a4d71fc2.jpg",
-      "id": 1
+      "id": 1,
+      "image2Thumb": "/img/content/fab35bc9213cfaf2.webp",
+      "image3Thumb": "/img/content/3bc188b8dd356aa8.webp",
+      "image4Thumb": "/img/content/429c56fbab7786c1.webp"
     },
     {
       "name": "Product 3",
@@ -648,5 +654,5 @@
       "text": "Export ready · Moradabad, India"
     }
   ],
-  "publishedAt": "2026-08-28T19:45:10.118Z"
+  "publishedAt": "2026-08-31T17:05:05.283Z"
 }
