@@ -400,6 +400,31 @@
       "image3Thumb": "/img/content/baf279814397c0a8.jpg",
       "image4Thumb": "/img/content/09b0b8e8b070f858.jpg",
       "id": 20
+    },
+    {
+      "name": "Pure 99% Copper Hammered Water Bottle - 1000ml | Ayurvedic & Leak-Proof",
+      "category": "Copper Products",
+      "subcategory": "Bottles",
+      "slug": "pure-99-copper-hammered-water-bottle-1000ml-ayurvedic-leak-proof",
+      "material": "Copper",
+      "dims": "",
+      "weight": "",
+      "moq": "",
+      "lead": "",
+      "image": "/img/content/4ef616335248b3b6.jpg",
+      "image2": "/img/content/aff8668c34fb5041.jpg",
+      "image3": "/img/content/f98c21903e332ccf.jpg",
+      "image4": "",
+      "story": "Experience wellness in its purest form with our Handcrafted Pure 99% Copper Hammered Bottle.\nMade from 99% pure, high-grade copper and hammered by skilled artisans of India, this bottle is not just a vessel – it's a tradition for healthy living. As per Ayurveda, storing water in copper (Tamra Jal) balances your doshas and promotes overall wellness.\nThe intricate hammer marks reflect the touch of the artisan, while the pure copper interior naturally alkalizes your water.\n\nSpecifications:\nMaterial: 99% Pure Copper\nCapacity: 950ml (Also available in 750ml / 500ml)\nCraft: Hand-Hammered Exterior, Plain Interior\nCap: Leak-Proof Copper Cap\n\nPerfect for home, office, yoga, gym and gifting.\n\nCare Instructions: To maintain shine, clean with lemon and salt water. Do not use dishwasher. Store water for 6-8 hours before drinking. Do not store acidic drinks.",
+      "tone": "brass",
+      "finishes": [
+        "Hammered"
+      ],
+      "rail": false,
+      "imageThumb": "",
+      "image2Thumb": "/img/content/23d6c2148a1533f1.webp",
+      "image3Thumb": "/img/content/fd9f96901b284fc3.webp",
+      "id": 21
     }
   ],
   "subcategories": {
@@ -654,5 +679,5 @@
       "text": "Export ready · Moradabad, India"
     }
   ],
-  "publishedAt": "2026-08-31T17:05:05.283Z"
+  "publishedAt": "2026-09-02T08:05:06.703Z"
 }
