@@ -39,18 +39,21 @@ export default function ProductPage({ params }) {
             picture — centring it floated the photograph against nothing and
             left the two columns starting on different lines. */}
         <div className="grid prod-hero-grid">
-          <div className="sp-6">
+          <div className="sp-5">
             {/* Up to four photographs, one at a time. The first is still the
                 Largest Contentful Paint on this route and is still the only
                 image here that must not be lazy; the rest are not fetched
                 until the visitor reaches for them. See ProductGallery. */}
-            <GalleryStage api={gallery} tone={p.tone} ratio="7/5" />
+            <GalleryStage api={gallery} tone={p.tone} ratio="1/1" />
           </div>
-          <div className="sp-6 prod-info">
-            <p className="meta">{p.category}</p>
-            <CharCascade as="h1" className="d1">{p.name}</CharCascade>
-            <Dilate>
-              <p className="lede" style={{ marginTop: '1rem' }}>{p.story}</p>
+          <div className="sp-7 prod-info">
+            <div className="prod-info-header">
+              <span className="prod-category-badge">{p.category}</span>
+            </div>
+            <CharCascade as="h1" className="d1 prod-title">{p.name}</CharCascade>
+            <div className="prod-divider" aria-hidden="true" />
+            <Dilate className="prod-body">
+              <p className="prod-story">{p.story}</p>
               <dl className="spec-list">
                 {specs.map(([k, v]) => (
                   <div key={k} className="spec-row">
@@ -59,10 +62,7 @@ export default function ProductPage({ params }) {
                   </div>
                 ))}
               </dl>
-              {/* a buyer who has read this far must be able to act HERE — the
-                  enquiry docket was reachable from every grid on the site
-                  except the page that actually argues for the piece */}
-              <div className="hero-cta">
+              <div className="prod-cta-block">
                 <Button small onClick={() => (has(p.slug) ? remove(p.slug) : add(p))}>
                   {has(p.slug) ? 'In your cart' : 'Add to cart'}
                 </Button>
@@ -87,7 +87,6 @@ export default function ProductPage({ params }) {
                   Request a quote
                 </Button>
               </div>
-              {/* small square preview cards, below all product info */}
               <GalleryViews api={gallery} />
             </Dilate>
           </div>
@@ -104,7 +103,7 @@ export default function ProductPage({ params }) {
               {related.map((r) => (
                 <Link key={r.slug} to={`/catalogue/${r.slug}`} className="rail-card">
                   <Slab tone={r.tone} label={r.name.toUpperCase()} meta={r.material}
-                    img={r.image || productImg(r.slug)} imgThumb={r.imageThumb} alt={r.name} />
+                    img={r.image || productImg(r.slug)} imgThumb={r.imageThumb} alt={r.name} ratio="1/1" />
                   <div className="rail-card-meta meta"><span>{r.category}</span><span>{r.idx}</span></div>
                 </Link>
               ))}

@@ -142,8 +142,10 @@ export function Router({ routes, notFound, before = null, after = null }) {
     if (push) window.history.pushState({}, '', to)
 
     /* back/forward is a return to somewhere you have already been — the mitre
-       announces arrival at a new page, so it would misread here */
-    if (!push || reduced() || !mitreRef.current) {
+       announces arrival at a new page, so it would misread here.
+       transition:false skips the mitre for specific navigations (e.g. product
+       cards in a collection, where the card itself already communicates intent). */
+    if (!push || reduced() || !mitreRef.current || opts.transition === false) {
       settle(to)
       requestAnimationFrame(() => ScrollTrigger.refresh())
       document.getElementById('main')?.focus({ preventScroll: true })
@@ -153,7 +155,29 @@ export function Router({ routes, notFound, before = null, after = null }) {
     busy.current = true
     try { getLenis()?.stop() } catch (_) {}
 
-    playMitre(to)
+    if (/^\/catalogue\//.test(to)) {
+      playFade(to)
+    } else {
+      playMitre(to)
+    }
+  }
+
+  function playFade(to) {
+    const mainEl = document.getElementById('main')
+    if (!mainEl) { settle(to); busy.current = false; try { getLenis()?.start() } catch (_) {} return }
+
+    gsap.to(mainEl, {
+      opacity: 0, duration: 0.18, ease: 'power1.in',
+      onComplete: () => {
+        settle(to)
+        requestAnimationFrame(() => {
+          ScrollTrigger.refresh()
+          gsap.fromTo(mainEl, { opacity: 0 }, { opacity: 1, duration: 0.28, ease: 'power1.out',
+            onComplete: () => { gsap.set(mainEl, { clearProps: 'opacity' }); busy.current = false; try { getLenis()?.start() } catch (_) {} document.getElementById('main')?.focus({ preventScroll: true }) }
+          })
+        })
+      }
+    })
   }
 
   /* the destination, named on the plate. Falls back to the notFound route so

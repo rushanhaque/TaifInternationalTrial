@@ -62,7 +62,7 @@ function PlateCard({ p, add, remove, has, setOpen }) {
           to={`/catalogue/${p.slug}`}
           className="pl-card-link"
           data-cursor="VIEW"
-          transition="slide-product"
+          transition={false}
         >
           {/* Studio Frame — 1:1 square ratio with radial vitrine ground */}
           <div className="pl-shot burnish">

@@ -219,7 +219,7 @@
 
 .pg-views {
   margin-top: auto;
-  padding-top: 1.2rem;
+  padding-top: 0.5rem;
 }
 
 .pg-views-label {
@@ -233,8 +233,8 @@
 
 .pg-view {
   flex: 0 0 auto;
-  width: 138px;
-  height: 138px;
+  width: 108px;
+  height: 108px;
   padding: 0;
   overflow: hidden;
   border: 1px solid var(--hair);
