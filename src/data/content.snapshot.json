@@ -402,11 +402,11 @@
       "id": 20
     },
     {
-      "name": "Pure 99% Copper Hammered Water Bottle - 1000ml | Ayurvedic & Leak-Proof",
+      "name": "Hammered  Water Bottle ",
       "category": "Copper Products",
       "subcategory": "Bottles",
       "slug": "pure-99-copper-hammered-water-bottle-1000ml-ayurvedic-leak-proof",
-      "material": "Copper",
+      "material": "99% Copper",
       "dims": "",
       "weight": "",
       "moq": "",
@@ -425,6 +425,58 @@
       "image2Thumb": "/img/content/23d6c2148a1533f1.webp",
       "image3Thumb": "/img/content/fd9f96901b284fc3.webp",
       "id": 21
+    },
+    {
+      "name": "Plain Water Bottle",
+      "category": "Copper Products",
+      "subcategory": "Bottles",
+      "slug": "plain-water-bottle",
+      "material": "99% Copper",
+      "dims": "",
+      "weight": "",
+      "moq": "",
+      "lead": "",
+      "image": "/img/content/20117e76a110488f.webp",
+      "image2": "/img/content/c4e6c2b08fae9a0b.webp",
+      "image3": "/img/content/7db6da9bd1fe8e44.webp",
+      "image4": "/img/content/bc13c1f5e879ffdf.webp",
+      "story": "Experience the ancient wellness of Ayurveda with our Pure 99% Copper Water Bottle – 950ml in a premium  Glossy Plain Finish.\n\nCrafted from a single sheet of pure, lab-certified copper with no joints and no inner lining, this bottle is designed to make your daily hydration healthy, stylish, and sustainable.\n\nStoring water in copper, known as Tamra Jal in Ayurveda, is believed to naturally infuse the water, helping to boost immunity, support digestion, and improve metabolism when stored for 6-8 hours.",
+      "tone": "brass",
+      "finishes": [
+        "Glossy Plain"
+      ],
+      "rail": false,
+      "imageThumb": "/img/content/dddaa0ea071eb693.webp",
+      "image2Thumb": "/img/content/914d01a21d94f402.webp",
+      "image3Thumb": "/img/content/0c61ba4c6ba094d7.webp",
+      "image4Thumb": "/img/content/2c4e1a40e5e7489b.webp",
+      "id": 22
+    },
+    {
+      "name": "Enamel Water Bottle",
+      "category": "Copper Products",
+      "subcategory": "Bottles",
+      "slug": "enamel-water-bottle",
+      "material": "99% Copper",
+      "dims": "",
+      "weight": "",
+      "moq": "",
+      "lead": "",
+      "image": "/img/content/5d515d044f5eae65.webp",
+      "image2": "/img/content/da8213da60c56aa2.webp",
+      "image3": "/img/content/61e440485f8802ea.webp",
+      "image4": "/img/content/4c642e6ef029bcbb.webp",
+      "story": "Bring art to your wellness with our Designer Pure Copper Bottle – Blue Bird Collection.\n\nCrafted from 99% pure copper on the inside and featuring a premium matte enamel print on the outside, this bottle combines the ancient health benefits of Ayurveda with modern designer aesthetics. The beautiful hummingbird and floral design makes it a statement piece for your office desk and home.\n\nAs per Ayurveda, water stored in pure copper (Tamra Jal) for 6-8 hours is believed to help boost immunity, support digestion, and improve overall wellness.",
+      "tone": "brass",
+      "finishes": [
+        "Enamel"
+      ],
+      "rail": false,
+      "imageThumb": "/img/content/0934c5c6a3a85c0b.webp",
+      "image2Thumb": "/img/content/66dd2c0b98164362.webp",
+      "image3Thumb": "/img/content/a7030b24c65d22b1.webp",
+      "image4Thumb": "/img/content/5400c24fc972dcdb.webp",
+      "id": 23
     }
   ],
   "subcategories": {
@@ -679,5 +731,5 @@
       "text": "Export ready · Moradabad, India"
     }
   ],
-  "publishedAt": "2026-09-02T08:05:06.703Z"
+  "publishedAt": "2026-09-03T07:53:15.308Z"
 }
