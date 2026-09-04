@@ -61,16 +61,34 @@ export default function DragRail({ children, label = 'Gallery', hint = 'Drag · 
       },
     })
 
-    // suppress child link clicks after a real drag
+    // suppress child link clicks after a real drag, but never block action buttons
     const clickGuard = (e) => {
+      if (e.target.closest('.rail-card-add')) return
       if (d.getMoved() > 8) { e.preventDefault(); e.stopPropagation() }
     }
     trackEl.addEventListener('click', clickGuard, true)
+
+    // sideways scroll — trackpad two-finger swipe (deltaX) or Shift+wheel
+    const wrapEl = wrap.current
+    const onWheel = (e) => {
+      const dx = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.shiftKey ? e.deltaY : 0
+      if (!dx) return
+      e.preventDefault()
+      const b = getBounds()
+      if (b.minX >= 0) return
+      const next = gsap.utils.clamp(b.minX, 0, d.pos.x - dx)
+      /* setPos updates pos.x and calls onMove → gsap.set(trackEl, {x})
+         which immediately overrides any in-flight tween — no separate
+         gsap.to needed and doing both was what caused the conflict */
+      d.setPos(next)
+    }
+    wrapEl.addEventListener('wheel', onWheel, { passive: false })
 
     return () => {
       st.kill()
       d.kill()
       trackEl.removeEventListener('click', clickGuard, true)
+      wrapEl.removeEventListener('wheel', onWheel)
     }
   }, [isNative])
 
@@ -98,15 +116,15 @@ export default function DragRail({ children, label = 'Gallery', hint = 'Drag · 
       aria-roledescription="carousel"
       aria-label={label}
     >
-      <div className="rail-head">
-        <span className="rail-hint meta">{hint}</span>
+      {(hint || showNav) && <div className="rail-head">
+        {hint && <span className="rail-hint meta">{hint}</span>}
         {showNav && (
           <div className="rail-nav">
             <button className="rail-btn" aria-label="Previous" onClick={() => nudge(-1)}>←</button>
             <button className="rail-btn" aria-label="Next" onClick={() => nudge(1)}>→</button>
           </div>
         )}
-      </div>
+      </div>}
       <div className="rail-wrap" ref={wrap} tabIndex={0} onKeyDown={onKey}>
         <div className="rail-track" ref={track}>{children}</div>
       </div>

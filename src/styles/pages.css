@@ -76,6 +76,65 @@
 
 /* Category badge pill */
 .prod-info-header { margin-bottom: 0.75rem; display: block; }
+
+.prod-care-link {
+  display: inline-block;
+  margin: 0.2rem 0 1rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #7A3B1D;
+  text-decoration: none;
+  letter-spacing: 0.01em;
+}
+.prod-care-link:hover { text-decoration: underline; }
+
+.prod-share-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  background: transparent;
+  border: 1.5px solid #7A3B1D;
+  border-radius: 10px;
+  cursor: pointer;
+  color: #7A3B1D;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+  transition:
+    color 0.22s ease,
+    background-color 0.22s ease,
+    box-shadow 0.22s ease;
+}
+.prod-share-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: #7A3B1D;
+  opacity: 0;
+  transition: opacity 0.22s ease;
+  border-radius: inherit;
+}
+.prod-share-btn:hover::before { opacity: 1; }
+.prod-share-btn:hover {
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(122, 59, 29, 0.28);
+}
+.prod-share-btn.is-copied {
+  background: #7A3B1D;
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(122, 59, 29, 0.28);
+}
+.prod-share-btn.is-copied::before { opacity: 0; }
+.prod-share-icon {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .prod-category-badge {
   display: inline-block;
   font-family: var(--font-accent);
@@ -122,11 +181,24 @@
   max-width: 44ch;
   text-wrap: pretty;
   margin: 0 0 1.2rem;
-  display: -webkit-box;
-  -webkit-line-clamp: 4;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
 }
+.prod-story-toggle {
+  display: inline;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: 600;
+  color: var(--copper, #7A3B1D);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  opacity: 0.85;
+  transition: opacity 0.15s;
+}
+.prod-story-toggle:hover { opacity: 1; }
 
 /* Spec rows */
 .spec-list {
@@ -158,6 +230,25 @@
   flex-wrap: wrap;
   gap: 0.65rem;
   margin-bottom: 1.4rem;
+}
+
+@media (max-width: 640px) {
+  .prod-cta-block {
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 0.45rem;
+  }
+  .prod-cta-block .btn {
+    flex: 1 1 0;
+    min-width: 0;
+    padding-inline: 0.6rem;
+    font-size: 0.7rem;
+    white-space: nowrap;
+    justify-content: center;
+  }
+  .prod-share-btn {
+    flex-shrink: 0;
+  }
 }
 
 /* ============ finishes ============ */

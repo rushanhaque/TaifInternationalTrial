@@ -65,7 +65,7 @@ export const COLLECTIONS = [
 export const MORE_LINKS = [
   { to: '/catalogue', label: 'Catalogue' },
   { to: '/testimonials', label: 'Testimonials' },
-  { to: '/care', label: 'Care' },
+  { to: '/care', label: 'Care Guide' },
   { to: '/faq', label: 'FAQ' },
 ]
 

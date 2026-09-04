@@ -10,7 +10,11 @@ import '../styles/mk2/page-editorial.css'
    signalled by fill colour alone. */
 
 export default function CarePage() {
-  const [tab, setTab] = useState(CARE[0].key)
+  const [tab, setTab] = useState(() => {
+    const param = new URLSearchParams(window.location.search).get('material')
+    const match = param && CARE.find((c) => c.key === param)
+    return match ? match.key : CARE[0].key
+  })
   const activeGuide = CARE.find((c) => c.key === tab) || CARE[0]
 
   return (

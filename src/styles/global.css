@@ -2000,7 +2000,7 @@ html.dark .header-brand-img {
 }
 
 .rail-card {
-  flex: 0 0 clamp(320px, 36vw, 480px);
+  flex: 0 0 clamp(200px, 22vw, 280px);
   box-sizing: border-box;
 }
 
@@ -2008,6 +2008,76 @@ html.dark .header-brand-img {
    the related rail is the same kind of surface as those */
 .rail-card .slab {
   aspect-ratio: 1/1;
+}
+
+/* rail card inner layout for the more-section */
+.rail-card-slab-wrap {
+  position: relative;
+}
+
+.rail-card-name {
+  display: block;
+  margin-top: 0.55rem;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--ink);
+  text-decoration: none;
+  line-height: 1.35;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.rail-card-name:hover { color: var(--copper, #7A3B1D); }
+
+.rail-card-add {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.88);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(122,59,29,0.25);
+  border-radius: 8px;
+  cursor: pointer;
+  color: #7A3B1D;
+  transition: background 0.18s, color 0.18s, border-color 0.18s;
+  z-index: 3;
+}
+.rail-card-add:hover {
+  background: #7A3B1D;
+  color: #fff;
+  border-color: #7A3B1D;
+}
+.rail-card-add.is-in {
+  background: #7A3B1D;
+  color: #fff;
+  border-color: #7A3B1D;
+}
+
+/* no hover scale, no tilt, no label slide, no tint veil, no rounded corners */
+.rail-card .slab,
+.rail-card .slab-core {
+  border-radius: 0 !important;
+  transform: none !important;
+}
+.rail-card .slab.has-img:hover .slab-img {
+  transform: none;
+  filter: none;
+}
+.rail-card .slab:hover .sl-i > span {
+  transform: none;
+}
+.rail-card .slab.has-img .slab-core::after {
+  display: none;
+}
+.rail-card .slab-sheen {
+  display: none;
 }
 
 /* product hero — show the photo clean, no colour veil or sheen */

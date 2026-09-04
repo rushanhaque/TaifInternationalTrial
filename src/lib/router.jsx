@@ -125,8 +125,9 @@ export function Router({ routes, notFound, before = null, after = null }) {
   }, [path]) // eslint-disable-line react-hooks/exhaustive-deps
 
   function settle(to) {
-    pathRef.current = to
-    setPath(to)
+    const pathname = to.split('?')[0]
+    pathRef.current = pathname
+    setPath(pathname)
     const l = getLenis()
     if (l) l.scrollTo(0, { immediate: true, force: true })
     window.scrollTo(0, 0)
@@ -134,7 +135,7 @@ export function Router({ routes, notFound, before = null, after = null }) {
 
   function go(to, push = true, opts = {}) {
     if (busy.current) return
-    if (to === window.location.pathname && push) {
+    if (to.split('?')[0] === window.location.pathname && push) {
       const l = getLenis()
       l ? l.scrollTo(0) : window.scrollTo({ top: 0, behavior: 'smooth' })
       return
@@ -215,7 +216,7 @@ export function Router({ routes, notFound, before = null, after = null }) {
       return
     }
 
-    setPlateLabel(labelFor(to))
+    setPlateLabel(labelFor(to.split('?')[0]))
     veil.classList.add('is-active')
 
     gsap.set(top, { yPercent: -101 })

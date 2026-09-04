@@ -30,6 +30,7 @@ export function makeDraggable(el, opts = {}) {
 
   function down(e) {
     if (e.button) return
+    if (e.target.closest('button')) return
     if (tween) tween.kill()
     dragging = true
     moved = 0
