@@ -462,21 +462,46 @@
       "weight": "",
       "moq": "",
       "lead": "",
-      "image": "/img/content/5d515d044f5eae65.webp",
-      "image2": "/img/content/da8213da60c56aa2.webp",
+      "image": "/img/content/a128842c22d4f626.webp",
+      "image2": "/img/content/e75e3b25a5add57d.webp",
       "image3": "/img/content/61e440485f8802ea.webp",
-      "image4": "/img/content/4c642e6ef029bcbb.webp",
-      "story": "Bring art to your wellness with our Designer Pure Copper Bottle – Blue Bird Collection.\n\nCrafted from 99% pure copper on the inside and featuring a premium matte enamel print on the outside, this bottle combines the ancient health benefits of Ayurveda with modern designer aesthetics. The beautiful hummingbird and floral design makes it a statement piece for your office desk and home.\n\nAs per Ayurveda, water stored in pure copper (Tamra Jal) for 6-8 hours is believed to help boost immunity, support digestion, and improve overall wellness.",
+      "image4": "",
+      "story": "Bring art to your wellness with our Designer Pure Copper Bottle.\n\nCrafted from 99% pure copper on the inside and featuring a premium matte enamel print on the outside, this bottle combines the ancient health benefits of Ayurveda with modern designer aesthetics. The beautiful hummingbird and floral design makes it a statement piece for your office desk and home.\n\nAs per Ayurveda, water stored in pure copper (Tamra Jal) for 6-8 hours is believed to help boost immunity, support digestion, and improve overall wellness.",
       "tone": "brass",
       "finishes": [
         "Enamel"
       ],
       "rail": false,
-      "imageThumb": "/img/content/0934c5c6a3a85c0b.webp",
-      "image2Thumb": "/img/content/66dd2c0b98164362.webp",
+      "imageThumb": "/img/content/f4aa7b6bbbe16473.webp",
+      "image2Thumb": "/img/content/189d50113d1be4d1.webp",
       "image3Thumb": "/img/content/a7030b24c65d22b1.webp",
-      "image4Thumb": "/img/content/5400c24fc972dcdb.webp",
+      "image4Thumb": "",
       "id": 23
+    },
+    {
+      "name": "Hammered Water Dispenser ",
+      "category": "Copper Products",
+      "subcategory": "Dispenser's",
+      "slug": "hammered-water-dispenser",
+      "material": "99% Copper",
+      "dims": "",
+      "weight": "",
+      "moq": "",
+      "lead": "",
+      "image": "/img/content/43ece915ffae7481.webp",
+      "image2": "/img/content/4d48fc8fe94987b7.jpg",
+      "image3": "/img/content/8fa709a6508dacca.jpg",
+      "image4": "",
+      "story": "Pure Copper Hammered Water Dispenser with Brass Tap and Golden Stand. Made from 99% pure copper, this traditional copper matka naturally purifies water as per Ayurveda (Tamra Jal).\n Stores 5L / 8L / 11L water and keeps it cool.\nPerfect for home, kitchen and office use. Includes leak-proof tap and sturdy stand for easy dispensing. A healthy, stylish and eco-friendly alternative to plastic.\n",
+      "tone": "brass",
+      "finishes": [
+        "Hammered"
+      ],
+      "rail": false,
+      "image2Thumb": "/img/content/cb284f10e19bd8fa.webp",
+      "image3Thumb": "/img/content/dfedf89124f665a1.webp",
+      "id": 24,
+      "imageThumb": "/img/content/897ef396963b8062.webp"
     }
   ],
   "subcategories": {
@@ -485,7 +510,8 @@
       "Chess"
     ],
     "Copper Products": [
-      "Bottles"
+      "Bottles",
+      "Dispenser's"
     ],
     "Home Decor": [
       "Wall sconce",
@@ -731,5 +757,5 @@
       "text": "Export ready · Moradabad, India"
     }
   ],
-  "publishedAt": "2026-09-03T07:53:15.308Z"
+  "publishedAt": "2026-09-04T08:51:35.903Z"
 }
