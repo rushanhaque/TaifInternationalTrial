@@ -504,7 +504,7 @@
       "imageThumb": "/img/content/897ef396963b8062.webp"
     },
     {
-      "name": "Enamel Water Dispenser",
+      "name": "Jali Print Water Dispenser",
       "category": "Copper Products",
       "subcategory": "Dispenser's",
       "slug": "enamel-water-dispenser",
@@ -529,7 +529,7 @@
       "id": 25
     },
     {
-      "name": "Enamel Water Dispenser",
+      "name": "Mandala Art Water Dispenser",
       "category": "Copper Products",
       "subcategory": "Dispenser's",
       "slug": "enamel-water-dispenser",
@@ -552,6 +552,81 @@
       "image3Thumb": "",
       "image2Thumb": "/img/content/d55f472310d1039a.webp",
       "id": 26
+    },
+    {
+      "name": "Hammered Mug with Brass Handle",
+      "category": "Copper Products",
+      "subcategory": "Mugs",
+      "slug": "hammered-mug-with-brass-handle",
+      "material": "Copper & Brass",
+      "dims": "",
+      "weight": "",
+      "moq": "",
+      "lead": "",
+      "image": "/img/content/c7a8a731fddbc50c.webp",
+      "image2": "/img/content/168ba0860c49fad5.webp",
+      "image3": "/img/content/b9ddc6b7f3e232d0.webp",
+      "image4": "",
+      "story": "Premium 99% pure copper mug with vintage antique hammered design and golden brass handle. Ideal for Moscow Mule, cold drinks, beer, or water. Inside plain pure copper, outside rustic antique finish. Keeps drinks chilled longer.\nCapacity: 450-500 ml | Material: Pure Copper + Brass Handle",
+      "tone": "brass",
+      "finishes": [
+        "Antique"
+      ],
+      "rail": false,
+      "image2Thumb": "/img/content/a920c1bec0ac1cd8.webp",
+      "imageThumb": "/img/content/243fe8aeebf55e29.webp",
+      "image3Thumb": "/img/content/a6046087a7a6dd08.webp",
+      "id": 27
+    },
+    {
+      "name": "Hammered Copper Mug",
+      "category": "Copper Products",
+      "subcategory": "Mugs",
+      "slug": "hammered-copper-mug",
+      "material": "Copper",
+      "dims": "",
+      "weight": "",
+      "moq": "",
+      "lead": "",
+      "image": "/img/content/639987f3eadc144d.webp",
+      "image2": "/img/content/cd9fd267a06743ac.webp",
+      "image3": "/img/content/3a571530d2449deb.webp",
+      "image4": "",
+      "story": "Classic 99% pure copper barrel mug with all-over hammered texture and premium brass handle. Perfect for serving Moscow Mule, chilled cocktails, beer & cold drinks. Pure copper inside keeps drinks colder for longer. Bar-style luxury finish.\n\nCapacity: 500 ml | Material: Pure Copper + Brass Handle",
+      "tone": "brass",
+      "finishes": [
+        "Hammered"
+      ],
+      "rail": false,
+      "imageThumb": "/img/content/5f3777ca92aaa8b8.webp",
+      "image2Thumb": "/img/content/bd412028e93a41cd.webp",
+      "image3Thumb": "/img/content/e27dd0d3ead8e3cb.webp",
+      "id": 28
+    },
+    {
+      "name": "Botanical Print Mug",
+      "category": "Copper Products",
+      "subcategory": "Mugs",
+      "slug": "botanical-print-mug",
+      "material": "Copper",
+      "dims": "",
+      "weight": "",
+      "moq": "",
+      "lead": "",
+      "image": "/img/content/02b5149c19246090.webp",
+      "image2": "/img/content/cb9506e3a01aa2c1.webp",
+      "image3": "/img/content/54de25e029ea3898.webp",
+      "image4": "",
+      "story": "Premium 99% pure copper mug with vibrant lotus, koi fish and water lily enamel print. Inside - 100% pure copper with copper handle. Perfect for a healthy and stylish sip.\n\nCapacity: 450 ml | Material: 99% Pure Copper | Finish: Blue Lotus Pond Enamel Print",
+      "tone": "brass",
+      "finishes": [
+        "Enamel"
+      ],
+      "rail": false,
+      "image2Thumb": "/img/content/9515ced10ed14793.webp",
+      "image3Thumb": "/img/content/7c99c707e376273f.webp",
+      "imageThumb": "/img/content/0ec749718306daec.webp",
+      "id": 29
     }
   ],
   "subcategories": {
@@ -561,7 +636,8 @@
     ],
     "Copper Products": [
       "Bottles",
-      "Dispenser's"
+      "Dispenser's",
+      "Mugs"
     ],
     "Home Decor": [
       "Wall sconce",
@@ -807,5 +883,5 @@
       "text": "Export ready · Moradabad, India"
     }
   ],
-  "publishedAt": "2026-09-04T15:30:31.635Z"
+  "publishedAt": "2026-09-05T07:34:59.280Z"
 }
