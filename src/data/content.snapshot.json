@@ -504,31 +504,6 @@
       "imageThumb": "/img/content/897ef396963b8062.webp"
     },
     {
-      "name": "Jali Print Water Dispenser",
-      "category": "Copper Products",
-      "subcategory": "Dispenser's",
-      "slug": "enamel-water-dispenser",
-      "material": "99% Copper",
-      "dims": "",
-      "weight": "",
-      "moq": "",
-      "lead": "",
-      "image": "/img/content/50e03d3a7b714546.webp",
-      "image2": "/img/content/7a3153b0e3cb67be.webp",
-      "image3": "/img/content/06843da75d35d9fd.jpg",
-      "image4": "",
-      "story": "Premium Pure Copper Dispenser 8 Litre with Royal Jaali Print. Made from 99% pure copper with food-grade enamel coating outside. Comes with pure copper lid and leak-proof copper tap. Perfect for home & kitchen – stores Tamra Jal for healthy hydration.",
-      "tone": "brass",
-      "finishes": [
-        "Enamel"
-      ],
-      "rail": false,
-      "imageThumb": "/img/content/ba47c3f4d34dfe1d.webp",
-      "image2Thumb": "/img/content/fcc42240fe139713.webp",
-      "image3Thumb": "/img/content/01bdd21cd7d0d400.webp",
-      "id": 25
-    },
-    {
       "name": "Mandala Art Water Dispenser",
       "category": "Copper Products",
       "subcategory": "Dispenser's",
@@ -627,6 +602,31 @@
       "image3Thumb": "/img/content/7c99c707e376273f.webp",
       "imageThumb": "/img/content/0ec749718306daec.webp",
       "id": 29
+    },
+    {
+      "name": "Jali Print Water Dispenser",
+      "category": "Copper Products",
+      "subcategory": "Dispenser's",
+      "slug": "jali-print-water-dispenser",
+      "material": "Copper",
+      "dims": "",
+      "weight": "",
+      "moq": "",
+      "lead": "",
+      "image": "/img/content/50e03d3a7b714546.webp",
+      "image2": "/img/content/7a3153b0e3cb67be.webp",
+      "image3": "/img/content/06843da75d35d9fd.jpg",
+      "image4": "",
+      "story": "Premium Pure Copper Dispenser 8 Litre with Royal Jaali Print. Made from 99% pure copper with food-grade enamel coating outside. Comes with pure copper lid and leak-proof copper tap. Perfect for home & kitchen – stores Tamra Jal for healthy hydration.",
+      "tone": "brass",
+      "finishes": [
+        "Antique"
+      ],
+      "rail": false,
+      "imageThumb": "/img/content/ba47c3f4d34dfe1d.webp",
+      "image2Thumb": "/img/content/fcc42240fe139713.webp",
+      "image3Thumb": "/img/content/01bdd21cd7d0d400.webp",
+      "id": 30
     }
   ],
   "subcategories": {
@@ -883,5 +883,5 @@
       "text": "Export ready · Moradabad, India"
     }
   ],
-  "publishedAt": "2026-09-05T07:49:50.694Z"
+  "publishedAt": "2026-09-05T08:01:23.232Z"
 }
