@@ -627,6 +627,81 @@
       "image2Thumb": "/img/content/fcc42240fe139713.webp",
       "image3Thumb": "/img/content/01bdd21cd7d0d400.webp",
       "id": 30
+    },
+    {
+      "name": "Half-Fluted Design Copper Gift Set",
+      "category": "Copper Products",
+      "subcategory": "Gift Set",
+      "slug": "matte-copper-bottle-glass-set-with-box",
+      "material": "Copper",
+      "dims": "",
+      "weight": "",
+      "moq": "",
+      "lead": "",
+      "image": "/img/content/4a7f27f782f94f4f.webp",
+      "image2": "/img/content/c0fcd204f028d868.webp",
+      "image3": "/img/content/786f0b384190cbb4.webp",
+      "image4": "/img/content/78650021e0a6f995.webp",
+      "story": "Premium corporate gifting set made from 99% pure copper. Includes 1 x 950ml designer bottle with half-cut fluted design and 2 x 300ml glasses with copper rings. Elegant matte finish with exposed copper shine. Comes in a luxury black gift box with satin lining – ideal for Diwali, office & festive gifting.",
+      "tone": "brass",
+      "finishes": [
+        "Matte"
+      ],
+      "rail": false,
+      "imageThumb": "/img/content/17be4ef66e73b0e3.webp",
+      "image2Thumb": "/img/content/e87e2c3c041d6487.webp",
+      "image3Thumb": "/img/content/f1e6466415cfb466.webp",
+      "image4Thumb": "/img/content/f30f9add5fa5fe0c.webp",
+      "id": 31
+    },
+    {
+      "name": "Half-Hammered Copper Gift Set",
+      "category": "Copper Products",
+      "subcategory": "Gift Set",
+      "slug": "half-hammered-copper-gift-set",
+      "material": "Copper",
+      "dims": "",
+      "weight": "",
+      "moq": "",
+      "lead": "",
+      "image": "/img/content/e655ad0ab2d5b069.webp",
+      "image2": "/img/content/1d7ae7f8ed0108ca.webp",
+      "image3": "/img/content/07102965e37b8b35.webp",
+      "image4": "/img/content/583e18cd0f2dba63.webp",
+      "story": "Luxury 99% pure copper gift set featuring a 950ml bottle and two 300ml glasses in premium matte finish with hammered copper detailing on top & bottom. The bottle has a half-hammered, half-matte design with beaded partition for an elegant corporate look.\nMade from 99% pure copper to keep water naturally pure and cool. Comes in a premium black gift box with satin lining - perfect for Diwali, corporate, and festive gifting.\nIncludes: 1 x 950ml Bottle + 2 x 300ml Glasses + Gift Box",
+      "tone": "brass",
+      "finishes": [
+        "Matte"
+      ],
+      "rail": false,
+      "imageThumb": "/img/content/d24add731425e089.webp",
+      "image2Thumb": "/img/content/b576e518bc1f1342.webp",
+      "image3Thumb": "/img/content/5735faff2bec6da3.webp",
+      "image4Thumb": "/img/content/8494aaefc164c6ff.webp",
+      "id": 32
+    },
+    {
+      "name": "Half Hammered- Glossy Finish Copper Gift Set",
+      "category": "Copper Products",
+      "subcategory": "Gift Set",
+      "slug": "copper-gift-set-half-hammered",
+      "material": "99% Copper",
+      "dims": "",
+      "weight": "",
+      "moq": "",
+      "lead": "",
+      "image": "/img/content/98e2d55b8e38625f.webp",
+      "image2": "",
+      "image3": "",
+      "image4": "",
+      "story": "Premium 99% pure copper set with 1 x 950ml bottle and 2 x 250ml glasses in elegant half-hammered, half-plain finish with beaded detailing. Leak-proof bottle with silicone ring. Comes in a luxury gift box - perfect for corporate, Diwali & festive gifting.",
+      "tone": "brass",
+      "finishes": [
+        "Glossy"
+      ],
+      "rail": false,
+      "imageThumb": "/img/content/8ea40653f8dd975f.webp",
+      "id": 33
     }
   ],
   "subcategories": {
@@ -637,7 +712,8 @@
     "Copper Products": [
       "Bottles",
       "Dispenser's",
-      "Mugs"
+      "Mugs",
+      "Gift Set"
     ],
     "Home Decor": [
       "Wall sconce",
@@ -883,5 +959,5 @@
       "text": "Export ready · Moradabad, India"
     }
   ],
-  "publishedAt": "2026-09-05T08:01:23.232Z"
+  "publishedAt": "2026-09-06T15:00:44.688Z"
 }
