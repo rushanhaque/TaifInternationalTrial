@@ -517,7 +517,7 @@
       "image2": "/img/content/fab38fbd1d7c35f0.webp",
       "image3": "",
       "image4": "",
-      "story": "Premium 99% pure copper dispenser with vibrant mandala print. Comes with leak-proof copper tap and copper lid with brass knob. Enamel coated outside, pure copper inside for healthy Tamra Jal. Naturally cools water and supports immunity & digestion.",
+      "story": "Premium 99% pure copper dispenser with vibrant mandala print. Comes with leak-proof copper tap and copper lid with brass knob. Enamel coated outside, pure copper inside for healthy Tamra Jal. Naturally cools water & supports immunity & digestion.",
       "tone": "brass",
       "finishes": [
         "Enamel"
@@ -702,6 +702,76 @@
       "rail": false,
       "imageThumb": "/img/content/8ea40653f8dd975f.webp",
       "id": 33
+    },
+    {
+      "name": "Etched Copper Glass",
+      "category": "Copper Products",
+      "subcategory": "Glasses",
+      "slug": "etches-copper-glass",
+      "material": "99% Copper",
+      "dims": "",
+      "weight": "",
+      "moq": "",
+      "lead": "",
+      "image": "/img/content/b08efa4e81faa9e9.webp",
+      "image2": "/img/content/222e2e06d38a1eac.webp",
+      "image3": "",
+      "image4": "",
+      "story": "Pure Copper Etched Tumbler in Antique Black Finish. Intricate floral pattern, 250ml capacity. Ideal for daily use & gifting.",
+      "tone": "brass",
+      "finishes": [
+        "Antique"
+      ],
+      "rail": false,
+      "imageThumb": "/img/content/e591dfe325888b95.webp",
+      "image2Thumb": "/img/content/ff003d26aeb49af0.webp",
+      "id": 34
+    },
+    {
+      "name": "Etched Copper Glass with Lid",
+      "category": "Copper Products",
+      "subcategory": "Glasses",
+      "slug": "etched-copper-glass-with-lid",
+      "material": "99% Copper",
+      "dims": "",
+      "weight": "",
+      "moq": "",
+      "lead": "",
+      "image": "/img/content/eb86403b0f44deeb.jpg",
+      "image2": "",
+      "image3": "",
+      "image4": "",
+      "story": "Beautifully handcrafted 99% pure copper tumblers featuring intricate Mughal-style floral etching. Comes with matching copper lids to keep water safe and hygienic.\nCapacity: 300ml per glass\nBenefits: Ayurvedic, helps boost immunity & digestion when water stored overnight",
+      "tone": "brass",
+      "finishes": [
+        "Glossy"
+      ],
+      "rail": false,
+      "imageThumb": "/img/content/4d8ffc7721e3e29d.webp",
+      "id": 35
+    },
+    {
+      "name": "Vintage Embossed  Copper Glass ",
+      "category": "Copper Products",
+      "subcategory": "Glasses",
+      "slug": "vintage-embossed-copper-glass",
+      "material": "99% Copper",
+      "dims": "",
+      "weight": "",
+      "moq": "",
+      "lead": "",
+      "image": "/img/content/542dd0cbfdc4e240.webp",
+      "image2": "",
+      "image3": "",
+      "image4": "",
+      "story": "Handcrafted pure copper water glass with premium antique embossed carving. Features traditional beaded border and floral Mughal pattern for a royal look.\n- Capacity: 300ml\n Ideal for drinking water, Ayurvedic health benefits\n",
+      "tone": "brass",
+      "finishes": [
+        "Antique Matt"
+      ],
+      "rail": false,
+      "imageThumb": "/img/content/dcb6073dab7fda17.webp",
+      "id": 36
     }
   ],
   "subcategories": {
@@ -713,7 +783,8 @@
       "Bottles",
       "Dispenser's",
       "Mugs",
-      "Gift Set"
+      "Gift Set",
+      "Glasses"
     ],
     "Home Decor": [
       "Wall sconce",
@@ -959,5 +1030,5 @@
       "text": "Export ready · Moradabad, India"
     }
   ],
-  "publishedAt": "2026-09-06T15:00:44.688Z"
+  "publishedAt": "2026-09-07T14:49:18.140Z"
 }
