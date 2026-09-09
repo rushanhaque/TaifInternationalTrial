@@ -1,0 +1,308 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   THE SEARCH BAR — /collections
+
+   One wide, quiet field between the lede and the plates. It reads as part of
+   the catalogue's furniture rather than as a widget dropped on top of it:
+   a hairline card on the page's own ground that lifts and lightens on focus,
+   and results in a panel that keeps the caption grammar of the wall behind
+   it — numeral-weight labels, name in the display face, material and family
+   underneath.
+
+   Focus is carried by the field's own ground, border and lift alone. A brass
+   rule used to draw across the foot of the box on focus; under a rounded
+   border it read as an underline slid beneath the control rather than as
+   part of it, so it is gone.
+
+   Nothing here filters the grid. The panel is an overlay; close it and the
+   page is untouched. That is deliberate — a buyer who is browsing the wall
+   should never have it rearranged under them by a stray keystroke.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.cs {
+  position: relative;
+  margin-top: clamp(1.5rem, 2.8vw, 2.4rem);
+  /* the panel has to sit over the specs line and the first course of plates */
+  z-index: 20;
+}
+
+/* ── the field ────────────────────────────────────────────────────────── */
+.cs-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  /* the vertical figure is smaller than it looks — the input's line box (see
+     .cs-input) carries most of the field's height */
+  padding: clamp(0.42rem, 0.7vw, 0.6rem) clamp(0.9rem, 1.6vw, 1.2rem);
+  background: var(--chrome-2);
+  border: 1px solid var(--hair);
+  border-radius: var(--r-sm, 10px);
+  box-shadow: var(--edge-hair);
+  transition:
+    box-shadow 0.5s var(--ease-fluid),
+    border-color 0.4s var(--ease-fluid),
+    background-color 0.4s var(--ease-fluid);
+}
+
+.cs-field:hover { border-color: var(--hair-strong); }
+
+/* focus lands on the input, but the ring belongs on the whole field */
+.cs-field:focus-within {
+  background: var(--white);
+  border-color: var(--hair-strong);
+  box-shadow: var(--edge-hair), var(--lift-2);
+}
+
+.cs-icon {
+  flex: none;
+  display: inline-flex;
+  color: var(--faint);
+  transition: color 0.4s var(--ease-fluid);
+}
+
+.cs-field:focus-within .cs-icon,
+.cs-field.has-q .cs-icon { color: var(--brass); }
+
+.cs-icon svg { width: 19px; height: 19px; }
+
+.cs-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--graphite);
+  font-family: var(--font-body);
+  font-weight: 350;
+  font-size: clamp(0.98rem, 1.2vw, 1.08rem);
+  /* The caret is drawn the height of the input's own line box, not the height
+     of the field around it — at 1.4 it was a short tick floating in a tall
+     box, which reads as a stray mark rather than as a cursor. The taller line
+     box gives it the full height of the control; the field's vertical padding
+     below is trimmed to match so the bar itself does not grow. */
+  line-height: 2.1;
+  caret-color: var(--brass);
+}
+
+/* the site's focus ring is a brass halo drawn around the focused element.
+   On a bare input inside a bordered field that reads as a second box inside
+   the first, so the ring is moved onto the field via :focus-within above —
+   the same affordance, drawn once, around the thing that looks like the
+   control. */
+.cs-input:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+.cs-input::placeholder {
+  color: var(--dim);
+  opacity: 0.72;
+}
+
+/* the browser's own clear affordance duplicates .cs-clear and does not
+   inherit any of this design */
+.cs-input::-webkit-search-cancel-button,
+.cs-input::-webkit-search-decoration {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.cs-clear {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--hair);
+  color: var(--graphite-2);
+  cursor: pointer;
+  transition: background-color 0.35s var(--ease-fluid), color 0.35s var(--ease-fluid);
+}
+
+.cs-clear:hover {
+  background: var(--brass);
+  color: var(--white);
+}
+
+.cs-clear svg { width: 10px; height: 10px; }
+
+/* the count, in the same accent face as every other figure on the page */
+.cs-hint {
+  flex: none;
+  font-family: var(--font-accent);
+  font-size: 0.62rem;
+  letter-spacing: 0.17em;
+  text-transform: uppercase;
+  color: var(--dim);
+  font-variant-numeric: tabular-nums;
+  padding-left: 0.75rem;
+  border-left: 1px solid var(--hair);
+}
+
+/* ── the results panel ────────────────────────────────────────────────── */
+.cs-panel {
+  position: absolute;
+  top: calc(100% + 0.6rem);
+  left: 0;
+  right: 0;
+  overflow: hidden;
+  background: var(--white);
+  border: 1px solid var(--hair-strong);
+  border-radius: var(--r-sm, 10px);
+  box-shadow: var(--lift-2);
+  animation: cs-drop 0.34s var(--ease-surge) both;
+}
+
+@keyframes cs-drop {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.cs-list {
+  list-style: none;
+  margin: 0;
+  padding: 0.35rem;
+  max-height: min(58vh, 30rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.cs-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: clamp(0.7rem, 1.2vw, 0.95rem);
+  padding: 0.55rem 0.6rem;
+  border-radius: 6px;
+  color: inherit;
+  text-decoration: none;
+  transition: background-color 0.28s var(--ease-fluid);
+}
+
+/* one highlight, driven by the same `active` index the arrow keys move, so
+   pointer and keyboard never disagree about which row is selected */
+.cs-row.is-active { background: var(--chrome-2); }
+
+.cs-thumb {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  overflow: hidden;
+  border-radius: 4px;
+  background: var(--chrome-2);
+  box-shadow: var(--edge-hair);
+  color: var(--brass);
+}
+
+.cs-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cs-thumb[data-kind='family'] { background: var(--white); }
+.cs-thumb svg { width: 16px; height: 16px; }
+
+.cs-row-txt {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* Two lines, then clip. A single ellipsised line cut 'Half-Hammered Glossy
+   Finish Copper Gift Set' down to something a buyer could not tell apart from
+   the next row — and the name is the whole reason the row is there. At the
+   panel's full width most names never reach the second line anyway. The
+   material line below stays on one. */
+.cs-row-name {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.24;
+  color: var(--graphite);
+}
+
+.cs-row-sub {
+  display: block;
+  margin-top: 0.22rem;
+  font-family: var(--font-accent);
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--dim);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cs-row-arrow {
+  flex: none;
+  display: inline-flex;
+  color: var(--tint-deep);
+  opacity: 0;
+  transform: translate(-5px, 3px);
+  transition:
+    opacity 0.35s var(--ease-fluid),
+    transform 0.5s var(--ease-surge);
+}
+
+.cs-row.is-active .cs-row-arrow { opacity: 1; transform: none; }
+.cs-row-arrow svg { width: 12px; height: 12px; }
+
+/* ── nothing found ────────────────────────────────────────────────────── */
+.cs-empty {
+  padding: clamp(1.1rem, 2vw, 1.5rem) clamp(1rem, 1.8vw, 1.4rem);
+}
+
+.cs-empty-head {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.02rem;
+  color: var(--graphite);
+}
+
+.cs-empty-sub {
+  margin: 0.45rem 0 0;
+  font-family: var(--font-body);
+  font-weight: 350;
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--graphite-2);
+}
+
+.cs-empty-sub a {
+  color: var(--brass);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+
+/* ── phones ───────────────────────────────────────────────────────────── */
+@media (max-width: 560px) {
+  /* the count is the first thing to go — the field needs its width for the
+     placeholder, which is what actually tells a visitor what to type */
+  .cs-hint { display: none; }
+  .cs-input { font-size: 1rem; }  /* 16px, or iOS zooms the page on focus */
+  .cs-thumb { width: 40px; height: 40px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cs-panel { animation: none; }
+  .cs-field,
+  .cs-icon,
+  .cs-row,
+  .cs-row-arrow,
+  .cs-clear {
+    transition-duration: 0.01ms !important;
+  }
+}

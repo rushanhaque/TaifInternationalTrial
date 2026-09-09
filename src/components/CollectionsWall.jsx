@@ -4,6 +4,7 @@ import { Link } from '../lib/router'
 import { COLLECTIONS } from '../data/site'
 import { COLLECTION_PAGE_IMGS } from '../data/images'
 import { familySlug } from '../lib/families'
+import CollectionSearch from './CollectionSearch'
 
 /* ── THE INDEX ──────────────────────────────────────────────────────────────
    All nine families as large plates, three to a row, captions underneath.
@@ -73,6 +74,11 @@ export default function CollectionsWall() {
             its own room of work — the pieces, the materials they are raised
             from, and the numbers a buyer actually needs.
           </p>
+
+          {/* the way past the wall for anyone who already knows what they
+              want — see collection-search.css on why it does not filter the
+              grid below it */}
+          <CollectionSearch />
 
           <dl className="cw-specs">
             <div className="cw-spec"><dt>Families</dt><dd>{String(COLLECTIONS.length).padStart(2, '0')}</dd></div>
