@@ -170,6 +170,19 @@
   overscroll-behavior: contain;
 }
 
+/* the section labels — Collections, then Pieces */
+.cs-group {
+  display: block;
+  padding: 0.75rem 0.6rem 0.35rem;
+  font-family: var(--font-accent);
+  font-size: 0.58rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.cs-list > li:first-child .cs-group { padding-top: 0.5rem; }
+
 .cs-row {
   position: relative;
   display: flex;
@@ -229,6 +242,22 @@
   font-size: 1rem;
   line-height: 1.24;
   color: var(--graphite);
+}
+
+/* the matched words. A <mark> is yellow by default in every browser, which
+   on this ground looks like a highlighter pen was taken to the catalogue —
+   the mark here is brass type on the faintest brass wash, the same accent
+   the rest of the page uses for emphasis. */
+.cs-hit {
+  background: rgba(122, 59, 29, 0.1);
+  color: var(--brass);
+  border-radius: 2px;
+  padding: 0 0.05em;
+}
+
+html.dark .cs-hit {
+  background: rgba(255, 255, 255, 0.14);
+  color: var(--brass);
 }
 
 .cs-row-sub {

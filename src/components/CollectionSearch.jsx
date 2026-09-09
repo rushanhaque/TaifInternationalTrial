@@ -3,6 +3,7 @@ import { Link, navigate } from '../lib/router'
 import { useContent } from '../lib/content'
 import { productImg } from '../data/images'
 import { FAMILIES, canonicalFamilySlug } from '../lib/families'
+import { buildIndex, markRuns, searchFamilies, searchIndex, tokenize } from '../lib/search'
 
 /* ── THE SEARCH BAR — /collections ──────────────────────────────────────────
    Nine families is a small enough wall to read; the thirty-odd pieces behind
@@ -14,35 +15,16 @@ import { FAMILIES, canonicalFamilySlug } from '../lib/families'
    types ('barware', 'copper') name a room rather than an object, and sending
    them to the family page is the better answer.
 
+   The matching itself is in lib/search.js — word-by-word across weighted
+   fields, a trade thesaurus, and one typo's tolerance. That file carries the
+   reasoning. This one is the field, the list and the keys.
+
    Fail open: with the field empty the page is exactly what it was. Nothing
    below is filtered, hidden or re-ordered — the results are an overlay, so a
    visitor who ignores the field never notices it is there.                 */
 
-const MAX_PIECES = 6
+const MAX_PIECES = 8
 const MAX_FAMILIES = 3
-
-/* fold accents and case so 'decor' finds 'Décor' */
-const norm = (s) =>
-  String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()
-
-/* Score rather than filter, so the closest name lands at the top instead of
-   whichever piece happens to sit first in the catalogue. A name that starts
-   with the query beats one that merely contains it, and a match on the
-   material or the family is worth less than a match on the name. */
-function score(p, q) {
-  const name = norm(p.name)
-  const cat = norm(p.category)
-  const mat = norm(p.material)
-  const rest = norm([p.story, (p.finishes || []).join(' '), p.slug].join(' '))
-
-  if (name === q) return 100
-  if (name.startsWith(q)) return 80
-  if (name.includes(q)) return 60
-  if (cat.startsWith(q) || mat.startsWith(q)) return 45
-  if (cat.includes(q) || mat.includes(q)) return 35
-  if (rest.includes(q)) return 15
-  return 0
-}
 
 export default function CollectionSearch() {
   const [q, setQ] = useState('')
@@ -52,47 +34,50 @@ export default function CollectionSearch() {
   const inputRef = useRef(null)
   const listId = useId()
 
-  const query = norm(q.trim())
-
   /* through the hook, not getProducts(), so an admin edit reaches the field
      without a reload — same contract the catalogue and the family pages use */
   const products = useContent('products') || []
 
+  /* every field of every piece, folded once. Rebuilt only when the catalogue
+     itself changes — not on each keystroke, which is the whole point of
+     keeping it out of the search below. */
+  const index = useMemo(() => buildIndex(products), [products])
+
+  const tokens = useMemo(() => tokenize(q), [q])
+  const ready = tokens.length > 0 && q.trim().length >= 2
+
   /* families first, then pieces — a family is the broader answer, and a
      buyer who typed one wants the room rather than one object inside it */
   const results = useMemo(() => {
-    if (query.length < 2) return []
+    if (!ready) return []
 
-    const fams = FAMILIES
-      .filter((f) => norm(f).includes(query))
-      .slice(0, MAX_FAMILIES)
-      .map((f) => ({
-        kind: 'family',
-        key: `f:${f}`,
-        title: f,
-        sub: 'Collection',
-        to: `/collections/${canonicalFamilySlug(f)}`,
-      }))
+    const fams = searchFamilies(FAMILIES, tokens, MAX_FAMILIES).map((r) => ({
+      kind: 'family',
+      key: `f:${r.name}`,
+      runs: markRuns(r.name, r.marks),
+      sub: 'Collection',
+      to: `/collections/${canonicalFamilySlug(r.name)}`,
+    }))
 
-    const pieces = products
-      .map((p) => ({ p, s: score(p, query) }))
-      .filter((r) => r.s > 0)
-      .sort((a, b) => b.s - a.s || a.p.name.localeCompare(b.p.name))
-      .slice(0, MAX_PIECES)
-      .map(({ p }) => ({
+    const pieces = searchIndex(index, tokens, MAX_PIECES).map((r) => {
+      const p = r.item
+      return {
         kind: 'piece',
         key: `p:${p.slug}`,
-        title: p.name,
-        sub: `${p.category} · ${p.material}`,
+        runs: markRuns(p.name, r.marks),
+        /* the family and the shelf it sits on — subcategory is what a buyer
+           searched by half the time, so it belongs in the answer */
+        sub: [p.category, p.subcategory, p.material].filter(Boolean).join(' · '),
         img: p.imageThumb || p.image || productImg(p.slug),
         to: `/catalogue/${p.slug}`,
-      }))
+      }
+    })
 
     return [...fams, ...pieces]
-  }, [query, products])
+  }, [ready, tokens, index])
 
   /* a fresh query starts at the top of a fresh list */
-  useEffect(() => { setActive(0) }, [query])
+  useEffect(() => { setActive(0) }, [q])
 
   /* click anywhere else and the panel closes */
   useEffect(() => {
@@ -131,7 +116,7 @@ export default function CollectionSearch() {
     }
   }
 
-  const showPanel = open && query.length >= 2
+  const showPanel = open && ready
   const activeId = results[active] ? `${listId}-${active}` : undefined
 
   return (
@@ -177,7 +162,7 @@ export default function CollectionSearch() {
         )}
 
         <span className="cs-hint" aria-hidden="true">
-          {query.length >= 2
+          {ready
             ? `${results.length} match${results.length === 1 ? '' : 'es'}`
             : 'Catalogue'}
         </span>
@@ -189,6 +174,14 @@ export default function CollectionSearch() {
             <ul className="cs-list" id={listId} role="listbox" aria-label="Search results">
               {results.map((r, i) => (
                 <li key={r.key} role="presentation">
+                  {/* a heading where the kind changes — two collections and
+                      eight pieces in one undivided list read as ten things of
+                      the same sort, and they are not */}
+                  {r.kind !== results[i - 1]?.kind && (
+                    <span className="cs-group" role="presentation">
+                      {r.kind === 'family' ? 'Collections' : 'Pieces'}
+                    </span>
+                  )}
                   <Link
                     to={r.to}
                     id={`${listId}-${i}`}
@@ -209,7 +202,16 @@ export default function CollectionSearch() {
                     </span>
 
                     <span className="cs-row-txt">
-                      <span className="cs-row-name">{r.title}</span>
+                      <span className="cs-row-name">
+                        {/* the matched words carried through folding and
+                            marked in the original spelling — a buyer scanning
+                            eight rows should see why each one is here */}
+                        {r.runs.map((run, n) =>
+                          run.hit
+                            ? <mark key={n} className="cs-hit">{run.text}</mark>
+                            : <span key={n}>{run.text}</span>,
+                        )}
+                      </span>
                       <span className="cs-row-sub">{r.sub}</span>
                     </span>
 
