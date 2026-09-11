@@ -772,6 +772,142 @@
       "rail": false,
       "imageThumb": "/img/content/dcb6073dab7fda17.webp",
       "id": 36
+    },
+    {
+      "name": "Turkish Copper Pitcher",
+      "category": "Copper Products",
+      "subcategory": "Pitchers",
+      "slug": "turkish-copper-pitcher",
+      "material": "99% Copper",
+      "dims": "",
+      "weight": "",
+      "moq": "",
+      "lead": "",
+      "image": "/img/content/f67eb31c3d6aaf96.webp",
+      "image2": "",
+      "image3": "",
+      "image4": "",
+      "story": "Handcrafted pure copper jug with traditional hammered finish and vintage brass handle.\n\nPerfect for serving water, Ayurvedic benefits, and elegant table decor.\n📏 Available Sizes\nLarge: approx. 650 g - 1.4 Liters (approx. 56.7 Oz)\nSmall: approx. 450 g - 1.0 Liters (approx. 40.5 Oz)",
+      "tone": "brass",
+      "finishes": [
+        "Hammered"
+      ],
+      "rail": false,
+      "imageThumb": "/img/content/45a6392f39f05162.webp",
+      "id": 37
+    },
+    {
+      "name": "Mughal Style Copper Pitcher",
+      "category": "Copper Products",
+      "subcategory": "Pitchers",
+      "slug": "mughal-style-copper-pitcher",
+      "material": "99% Copper",
+      "dims": "",
+      "weight": "",
+      "moq": "",
+      "lead": "",
+      "image": "/img/content/1d08ace70a831b06.jpg",
+      "image2": "",
+      "image3": "",
+      "image4": "",
+      "story": "Elegant tall pitcher featuring all-over hammered texture with brass handle, base & pour guard. Tin coated (Kalai) inside for safe and hygienic water storage.\nPerfect for Ayurvedic water benefits, luxury dining, and traditional home decor.\nCapacity: 1.8L - 2L",
+      "tone": "brass",
+      "finishes": [
+        "Antique Hammered"
+      ],
+      "rail": false,
+      "imageThumb": "/img/content/bf696e5e26f9dbfc.webp",
+      "id": 38
+    },
+    {
+      "name": "Sleek Style Copper Pitcher",
+      "category": "Copper Products",
+      "subcategory": "Pitchers",
+      "slug": "sleek-style-copper-pitcher",
+      "material": "99% Copper",
+      "dims": "",
+      "weight": "",
+      "moq": "",
+      "lead": "",
+      "image": "/img/content/168cc09f5e393c61.webp",
+      "image2": "",
+      "image3": "",
+      "image4": "",
+      "story": "Modern minimalist design in highly polished pure copper with elegant brass handle and rim band. Tin lined inside for safe drinking.\nIdeal for daily water storage, serving, and gifting with Ayurvedic health benefits.\n- Capacity: 1.5L / 1500ml\n- Feature: Kalai coated inside, easy pour spout",
+      "tone": "brass",
+      "finishes": [
+        "High Gloss Mirror Polish"
+      ],
+      "rail": false,
+      "imageThumb": "/img/content/a77ef267d4e8aa59.webp",
+      "id": 39
+    },
+    {
+      "name": "Etched Copper Tea Kettle",
+      "category": "Copper Products",
+      "subcategory": "Kettles",
+      "slug": "etched-copper-tea-kettle",
+      "material": "99% Copper",
+      "dims": "",
+      "weight": "",
+      "moq": "",
+      "lead": "",
+      "image": "/img/content/ab1f4fe422ddfe6e.webp",
+      "image2": "",
+      "image3": "",
+      "image4": "",
+      "story": "Handcrafted heritage-style copper kettle with beautiful floral etching and brass hardware. Features wooden grip handle for easy & heat-safe serving with tin coating inside.\nPerfect for serving tea, water, home decor and Ayurvedic use.\nCapacity: 1L / 1.5L\nInside: Kalai / Tin Lined",
+      "tone": "brass",
+      "finishes": [
+        "Mirror Polish"
+      ],
+      "rail": false,
+      "imageThumb": "/img/content/191b95e4d68e1767.webp",
+      "id": 40
+    },
+    {
+      "name": "Copper Tea Kettle with Royal Crown Lid",
+      "category": "Copper Products",
+      "subcategory": "Kettles",
+      "slug": "copper-tea-kettle-with-royal-crown-lid",
+      "material": "99% Copper",
+      "dims": "",
+      "weight": "",
+      "moq": "",
+      "lead": "",
+      "image": "/img/content/c4819d88f7429f3e.webp",
+      "image2": "",
+      "image3": "",
+      "image4": "",
+      "story": "Luxury round kettle with all-over hammered & fluted texture, arched copper handle and decorative brass crown knob with chain.\nCapacity: 1L / 1.5L / 2L\nInside: Food-grade tin lining (Kalai)\nIdeal for serving tea / water, home decor, and traditional gifting with Ayurvedic benefits.",
+      "tone": "brass",
+      "finishes": [
+        "High Gloss Hammered"
+      ],
+      "rail": false,
+      "imageThumb": "/img/content/db7c7737191e2edb.webp",
+      "id": 41
+    },
+    {
+      "name": "Japanese Style Copper Kettle",
+      "category": "Copper Products",
+      "subcategory": "Kettles",
+      "slug": "japanese-style-copper-kettle",
+      "material": "99% Copper",
+      "dims": "",
+      "weight": "",
+      "moq": "",
+      "lead": "",
+      "image": "/img/content/a286803c8db78bdf.webp",
+      "image2": "",
+      "image3": "",
+      "image4": "",
+      "story": "Minimalist square-spout kettle with all-over hand-hammered finish and woven leather-wrapped top handle for heat protection.\n- Capacity: 1L / 1.2L\n- Feature: Tin lined inside (Kalai), leak-proof spout\nPerfect for serving tea, hot water, stovetop use & rustic home decor.",
+      "tone": "brass",
+      "finishes": [],
+      "rail": false,
+      "imageThumb": "/img/content/d385f6892ee7034d.webp",
+      "id": 42
     }
   ],
   "subcategories": {
@@ -784,7 +920,10 @@
       "Dispenser's",
       "Mugs",
       "Gift Set",
-      "Glasses"
+      "Glasses",
+      "Pitchers",
+      "Kettles",
+      "Goblet/Wine Glasses"
     ],
     "Home Decor": [
       "Wall sconce",
@@ -1030,5 +1169,5 @@
       "text": "Export ready · Moradabad, India"
     }
   ],
-  "publishedAt": "2026-09-07T14:49:18.140Z"
+  "publishedAt": "2026-09-11T10:43:51.764Z"
 }
