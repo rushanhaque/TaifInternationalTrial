@@ -34,7 +34,7 @@
     }
   ],
   "bestSellers": [
-    "product-1",
+    "bsjsbsbs",
     "product-2",
     "product-3",
     "hi",
@@ -43,7 +43,8 @@
     "candle-stand",
     "ndjsn",
     "jdjwns",
-    "hshs"
+    "hshs",
+    "matte-copper-bottle-glass-set-with-box"
   ],
   "products": [
     {
@@ -1184,6 +1185,75 @@
       "rail": false,
       "imageThumb": "/img/content/2e75fa43b21835e1.webp",
       "id": 54
+    },
+    {
+      "name": "Hammered Copper Handi with Brass Lid & Handles",
+      "category": "Copper Products",
+      "subcategory": "Haandi",
+      "slug": "hammered-copper-handi-with-brass-lid-handles",
+      "material": "Copper & Brass",
+      "dims": "",
+      "weight": "",
+      "moq": "",
+      "lead": "",
+      "image": "/img/content/40f74192707d6d61.webp",
+      "image2": "",
+      "image3": "",
+      "image4": "",
+      "story": "Traditional copper handi featuring full hand-hammered copper body, wide brass hammered lid with knob, and sturdy brass ring handles on sides.\n\n- Material: Pure Copper Body with Brass Lid & Handles (Tin-coated inside)\n- Design: All-Over Hand-Hammered Matki Shape\n- Finish: High Mirror Polish Copper + Golden Brass Lid Contrast\n- Capacity: 2L / 3L / 4L\n\nIdeal for cooking & serving biryani, dal, curries, slow-cooking. Excellent heat conductivity and heritage royal look. Perfect for home kitchen, restaurant serving and premium gifting.",
+      "tone": "brass",
+      "finishes": [
+        "High Mirror Polish"
+      ],
+      "rail": false,
+      "imageThumb": "/img/content/e623b22246bf7665.webp",
+      "id": 55
+    },
+    {
+      "name": "Hammered Pure Copper Handi / Biryani Pot with Dome Lid",
+      "category": "Copper Products",
+      "subcategory": "Haandi",
+      "slug": "hammered-pure-copper-handi-biryani-pot-with-dome-lid",
+      "material": "99% Pure Copper",
+      "dims": "",
+      "weight": "",
+      "moq": "",
+      "lead": "",
+      "image": "/img/content/a2e8965b29d7d376.webp",
+      "image2": "",
+      "image3": "",
+      "image4": "",
+      "story": "Royal low-height handi featuring full hand-hammered body, heavy dome-shaped lid with brass knob, and steel rim for strength.\n\n- Material: Pure Copper with Steel Rim (Tin-coated inside for safe cooking)\n- Design: Wide Flat Handi Shape - Full Hammered Texture\n- Finish: High Mirror Polish Outside, Food-Grade Kalai Inside\n- Capacity: 1.5L / 2L / 3L\n\nPerfect for cooking and serving biryani, handi dal, curries & dum dishes. Excellent heat retention, authentic flavor. Ideal for home kitchen, restaurant serving, and luxury gifting.",
+      "tone": "brass",
+      "finishes": [
+        "High Mirror Polish"
+      ],
+      "rail": false,
+      "imageThumb": "/img/content/a791c215cf636e47.webp",
+      "id": 56
+    },
+    {
+      "name": "Silk Green Velvet Bedside Pure Copper Carafe / Bedroom Jar ",
+      "category": "Copper Products",
+      "subcategory": "Carafe/Bedroom Jars",
+      "slug": "silk-green-velvet-bedside-pure-copper-carafe-bedroom-jar",
+      "material": "99% Pure Copper",
+      "dims": "",
+      "weight": "",
+      "moq": "",
+      "lead": "",
+      "image": "/img/content/ba7a9907ab18b12d.webp",
+      "image2": "",
+      "image3": "",
+      "image4": "",
+      "story": "Luxury velvet-covered bedside carafe featuring rich emerald green silk coating on hammered copper body with polished copper neck, beaded border and dome lid.\n\n- Material: 99% Pure Copper with Premium Silk Coating\n- Design: Modern Minimal - Half Silk Velvet + Hammered Dome Lid\n- Finish: Soft Touch Silk Green + High Mirror Polish Copper\n- Capacity: 900ml / 1000ml\n\nPerfect as bedside water carafe, sugar pot, luxury decor piece. Leak-proof lid, non-slip velvet grip, Ayurvedic wellness benefits. Ideal for daily use & premium festive gifting.",
+      "tone": "brass",
+      "finishes": [
+        "High Mirror Polish"
+      ],
+      "rail": false,
+      "imageThumb": "/img/content/0661e7a709617e4c.webp",
+      "id": 57
     }
   ],
   "subcategories": {
@@ -1201,7 +1271,8 @@
       "Kettles",
       "Goblet/Wine Glasses",
       "Carafe/Bedroom Jars",
-      "Haandi"
+      "Haandi",
+      "Turkish Pot"
     ],
     "Home Decor": [
       "Wall sconce",
@@ -1447,5 +1518,5 @@
       "text": "Export ready · Moradabad, India"
     }
   ],
-  "publishedAt": "2026-09-13T06:19:33.771Z"
+  "publishedAt": "2026-09-15T07:09:58.789Z"
 }
