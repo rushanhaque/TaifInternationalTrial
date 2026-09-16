@@ -50,7 +50,7 @@
     {
       "name": "Product 1",
       "category": "Wooden Products",
-      "subcategory": "Trays",
+      "subcategory": "",
       "slug": "product-1",
       "material": "bdjsbs",
       "dims": "",
@@ -1415,12 +1415,197 @@
       "rail": false,
       "imageThumb": "/img/content/1eb06ec5aa750d8e.webp",
       "id": 64
+    },
+    {
+      "name": "Acacia Wooden Serving Bowl ",
+      "category": "Wooden Products",
+      "subcategory": "Bowls",
+      "slug": "acacia-wooden-serving-bowl",
+      "material": "Acacia Wood",
+      "dims": "",
+      "weight": "",
+      "moq": "",
+      "lead": "",
+      "image": "/img/content/aa32455df1106b3c.jpg",
+      "image2": "",
+      "image3": "",
+      "image4": "",
+      "story": "Beautiful natural wooden salad / fruit bowl made from single piece of Acacia wood with rich dark grain pattern.\n\n- Material: 100% Natural Acacia Wood\n- Finish: Food-Safe Polished, Smooth Matte Natural Grain\n- Design: Deep Round Bowl - Thick Walled, Seamless Carved\n- Size: 8 inch / 10 inch / 12 inch Diameter Available\n- Use: Serving Bowl for Salad, Fruits, Snacks, Dough, Decor\n\nEco-friendly, durable, and lightweight. Each bowl has unique natural wood grains - No two pieces are same. Perfect for modern kitchen, dining table decor and rustic serving.\n\nCare: Hand Wash Only, Do Not Soak",
+      "tone": "brass",
+      "finishes": [
+        "Food-Safe Polished"
+      ],
+      "rail": false,
+      "imageThumb": "/img/content/a575640316bb4168.webp",
+      "id": 65
+    },
+    {
+      "name": "Acacia Wooden Wavy Edge Bowl",
+      "category": "Wooden Products",
+      "subcategory": "Bowls",
+      "slug": "acacia-wooden-wavy-edge-bowl",
+      "material": "Acacia Wood",
+      "dims": "",
+      "weight": "",
+      "moq": "",
+      "lead": "",
+      "image": "/img/content/26a43068bc589c60.webp",
+      "image2": "",
+      "image3": "",
+      "image4": "",
+      "story": "Premium artisanal wooden bowl featuring natural organic wavy rim design, hand-carved from solid Acacia wood with beautiful live grain texture.\n\n- Material: 100% Natural Acacia Wood - Single Log Carved\n- Design: Irregular Wavy / Live Edge Organic Shape - Thick Curved Walls\n- Finish: Food-Safe Natural Oil Polish, Smooth Inside & Outside\n- Size: 10 inch / 12 inch Approx.\n- Use: Decorative Centerpiece Bowl, Fruit Bowl, Dry Snack Serving, Potpourri, Keys & Jewelry Holder\n\nPerfect for Japandi / Wabi-Sabi / Modern Rustic home decor. Adds warm, earthy luxury to coffee table, console and dining setup. Each piece has unique natural grains and shape.\n\nCare: Hand Wash Only, Wipe with Dry Cloth",
+      "tone": "brass",
+      "finishes": [
+        "Food-Safe Polish"
+      ],
+      "rail": false,
+      "imageThumb": "/img/content/48e1aec634e9a654.webp",
+      "id": 66
+    },
+    {
+      "name": "Teak Wooden Modern Curved Bowl - Boat Shape",
+      "category": "Wooden Products",
+      "subcategory": "Bowls",
+      "slug": "teak-wooden-modern-curved-bowl-boat-shape",
+      "material": " Teak Wood",
+      "dims": "",
+      "weight": "",
+      "moq": "",
+      "lead": "",
+      "image": "/img/content/1af3657d3f67655b.webp",
+      "image2": "",
+      "image3": "",
+      "image4": "",
+      "story": "Artisan sculpted wooden bowl with elegant slanted / boat shaped rim, made from solid Teak wood with deep high-gloss polished grains.\n\n- Material: 100% Premium Teak Wood - Single Piece Carved\n- Design: Modern Asymmetrical Boat Shape / Curved Rim - Thick Rounded Walls\n- Finish: High Gloss Natural Oil Polish - Smooth & Shiny\n- Size: 10 inch / 12 inch Approx.\n- Use: Luxury Decor Bowl, Fruit Bowl, Dry Snacks Serving, Centerpiece, Coffee Table Decor\n\nMinimalist Japanese-inspired design perfect for modern luxury homes, hotels and cafes. Each bowl has unique natural dark wood grain patterns.\n\nCare: Hand Wash Only, Avoid Dishwasher",
+      "tone": "brass",
+      "finishes": [
+        "High Gloss Natural Oil Polish"
+      ],
+      "rail": false,
+      "imageThumb": "/img/content/3f501cebdc094c58.webp",
+      "id": 67
+    },
+    {
+      "name": "Acacia Wooden Serving Bowl - Classic Round",
+      "category": "Wooden Products",
+      "subcategory": "Bowls",
+      "slug": "acacia-wooden-serving-bowl-classic-round",
+      "material": "Acacia Wood",
+      "dims": "",
+      "weight": "",
+      "moq": "",
+      "lead": "",
+      "image": "/img/content/e6a3cc21d23f919c.webp",
+      "image2": "",
+      "image3": "",
+      "image4": "",
+      "story": "Solid wood bowl carved from a single piece of natural Acacia wood with beautiful swirl grain texture and warm honey-brown finish.\n\n- Material: 100% Natural Acacia Wood\n- Design: Classic Deep Round Bowl - Thick Walled, Seamless\n- Finish: Food-Safe Natural Oil Polished - Smooth Matte\n- Size: 6 inch / 8 inch / 10 inch Available\n- Use: Serving Bowl for Salad, Fruits, Soup, Snacks, Kitchen Prep & Home Decor\n\nDurable, lightweight and eco-friendly. Each piece has unique natural wood grains. Perfect for daily use, modern kitchen, and rustic dining decor.\n\nCare: Hand Wash Only, Do Not Soak",
+      "tone": "brass",
+      "finishes": [
+        "Food-Safe  Polished"
+      ],
+      "rail": false,
+      "imageThumb": "/img/content/7b0bb1dcd2ba744a.webp",
+      "id": 68
+    },
+    {
+      "name": " Teak Wooden Deep Bowls- Textured Edge",
+      "category": "Wooden Products",
+      "subcategory": "Bowls",
+      "slug": "teak-wooden-deep-bowls-textured-edge",
+      "material": "Teak Wood",
+      "dims": "",
+      "weight": "",
+      "moq": "",
+      "lead": "",
+      "image": "/img/content/cfca96f0096a8690.jpg",
+      "image2": "",
+      "image3": "",
+      "image4": "",
+      "story": "Artisan-made low-depth serving plates crafted from solid Teak wood, featuring unique hand-chiseled textured outer walls and rich dark swirl grain inside.\n\n- Material: 100% Premium Teak Wood - Single Log Carved\n- Design: Shallow Round Plate Bowl - Hand-Hammered / Carved Exterior Texture\n- Finish: Food-Safe High Gloss Polish Inside, Rustic Carved Outside\n- Size: 8 inch / 10 inch / 12 inch Approx. Diameter x 2.5 inch Height\n- Use: Fruit Plate, Salad Plate, Dry Snack Serving, Pasta Plate, Decor Platter\n\nPerfect for wabi-sabi, Japanese & modern rustic table setup. Each piece has unique wood grain and hand-carved marks - no two are same. Ideal for premium gifting and cafe / restaurant serving.\n\nCare: Hand Wash Only",
+      "tone": "brass",
+      "finishes": [
+        "Food-Safe High Gloss Polish"
+      ],
+      "rail": false,
+      "imageThumb": "/img/content/e346b1cb42f96f8a.webp",
+      "id": 69
+    },
+    {
+      "name": " Acacia Wooden Flower Shape Bowl - Petal Design",
+      "category": "Wooden Products",
+      "subcategory": "Bowls",
+      "slug": "acacia-wooden-flower-shape-bowl-petal-design",
+      "material": "Acacia Wood ",
+      "dims": "",
+      "weight": "",
+      "moq": "",
+      "lead": "",
+      "image": "/img/content/0caf2c392c870709.webp",
+      "image2": "",
+      "image3": "",
+      "image4": "",
+      "story": "Beautiful flower / petal shaped serving bowls carved from solid Acacia wood with elegant 5-petal scalloped edges and inner leaf veining.\n\n- Material: 100% Natural Acacia Wood - Single Piece Carved\n- Design: Flower / Clover Shape Bowl - Scalloped Petal Edge with Inner Groove Detailing\n- Finish: Food-Safe Natural Oil Polish - Smooth Matte & High Gloss Inside\n- Size: 5 inch / 6 inch Diameter x 2 inch Height Approx.\n- Use: Chutney Bowl, Dip Bowl, Nuts & Dry Fruits, Snack Serving, Decor Bowl, Gifting\n\nAesthetic Japanese-inspired design perfect for modern dining, cafe serving, and festive gifting. Stackable, durable and lightweight. Each bowl has unique natural wood grain.\n\nCare: Hand Wash Only",
+      "tone": "brass",
+      "finishes": [
+        "Food-Safe Natural Oil Polish"
+      ],
+      "rail": false,
+      "imageThumb": "/img/content/b61afbf1e821f78f.webp",
+      "id": 70
+    },
+    {
+      "name": "Acacia Wooden Shallow Serving Bowl - Classic Round",
+      "category": "Wooden Products",
+      "subcategory": "Bowls",
+      "slug": "acacia-wooden-shallow-serving-bowl-classic-round",
+      "material": "Acacia Wood",
+      "dims": "",
+      "weight": "",
+      "moq": "",
+      "lead": "",
+      "image": "/img/content/5c4e1d01d11a39c3.jpg",
+      "image2": "",
+      "image3": "",
+      "image4": "",
+      "story": "Solid wood bowl carved from a single piece of premium Acacia wood with beautiful long natural grain patterns and warm walnut brown tone.\n\n- Material: 100% Natural Acacia Wood - Single Piece, No Joint\n- Design: Classic Round Shallow Bowl - Thick Rolled Rim, Deep Walls\n- Finish: Food-Safe Natural Oil Polish - Smooth High Gloss Inside & Outside\n- Size: 8 inch / 10 inch / 12 inch Diameter Approx.\n- Use: Serving Bowl for Salad, Fruits, Pasta, Snacks, Decor Bowl, Centerpiece\n\nMinimalist Japanese-inspired design, durable, lightweight and eco-friendly. Each piece has unique natural wood grains. Perfect for modern homes, cafes, and luxury gifting.\n\nCare: Hand Wash Only",
+      "tone": "brass",
+      "finishes": [
+        "Food-Safe Natural Oil Polish"
+      ],
+      "rail": false,
+      "imageThumb": "/img/content/29afbb1340909523.webp",
+      "id": 71
+    },
+    {
+      "name": " Acacia Wooden Round Bowl - Two-Tone Natural Live Edge",
+      "category": "Wooden Products",
+      "subcategory": "Bowls",
+      "slug": "acacia-wooden-round-bowl-two-tone-natural-live-edge",
+      "material": " Acacia Wood",
+      "dims": "",
+      "weight": "",
+      "moq": "",
+      "lead": "",
+      "image": "/img/content/2aaa69a68cd9a639.jpg",
+      "image2": "",
+      "image3": "",
+      "image4": "",
+      "story": "Solid wood bowl carved from a single log of Acacia wood featuring stunning dual-tone natural grain - rich dark walnut mixed with light natural beige.\n\n- Material: 100% Natural Acacia Wood - Single Piece, No Joint\n- Design: Modern Belly Shape / Bulging Sides - Thick Walled, Deep Round\n- Finish: Food-Safe Natural Oil Polished - Smooth High Gloss\n- Size: 8 inch / 10 inch Diameter Approx.\n- Use: Fruit Bowl, Salad Bowl, Decor Centerpiece, Keys Holder, Modern Home Decor\n\nEach bowl showcases unique live wood grains and natural color variation - No two pieces are same. Perfect for Japandi, Wabi-Sabi and rustic luxury decor.\n\nCare: Hand Wash Only",
+      "tone": "brass",
+      "finishes": [
+        "Food-Safe Natural Oil Polished"
+      ],
+      "rail": false,
+      "imageThumb": "/img/content/015f55d45a019942.webp",
+      "id": 72
     }
   ],
   "subcategories": {
     "Wooden Products": [
+      "Bowls",
       "Trays",
-      "Chess"
+      "Chopping Board"
     ],
     "Copper Products": [
       "Bottles",
@@ -1679,5 +1864,5 @@
       "text": "Export ready · Moradabad, India"
     }
   ],
-  "publishedAt": "2026-09-16T09:34:34.078Z"
+  "publishedAt": "2026-09-16T19:11:11.014Z"
 }
