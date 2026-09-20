@@ -76,7 +76,7 @@
     {
       "name": "Product 3",
       "category": "Religious Supplies",
-      "subcategory": "Ornaments",
+      "subcategory": "",
       "slug": "product-3",
       "material": "",
       "dims": "",
@@ -209,7 +209,7 @@
     {
       "name": "jdjd",
       "category": "Religious Supplies",
-      "subcategory": "Diyas",
+      "subcategory": "",
       "slug": "jdjd",
       "material": "",
       "dims": "",
@@ -227,7 +227,7 @@
     {
       "name": "nsnsns",
       "category": "Religious Supplies",
-      "subcategory": "Ornaments",
+      "subcategory": "",
       "slug": "nsnsns",
       "material": "",
       "dims": "",
@@ -245,7 +245,7 @@
     {
       "name": "bsnsbsbs",
       "category": "Religious Supplies",
-      "subcategory": "Ornaments",
+      "subcategory": "",
       "slug": "bsnsbsbs",
       "material": "nns",
       "dims": "",
@@ -1875,6 +1875,29 @@
       "rail": false,
       "imageThumb": "/img/content/0e284d94991584e0.webp",
       "id": 84
+    },
+    {
+      "name": "Gold Plated Chalice with Paten and Ciborium Set",
+      "category": "Religious Supplies",
+      "subcategory": "Church Supplies",
+      "slug": "gold-plated-chalice-with-paten-and-ciborium-set",
+      "material": "Brass ",
+      "dims": "",
+      "weight": "",
+      "moq": "",
+      "lead": "",
+      "image": "/img/content/0a03cbca94d4e1ea.jpg",
+      "image2": "",
+      "image3": "",
+      "image4": "",
+      "story": "Designed with both functionality and liturgical tradition in mind, this collection is ideal for Catholic and Christian worship services, ordination gifts, or church sanctuary collection.\nComplete Liturgical Set: Includes one chalice, one ciborium with a cross-adorned lid, and one footed paten.\nCare Instructions: Hand wash gently with warm water and a soft cloth; avoid abrasive cleaners or harsh chemicals.",
+      "tone": "brass",
+      "finishes": [
+        "24K Gold-Plated"
+      ],
+      "rail": false,
+      "imageThumb": "/img/content/afafb7de4717931a.webp",
+      "id": 85
     }
   ],
   "subcategories": {
@@ -1916,8 +1939,7 @@
       "Hampers"
     ],
     "Religious Supplies": [
-      "Diyas",
-      "Ornaments"
+      "Church Supplies"
     ],
     "Bathroom Accessories": [
       "Sentinels",
@@ -2145,5 +2167,5 @@
       "text": "Export ready · Moradabad, India"
     }
   ],
-  "publishedAt": "2026-09-17T09:05:56.631Z"
+  "publishedAt": "2026-09-20T18:00:03.051Z"
 }
