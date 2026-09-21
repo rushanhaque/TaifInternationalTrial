@@ -34,10 +34,10 @@
     }
   ],
   "bestSellers": [
-    "bsjsbsbs",
-    "product-2",
-    "product-3",
-    "hi",
+    "24k-gold-dipped-natural-rose-with-velvet-gift-box-and-certificate-luxury-gift",
+    "indian-rosewood-sheesham-wood-antler-jewelry-tree-stand-with-drawer",
+    "brass-gold-plated-ciborium-with-cross-lid",
+    "royal-blue-enamel-pure-copper-coupe-goblet",
     "hello",
     "jejsn",
     "candle-stand",
@@ -153,7 +153,7 @@
     {
       "name": "bsjsbsbs",
       "category": "Gifting",
-      "subcategory": "Hamper",
+      "subcategory": "",
       "slug": "bsjsbsbs",
       "material": "",
       "dims": "",
@@ -316,7 +316,7 @@
     {
       "name": "nsjsbsjs",
       "category": "Gifting",
-      "subcategory": "Hamper",
+      "subcategory": "",
       "slug": "nsjsbsjs",
       "material": "nsjsns",
       "dims": "",
@@ -2457,6 +2457,29 @@
       "rail": false,
       "imageThumb": "/img/content/1050dd0f110d86d9.webp",
       "id": 109
+    },
+    {
+      "name": "24K Gold Dipped Natural Rose with Velvet Gift Box and Certificate - Luxury Gift",
+      "category": "Gifting",
+      "subcategory": "Romantic Gift",
+      "slug": "24k-gold-dipped-natural-rose-with-velvet-gift-box-and-certificate-luxury-gift",
+      "material": "Natural Real Rose",
+      "dims": "",
+      "weight": "",
+      "moq": "",
+      "lead": "",
+      "image": "/img/content/19b1046094c23679.jpg",
+      "image2": "",
+      "image3": "",
+      "image4": "",
+      "story": "Real natural rose preserved and dipped in pure 24K gold for eternal keepsake.\n\n- Material: Natural Real Rose Dipped in 24K Pure Gold Plating\n- Design: Full Bloom Rose with Detailed Petals, Long Textured Stem with Leaves, Handcrafted by Skilled Artisans\n- Finish: High Gloss Mirror 24K Gold Plated\n- Size: Rose Length - 10 inch Approx.\n- Packaging: Premium Black Velvet Box with Satin Inner Lining and Gold Locks + Certificate Card Included\n- Use: Anniversary Gift, Valentine's Day Gift, Birthday Gift, Wedding Gift, Mother's Day Gift, Luxury Keepsake\n\nCertificate Says: Natural Rose Dipped in 24K Gold - Beautiful piece dipped in pure 24K gold to preserve natural beauty forever.\n\nPerfect for Romantic Gift, Home Decor, Anniversary, Valentine and Lifetime Memory.\n\nCare: Regularly Clean with Soft Dry Cloth",
+      "tone": "brass",
+      "finishes": [
+        "24K Pure Gold Plating"
+      ],
+      "rail": false,
+      "imageThumb": "/img/content/704e2a8366b349bd.webp",
+      "id": 110
     }
   ],
   "subcategories": {
@@ -2514,7 +2537,7 @@
       "Tongs"
     ],
     "Gifting": [
-      "Hamper"
+      "Romantic Gift"
     ]
   },
   "reviews": [
@@ -2726,5 +2749,5 @@
       "text": "Export ready · Moradabad, India"
     }
   ],
-  "publishedAt": "2026-09-21T17:00:09.453Z"
+  "publishedAt": "2026-09-21T17:17:35.256Z"
 }
