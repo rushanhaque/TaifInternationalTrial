@@ -2125,6 +2125,98 @@
       "rail": false,
       "imageThumb": "/img/content/704e2a8366b349bd.webp",
       "id": 110
+    },
+    {
+      "name": "Wooden Solitaire Game ",
+      "category": "Wooden Products",
+      "subcategory": "Games",
+      "slug": "wooden-solitaire-game",
+      "material": "Premium Rosewood / Sheesham Wood Board ",
+      "dims": "",
+      "weight": "",
+      "moq": "",
+      "lead": "",
+      "image": "/img/content/ee06735497a4b913.webp",
+      "image2": "",
+      "image3": "",
+      "image4": "",
+      "story": "Classic peg solitaire strategy game handcrafted in premium solid wood for kids and adults.\n- Material: Premium Rosewood / Sheesham Wood Board with 32 Stainless Steel Balls\n- Finish: Natural High Gloss Wood Polished with Silver Mirror Steel Balls\n- Size: 8 x 8 Inch Square Board Approx.\n- Use: Brain Teaser Game, Family Board Game, Travel Game, Mind Exercise, Vintage Decor\nChallenge is to clear the board and leave only one ball in the center hole by jumping over balls.",
+      "tone": "brass",
+      "finishes": [
+        "High Gloss Wood Polished"
+      ],
+      "rail": false,
+      "imageThumb": "/img/content/241b7f0eed4afff1.webp",
+      "id": 111
+    },
+    {
+      "name": "Wooden Hexagon Tangram Puzzle - 3D Star Brain Teaser",
+      "category": "Wooden Products",
+      "subcategory": "Games",
+      "slug": "wooden-hexagon-tangram-puzzle-3d-star-brain-teaser",
+      "material": "Premium Rosewood / Sheesham Wood",
+      "dims": "",
+      "weight": "",
+      "moq": "",
+      "lead": "",
+      "image": "/img/content/b330d124e25c1636.webp",
+      "image2": "",
+      "image3": "",
+      "image4": "",
+      "story": "Challenging wooden mosaic puzzle to form a hexagon star shape with interlocking blocks.\n- Material: Premium Rosewood / Sheesham Wood and Natural Pine Wood\n- Design: Hexagonal Tray with 21 Geometric Blocks in Triangle, Diamond & Parallelogram Shapes, Dual Tone Light and Dark Brown Blocks\n- Finish: Natural High Gloss Wood Polished\n- Size: 8 Inch Hexagon Tray Approx.\n- Use: Brain Teaser Game, IQ Puzzle, Educational Toy, Stress Relief Game, Desk Decor\nArrange all small wooden pieces perfectly inside the hexagon frame to complete the puzzle.",
+      "tone": "brass",
+      "finishes": [
+        "Natural High Gloss Wood Polished"
+      ],
+      "rail": false,
+      "imageThumb": "/img/content/8a0ecac3a192a736.webp",
+      "id": 112
+    },
+    {
+      "name": "Wooden 6-in-1 3D Burr Puzzle Game Set ",
+      "category": "Wooden Products",
+      "subcategory": "Games",
+      "slug": "wooden-6-in-1-3d-burr-puzzle-game-set",
+      "material": "Premium Sheesham / Rosewood ",
+      "dims": "",
+      "weight": "",
+      "moq": "",
+      "lead": "",
+      "image": "/img/content/eb4895443b265ebc.webp",
+      "image2": "",
+      "image3": "",
+      "image4": "",
+      "story": "Set of 6 challenging interlocking wooden puzzles for brain teaser fun and display.\n- Material: Premium Sheesham / Rosewood with Acrylic Glass Top Box\n- Design: 6 Different 3D Puzzles - Cube Puzzle, Sphere Puzzle, Star Puzzle, Cross Burr Puzzle, Diagonal Burr Puzzle and Soma Cube Puzzle, Rectangular Box with 6 Compartments and Brass Lock Clasp\n- Finish: Natural High Gloss Dual Tone Dark Walnut and Light Honey Wood Polished\n- Size: Box - 9 x 6 inch Approx. | Puzzle Size - 2 to 3 inch Approx.\n- Use: Brain Teaser, IQ Test Game, Educational Toy, Stress Buster, Executive Desk Decor, Family Game\n\nTake apart and re-assemble each wooden puzzle to solve it - improves logic, memory and concentration.\n",
+      "tone": "brass",
+      "finishes": [
+        "Wood Polished"
+      ],
+      "rail": false,
+      "imageThumb": "/img/content/6c5750adb0011816.webp",
+      "id": 113
+    },
+    {
+      "name": " Wooden Dice Box with 5 Wooden Dice ",
+      "category": "Wooden Products",
+      "subcategory": "Games",
+      "slug": "wooden-dice-box-with-5-wooden-dice",
+      "material": "Premium Sheesham / Rosewood",
+      "dims": "",
+      "weight": "",
+      "moq": "",
+      "lead": "",
+      "image": "/img/content/a68ee3ccbcb26f21.webp",
+      "image2": "",
+      "image3": "",
+      "image4": "",
+      "story": "Classic Ludo dice set handcrafted in premium wood with brass inlay work.\n\n- Material: Premium Sheesham / Rosewood Wood Box and Dice\n- Design: Rectangular Hinged Lid Box with Brass Wire Inlay, \"GAME\" Letter Inlay on Top, Contains 5 Handmade Wooden Dice with Brass Dots\n- Finish: Natural High Gloss Dark Walnut Polish with Golden Brass Inlay\n- Size: Box - 6 x 2 inch Approx. | Dice - 0.75 inch Each Approx.\n- Use: Ludo, Board Games, Casino Games, Family Game Night, Travel Game, Collectible\n\nDurable handmade dice with smooth rounded edges for perfect rolling.",
+      "tone": "brass",
+      "finishes": [
+        "Natural"
+      ],
+      "rail": false,
+      "imageThumb": "/img/content/ed12e7c98b88d035.webp",
+      "id": 114
     }
   ],
   "subcategories": {
@@ -2134,9 +2226,7 @@
       "Chopping Board",
       "Jewelry Organizer",
       "Vases",
-      "Boxes",
-      "Coaster",
-      "Furniture"
+      "Games"
     ],
     "Copper Products": [
       "Bottles",
@@ -2394,5 +2484,5 @@
       "text": "Export ready · Moradabad, India"
     }
   ],
-  "publishedAt": "2026-09-22T13:27:12.185Z"
+  "publishedAt": "2026-09-23T06:04:15.731Z"
 }
