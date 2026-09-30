@@ -2447,6 +2447,237 @@
       "rail": false,
       "imageThumb": "/img/content/9e07f064e19290a4.webp",
       "id": 124
+    },
+    {
+      "name": "Brass Ice Bucket with Lid and Tong",
+      "category": "Barware",
+      "subcategory": "Ice Buckets",
+      "slug": "brass-ice-bucket-with-lid-and-tong",
+      "material": "Brass",
+      "dims": "",
+      "weight": "",
+      "moq": "",
+      "lead": "",
+      "image": "/img/content/abea38bfdacaa043.webp",
+      "image2": "",
+      "image3": "",
+      "image4": "",
+      "story": "This is a Premium Barware Ice Bucket.\nElevate your bar setup with this luxury solid brass ice bucket. Featuring a modern minimal cylindrical design with a brushed matte gold finish, it comes with a matching flat lid with T-bar handle and a sleek brass ice tong.\nBucket: Diameter 18 cm (7\") x Height 20 cm (8\")\n- Lid: Diameter 18.5 cm with 4 cm T-Handle\n- Tong: Length 18 cm (7\")",
+      "tone": "brass",
+      "finishes": [
+        "Matte"
+      ],
+      "rail": false,
+      "imageThumb": "/img/content/15f32534bcbfa29a.webp",
+      "id": 125
+    },
+    {
+      "name": "Hammered Copper Ice Bucket with Lid - 2.5L",
+      "category": "Barware",
+      "subcategory": "Ice Buckets",
+      "slug": "hammered-copper-ice-bucket-with-lid-2-5l",
+      "material": "Copper",
+      "dims": "",
+      "weight": "",
+      "moq": "",
+      "lead": "",
+      "image": "/img/content/0361c4c4936a4a4e.jpg",
+      "image2": "",
+      "image3": "",
+      "image4": "",
+      "story": "Hammered pure copper ice bucket with brass knob lid, 2.5L capacity to keep ice chilled longer.",
+      "tone": "brass",
+      "finishes": [
+        "Hammered"
+      ],
+      "rail": false,
+      "imageThumb": "/img/content/95997e48f8998d19.webp",
+      "id": 126
+    },
+    {
+      "name": " Vintage-Style Antique Brass Ice Bucket",
+      "category": "Barware",
+      "subcategory": "Ice Buckets",
+      "slug": "vintage-style-antique-brass-ice-bucket",
+      "material": "Brass",
+      "dims": "",
+      "weight": "",
+      "moq": "",
+      "lead": "",
+      "image": "/img/content/dd4975ef7ebcc991.jpg",
+      "image2": "",
+      "image3": "",
+      "image4": "",
+      "story": "This is a Vintage-Style Antique Brass Ice Bucket with Swing Handle. Crafted in solid brass with a brushed antique bronze finish, this bucket features a dome lid with ball knob and a matching ice tong, perfect for luxury bar service.",
+      "tone": "brass",
+      "finishes": [
+        "Antique"
+      ],
+      "rail": false,
+      "imageThumb": "/img/content/92573a0863438162.webp",
+      "id": 127
+    },
+    {
+      "name": "4-Piece Luxury Bar Tool Set ",
+      "category": "Barware",
+      "subcategory": "Bar Tool Set",
+      "slug": "4-piece-luxury-bar-tool-set",
+      "material": "Wood with Epoxy Resin",
+      "dims": "",
+      "weight": "",
+      "moq": "",
+      "lead": "",
+      "image": "/img/content/989b5350ab3289d0.jpg",
+      "image2": "/img/content/194c972699a2dd28.webp",
+      "image3": "",
+      "image4": "",
+      "story": "This is a 4-Piece Luxury Bar Tool Set with Wooden Stand, not a loose bar kit. It includes a bar spoon, ice scoop, bottle opener and double-sided peg measure with designer burl wood and clear resin handles mounted on a premium stainless steel and wooden base stand.",
+      "tone": "brass",
+      "finishes": [
+        "Nickel Plated"
+      ],
+      "rail": false,
+      "imageThumb": "/img/content/98a28a10b4283137.webp",
+      "image2Thumb": "/img/content/45c461b3f6352d68.webp",
+      "id": 128
+    },
+    {
+      "name": "Premium 4-Piece Luxury Bar Tool Set with Green Marble Stand ",
+      "category": "Barware",
+      "subcategory": "Bar Tool Set",
+      "slug": "premium-4-piece-luxury-bar-tool-set-with-green-marble-stand",
+      "material": "Marble + Steel",
+      "dims": "",
+      "weight": "",
+      "moq": "",
+      "lead": "",
+      "image": "/img/content/91f1acfcbbe1dabd.jpg",
+      "image2": "",
+      "image3": "",
+      "image4": "",
+      "story": "Luxury 4-piece gold plated bar tool set with faceted green marble handles, includes ice tong, bottle opener, peg measure and spreader, mounted on a gold stand with green marble base.",
+      "tone": "brass",
+      "finishes": [
+        "Shiny Gold"
+      ],
+      "rail": false,
+      "imageThumb": "/img/content/bea03353f2e9797e.webp",
+      "id": 129
+    },
+    {
+      "name": "Premium 6-piece Bar Tool Set with Hanging Stand",
+      "category": "Barware",
+      "subcategory": "Bar Tool Set",
+      "slug": "premium-6-piece-bar-tool-set-with-hanging-stand",
+      "material": "304 Stainless Steel",
+      "dims": "",
+      "weight": "",
+      "moq": "",
+      "lead": "",
+      "image": "/img/content/fb0b6eafe7a2e99d.webp",
+      "image2": "",
+      "image3": "",
+      "image4": "",
+      "story": "Premium 6-piece stainless steel bar tool set with hanging ball-top stand, includes jigger, strainer, bottle opener, ice tong and 2 spoons.\nDimensions: Stand H 13\" x W 10\" | Base 10\" x 4\" | Tools 9\" to 11\" Length",
+      "tone": "brass",
+      "finishes": [
+        "Silver Nickel Plated"
+      ],
+      "rail": false,
+      "imageThumb": "/img/content/b98ed67d5765498c.webp",
+      "id": 130
+    },
+    {
+      "name": "5-Piece Gold Plated Bar Tool Set with Wooden Stand",
+      "category": "Barware",
+      "subcategory": "Bar Tool Set",
+      "slug": "5-piece-gold-plated-bar-tool-set-with-wooden-stand",
+      "material": "Stainless Steel ",
+      "dims": "",
+      "weight": "",
+      "moq": "",
+      "lead": "",
+      "image": "/img/content/c41c0be39ce66553.webp",
+      "image2": "",
+      "image3": "",
+      "image4": "",
+      "story": "5-piece gold plated bar tool set with wooden base stand, includes 2 ice tongs, peg measure, bottle opener and garnish knife.\nDimensions: Wooden Base 10\" x 4\" x 1.5\" | Stand Height 12\" | Tools 8\" - 10\" Length",
+      "tone": "brass",
+      "finishes": [
+        "High Shine Gold"
+      ],
+      "rail": false,
+      "imageThumb": "/img/content/24d0b8a6d01ca595.webp",
+      "id": 131
+    },
+    {
+      "name": "Wall Mounted Leaf Shape Wine Bottle & Glass Holder",
+      "category": "Barware",
+      "subcategory": "Wine Bottle Holder",
+      "slug": "wall-mounted-leaf-shape-wine-bottle-glass-holder",
+      "material": "Rosewood/Sheesham",
+      "dims": "",
+      "weight": "",
+      "moq": "",
+      "lead": "",
+      "image": "/img/content/31f7d9fd6c178f67.jpg",
+      "image2": "",
+      "image3": "",
+      "image4": "",
+      "story": "Wall mounted wooden wine bottle holder in leaf shape with 2 stem glass hanging rack, walnut finish.\nSize: Approx. 16\" H x 10\" W",
+      "tone": "brass",
+      "finishes": [
+        "Plain"
+      ],
+      "rail": false,
+      "imageThumb": "/img/content/7b2a4900e1b92906.webp",
+      "id": 132
+    },
+    {
+      "name": "Metal Man Figure Wine Bottle Holder ",
+      "category": "Barware",
+      "subcategory": "Wine Bottle Holder",
+      "slug": "metal-man-figure-wine-bottle-holder",
+      "material": "Stainless Steel",
+      "dims": "",
+      "weight": "",
+      "moq": "",
+      "lead": "",
+      "image": "/img/content/17015727f7a6d923.jpg",
+      "image2": "",
+      "image3": "",
+      "image4": "",
+      "story": "Funny stainless steel human figure wine bottle holder lifting a bottle, modern decorative countertop stand for home bar and gifting.",
+      "tone": "brass",
+      "finishes": [
+        "Silver Nickel Finish"
+      ],
+      "rail": false,
+      "imageThumb": "/img/content/0e85fa0565ab257a.webp",
+      "id": 133
+    },
+    {
+      "name": "6-Piece Gold Plated Cocktail Picks Set",
+      "category": "Barware",
+      "subcategory": "Cocktail Picks",
+      "slug": "6-piece-gold-plated-cocktail-picks-set",
+      "material": "Stainless Steel ",
+      "dims": "",
+      "weight": "",
+      "moq": "",
+      "lead": "",
+      "image": "/img/content/d2d7a966cd3cd195.webp",
+      "image2": "",
+      "image3": "",
+      "image4": "",
+      "story": "Set of 6 luxury gold plated cocktail picks with designer tops - rainbow, seashell, pineapple, mermaid tail, triple heart and star shape, perfect for cocktails, mocktails and party garnishing.\n6\" Long Each - Sharp Point for Olives, Fruits, Garnish",
+      "tone": "brass",
+      "finishes": [
+        "High Gloss Gold"
+      ],
+      "rail": false,
+      "imageThumb": "/img/content/f496144664f17c04.webp",
+      "id": 134
     }
   ],
   "subcategories": {
@@ -2501,10 +2732,10 @@
       "Wine Shaker",
       "Beer Mugs",
       "Ice Buckets",
-      "Tool Sets",
+      "Bar Tool Set",
       "Wine Bottle Holder",
-      "Swizzle Sticks",
-      "Bottle Openers & Corkscrew"
+      "Bottle Opener & Corkscrew",
+      "Cocktail Picks"
     ],
     "Gifting": [
       "Romantic Gift"
@@ -2719,5 +2950,5 @@
       "text": "Export ready · Moradabad, India"
     }
   ],
-  "publishedAt": "2026-09-25T08:51:13.006Z"
+  "publishedAt": "2026-09-30T11:34:28.858Z"
 }
