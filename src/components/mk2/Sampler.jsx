@@ -35,7 +35,7 @@ const CELLS = [
    nine slugs be saved; anything past the ninth is dropped here rather than
    wrapping back onto an occupied cell, which is what `% CELLS.length` in
    layoutFor would otherwise do — two cards stacked on one square. */
-const MAX_PIECES = CELLS.length
+const MAX_PIECES = CELLS.length + 1 // the plate holds the first selection
 
 function layoutFor(index) {
   const { row, col } = CELLS[index % CELLS.length]
@@ -94,6 +94,9 @@ export default function Sampler() {
     .filter(Boolean)
     .slice(0, MAX_PIECES)
   const signature = pieces[0]
+  /* On desktop the first selection IS the signature plate, so the grid
+     around it carries the rest rather than showing that piece twice. */
+  const gridPieces = pieces.slice(1)
 
   /* Clicking the signature plate runs the whole transition for you: it scrolls
      to the exact offset where p reaches 1, which is the end of the section's
@@ -240,7 +243,7 @@ export default function Sampler() {
           <div className="czoom-grid">
 
             {/* Best sellers, floating into place around the signature plate */}
-            {pieces.map((item, idx) => {
+            {gridPieces.map((item, idx) => {
               const { row, col, dx, dy } = layoutFor(idx)
               const stagger = idx * 0.04
               const rawCardP = Math.min(1, Math.max(0, (p - 0.1 - stagger) / 0.6))
@@ -295,7 +298,15 @@ export default function Sampler() {
                   aria-label="Skip to the best sellers"
                 />
               )}
-              {/* Removed signature piece cover image */}
+              {/* Cover image: the first best seller selected in /admin */}
+              {signature && (
+                <img
+                  src={signature.image || productImg(signature.slug)}
+                  alt={signature.name}
+                  className="sig-card-bg-img"
+                  decoding="async"
+                />
+              )}
 
               {/* Vignette Overlay */}
               <div className="sig-card-overlay" />
@@ -313,8 +324,10 @@ export default function Sampler() {
 
 
 
-              {/* Actual Product Name "Atelier's Lamp" (Fades in when scroll transition is done) */}
-              <div
+              {/* Signature piece name (fades in when scroll transition is done) */}
+              {signature && (
+              <Link
+                to={`/catalogue/${signature.slug}`}
                 className="czoom-card-meta"
                 style={{
                   position: 'absolute',
@@ -326,11 +339,12 @@ export default function Sampler() {
                   zIndex: 6
                 }}
               >
-                <span className="czoom-card-sub">SIGNATURE SPECIFICATION</span>
+                <span className="czoom-card-sub">{signature.material}</span>
                 <h3 className="czoom-card-name" style={{ fontSize: 'clamp(1.1rem, 1.6vw, 1.5rem)' }}>
-                  Atelier's Lamp
+                  {signature.name}
                 </h3>
-              </div>
+              </Link>
+              )}
             </div>
 
           </div>

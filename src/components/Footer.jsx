@@ -34,6 +34,13 @@ export default function Footer() {
     return () => ctx.revert()
   }, [])
 
+  useEffect(() => {
+    if (!showColophon) return
+    const onKey = (e) => { if (e.key === 'Escape') setShowColophon(false) }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [showColophon])
+
   return (
     <footer className="footer" ref={root}>
       <div className="wrap">
@@ -119,8 +126,45 @@ export default function Footer() {
         <span className="foot-copy-sep">·</span>
         <span>{BRAND.origin}</span>
         <span className="foot-copy-sep">·</span>
-        <Link to="/privacy">Privacy</Link>
+        <button type="button" className="foot-dev-btn" onClick={() => setShowColophon(true)}>
+          Contact Developer
+        </button>
       </div>
+
+      {showColophon && (
+        <div className="dev-modal-backdrop" onClick={() => setShowColophon(false)}>
+          <div
+            className="dev-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="dev-modal-title"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              type="button"
+              className="dev-modal-close"
+              aria-label="Close"
+              onClick={() => setShowColophon(false)}
+            >
+              ×
+            </button>
+            <span className="dev-modal-kicker">Behind the website</span>
+            <h3 id="dev-modal-title" className="dev-modal-title">Designed &amp; Developed by Rushan Haque</h3>
+            <p className="dev-modal-text">
+              This website was designed and developed by Rushan Haque. Have a project in mind,
+              or want to say hello? Visit my website and let's connect.
+            </p>
+            <a
+              className="dev-modal-cta"
+              href="https://rushanhaque.in"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Visit rushanhaque.in &amp; Connect
+            </a>
+          </div>
+        </div>
+      )}
     </footer>
   )
 }
