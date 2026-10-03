@@ -27,7 +27,8 @@
   [headers.values]
     Cache-Control = "no-store, must-revalidate"
     X-Content-Type-Options = "nosniff"
-    X-Frame-Options = "SAMEORIGIN"
+    # Only this site and rushanhaque.in (portfolio preview) may frame it.
+    Content-Security-Policy = "frame-ancestors 'self' https://www.rushanhaque.in https://rushanhaque.in"
     Referrer-Policy = "strict-origin-when-cross-origin"
     # Must stay identical to the header block in vercel.json. Without this the
     # same commit passes a security-header scan on Vercel and fails on Netlify,
