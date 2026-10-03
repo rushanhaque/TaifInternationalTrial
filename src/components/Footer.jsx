@@ -152,7 +152,7 @@ export default function Footer() {
             <h3 id="dev-modal-title" className="dev-modal-title">Designed &amp; Developed by Rushan Haque</h3>
             <p className="dev-modal-text">
               Have a project in mind, an idea to develop, or a collaboration to explore?
-              I'd be glad to hear from you. Connect with me at rushanhaque.in.
+              I'd be glad to hear from you.
             </p>
             <a
               className="dev-modal-cta"
