@@ -2336,17 +2336,31 @@ html.dark .header-brand-img {
 .foot-copy a:hover { color: rgba(255, 255, 255, 0.75); }
 .foot-copy-sep { opacity: 0.3; }
 .foot-dev-btn {
-  background: none;
-  border: 0;
-  padding: 0;
+  padding: 0.18rem 0.6rem;
   cursor: pointer;
   font: inherit;
-  letter-spacing: inherit;
-  text-transform: inherit;
-  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.56rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  backdrop-filter: blur(6px);
+  transition: background 0.25s, color 0.25s, border-color 0.25s;
 }
-.foot-dev-btn:hover, .foot-dev-btn:focus-visible { color: rgba(255, 255, 255, 0.75); }
+.foot-dev-btn:hover, .foot-dev-btn:focus-visible {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.4);
+}
 
+/* Liquid-glass popup: frosted, saturated blur, specular edge highlights. */
+@keyframes dev-glass-in {
+  from { opacity: 0; transform: translateY(14px) scale(0.94); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes dev-backdrop-in { from { opacity: 0; } to { opacity: 1; } }
 .dev-modal-backdrop {
   position: fixed;
   inset: 0;
@@ -2355,32 +2369,62 @@ html.dark .header-brand-img {
   align-items: center;
   justify-content: center;
   padding: 1.25rem;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(4px);
+  background:
+    radial-gradient(circle at 25% 20%, rgba(214, 170, 96, 0.28), transparent 45%),
+    radial-gradient(circle at 78% 80%, rgba(120, 140, 255, 0.22), transparent 45%),
+    rgba(10, 8, 6, 0.6);
+  /* no backdrop-filter here: it would become a backdrop root and stop the
+     glass panel's own blur from seeing the page behind it */
+  animation: dev-backdrop-in 0.3s ease both;
 }
 .dev-modal {
   position: relative;
-  width: min(420px, 100%);
-  padding: 2rem 1.75rem 1.75rem;
+  overflow: hidden;
+  width: min(400px, 100%);
+  padding: 2.25rem 1.9rem 1.9rem;
   text-align: center;
-  border-radius: 14px;
-  background: #1b1511;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+  border-radius: 28px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.24), rgba(40, 30, 20, 0.35) 55%, rgba(255, 255, 255, 0.14));
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  box-shadow:
+    0 30px 70px rgba(0, 0, 0, 0.45),
+    inset 0 1px 1px rgba(255, 255, 255, 0.6),
+    inset 0 -1px 2px rgba(255, 255, 255, 0.15),
+    inset 0 0 30px rgba(255, 255, 255, 0.06);
   color: #fff;
+  animation: dev-glass-in 0.45s cubic-bezier(0.2, 0.9, 0.3, 1.1) both;
 }
+.dev-modal::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(115deg, rgba(255, 255, 255, 0.28) 0%, transparent 32%);
+  opacity: 0.7;
+}
+.dev-modal > * { position: relative; }
 .dev-modal-close {
   position: absolute;
-  top: 0.5rem;
-  right: 0.75rem;
-  background: none;
-  border: 0;
+  top: 0.7rem;
+  right: 0.8rem;
+  width: 2rem;
+  height: 2rem;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 50%;
   cursor: pointer;
-  font-size: 1.6rem;
+  font-size: 1.2rem;
   line-height: 1;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(255, 255, 255, 0.85);
 }
-.dev-modal-close:hover { color: #fff; }
+.dev-modal-close:hover { background: rgba(255, 255, 255, 0.25); color: #fff; }
+@media (prefers-reduced-motion: reduce) {
+  .dev-modal, .dev-modal-backdrop { animation: none; }
+}
 .dev-modal-kicker {
   display: block;
   margin-bottom: 0.6rem;
@@ -2400,13 +2444,15 @@ html.dark .header-brand-img {
   display: inline-block;
   padding: 0.75rem 1.4rem;
   border-radius: 999px;
-  background: #fff;
+  background: rgba(255, 255, 255, 0.92);
   color: #1b1511;
   font-weight: 600;
   font-size: 0.9rem;
   text-decoration: none;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25), inset 0 1px 0 #fff;
+  transition: transform 0.2s, background 0.2s;
 }
-.dev-modal-cta:hover { opacity: 0.88; }
+.dev-modal-cta:hover { background: #fff; transform: translateY(-1px); }
 
 .footer h3,
 .footer p,

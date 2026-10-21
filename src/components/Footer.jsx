@@ -151,8 +151,8 @@ export default function Footer() {
             <span className="dev-modal-kicker">Behind the website</span>
             <h3 id="dev-modal-title" className="dev-modal-title">Designed &amp; Developed by Rushan Haque</h3>
             <p className="dev-modal-text">
-              Have a project in mind, an idea to develop, or a collaboration to explore?
-              I'd be glad to hear from you.
+              This website is designed and developed by Rushan Haque.
+              To connect, visit <strong>rushanhaque.in</strong>
             </p>
             <a
               className="dev-modal-cta"
@@ -160,7 +160,7 @@ export default function Footer() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              Connect at rushanhaque.in
+              Visit rushanhaque.in
             </a>
           </div>
         </div>
